@@ -1,0 +1,2 @@
+- get:
+    host: "https://localhost:5743/status/500"

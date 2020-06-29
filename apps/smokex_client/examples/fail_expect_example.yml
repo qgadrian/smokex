@@ -1,0 +1,7 @@
+- get:
+    host: "https://httpbin.org/status/500"
+    expect:
+      status_code: 200
+      headers:
+        a_header: "a_value"
+        Server: "fake_server"

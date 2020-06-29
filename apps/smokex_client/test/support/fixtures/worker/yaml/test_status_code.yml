@@ -1,0 +1,4 @@
+- get:
+    host: "https://localhost:5743/status/423"
+    expect:
+      status_code: 423

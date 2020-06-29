@@ -1,0 +1,15 @@
+- get:
+    host: "https://localhost:5743/get"
+    expect:
+      status_code: 200
+- post:
+    host: "https://localhost:5743/post"
+    body:
+      param_1: "param_1"
+      param_2: "param_2"
+    expect:
+      status_code: 200
+- get:
+    host: "https://localhost:5743/status/204"
+    expect:
+      status_code: 204
