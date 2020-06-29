@@ -1,0 +1,8 @@
+- get:
+    host: "https://localhost:5743/status/202"
+    expect:
+      status_code: 523
+      headers:
+        a_header: "a_value"
+    headers:
+      header_1: "header_1"

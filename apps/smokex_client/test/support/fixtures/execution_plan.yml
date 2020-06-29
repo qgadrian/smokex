@@ -1,0 +1,27 @@
+- get:
+    host: "get_host_1"
+    query:
+      - param_1: "another_test"
+      - param_2: "another_test"
+- get:
+    host: "get_host_2"
+    query:
+      - param_1: "another_test"
+      - param_2: "another_test"
+- post:
+    host: "post_host_1"
+    body:
+      - param_1: "another_test"
+      - param_2: "another_test"
+      - param_2: "another_test"
+- put:
+    host: "put_host"
+    body:
+      - param_1: "another_test"
+      - param_2: "another_test"
+- post:
+    host: "post_host_2"
+    body:
+      - param_1: "another_test"
+      - param_2: "another_test"
+      - param_2: "another_test"

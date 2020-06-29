@@ -1,0 +1,3 @@
+- get:
+    host: "http://httpbing.org/"
+    body: "this is a body string"

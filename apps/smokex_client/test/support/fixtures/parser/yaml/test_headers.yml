@@ -1,0 +1,9 @@
+- get:
+    host: "test_host"
+    query:
+      param_1: "param_1"
+    expect:
+      status_code: 200
+    headers:
+      header_1: "header_1"
+      header_2: "header_2"

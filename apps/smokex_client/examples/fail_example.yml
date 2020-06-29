@@ -1,0 +1,4 @@
+- get:
+    host: "https://httpbin.org/get"
+- get:
+    host: "https://httpbin.org/status/500"

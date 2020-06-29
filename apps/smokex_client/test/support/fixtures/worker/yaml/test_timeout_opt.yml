@@ -1,0 +1,6 @@
+- get:
+    host: "http://httpbin.org/get"
+    expect:
+      status_code: 200
+    options:
+      timeout: 0

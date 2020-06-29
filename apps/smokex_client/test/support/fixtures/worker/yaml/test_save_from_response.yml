@@ -1,0 +1,23 @@
+- post:
+    host: "https://localhost:5743/post"
+    body:
+      test:
+        value: "param_1"
+        another_value:
+          another_value_child: "another_value_child_value"
+    save_from_response:
+      - variable_name: "save_test"
+        json_path: "json.test.value"
+      - variable_name: "save_another_value"
+        json_path: "json.test.another_value.another_value_child"
+- get:
+    host: "https://localhost:5743/headers"
+    headers:
+      a_header: "${save_test}"
+    expect:
+      status_code: 200
+      body:
+        headers:
+          a_header: "param_1"
+          host: "localhost:5743"
+          user-agent: "hackney/1.16.0"

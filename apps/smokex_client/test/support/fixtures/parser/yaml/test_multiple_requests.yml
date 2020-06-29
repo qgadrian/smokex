@@ -1,0 +1,14 @@
+- get:
+    host: "test_2_host_1"
+- get:
+    host: "test_2_host_2"
+- post:
+    host: "test_2_host_3"
+- get:
+    host: "test_2_host_4"
+- post:
+    host: "test_2_host_5"
+- post:
+    host: "test_2_host_6"
+- patch:
+    host: "test_2_host_7"
