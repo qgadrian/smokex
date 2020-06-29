@@ -2,7 +2,7 @@ defmodule SmokexClient.Utils.MapExtractorTest do
   use ExUnit.Case
 
   alias SmokexClient.Utils.MapExtractor
-  alias SmokexClient.Step.Request.SaveFromResponse
+  alias Smokex.Step.Request.SaveFromResponse
 
   describe "Given a json path" do
     test "when the response contains the path then the value its returned" do

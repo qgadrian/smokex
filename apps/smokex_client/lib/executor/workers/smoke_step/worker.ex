@@ -1,12 +1,11 @@
-defimpl SmokexClient.Worker, for: SmokexClient.Step.Request do
+defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   alias SmokexClient.Validator
   alias SmokexClient.Printer.SmokeStep, as: Printer
   alias SmokexClient.ExecutionState
 
-  alias SmokexClient.Step.Request.SaveFromResponse
-  alias SmokexClient.Step.Request
-
-  alias SmokexClient.Result
+  alias Smokex.Step.Request.SaveFromResponse
+  alias Smokex.Step.Request
+  alias Smokex.Result
 
   alias SmokexClient.Utils.StepVarsReplacer
 
@@ -61,6 +60,16 @@ defimpl SmokexClient.Worker, for: SmokexClient.Step.Request do
           failed_assertions: info,
           result: :error
         })
+
+        {:ok, result} =
+          Smokex.Results.create(%{
+            action: step.action,
+            host: step.host,
+            failed_assertions: [info],
+            result: :error
+          })
+
+        IO.inspect(result)
 
         throw({:error, message})
 

@@ -4,7 +4,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
   alias SmokexClient.Parsers.Yaml.Parser
   alias SmokexClient.Executor
   alias SmokexClient.ExecutionState
-  alias SmokexClient.Result
+  alias Smokex.Result
 
   test "Given a yaml steps when launch worker then each valid step is processed" do
     result =

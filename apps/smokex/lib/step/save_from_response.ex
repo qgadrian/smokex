@@ -1,4 +1,4 @@
-defmodule SmokexClient.Step.Request.SaveFromResponse do
+defmodule Smokex.Step.Request.SaveFromResponse do
   @typedoc """
   Saves to a variable name a value from a response:
     - variable_name: The name of the variable to use in any next step

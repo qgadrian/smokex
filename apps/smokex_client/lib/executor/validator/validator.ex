@@ -1,5 +1,5 @@
 defmodule SmokexClient.Validator do
-  alias SmokexClient.Step.Request.Expect
+  alias Smokex.Step.Request.Expect
 
   alias SmokexClient.Validator.StatusCode
   alias SmokexClient.Validator.Headers

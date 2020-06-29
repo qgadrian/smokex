@@ -1,7 +1,7 @@
 defmodule SmokexClient.Parsers.Yaml.Parser do
-  alias SmokexClient.Step.Request
-  alias SmokexClient.Step.Request.Expect
-  alias SmokexClient.Step.Request.SaveFromResponse
+  alias Smokex.Step.Request
+  alias Smokex.Step.Request.Expect
+  alias Smokex.Step.Request.SaveFromResponse
 
   alias SmokexClient.Utils.StepVarsReplacer
 

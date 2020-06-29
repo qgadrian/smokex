@@ -1,5 +1,5 @@
 defmodule SmokexClient.Utils.StepVarsReplacer do
-  alias SmokexClient.Step.Request
+  alias Smokex.Step.Request
 
   @spec process_step_variables(list(Request.t())) :: list(Request.t())
   def process_step_variables(steps) when is_list(steps) do

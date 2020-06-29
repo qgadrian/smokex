@@ -3,7 +3,7 @@ defmodule SmokexClient.Test.Validator do
 
   @moduletag :validator
 
-  alias SmokexClient.Step.Request.Expect
+  alias Smokex.Step.Request.Expect
 
   alias SmokexClient.Validator
 
