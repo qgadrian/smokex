@@ -1,5 +1,5 @@
 defmodule SmokexClient.Validator.Body do
-  alias SmokexClient.Step.Request.Expect
+  alias Smokex.Step.Request.Expect
 
   alias SmokexClient.Printer.SmokeStep, as: Printer
 
@@ -42,9 +42,7 @@ defmodule SmokexClient.Validator.Body do
         {
           :error,
           %{body: %{expected: expected_body, received: received_body}},
-          "\nExpected body:\n#{Jason.encode!(expected_body)}\nReceived:\n#{
-            inspect(received_body)
-          }\n"
+          "\nExpected body:\n#{Jason.encode!(expected_body)}\nReceived:\n#{inspect(received_body)}\n"
         }
       end
     else

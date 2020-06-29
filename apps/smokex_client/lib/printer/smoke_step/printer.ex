@@ -1,5 +1,5 @@
 defmodule SmokexClient.Printer.SmokeStep do
-  alias SmokexClient.Step.Request
+  alias Smokex.Step.Request
 
   def print_validation(result, message) do
     unless is_quiet?() do
@@ -40,11 +40,13 @@ defmodule SmokexClient.Printer.SmokeStep do
   end
 
   defp is_quiet?() do
-    Application.get_env(:smokex_client, :quiet) || Application.get_env(:smokex_client, :env) == :test ||
+    Application.get_env(:smokex_client, :quiet) ||
+      Application.get_env(:smokex_client, :env) == :test ||
       Application.get_env(:smokex_client, :output) != :console
   end
 
   defp is_verbose?() do
-    Application.get_env(:smokex_client, :verbose) || Application.get_env(:smokex_client, :env) == :test
+    Application.get_env(:smokex_client, :verbose) ||
+      Application.get_env(:smokex_client, :env) == :test
   end
 end

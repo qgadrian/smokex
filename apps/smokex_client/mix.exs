@@ -9,19 +9,10 @@ defmodule SmokexClient.Mixfile do
       version: @version,
       elixir: "~> 1.6",
       elixirc_paths: elixirc_paths(Mix.env()),
-      escript: [main_module: Smokex],
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases(),
-      test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [
-        coveralls: :test,
-        "coveralls.detail": :test,
-        "coveralls.post": :test,
-        "coveralls.html": :test
-      ],
-      dialyzer: [ignore_warnings: "dialyzer.ignore-warnings"]
+      aliases: aliases()
     ]
   end
 
@@ -39,6 +30,7 @@ defmodule SmokexClient.Mixfile do
 
   defp deps do
     [
+      {:smokex, in_umbrella: true},
       # Main deps
       {:httpoison, "~> 1.6"},
       {:jason, "~> 1.2"},

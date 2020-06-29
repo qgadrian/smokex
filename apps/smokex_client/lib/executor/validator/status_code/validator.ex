@@ -1,5 +1,5 @@
 defmodule SmokexClient.Validator.StatusCode do
-  alias SmokexClient.Step.Request.Expect
+  alias Smokex.Step.Request.Expect
 
   alias SmokexClient.Printer.SmokeStep, as: Printer
 

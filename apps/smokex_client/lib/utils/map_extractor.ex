@@ -1,5 +1,5 @@
 defmodule SmokexClient.Utils.MapExtractor do
-  alias SmokexClient.Step.Request.SaveFromResponse
+  alias Smokex.Step.Request.SaveFromResponse
 
   @spec extract_variable_from_json_path(SaveFromResponse.t(), map) :: {atom, String.t()}
   def extract_variable_from_json_path(%SaveFromResponse{} = save_from_response, json_response) do
