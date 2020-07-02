@@ -8,6 +8,7 @@ defmodule Smokex.Result do
 
   alias Smokex.Step.RequestActionEnum
   alias Smokex.Step.RequestResultEnum
+  alias Smokex.PlanExecution
 
   @typedoc """
   The result status of an execution step
@@ -19,8 +20,10 @@ defmodule Smokex.Result do
 
   * `action`: [action](`t:#{RequestActionEnum}/0`) that was executed.
   * `host`: A host used in the execution. Defaults to `nil`.
-  * `failed_assertions`: List of failed assertions for the execution. Defaults to `[]`.
-  * `result`: The overall [result](`t:#{RequestResultEnum}/0`) of the execution.
+  * `failed_assertions`: List of failed assertions for the execution. Defaults
+  to `[]`.
+  * `result`: The overall [result](`t:#{RequestResultEnum}/0`) of the
+  execution.
   """
   @type t :: %__MODULE__{
           action: term,
@@ -34,16 +37,20 @@ defmodule Smokex.Result do
 
   @schema_fields @required_fields ++ @optional_fields
 
-  schema "execution_steps_results" do
+  schema "plans_executions_steps_results" do
     field(:action, RequestActionEnum)
     field(:host, :string, default: nil)
     field(:failed_assertions, {:array, :map}, default: [])
     field(:result, RequestResultEnum)
+
+    belongs_to(:plan_execution, PlanExecution)
   end
 
   def changeset(changeset, params \\ %{}) do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
+    |> Ecto.Changeset.put_assoc(:plan_execution, params[:plans_execution])
+    |> Ecto.Changeset.assoc_constraint(:plan_execution)
   end
 end

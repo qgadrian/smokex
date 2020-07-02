@@ -61,6 +61,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
           result: :error
         })
 
+        # TODO save in database and notify the result via PubSub
         {:ok, result} =
           Smokex.Results.create(%{
             action: step.action,
@@ -68,8 +69,6 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
             failed_assertions: [info],
             result: :error
           })
-
-        IO.inspect(result)
 
         throw({:error, message})
 
