@@ -35,22 +35,30 @@ defmodule Smokex.PlanExecution do
           results: list(Result.t())
         }
 
+  # @required_fields [:plan_definition_id]
+  @required_fields []
   @optional_fields [:status]
+
+  @schema_fields @optional_fields ++ @required_fields
 
   schema "plans_executions" do
     field(:status, PlanExecutionStatus, null: false, default: :created)
 
     belongs_to(:plan_definition, PlanDefinition)
 
-    has_many(:results, Result, on_replace: :delete)
+    has_many(:results, Result)
 
     timestamps()
   end
 
-  def changeset(changeset, params \\ %{}) do
+  @spec changeset(__MODULE__.t(), map) :: Ecto.Changeset.t()
+  def changeset(%__MODULE__{} = changeset, params \\ %{}) do
     changeset
-    |> Ecto.Changeset.cast(params, @optional_fields)
-    |> Ecto.Changeset.put_assoc(:plan_definition, params[:plan_definition])
+    |> Ecto.Changeset.cast(params, @schema_fields)
+    |> Ecto.Changeset.put_assoc(
+      :plan_definition,
+      params[:plan_definition] || changeset.plan_definition
+    )
     |> Ecto.Changeset.assoc_constraint(:plan_definition)
   end
 end
