@@ -14,7 +14,7 @@ defmodule SmokexClient do
   def process() do
     # TODO
     execution_plan_file_path =
-      "/Users/adrian/workspace/smokex_umbrella/apps/smokex_client/examples/sucess_example.yml"
+      "/Users/adrian/workspace/smokex_umbrella/apps/smokex_client/examples/success_example.yml"
 
     []
     |> set_execution_env()
