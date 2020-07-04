@@ -1,10 +1,16 @@
 defmodule SmokexClient.Test.Workers.Yaml do
   use ExUnit.Case
 
+  import Smokex.TestSupport.Factories
+
   alias SmokexClient.Parsers.Yaml.Parser
   alias SmokexClient.Executor
   alias SmokexClient.ExecutionState
   alias Smokex.Result
+
+  setup_all do
+    [plan_definition: insert(:plan_definition)]
+  end
 
   test "Given a yaml steps when launch worker then each valid step is processed" do
     result =

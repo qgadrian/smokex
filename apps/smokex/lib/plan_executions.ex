@@ -10,7 +10,7 @@ defmodule Smokex.PlanExecutions do
   @spec create_plan_execution(PlanDefinition.t()) :: {:ok, PlanExecution.t()} | {:error, term}
   def create_plan_execution(%PlanDefinition{} = plan_definition) do
     %PlanExecution{}
-    |> PlanExecution.changeset(%{plan_definition: plan_definition})
+    |> PlanExecution.create_changeset(%{plan_definition: plan_definition})
     |> Smokex.Repo.insert()
   end
 
@@ -18,7 +18,7 @@ defmodule Smokex.PlanExecutions do
   @spec update_plan_execution(PlanExecution.t(), map) :: {:ok, PlanExecution.t()} | {:error, term}
   def update_plan_execution(%PlanExecution{} = plan_execution, attrs) do
     plan_execution
-    |> PlanExecution.changeset(attrs)
+    |> PlanExecution.update_changeset(attrs)
     |> Smokex.Repo.update()
   end
 end

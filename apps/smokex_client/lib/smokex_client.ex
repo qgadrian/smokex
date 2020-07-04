@@ -10,36 +10,13 @@ defmodule SmokexClient do
   @type parsed_opts :: keyword
   @type non_parsed_opts :: list(String.t())
 
-  @spec main(any) :: no_return
-  def main(args) do
-    args
-    |> parse_args()
-    |> process()
-  end
+  @spec process() :: no_return
+  def process() do
+    # TODO
+    execution_plan_file_path =
+      "/Users/adrian/workspace/smokex_umbrella/apps/smokex_client/examples/sucess_example.yml"
 
-  @spec parse_args(non_parsed_opts) :: {parsed_opts, non_parsed_opts}
-  defp parse_args(args) do
-    {options, remaining_opts, _invalid_args} =
-      OptionParser.parse(
-        args,
-        switches: [quiet: :boolean, verbose: :boolean, output: :string, timeout: :integer],
-        aliases: [q: :quiet, v: :verbose, o: :output, h: :help, t: :timeout]
-      )
-
-    {options, remaining_opts}
-  end
-
-  @spec process({parsed_opts, non_parsed_opts}) :: no_return
-  defp process(args) do
-    execution_plan_file_path = List.first(elem(args, 1)) || :error
-
-    opts = elem(args, 0)
-
-    if opts[:help] || execution_plan_file_path == :error do
-      Printer.print_help()
-    end
-
-    opts
+    []
     |> set_execution_env()
     |> set_output_type()
     |> set_global_timeout()
@@ -48,7 +25,6 @@ defmodule SmokexClient do
       {:ok, execution_plan} ->
         execution_plan
         |> Executor.execute()
-        |> Printer.print_result()
 
       {:error, message} ->
         Printer.print_result({:error, message})

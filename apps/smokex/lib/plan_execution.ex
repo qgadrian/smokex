@@ -51,8 +51,8 @@ defmodule Smokex.PlanExecution do
     timestamps()
   end
 
-  @spec changeset(__MODULE__.t(), map) :: Ecto.Changeset.t()
-  def changeset(%__MODULE__{} = changeset, params \\ %{}) do
+  @spec create_changeset(__MODULE__.t(), map) :: Ecto.Changeset.t()
+  def create_changeset(%__MODULE__{} = changeset, params \\ %{}) do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.put_assoc(
@@ -60,5 +60,11 @@ defmodule Smokex.PlanExecution do
       params[:plan_definition] || changeset.plan_definition
     )
     |> Ecto.Changeset.assoc_constraint(:plan_definition)
+  end
+
+  @spec update_changeset(__MODULE__.t(), map) :: Ecto.Changeset.t()
+  def update_changeset(%__MODULE__{} = changeset, params \\ %{}) do
+    changeset
+    |> Ecto.Changeset.cast(params, @schema_fields)
   end
 end
