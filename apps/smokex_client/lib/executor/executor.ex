@@ -17,8 +17,6 @@ defmodule SmokexClient.Executor do
       Enum.each(steps, &Worker.execute(&1, plan_execution))
 
       PlanExecutions.update_plan_execution(plan_execution, %{status: :finished})
-
-      :ok
     catch
       {:error, reason} ->
         PlanExecutions.update_plan_execution(plan_execution, %{status: :halted})
