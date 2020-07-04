@@ -12,6 +12,7 @@ defmodule Smokex.TestSupport.Factories do
     %PlanDefinition{
       # name: sequence(:name, &"Plan definition number #{&1}"),
       name: "Plan definition",
+      content: "",
       executions: []
     }
   end

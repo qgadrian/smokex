@@ -22,14 +22,15 @@ defmodule Smokex.PlanDefinition do
   alias Smokex.Result
   alias Smokex.PlanExecution
 
-  @required_fields [:name]
+  @required_fields [:name, :content]
 
   schema "plans_definitions" do
     field(:name, :string)
+    field(:content, :string, null: false)
 
     # belongs_to(:user, User)
 
-    has_many(:executions, PlanExecution, on_replace: :delete)
+    has_many(:executions, PlanExecution)
 
     timestamps()
   end
