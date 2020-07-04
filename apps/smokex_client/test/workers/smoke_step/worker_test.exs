@@ -7,6 +7,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
   alias SmokexClient.Executor
   alias SmokexClient.ExecutionState
   alias Smokex.Result
+  alias Smokex.PlanExecution
 
   setup_all do
     [plan_definition: insert(:plan_definition)]
@@ -18,7 +19,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
       |> Parser.parse!()
       |> Executor.execute()
 
-    assert :ok === result
+    assert {:ok, %PlanExecution{status: :finished}} = result
 
     expected_result_state = [
       %Result{action: "get", host: "https://localhost:5743/get", result: :ok},
@@ -55,7 +56,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
       |> Parser.parse!()
       |> Executor.execute()
 
-    assert :ok === result
+    assert {:ok, %PlanExecution{status: :finished}} = result
 
     expected_result_state = [
       %Result{action: "get", host: "https://localhost:5743/status/423", result: :ok}
@@ -170,7 +171,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
     end
 
     test "when the body is a string then the body string is sent in the request" do
-      assert :ok =
+      assert {:ok, %PlanExecution{status: :finished}} =
                "test/support/fixtures/worker/yaml/test_body_string.yml"
                |> Parser.parse!()
                |> Executor.execute()
@@ -187,7 +188,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
     end
 
     test "when save a response and the var key is used in another request then the request sends the var value" do
-      assert :ok =
+      assert {:ok, %PlanExecution{status: :finished}} =
                "test/support/fixtures/worker/yaml/test_save_from_response.yml"
                |> Parser.parse!()
                |> Executor.execute()
