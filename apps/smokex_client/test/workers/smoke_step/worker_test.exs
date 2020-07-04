@@ -3,21 +3,26 @@ defmodule SmokexClient.Test.Workers.Yaml do
 
   import Smokex.TestSupport.Factories
 
-  alias SmokexClient.Parsers.Yaml.Parser
   alias SmokexClient.Executor
   alias SmokexClient.ExecutionState
   alias Smokex.Result
   alias Smokex.PlanExecution
 
   setup_all do
-    [plan_definition: insert(:plan_definition)]
+    [
+      plan_definition: insert(:plan_definition)
+    ]
+  end
+
+  defp create_plan_definition(yaml_file_path) do
+    insert(:plan_definition, content: yaml_file_path)
   end
 
   test "Given a yaml steps when launch worker then each valid step is processed" do
-    result =
-      "test/support/fixtures/worker/yaml/test_valid_steps.yml"
-      |> Parser.parse!()
-      |> Executor.execute()
+    plan_definition =
+      create_plan_definition("test/support/fixtures/worker/yaml/test_valid_steps.yml")
+
+    result = Executor.execute(plan_definition)
 
     assert {:ok, %PlanExecution{status: :finished}} = result
 
@@ -31,12 +36,10 @@ defmodule SmokexClient.Test.Workers.Yaml do
   end
 
   test "Given a yaml steps when it has a failing step then an error is returned" do
-    {result, _message} =
-      "test/support/fixtures/worker/yaml/test_request_internal_error.yml"
-      |> Parser.parse!()
-      |> Executor.execute()
+    plan_definition =
+      create_plan_definition("test/support/fixtures/worker/yaml/test_request_internal_error.yml")
 
-    assert :error === result
+    assert {:ok, %PlanExecution{status: :halted}} = Executor.execute(plan_definition)
 
     expected_result_state = [
       %Result{
@@ -51,12 +54,10 @@ defmodule SmokexClient.Test.Workers.Yaml do
   end
 
   test "Given a yaml with an expect code when a response returns the same code then an error is returned" do
-    result =
-      "test/support/fixtures/worker/yaml/test_status_code.yml"
-      |> Parser.parse!()
-      |> Executor.execute()
+    plan_definition =
+      create_plan_definition("test/support/fixtures/worker/yaml/test_status_code.yml")
 
-    assert {:ok, %PlanExecution{status: :finished}} = result
+    assert {:ok, %PlanExecution{status: :finished}} = Executor.execute(plan_definition)
 
     expected_result_state = [
       %Result{action: "get", host: "https://localhost:5743/status/423", result: :ok}
@@ -66,12 +67,10 @@ defmodule SmokexClient.Test.Workers.Yaml do
   end
 
   test "Given a yaml with an expect code when a response returns a different code then an error is returned" do
-    {result, _message} =
-      "test/support/fixtures/worker/yaml/test_status_code_error.yml"
-      |> Parser.parse!()
-      |> Executor.execute()
+    plan_definition =
+      create_plan_definition("test/support/fixtures/worker/yaml/test_status_code_error.yml")
 
-    assert :error === result
+    assert {:ok, %PlanExecution{status: :halted}} = Executor.execute(plan_definition)
 
     expected_result_state = [
       %Result{
@@ -86,12 +85,10 @@ defmodule SmokexClient.Test.Workers.Yaml do
   end
 
   test "Given a yaml when it contains an invalid host then an error is returned" do
-    {result, _message} =
-      "test/support/fixtures/worker/yaml/test_invalid_host.yml"
-      |> Parser.parse!()
-      |> Executor.execute()
+    plan_definition =
+      create_plan_definition("test/support/fixtures/worker/yaml/test_invalid_host.yml")
 
-    assert :error === result
+    assert {:ok, %PlanExecution{status: :halted}} = Executor.execute(plan_definition)
 
     expected_result_state = [
       %Result{
@@ -106,12 +103,10 @@ defmodule SmokexClient.Test.Workers.Yaml do
   end
 
   test "Given a yaml with an header when the response does not return the header then an error is returned" do
-    {result, _message} =
-      "test/support/fixtures/worker/yaml/test_headers_error.yml"
-      |> Parser.parse!()
-      |> Executor.execute()
+    plan_definition =
+      create_plan_definition("test/support/fixtures/worker/yaml/test_headers_error.yml")
 
-    assert :error === result
+    assert {:ok, %PlanExecution{status: :halted}} = Executor.execute(plan_definition)
 
     expeted_header = %{headers: [%{header: "a_header", expected: "a_value", received: nil}]}
 
@@ -128,12 +123,12 @@ defmodule SmokexClient.Test.Workers.Yaml do
   end
 
   test "Given a yaml with an expected header and status code when the response does not return none of them then an error is returned" do
-    {result, _message} =
-      "test/support/fixtures/worker/yaml/test_status_code_and_headers_error.yml"
-      |> Parser.parse!()
-      |> Executor.execute()
+    plan_definition =
+      create_plan_definition(
+        "test/support/fixtures/worker/yaml/test_status_code_and_headers_error.yml"
+      )
 
-    assert :error === result
+    assert {:ok, %PlanExecution{status: :halted}} = Executor.execute(plan_definition)
 
     expeted_header = %{headers: [%{header: "a_header", expected: "a_value", received: nil}]}
     expeted_status_code = %{status_code: %{expected: 523, received: 202}}
@@ -153,10 +148,10 @@ defmodule SmokexClient.Test.Workers.Yaml do
 
   describe "Given a yaml plan" do
     test "when a request takes more time than the configured timout then an error is returned" do
-      assert {:error, _message} =
-               "test/support/fixtures/worker/yaml/test_timeout_opt.yml"
-               |> Parser.parse!()
-               |> Executor.execute()
+      plan_definition =
+        create_plan_definition("test/support/fixtures/worker/yaml/test_timeout_opt.yml")
+
+      assert {:ok, %PlanExecution{status: :halted}} = Executor.execute(plan_definition)
 
       expected_result_state = [
         %Result{
@@ -171,10 +166,10 @@ defmodule SmokexClient.Test.Workers.Yaml do
     end
 
     test "when the body is a string then the body string is sent in the request" do
-      assert {:ok, %PlanExecution{status: :finished}} =
-               "test/support/fixtures/worker/yaml/test_body_string.yml"
-               |> Parser.parse!()
-               |> Executor.execute()
+      plan_definition =
+        create_plan_definition("test/support/fixtures/worker/yaml/test_body_string.yml")
+
+      assert {:ok, %PlanExecution{status: :finished}} = Executor.execute(plan_definition)
 
       expected_result_state = [
         %Result{
@@ -188,10 +183,10 @@ defmodule SmokexClient.Test.Workers.Yaml do
     end
 
     test "when save a response and the var key is used in another request then the request sends the var value" do
-      assert {:ok, %PlanExecution{status: :finished}} =
-               "test/support/fixtures/worker/yaml/test_save_from_response.yml"
-               |> Parser.parse!()
-               |> Executor.execute()
+      plan_definition =
+        create_plan_definition("test/support/fixtures/worker/yaml/test_save_from_response.yml")
+
+      assert {:ok, %PlanExecution{status: :finished}} = Executor.execute(plan_definition)
 
       expected_result_state = [
         %Result{
