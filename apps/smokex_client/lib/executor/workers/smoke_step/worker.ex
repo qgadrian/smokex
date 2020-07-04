@@ -6,13 +6,14 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   alias Smokex.Step.Request.SaveFromResponse
   alias Smokex.Step.Request
   alias Smokex.Result
+  alias Smokex.PlanExecution
 
   alias SmokexClient.Utils.StepVarsReplacer
 
   @type validation_result :: {:ok, any} | {:error, any, String.t()}
 
-  @spec execute(Request.t()) :: atom | no_return
-  def execute(%Request{} = step) do
+  @spec execute(Request.t(), PlanExecution.t()) :: atom | no_return
+  def execute(%Request{} = step, %PlanExecution{} = plan_execution) do
     step = StepVarsReplacer.process_step_variables_(step)
 
     Printer.print_step_info(step)
@@ -37,7 +38,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
       {:ok, response} ->
         step.expect
         |> Validator.validate(response)
-        |> process_validation(step)
+        |> process_validation(step, plan_execution)
 
       {:error, %HTTPoison.Error{reason: reason}} ->
         process_request_error(step, reason)
@@ -50,10 +51,20 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   defp get_body(body, _action) when is_binary(body), do: body
   defp get_body(body, _action), do: Jason.encode!(body)
 
-  @spec process_validation(validation_result, Request.t()) :: atom
-  defp process_validation(validation_result, %Request{} = step) do
+  @spec process_validation(validation_result, Request.t(), PlanExecution.t()) :: atom
+  defp process_validation(validation_result, %Request{} = step, %PlanExecution{} = plan_execution) do
     case validation_result do
       {:error, info, message} ->
+        # TODO save in database and notify the result via PubSub
+        {:ok, result} =
+          Smokex.Results.create(%{
+            plan_execution: plan_execution,
+            action: step.action,
+            host: step.host,
+            failed_assertions: [info],
+            result: :error
+          })
+
         ExecutionState.put_result(%Result{
           action: step.action,
           host: step.host,
@@ -61,19 +72,19 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
           result: :error
         })
 
-        # TODO save in database and notify the result via PubSub
-        {:ok, result} =
-          Smokex.Results.create(%{
-            action: step.action,
-            host: step.host,
-            failed_assertions: [info],
-            result: :error
-          })
-
         throw({:error, message})
 
       {:ok, response_body} ->
         save_from_response(step.save_from_response, response_body)
+
+        # TODO save in database and notify the result via PubSub
+        {:ok, result} =
+          Smokex.Results.create(%{
+            plan_execution: plan_execution,
+            action: step.action,
+            host: step.host,
+            result: :ok
+          })
 
         ExecutionState.put_result(%Result{
           action: step.action,

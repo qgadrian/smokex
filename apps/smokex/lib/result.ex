@@ -46,11 +46,12 @@ defmodule Smokex.Result do
     belongs_to(:plan_execution, PlanExecution)
   end
 
+  @spec changeset(__MODULE__.t(), map) :: Ecto.Changeset.t()
   def changeset(changeset, params \\ %{}) do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
-    |> Ecto.Changeset.put_assoc(:plan_execution, params[:plans_execution])
+    |> Ecto.Changeset.put_assoc(:plan_execution, params[:plan_execution])
     |> Ecto.Changeset.assoc_constraint(:plan_execution)
   end
 end

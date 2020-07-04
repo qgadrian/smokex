@@ -3,7 +3,7 @@ defmodule Smokex.Repo.Migrations.CreatePlansExecutionsStepsResults do
 
   def change do
     create table(:plans_executions_steps_results) do
-      add(:plan_execution_id, references(:plans_executions))
+      add(:plan_execution_id, references(:plans_executions), null: false)
 
       add(:action, :string, null: false)
       add(:host, :string, null: true)
