@@ -1,6 +1,5 @@
 defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   alias SmokexClient.Validator
-  alias SmokexClient.Printer.SmokeStep, as: Printer
   alias SmokexClient.ExecutionState
 
   alias Smokex.Step.Request.SaveFromResponse
@@ -15,8 +14,6 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   @spec execute(Request.t(), PlanExecution.t()) :: atom | no_return
   def execute(%Request{} = step, %PlanExecution{} = plan_execution) do
     step = StepVarsReplacer.process_step_variables_(step)
-
-    Printer.print_step_info(step)
 
     body = get_body(step.body, step.action)
 
