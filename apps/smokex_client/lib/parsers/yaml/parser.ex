@@ -9,18 +9,41 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
 
   @step_opts ["timeout"]
 
+  @type requests :: list(Request.t())
+
+  @doc "Reads a yaml file and returns a list of [requests](`t:#{Request}`)"
+  @spec parse_file!(String.t()) :: requests() | no_return
+  def parse_file!(yaml_file_path) do
+    yaml_file_path
+    |> File.read!()
+    |> parse!()
+  end
+
+  @doc "Reads a yaml file and returns a list of [requests](`t:#{Request}`)"
+  @spec parse_file!(String.t()) :: {:ok, requests()} | {:error, term}
+  def parse_file(yaml_file_path) do
+    with {:ok, file_content} <- File.read(yaml_file_path) do
+      parse(file_content)
+    else
+      _ ->
+        {:error, "Error reading yaml file"}
+    end
+  end
+
+  @doc "Parses a yaml string content and returns a list of [requests](`t:#{Request}`)"
   @spec parse!(String.t()) :: list(Request.t()) | no_return
-  def parse!(yaml_file_path) do
-    case parse(yaml_file_path) do
+  def parse!(yaml_as_string) do
+    case parse(yaml_as_string) do
       {:ok, parse_result} -> parse_result
       error -> throw(error)
     end
   end
 
+  @doc "Parses a yaml string content and returns a list of [requests](`t:#{Request}`)"
   @spec parse(String.t()) :: {:ok, list(Request.t())} | {:error, String.t()}
-  def parse(yaml_file_path) do
-    with {:ok, yaml_file} <- YamlElixir.read_from_file(yaml_file_path) do
-      steps_maps = Enum.map(yaml_file, &parse_step(&1))
+  def parse(yaml_as_string) do
+    with {:ok, yaml_map} <- YamlElixir.read_from_string(yaml_as_string) do
+      steps_maps = Enum.map(yaml_map, &parse_step(&1))
       {:ok, StepVarsReplacer.process_step_variables(steps_maps)}
     else
       {:error, _message} ->
