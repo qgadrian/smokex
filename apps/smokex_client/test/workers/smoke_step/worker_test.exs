@@ -8,14 +8,8 @@ defmodule SmokexClient.Test.Workers.Yaml do
   alias Smokex.Result
   alias Smokex.PlanExecution
 
-  setup_all do
-    [
-      plan_definition: insert(:plan_definition)
-    ]
-  end
-
   defp create_plan_definition(yaml_file_path) do
-    insert(:plan_definition, content: yaml_file_path)
+    insert(:plan_definition, content: File.read!(yaml_file_path))
   end
 
   test "Given a yaml steps when launch worker then each valid step is processed" do

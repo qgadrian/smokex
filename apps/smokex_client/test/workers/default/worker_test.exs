@@ -8,7 +8,7 @@ defmodule SmokexClient.Test.Workers.Default do
 
   setup do
     [
-      plan_definition: insert(:plan_definition, content: "asdasddas")
+      plan_definition: insert(:plan_definition, content: "- get: \n an: error")
     ]
   end
 

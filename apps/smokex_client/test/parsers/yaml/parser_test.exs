@@ -10,19 +10,20 @@ defmodule SmokexClient.Test.Parsers.Yaml do
   alias SmokexClient.Parsers.Yaml.Parser
 
   test "When a yaml file path doesn't exists then an error is returned" do
-    {result, _message} = Parser.parse("test/support/fixtures/parser/yaml/invalid.yml")
+    {result, _message} = Parser.parse_file("test/support/fixtures/parser/yaml/invalid.yml")
 
     assert :error === result
   end
 
-  test "Given a non existen yaml file when do a bang parse then an exception is thrown" do
-    error_result = Parser.parse("an_invalid.yml")
-
-    assert error_result === catch_throw(Parser.parse!("an_invalid.yml"))
+  test "Given a non existen yaml file when do a bang parse then an error is raised" do
+    assert_raise File.Error, fn ->
+      Parser.parse_file!("an_invalid.yml")
+    end
   end
 
   test "Given a yml run plan with multiple and different actions when its parsed then a list with with the actions is returned" do
-    result_response = Parser.parse("test/support/fixtures/parser/yaml/test_multiple_requests.yml")
+    result_response =
+      Parser.parse_file("test/support/fixtures/parser/yaml/test_multiple_requests.yml")
 
     expected_yaml_data = [
       %Request{action: "get", host: "test_2_host_1"},
@@ -38,7 +39,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
   end
 
   test "Given a yml run plan with params when its parsed then a list with the params is returned" do
-    result_response = Parser.parse("test/support/fixtures/parser/yaml/test_parse_params.yml")
+    result_response = Parser.parse_file("test/support/fixtures/parser/yaml/test_parse_params.yml")
 
     expected_yaml_data = [
       %Request{action: "get", host: "test_3_host_1", query: %{"param_1" => "param_1"}},
@@ -54,7 +55,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
   end
 
   test "Given a yml run plan with headers when its parsed then a list with the headers is returned" do
-    result_response = Parser.parse("test/support/fixtures/parser/yaml/test_headers.yml")
+    result_response = Parser.parse_file("test/support/fixtures/parser/yaml/test_headers.yml")
 
     expected_yaml_data = [
       %Request{
@@ -70,7 +71,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
   end
 
   test "Given a yml run plan with expect body when its parsed then the expect result with the expected body is returned" do
-    result_response = Parser.parse("test/support/fixtures/parser/yaml/test_expect_body.yml")
+    result_response = Parser.parse_file("test/support/fixtures/parser/yaml/test_expect_body.yml")
 
     expected_yaml_data = [
       %Request{
@@ -89,7 +90,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
 
   test "Given a yml run plan with expect status code when its parsed then a list with the expect result is returned" do
     result_response =
-      Parser.parse("test/support/fixtures/parser/yaml/test_expect_status_code.yml")
+      Parser.parse_file("test/support/fixtures/parser/yaml/test_expect_status_code.yml")
 
     expected_yaml_data = [
       %Request{
@@ -104,7 +105,8 @@ defmodule SmokexClient.Test.Parsers.Yaml do
   end
 
   test "Given a yml run plan with expect headers when its parsed then a list with the expected headers is returned" do
-    result_response = Parser.parse("test/support/fixtures/parser/yaml/test_expect_headers.yml")
+    result_response =
+      Parser.parse_file("test/support/fixtures/parser/yaml/test_expect_headers.yml")
 
     expected_yaml_data = [
       %Request{
@@ -123,7 +125,8 @@ defmodule SmokexClient.Test.Parsers.Yaml do
 
   describe "Given a yml plan with save to variable" do
     test "when the response contains the json path then the value its saved to the variable" do
-      result_response = Parser.parse("test/support/fixtures/parser/yaml/save_to_variable.yml")
+      result_response =
+        Parser.parse_file("test/support/fixtures/parser/yaml/save_to_variable.yml")
 
       expected_yaml_data = [
         %Request{
@@ -152,7 +155,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
   describe "Given a yaml plan" do
     test "when a request has opts then the parsed steps have the opts" do
       result_response =
-        Parser.parse("test/support/fixtures/parser/yaml/test_parse_request_opts.yml")
+        Parser.parse_file("test/support/fixtures/parser/yaml/test_parse_request_opts.yml")
 
       expected_yaml_data = [
         %Request{
@@ -168,7 +171,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
 
     test "when the body is a string then the step has the body value" do
       result_response =
-        Parser.parse("test/support/fixtures/parser/yaml/test_parse_body_string.yml")
+        Parser.parse_file("test/support/fixtures/parser/yaml/test_parse_body_string.yml")
 
       expected_yaml_data = [
         %Request{
