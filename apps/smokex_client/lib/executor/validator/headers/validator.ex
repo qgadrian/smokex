@@ -1,8 +1,6 @@
 defmodule SmokexClient.Validator.Headers do
   alias Smokex.Step.Request.Expect
 
-  alias SmokexClient.Printer.SmokeStep, as: Printer
-
   @spec validate(Expect.t(), list(tuple)) ::
           {:ok, :headers} | {:error, %{headers: list(map)}, String.t()}
   def validate(%Expect{} = expected, headers) do
@@ -14,7 +12,7 @@ defmodule SmokexClient.Validator.Headers do
         expected_headers
         |> get_headers_to_validate(headers)
         |> validate_expected_headers()
-        |> print_headers_validation()
+        |> group_validated_headers()
         |> build_validation_result()
     end
   end
@@ -58,41 +56,17 @@ defmodule SmokexClient.Validator.Headers do
     end)
   end
 
-  @spec print_headers_validation(list(map)) :: {:ok, :headers} | list(map)
-  defp print_headers_validation(headers_validation) do
+  @spec group_validated_headers(list(map)) :: {:ok, :headers} | list(map)
+  defp group_validated_headers(headers_validation) do
     all_headers_valid = Enum.all?(headers_validation, fn {result, _header} -> result == :ok end)
 
     case all_headers_valid do
       true ->
-        Printer.print_validation(:sucess, "All headers present")
         {:ok, :headers}
 
       false ->
-        headers_validation
-        |> get_invalid_headers()
-        |> print_invalid_headers()
+        get_invalid_headers(headers_validation)
     end
-  end
-
-  @spec print_invalid_headers(list(map)) :: list(map)
-  defp print_invalid_headers(invalid_headers) do
-    Enum.each(invalid_headers, fn %{header: header, expected: expected, received: received} ->
-      case received do
-        nil ->
-          Printer.print_validation(
-            false,
-            "Expected header #{header} to be '#{expected}' but was not present"
-          )
-
-        received_value ->
-          Printer.print_validation(
-            false,
-            "Expected header #{header} to be '#{expected}' but received '#{received_value}'"
-          )
-      end
-    end)
-
-    invalid_headers
   end
 
   @spec get_invalid_headers(list(map)) :: list(map)

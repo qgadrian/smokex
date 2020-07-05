@@ -1,8 +1,6 @@
 defmodule SmokexClient.Validator.Body do
   alias Smokex.Step.Request.Expect
 
-  alias SmokexClient.Printer.SmokeStep, as: Printer
-
   defstruct errors: []
 
   @spec validate(Expect.t(), String.t()) :: tuple
@@ -21,8 +19,6 @@ defmodule SmokexClient.Validator.Body do
     if expected_body == received_body do
       {:ok, received_body}
     else
-      Printer.print_validation(:error, "Received body is not same as expected body")
-
       {
         :error,
         %{body: %{expected: expected_body, received: received_body}},
@@ -37,8 +33,6 @@ defmodule SmokexClient.Validator.Body do
       if Map.equal?(expected_body, parsed_received_body) do
         {:ok, received_body}
       else
-        Printer.print_validation(:error, "Received body is not same as expected body")
-
         {
           :error,
           %{body: %{expected: expected_body, received: received_body}},
@@ -47,8 +41,6 @@ defmodule SmokexClient.Validator.Body do
       end
     else
       _ ->
-        Printer.print_validation(:error, "Received body is not same as expected body")
-
         {
           :error,
           %{body: %{expected: expected_body, received: received_body}},
