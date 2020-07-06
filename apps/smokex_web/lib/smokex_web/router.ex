@@ -18,6 +18,11 @@ defmodule SmokexWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+    live "/plans", PlansDefinitionsLive.List
+    live "/plans/:id", PlansDefinitionsLive.Show
+    live "/executions", PlansExecutionsLive.All
+    live "/plans/:plan_definition_id/executions", PlansExecutionsLive.List
+    live "/executions/:id", PlansExecutionsLive.Show
   end
 
   # Other scopes may use custom stacks.

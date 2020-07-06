@@ -9,3 +9,38 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+for plan_definition_index <- 1..10 do
+  example_file_path = Path.absname("./apps/smokex/priv/repo/plan_definition_content_example.yml")
+
+  {:ok, plan_definition} =
+    Smokex.PlanDefinitions.create(%{
+      name: "plan_definition_#{plan_definition_index}",
+      content: File.read!(example_file_path)
+    })
+
+  for _ <- 1..10 do
+    {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(plan_definition)
+  end
+
+  for _ <- 1..5 do
+    {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(plan_definition)
+
+    {:ok, _plan_execution} =
+      Smokex.PlanExecutions.update_plan_execution(plan_execution, %{status: :finished})
+  end
+
+  for _ <- 1..5 do
+    {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(plan_definition)
+
+    {:ok, _plan_execution} =
+      Smokex.PlanExecutions.update_plan_execution(plan_execution, %{status: :halted})
+  end
+
+  for _ <- 1..5 do
+    {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(plan_definition)
+
+    {:ok, _plan_execution} =
+      Smokex.PlanExecutions.update_plan_execution(plan_execution, %{status: :running})
+  end
+end
