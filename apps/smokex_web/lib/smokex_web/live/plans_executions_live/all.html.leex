@@ -1,0 +1,7 @@
+<section class="phx-hero">
+    <%= for plan_execution <- @plan_executions do %>
+      <li class="list-group-item">
+        <%= plan_execution.status %>
+      </li>
+    <% end %>
+</section>

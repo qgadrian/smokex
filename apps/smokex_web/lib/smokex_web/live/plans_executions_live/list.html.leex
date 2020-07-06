@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <table class="table">
+    <caption>List of executions for plan <%= @plan_definition_id %></caption>
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for plan_execution <- @plan_executions do %>
+        <%= live_component @socket, RowComponent,
+          id: plan_execution.id, plan_execution: plan_execution %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
