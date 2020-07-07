@@ -5,6 +5,10 @@ defmodule Smokex.Repo.Migrations.CreatePlansExecutions do
     create table(:plans_executions) do
       add(:status, :string, null: false)
       add(:plan_definition_id, references(:plans_definitions))
+
+      add(:started_at, :naive_datetime)
+      add(:finished_at, :naive_datetime)
+
       timestamps()
     end
   end

@@ -21,16 +21,18 @@ defmodule SmokexClient.Executor do
     |> case do
       {:ok, list_of_requests} ->
         try do
+          PlanExecutions.start(plan_execution)
+
           Enum.each(list_of_requests, &Worker.execute(&1, plan_execution))
 
-          PlanExecutions.update_plan_execution(plan_execution, %{status: :finished})
+          PlanExecutions.finish(plan_execution)
         catch
           {:error, reason} ->
-            PlanExecutions.update_plan_execution(plan_execution, %{status: :halted})
+            PlanExecutions.halt(plan_execution)
         end
 
       {:error, message} ->
-        PlanExecutions.update_plan_execution(plan_execution, %{status: :halted})
+        PlanExecutions.halt(plan_execution)
     end
   end
 end
