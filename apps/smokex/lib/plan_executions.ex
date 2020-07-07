@@ -21,11 +21,27 @@ defmodule Smokex.PlanExecutions do
   @doc """
   Returns all the executions of a plan definition id.
   """
-  @spec list_by_plan_definition(integer) :: list(PlanExecution.t())
-  def list_by_plan_definition(plan_definition_id) do
+  @spec get_by_plan_definition(integer) :: list(PlanExecution.t())
+  def get_by_plan_definition(plan_definition_id) do
     query =
       from(plan_execution in PlanExecution,
         where: plan_execution.plan_definition_id == ^plan_definition_id,
+        select: plan_execution
+      )
+
+    Smokex.Repo.all(query)
+  end
+
+  @doc """
+  Returns all the executions of a plan definition id that are in the given
+  status.
+  """
+  @spec get_by_plan_definition(integer, PlanExecution.status()) :: list(PlanExecution.t())
+  def get_by_plan_definition(plan_definition_id, status) do
+    query =
+      from(plan_execution in PlanExecution,
+        where: plan_execution.plan_definition_id == ^plan_definition_id,
+        where: plan_execution.status == ^status,
         select: plan_execution
       )
 
