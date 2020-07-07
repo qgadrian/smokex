@@ -1,17 +1,25 @@
 <div class="container-fluid">
-  <table class="table">
-    <caption>List of executions for plan <%= @plan_definition_id %></caption>
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= for plan_execution <- @plan_executions do %>
-        <%= live_component @socket, RowComponent,
-          id: plan_execution.id, plan_execution: plan_execution %>
+  <div class="row">
+    <div class="col-2">
+      <%= live_component @socket, FilterComponent, plan_executions: @plan_executions %>
+    </div>
+
+    <div class="col-10">
+      <table class="table">
+        <caption>List of executions for plan <%= @plan_definition_id %></caption>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for plan_execution <- @plan_executions do %>
+            <%= live_component @socket, RowComponent,
+id: plan_execution.id, plan_execution: plan_execution %>
       <% end %>
-    </tbody>
-  </table>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

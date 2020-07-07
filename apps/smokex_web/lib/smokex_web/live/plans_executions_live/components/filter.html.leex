@@ -1,0 +1,7 @@
+<div class="list-group">
+  <%= FilterView.plan_execution_filter(:created, @plan_executions) %>
+  <%= FilterView.plan_execution_filter(:finished, @plan_executions) %>
+  <%= FilterView.plan_execution_filter(:halted, @plan_executions) %>
+  <%= FilterView.plan_execution_filter(:running, @plan_executions) %>
+</div>
+
