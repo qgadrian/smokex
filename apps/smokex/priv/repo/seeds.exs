@@ -26,21 +26,20 @@ for plan_definition_index <- 1..10 do
   for _ <- 1..5 do
     {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(plan_definition)
 
-    {:ok, _plan_execution} =
-      Smokex.PlanExecutions.update_plan_execution(plan_execution, %{status: :finished})
+    {:ok, _plan_execution} = Smokex.PlanExecutions.start(plan_execution)
+    {:ok, _plan_execution} = Smokex.PlanExecutions.finish(plan_execution)
   end
 
   for _ <- 1..5 do
     {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(plan_definition)
 
-    {:ok, _plan_execution} =
-      Smokex.PlanExecutions.update_plan_execution(plan_execution, %{status: :halted})
+    {:ok, _plan_execution} = Smokex.PlanExecutions.start(plan_execution)
+    {:ok, _plan_execution} = Smokex.PlanExecutions.halt(plan_execution)
   end
 
   for _ <- 1..5 do
     {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(plan_definition)
 
-    {:ok, _plan_execution} =
-      Smokex.PlanExecutions.update_plan_execution(plan_execution, %{status: :running})
+    {:ok, _plan_execution} = Smokex.PlanExecutions.start(plan_execution)
   end
 end

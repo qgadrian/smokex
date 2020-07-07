@@ -25,24 +25,31 @@ defmodule Smokex.PlanExecution do
   Represents a [plan definition](`t:#{PlanDefinition}/0`):
 
   * `status`: The [status](`t:#{__MODULE__}.status/0`) of the execution.
+  * `started_at`: When the execution was started, without timezone.
+  * `finished_at`: When the execution was finished, without timezone.
   * `plan_definition`: [action](`t:#{RequestActionEnum}/0`) that was executed.
   * `results`: The total [results](`t:#{RequestResultEnum}/0`) of the
   execution.
   """
   @type t :: %__MODULE__{
           status: status(),
+          started_at: NaiveDateTime.t(),
+          finished_at: NaiveDateTime.t(),
           plan_definition: PlanDefinition.t(),
           results: list(Result.t())
         }
 
   # @required_fields [:plan_definition_id]
   @required_fields []
-  @optional_fields [:status]
+  @optional_fields [:status, :started_at, :finished_at]
 
   @schema_fields @optional_fields ++ @required_fields
 
   schema "plans_executions" do
     field(:status, PlanExecutionStatus, null: false, default: :created)
+
+    field(:started_at, :naive_datetime, null: true)
+    field(:finished_at, :naive_datetime, null: true)
 
     belongs_to(:plan_definition, PlanDefinition)
 
