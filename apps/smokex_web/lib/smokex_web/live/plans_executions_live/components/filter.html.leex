@@ -1,8 +1,8 @@
 <div class="list-group">
-  <%= FilterView.plan_execution_filter(:all, @plan_executions, @active_filter) %>
-  <%= FilterView.plan_execution_filter(:created, @plan_executions, @active_filter) %>
-  <%= FilterView.plan_execution_filter(:finished, @plan_executions, @active_filter) %>
-  <%= FilterView.plan_execution_filter(:halted, @plan_executions, @active_filter) %>
-  <%= FilterView.plan_execution_filter(:running, @plan_executions, @active_filter) %>
+  <%= FilterView.plan_execution_filter(:all, @active_filter) %>
+  <%= FilterView.plan_execution_filter(:created, @active_filter) %>
+  <%= FilterView.plan_execution_filter(:finished, @active_filter) %>
+  <%= FilterView.plan_execution_filter(:halted, @active_filter) %>
+  <%= FilterView.plan_execution_filter(:running, @active_filter) %>
 </div>
 

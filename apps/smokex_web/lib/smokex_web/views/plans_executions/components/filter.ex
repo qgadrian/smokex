@@ -7,59 +7,49 @@ defmodule SmokexWeb.PlanExecutions.Components.FilterView do
   # active
   @default_class "list-group-item list-group-item-action d-flex justify-content-between align-items-center hover-cursor"
 
-  @spec plan_execution_filter(atom, list(PlanExecution.t()), boolean) :: Phoenix.HTML.Tag.t()
-  def plan_execution_filter(:all, plan_executions, active_filter) do
-    plan_executions
-    |> count_by(:all)
-    |> filter_tag("All", active_filter == :all)
+  @typep filter_name :: PlanExecution.state() | String.t()
+
+  @spec plan_execution_filter(atom, filter_name) :: Phoenix.HTML.Tag.t()
+  def plan_execution_filter(:all, active_filter) do
+    filter_tag("All", :all, active_filter)
   end
 
-  def plan_execution_filter(:created, plan_executions, active_filter) do
-    plan_executions
-    |> count_by(:created)
-    |> filter_tag("Created", active_filter == :created)
+  def plan_execution_filter(:created, active_filter) do
+    filter_tag("Created", :created, active_filter)
   end
 
-  def plan_execution_filter(:finished, plan_executions, active_filter) do
-    plan_executions
-    |> count_by(:finished)
-    |> filter_tag("Finished", active_filter == :finished)
+  def plan_execution_filter(:finished, active_filter) do
+    filter_tag("Finished", :finished, active_filter)
   end
 
-  def plan_execution_filter(:halted, plan_executions, active_filter) do
-    plan_executions
-    |> count_by(:halted)
-    |> filter_tag("Halted", active_filter == :halted)
+  def plan_execution_filter(:halted, active_filter) do
+    filter_tag("Halted", :halted, active_filter)
   end
 
-  def plan_execution_filter(:running, plan_executions, active_filter) do
-    plan_executions
-    |> count_by(:running)
-    |> filter_tag("Running", active_filter == :running)
+  def plan_execution_filter(:running, active_filter) do
+    filter_tag("Running", :running, active_filter)
   end
 
-  defp filter_tag(number_of_items, label, is_active) do
+  defp filter_tag(label, filter_name, active_filter) do
     class =
-      if is_active do
+      if is_active(filter_name, active_filter) do
         "#{@default_class} active"
       else
         @default_class
       end
 
-    content_tag :a, class: class do
+    content_tag :a, class: class, phx_click: "filter_executions", phx_value_filter: filter_name do
       [
-        content_tag(:span, label),
-        content_tag(:span, number_of_items, class: "badge badge-secondary badge-pill")
+        content_tag(:span, label)
       ]
     end
   end
 
-  defp count_by(plan_executions, :all), do: length(plan_executions)
+  defp is_active(filter_name, active_filter) when is_atom(active_filter) do
+    active_filter == filter_name
+  end
 
-  defp count_by(plan_executions, status) do
-    Enum.count(plan_executions, fn
-      %PlanExecution{status: ^status} -> true
-      _ -> false
-    end)
+  defp is_active(filter_name, active_filter) when is_binary(active_filter) do
+    String.to_existing_atom(active_filter) == filter_name
   end
 end
