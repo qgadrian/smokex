@@ -4,7 +4,7 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanExecutions
   alias Smokex.PlanExecution
-  alias SmokexWeb.PlansExecutionsLive.Components.Row, as: RowComponent
+  alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
   alias SmokexWeb.PlansExecutionsLive.Components.Filter, as: FilterComponent
 
   @default_assigns [
