@@ -1,7 +1,8 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-2">
-      <%= live_component @socket, FilterComponent, plan_executions: @plan_executions %>
+      <%= live_component @socket, FilterComponent, active_filter: @active_filter,
+        plan_executions: @plan_executions %>
     </div>
 
     <div class="col-10">

@@ -6,9 +6,13 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
   alias SmokexWeb.PlansExecutionsLive.Components.Row, as: RowComponent
   alias SmokexWeb.PlansExecutionsLive.Components.Filter, as: FilterComponent
 
+  @default_assigns [
+    active_filter: :all
+  ]
+
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, assign(socket, @default_assigns)}
   end
 
   def handle_params(%{"plan_definition_id" => plan_definition_id}, _url, socket) do
