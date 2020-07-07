@@ -4,6 +4,7 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanExecutions
   alias SmokexWeb.PlansExecutionsLive.Components.Row, as: RowComponent
+  alias SmokexWeb.PlansExecutionsLive.Components.Filter, as: FilterComponent
 
   @impl true
   def mount(_params, _session, socket) do
