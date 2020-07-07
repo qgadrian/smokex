@@ -3,6 +3,7 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
 
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanExecutions
+  alias Smokex.PlanExecution
   alias SmokexWeb.PlansExecutionsLive.Components.Row, as: RowComponent
   alias SmokexWeb.PlansExecutionsLive.Components.Filter, as: FilterComponent
 
@@ -25,8 +26,27 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
     {:noreply, socket}
   end
 
+  def handle_event("filter_executions", %{"filter" => "all"}, %Socket{} = socket) do
+    socket =
+      socket
+      |> assign(active_filter: :all)
+      |> fetch_executions
+
+    {:noreply, socket}
+  end
+
+  def handle_event(
+        "filter_executions",
+        %{"filter" => filter_name},
+        %Socket{assigns: %{plan_definition_id: plan_definition_id}} = socket
+      ) do
+    plan_executions = PlanExecutions.get_by_plan_definition(plan_definition_id, filter_name)
+
+    {:noreply, assign(socket, active_filter: filter_name, plan_executions: plan_executions)}
+  end
+
   defp fetch_executions(%Socket{assigns: %{plan_definition_id: plan_definition_id}} = socket) do
-    plan_definition_executions = PlanExecutions.list_by_plan_definition(plan_definition_id)
+    plan_definition_executions = PlanExecutions.get_by_plan_definition(plan_definition_id)
     assign(socket, plan_executions: plan_definition_executions)
   end
 end
