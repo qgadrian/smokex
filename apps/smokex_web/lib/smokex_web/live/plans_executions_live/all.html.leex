@@ -1,7 +1,13 @@
-<section class="phx-hero">
-    <%= for plan_execution <- @plan_executions do %>
-      <li class="list-group-item">
-        <%= plan_execution.status %>
-      </li>
-    <% end %>
-</section>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2">
+      <%= live_component @socket, FilterComponent, active_filter: @active_filter,
+        plan_executions: @plan_executions %>
+    </div>
+
+    <div class="col-10">
+      <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
+    </div>
+  </div>
+</div>
+
