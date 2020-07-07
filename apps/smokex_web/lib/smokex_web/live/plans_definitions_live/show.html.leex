@@ -1,11 +1,11 @@
 <div class="container-fluid">
-  <ul class="list-group">
-    <%= for plan_definition <- @plan_definitions do %>
-      <li class="list-group-item">
-        <%= live_patch "Plan #{plan_definition.name} executions",
-          to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, plan_definition.id),
-          class: "button" %>
-      </li>
-    <% end %>
-  </ul>
+  <div class="row">
+    <h1 class="display-4"><%= @plan_definition.name %></h1>
+  </div>
+
+  <div class="row">
+    <p class="lead">Last 5 executions of <%= @plan_definition.name %>.</p>
+
+    <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
+  </div>
 </div>

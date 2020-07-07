@@ -43,11 +43,13 @@ defmodule Smokex.PlanExecutions do
   @doc """
   Returns all the executions of a plan definition id.
   """
-  @spec get_by_plan_definition(integer) :: list(PlanExecution.t())
-  def get_by_plan_definition(plan_definition_id) do
+  @spec get_by_plan_definition(integer, integer) :: list(PlanExecution.t())
+  def get_by_plan_definition(plan_definition_id, limit) do
     query =
       from(plan_execution in PlanExecution,
         where: plan_execution.plan_definition_id == ^plan_definition_id,
+        limit: ^limit,
+        order_by: [asc: :finished_at],
         select: plan_execution
       )
 
