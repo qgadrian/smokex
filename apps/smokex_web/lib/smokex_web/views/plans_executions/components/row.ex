@@ -12,7 +12,7 @@ defmodule SmokexWeb.PlanExecutions.Components.RowView do
   end
 
   def status_badge(%PlanExecution{status: :halted}) do
-    content_tag(:span, "Danger", class: "badge badge-danger")
+    content_tag(:span, "Halted", class: "badge badge-danger")
   end
 
   def status_badge(%PlanExecution{status: :running}) do
