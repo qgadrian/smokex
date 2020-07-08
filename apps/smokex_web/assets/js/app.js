@@ -17,8 +17,35 @@ import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 
+import {EditorView, basicSetup} from "@codemirror/next/basic-setup"
+import {EditorState} from "@codemirror/next/state"
+import {tagExtension} from "@codemirror/next/state"
+import {javascript} from "@codemirror/next/lang-javascript"
+
+let Hooks = {}
+
+Hooks.LoadPlanDefinitionContent = {
+  content() { return this.el.dataset.content },
+  targetElement() { return this.el },
+  mounted() {
+    let state = EditorState.create({
+      doc:  this.content(),
+      extensions: [
+        basicSetup,
+        EditorView.contentAttributes.of({ contenteditable: false }),
+        tagExtension(Symbol("language"), javascript()),
+      ]
+    })
+
+    let view = new EditorView({
+      state,
+      parent: this.targetElement(),
+    })
+  }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks, params: {_csrf_token: csrfToken}})
 
 // Show progress bar on live navigation and form submits
 window.addEventListener("phx:page-loading-start", info => NProgress.start())
