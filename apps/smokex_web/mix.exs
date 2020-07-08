@@ -39,7 +39,7 @@ defmodule SmokexWeb.MixProject do
     [
       {:phoenix, "~> 1.5.3"},
       {:phoenix_ecto, "~> 4.0"},
-      {:phoenix_live_view, "~> 0.13.0"},
+      {:phoenix_live_view, "~> 0.14.0", override: true},
       {:floki, ">= 0.0.0", only: :test},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
