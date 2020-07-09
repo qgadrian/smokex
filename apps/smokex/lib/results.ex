@@ -3,33 +3,28 @@ defmodule Smokex.Results do
   Context module to work with [results](`t:#{Result}/0`).
   """
 
+  require Logger
+
   alias Smokex.Result
+  alias Smokex.PlanExecution
 
   @spec create(map) :: {:ok, Result.t()} | {:error, Ecto.Changeset.t()}
-  def create(%{plan_execution: plan_execution} = attrs) do
+  def create(%{plan_execution: %PlanExecution{id: plan_execution_id}} = attrs) do
     result =
       %Result{}
       |> Result.changeset(attrs)
       |> Smokex.Repo.insert()
-      |> notify_result(plan_execution)
-  end
 
-  defp notify_result({:ok, %Result{}} = result, plan_execution) do
-    Phoenix.PubSub.broadcast(
-      Smokex.PubSub,
-      "#{plan_execution.id}",
-      {:result, plan_execution}
-    )
-
-    result
-  end
-
-  defp notify_result({:error, _result_changeset} = result, plan_execution) do
-    Phoenix.PubSub.broadcast(
-      Smokex.PubSub,
-      "#{plan_execution.id}",
-      {:error, plan_execution}
-    )
+    with {:ok, result} <- result do
+      Phoenix.PubSub.broadcast(
+        Smokex.PubSub,
+        "#{plan_execution_id}",
+        {:result, result}
+      )
+    else
+      _ ->
+        Logger.error("Error creating result: #{inspect(result)}")
+    end
 
     result
   end

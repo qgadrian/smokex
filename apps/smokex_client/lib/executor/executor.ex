@@ -36,7 +36,7 @@ defmodule SmokexClient.Executor do
     |> case do
       {:ok, list_of_requests} ->
         try do
-          PlanExecutions.start(plan_execution)
+          {:ok, plan_execution} = PlanExecutions.start(plan_execution)
 
           Enum.each(list_of_requests, &Worker.execute(&1, plan_execution))
 
@@ -49,37 +49,6 @@ defmodule SmokexClient.Executor do
 
       {:error, reason} ->
         Logger.error("Execution #{id} error: #{inspect(reason)}")
-        PlanExecutions.halt(plan_execution)
-    end
-  end
-
-  @spec execute(PlanDefinition.t()) :: {:ok, term} | {:error, term}
-  def execute(%PlanDefinition{content: content} = plan_definition) do
-    # TODO stop using a process to handle the state here
-    ExecutionState.start_link()
-
-    {:ok, plan_execution} = PlanExecutions.create_plan_execution(plan_definition)
-
-    # TODO this code is currently expecting a YAML file, but the parser could
-    # be different depending on the type of content
-    content
-    |> YamlParser.parse()
-    |> case do
-      {:ok, list_of_requests} ->
-        try do
-          PlanExecutions.start(plan_execution)
-
-          Enum.each(list_of_requests, &Worker.execute(&1, plan_execution))
-
-          PlanExecutions.finish(plan_execution)
-        catch
-          {:error, reason} ->
-            Logger.error("Execution #{plan_execution.id} error: #{inspect(reason)}")
-            PlanExecutions.halt(plan_execution)
-        end
-
-      {:error, reason} ->
-        Logger.error("Execution #{plan_execution.id} error: #{inspect(reason)}")
         PlanExecutions.halt(plan_execution)
     end
   end

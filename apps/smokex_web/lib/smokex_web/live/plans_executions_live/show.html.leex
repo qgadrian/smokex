@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="row">
+    <h1>Plan execution details</h1>
+
+    <%= StatusBadge.new(@plan_execution) %>
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <%= for %Result{result: result, host: host} <- @results do %>
+        <p>
+          <span><%= result %><span>
+          <span><%= host %><span>
+        </p>
+      <% end %>
+    </div>
+  </div>
+</div>

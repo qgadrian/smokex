@@ -44,6 +44,15 @@ defmodule Smokex.PlanExecutions do
   end
 
   @doc """
+  Returns the plan execution with the given id. If no execution is found,
+  returns `nil`.
+  """
+  @spec get(integer) :: PlanExecution.t() | nil
+  def get(id) do
+    Smokex.Repo.get(PlanExecution, id)
+  end
+
+  @doc """
   Returns all plans definitions by the given params.
   """
   @spec by_status(PlanExecution.status() | String.t()) :: list(PlanExecution.t())
@@ -136,7 +145,7 @@ defmodule Smokex.PlanExecutions do
       status: :finished,
       finished_at: NaiveDateTime.utc_now()
     })
-    |> notify_change(:halted)
+    |> notify_change(:finished)
   end
 
   @doc """
@@ -155,6 +164,11 @@ defmodule Smokex.PlanExecutions do
   @spec subscribe(PlanExecution.t()) :: :ok | {:error, term}
   def subscribe(%PlanExecution{} = plan_execution) do
     Phoenix.PubSub.subscribe(Smokex.PubSub, "#{plan_execution.id}", link: true)
+  end
+
+  @spec subscribe(String.t()) :: :ok | {:error, term}
+  def subscribe(plan_execution_id) when is_binary(plan_execution_id) do
+    Phoenix.PubSub.subscribe(Smokex.PubSub, plan_execution_id, link: true)
   end
 
   @doc """
