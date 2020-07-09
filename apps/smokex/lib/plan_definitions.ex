@@ -31,4 +31,16 @@ defmodule Smokex.PlanDefinitions do
   def get(id) do
     Smokex.Repo.get(PlanDefinition, id)
   end
+
+  @doc """
+  Subscribes to the plan definition.
+  """
+  @spec subscribe(PlanDefinition.t() | String.t()) :: :ok | {:error, term}
+  def subscribe(plan_definition_id) when is_binary(plan_definition_id) do
+    Phoenix.PubSub.subscribe(Smokex.PubSub, plan_definition_id, link: true)
+  end
+
+  def subscribe(%PlanDefinition{} = plan_definition) do
+    Phoenix.PubSub.subscribe(Smokex.PubSub, "#{plan_definition.id}", link: true)
+  end
 end
