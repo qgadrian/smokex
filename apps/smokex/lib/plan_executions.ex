@@ -73,10 +73,11 @@ defmodule Smokex.PlanExecutions do
 
   @doc """
   Returns all the executions of a plan definition id that are in the given
-  status.
+  status, filtered by status.
   """
-  @spec get_by_plan_definition(integer, PlanExecution.status()) :: list(PlanExecution.t())
-  def get_by_plan_definition(plan_definition_id, status) do
+  @spec filtered_executions(integer, String.t() | PlanExecution.status()) ::
+          list(PlanExecution.t())
+  def filtered_executions(plan_definition_id, status) do
     query =
       from(plan_execution in PlanExecution,
         where: plan_execution.plan_definition_id == ^plan_definition_id,
