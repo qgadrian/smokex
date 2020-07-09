@@ -34,7 +34,13 @@ defmodule Smokex.PlanExecutions do
   """
   @spec all() :: list(PlanExecution.t())
   def all() do
-    Smokex.Repo.all(PlanExecution)
+    query =
+      from(plan_execution in PlanExecution,
+        order_by: [desc: :updated_at],
+        select: plan_execution
+      )
+
+    Smokex.Repo.all(query)
   end
 
   @doc """
@@ -149,6 +155,14 @@ defmodule Smokex.PlanExecutions do
   @spec subscribe(PlanExecution.t()) :: :ok | {:error, term}
   def subscribe(%PlanExecution{} = plan_execution) do
     Phoenix.PubSub.subscribe(Smokex.PubSub, "#{plan_execution.id}", link: true)
+  end
+
+  @doc """
+  Subscribes to the plan execution.
+  """
+  @spec subscribe(list(PlanExecution.t())) :: :ok | {:error, term}
+  def subscribe([%PlanExecution{} | _] = plan_executions) when is_list(plan_executions) do
+    Enum.each(plan_executions, &subscribe/1)
   end
 
   #
