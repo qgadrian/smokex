@@ -1,7 +1,8 @@
 defmodule SmokexClient do
+  require Logger
+
   alias SmokexClient.Executor
   alias SmokexClient.Parsers.Yaml.Parser
-  alias SmokexClient.Printer
 
   @default_quiet false
   @default_verbose false
@@ -27,7 +28,7 @@ defmodule SmokexClient do
         |> Executor.execute()
 
       {:error, message} ->
-        Printer.print_result({:error, message})
+        Logger.error("Error: #{inspect(message)}")
     end
   end
 
