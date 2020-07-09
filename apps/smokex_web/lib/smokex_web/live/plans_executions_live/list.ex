@@ -45,7 +45,7 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
         %{"filter" => filter_name},
         %Socket{assigns: %{plan_definition_id: plan_definition_id}} = socket
       ) do
-    plan_executions = PlanExecutions.get_by_plan_definition(plan_definition_id, filter_name)
+    plan_executions = PlanExecutions.filtered_executions(plan_definition_id, filter_name)
 
     {:noreply, assign(socket, active_filter: filter_name, plan_executions: plan_executions)}
   end
