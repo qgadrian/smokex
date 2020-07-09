@@ -42,18 +42,20 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
   @impl Phoenix.LiveView
   def handle_event(
         "filter_executions",
-        %{"filter" => filter_name},
+        %{"filter" => filter_status},
         %Socket{assigns: %{plan_definition_id: plan_definition_id}} = socket
       ) do
-    plan_executions = PlanExecutions.filtered_executions(plan_definition_id, filter_name)
+    filter_status = String.to_existing_atom(filter_status)
 
-    {:noreply, assign(socket, active_filter: filter_name, plan_executions: plan_executions)}
+    plan_executions = PlanExecutions.filtered_executions(plan_definition_id, filter_status)
+
+    {:noreply, assign(socket, active_filter: filter_status, plan_executions: plan_executions)}
   end
 
   @impl Phoenix.LiveView
   def handle_info(
-        {:created, %PlanExecution{} = plan_execution},
-        %Socket{assigns: %{plan_executions: plan_executions}} = socket
+        {:created, %PlanExecution{status: status} = plan_execution},
+        %Socket{assigns: %{plan_executions: plan_executions, active_filter: status}} = socket
       ) do
     plan_executions = [plan_execution | plan_executions]
 
@@ -62,6 +64,31 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
     {:noreply, assign(socket, plan_executions: plan_executions)}
   end
 
+  @impl Phoenix.LiveView
+  def handle_info(
+        {:created, %PlanExecution{}},
+        %Socket{assigns: %{active_filter: :all}} = socket
+      ) do
+    socket = fetch_executions(socket)
+
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_info({:created, %PlanExecution{}}, %Socket{} = socket) do
+    {:noreply, socket}
+  end
+
+  # TODO this won't add the plan execution to the active filter, only update if
+  # it's already present.
+  #
+  # Since the first state is created, it will match in the `:created` event,
+  # but if any other filter is active and then the execution changes to the
+  # state in the filter we will need to check if it's present and add it
+  # otherwise.
+  #
+  # Another solution could be fetch the executions.
+  #
   @impl Phoenix.LiveView
   def handle_info(
         {_event, %PlanExecution{id: id} = plan_execution},
@@ -79,7 +106,7 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
   defp fetch_executions(%Socket{assigns: %{plan_definition_id: plan_definition_id}} = socket) do
     plan_executions =
       plan_definition_id
-      |> PlanExecutions.get_by_plan_definition()
+      |> PlanExecutions.filtered_executions(:all)
       |> subscribe_to_changes()
 
     assign(socket, plan_executions: plan_executions)

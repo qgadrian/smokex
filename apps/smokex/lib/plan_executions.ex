@@ -51,15 +51,12 @@ defmodule Smokex.PlanExecutions do
     Smokex.Repo.all(query)
   end
 
-  # TODO rename this
-  def get_by_plan_definition(plan_definition_id, limit \\ 100)
-
   @doc """
-  Returns all the executions of a plan definition id.
+  Returns the last *number* of executions of a plan definition.
   """
-  @spec get_by_plan_definition(integer, integer) :: list(PlanExecution.t())
+  @spec last_executions(integer, integer) :: list(PlanExecution.t())
   # TODO add a config to limit
-  def get_by_plan_definition(plan_definition_id, limit) when is_number(limit) do
+  def last_executions(plan_definition_id, limit \\ 10) when is_number(limit) do
     query =
       from(plan_execution in PlanExecution,
         where: plan_execution.plan_definition_id == ^plan_definition_id,
@@ -75,13 +72,25 @@ defmodule Smokex.PlanExecutions do
   Returns all the executions of a plan definition id that are in the given
   status, filtered by status.
   """
-  @spec filtered_executions(integer, String.t() | PlanExecution.status()) ::
-          list(PlanExecution.t())
+  @typep filter_status :: String.t() | PlanExecution.status() | :all
+  @spec filtered_executions(integer, filter_status) :: list(PlanExecution.t())
+  def filtered_executions(plan_definition_id, :all) do
+    query =
+      from(plan_execution in PlanExecution,
+        where: plan_execution.plan_definition_id == ^plan_definition_id,
+        order_by: [desc: :updated_at],
+        select: plan_execution
+      )
+
+    Smokex.Repo.all(query)
+  end
+
   def filtered_executions(plan_definition_id, status) do
     query =
       from(plan_execution in PlanExecution,
         where: plan_execution.plan_definition_id == ^plan_definition_id,
         where: plan_execution.status == ^status,
+        order_by: [desc: :updated_at],
         select: plan_execution
       )
 
