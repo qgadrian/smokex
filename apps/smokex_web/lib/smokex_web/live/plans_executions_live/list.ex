@@ -115,14 +115,12 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
   @spec subscribe_to_changes(PlanExecution.t() | list(PlanExecution.t())) ::
           list(PlanExecution.t())
   defp subscribe_to_changes(%PlanExecution{} = plan_execution) do
-    subscribe_to_changes([plan_execution])
+    PlanExecutions.subscribe(plan_execution)
+    [plan_execution]
   end
 
   defp subscribe_to_changes(plan_executions) when is_list(plan_executions) do
-    Enum.each(plan_executions, fn plan_execution ->
-      Smokex.PlanExecutions.subscribe(plan_execution)
-    end)
-
+    PlanExecutions.subscribe(plan_executions)
     plan_executions
   end
 end
