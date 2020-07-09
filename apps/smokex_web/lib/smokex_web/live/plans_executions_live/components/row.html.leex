@@ -1,7 +1,17 @@
 <tr>
-  <td scope="row"><%= @plan_execution.id %></td>
-  <td scope="row"><%= @plan_execution.started_at %></td>
-  <td scope="row"><%= @plan_execution.finished_at %></td>
-  <td scope="row"><%= RowView.status_badge(@plan_execution) %></td>
+  <td scope="row">
+    <%= live_patch @plan_execution.id,
+to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.Show, @plan_execution.id),
+class: "nav-link" %>
+  </td>
+  <td scope="row">
+    <%= @plan_execution.started_at %>
+  </td>
+  <td scope="row">
+    <%= @plan_execution.finished_at %>
+  </td>
+  <td scope="row">
+    <%= RowView.status_badge(@plan_execution) %>
+  </td>
 </tr>
 

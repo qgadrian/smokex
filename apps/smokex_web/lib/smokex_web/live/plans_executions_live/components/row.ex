@@ -1,5 +1,5 @@
 defmodule SmokexWeb.PlansExecutionsLive.Components.Row do
-  use Phoenix.LiveComponent
+  use SmokexWeb, :live_component
 
   alias SmokexWeb.PlanExecutions.Components.RowView
 
