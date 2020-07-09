@@ -41,6 +41,21 @@ Hooks.LoadPlanDefinitionContent = {
       state,
       parent: this.targetElement(),
     })
+  },
+  updated() {
+    let state = EditorState.create({
+      doc:  this.content(),
+      extensions: [
+        basicSetup,
+        EditorView.contentAttributes.of({ contenteditable: false }),
+        tagExtension(Symbol("language"), javascript()),
+      ]
+    })
+
+    let view = new EditorView({
+      state,
+      parent: this.targetElement(),
+    })
   }
 }
 
