@@ -46,11 +46,10 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
   end
 
   defp fetch_plan_executions(%Socket{assigns: %{id: id}} = socket) do
-    plan_executions = PlanExecutions.get_by_plan_definition(id, 5)
+    plan_executions = PlanExecutions.last_executions(id, 5)
     assign(socket, plan_executions: plan_executions)
   end
 
-  # TODO move to a show view
   @impl Phoenix.LiveView
   def handle_info(
         {:created, %PlanExecution{} = plan_execution},
