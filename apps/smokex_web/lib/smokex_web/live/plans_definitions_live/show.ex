@@ -35,7 +35,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
     {:ok, plan_execution} = PlanExecutions.create_plan_execution(plan_definition)
     Smokex.PlanExecutions.subscribe(plan_execution)
 
-    PlanExecutions.start(plan_execution)
+    SmokexClient.Executor.execute(plan_execution)
 
     {:noreply, socket}
   end
@@ -71,5 +71,10 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
       end)
 
     {:noreply, assign(socket, plan_executions: plan_executions)}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_info(_message, socket) do
+    {:noreply, socket}
   end
 end
