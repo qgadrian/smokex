@@ -60,6 +60,7 @@ defmodule Smokex.PlanExecutions do
     query =
       from(plan_execution in PlanExecution,
         where: plan_execution.status == ^status,
+        order_by: [desc: :updated_at],
         select: plan_execution
       )
 
