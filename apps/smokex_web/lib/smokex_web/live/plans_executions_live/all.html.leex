@@ -1,13 +1,10 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-2">
-      <%= live_component @socket, FilterComponent, active_filter: @active_filter,
-        plan_executions: @plan_executions %>
-    </div>
+<h2 class="title">All executions</h2>
 
-    <div class="col-10">
-      <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
-    </div>
+<section class="section">
+  <div class="container">
+    <%= live_component @socket, FilterComponent, active_filter: @active_filter,
+plan_executions: @plan_executions %>
+
+    <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
   </div>
-</div>
-
+</section>

@@ -1,18 +1,32 @@
 <div class="container-fluid">
   <div class="row">
     <h1>Plan execution details</h1>
+  </div>
 
-    <%= StatusBadge.new(@plan_execution) %>
+  <div class="row">
+    Current status: <%= StatusBadge.new(@plan_execution) %>
   </div>
 
   <div class="row">
     <div class="container">
-      <%= for %Result{result: result, host: host} <- @results do %>
-        <p>
-          <span><%= result %><span>
-          <span><%= host %><span>
-        </p>
-      <% end %>
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th scope="col">Action</th>
+            <th scope="col">Host</th>
+            <th scope="col">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for %Result{} = result <- @results do %>
+            <tr>
+              <td scope="row"><%= result.action %></td>
+              <td scope="row"><%= result.host %></td>
+              <td scope="row"><%= result.result %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

@@ -1,8 +1,12 @@
-<div class="list-group">
-  <%= FilterView.plan_execution_filter(:all, @active_filter) %>
-  <%= FilterView.plan_execution_filter(:created, @active_filter) %>
-  <%= FilterView.plan_execution_filter(:finished, @active_filter) %>
-  <%= FilterView.plan_execution_filter(:halted, @active_filter) %>
-  <%= FilterView.plan_execution_filter(:running, @active_filter) %>
+<div class="column is-two-fifths">
+  <div class="box">
+    <p class="subtitle has-text-left">Execution status</p>
+    <div class="buttons has-addons">
+      <%= FilterView.plan_execution_filter(:all, @active_filter) %>
+      <%= FilterView.plan_execution_filter(:created, @active_filter) %>
+      <%= FilterView.plan_execution_filter(:finished, @active_filter) %>
+      <%= FilterView.plan_execution_filter(:halted, @active_filter) %>
+      <%= FilterView.plan_execution_filter(:running, @active_filter) %>
+    </div>
+  </div>
 </div>
-
