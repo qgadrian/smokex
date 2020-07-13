@@ -5,6 +5,8 @@
     <%= live_component @socket, FilterComponent, active_filter: @active_filter,
 plan_executions: @plan_executions %>
 
-    <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
+    <div class="box">
+      <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
+    </div>
   </div>
 </section>

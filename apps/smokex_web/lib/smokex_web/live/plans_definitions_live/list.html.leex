@@ -1,11 +1,40 @@
-<div class="container-fluid">
-  <ul class="list-group">
-    <%= for plan_definition <- @plan_definitions do %>
-      <li class="list-group-item">
-        <%= live_patch plan_definition.name,
-          to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Show, plan_definition.id),
-          class: "button" %>
-      </li>
-    <% end %>
-  </ul>
-</div>
+<h2 class="title">Plan definitions</h2>
+
+<section class="section">
+  <div class="container">
+    <div class="box">
+      <div class="column has-text-centered">
+        <a href="#" role="button" phx-click="execute" class="button is-large is-primary">Create new plan</a>
+      </div>
+
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Last execution at</th>
+            <th scope="col">Next execution at</th>
+            <th scope="col">Last status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for plan_definition <- @plan_definitions do %>
+            <tr>
+              <td scope="row">
+                <%= live_patch plan_definition.name, to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Show, plan_definition.id) %>
+              </td>
+              <td scope="row">
+                <%= ListView.last_execution_started(plan_definition) %>
+              </td>
+              <td scope="row">
+                <%= ListView.next_execution_started(plan_definition) %>
+              </td>
+              <td scope="row">
+                <%= ListView.last_execution_status(plan_definition) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

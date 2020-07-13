@@ -8,7 +8,11 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Table do
   end
 
   def update(%{plan_executions: plan_executions}, socket) do
-    {:ok, assign(socket, plan_executions: plan_executions)}
+    socket =
+      socket
+      |> assign(plan_executions: plan_executions)
+
+    {:ok, socket}
   end
 end
 

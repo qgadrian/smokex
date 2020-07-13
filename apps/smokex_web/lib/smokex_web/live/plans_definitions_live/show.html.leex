@@ -1,38 +1,24 @@
-<div class="container-fluid">
+<div class="container is-fullwidth">
   <h2 class="title"><%= @plan_definition.name %></h2>
 
-  <div class="row">
-    <div class="container">
-      <div class="row">
-        <h2>Definition of <%= @plan_definition.name %></h2>
-      </div>
+  <div class="box">
+    <div class="column has-text-centered">
+      <%= live_patch "View all executions",
+        to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
+        class: "button is-large is-primary is-outlined" %>
 
-      <div class="row">
-        <div class="col">
-          <div id=”plan-definition-content”
-               class="border border-primary"
-               phx-hook="LoadPlanDefinitionContent"
-               data-content="<%= @plan_definition.content %>">
-          </div>
-        </div>
-      </div>
+      <a href="#" role="button" phx-click="execute" class="button is-large is-primary">Start new execution</a>
     </div>
+
+    <%= live_component @socket, TableComponent, plan_executions: @plan_executions,
+title: "Last 5 executions of #{@plan_definition.name}" %>
   </div>
 
-  <div class="row">
-    <p class="subtitle">Last 5 executions of <%= @plan_definition.name %></p>
-
-    <div class="container">
-      <div class="row">
-        <%= live_patch "View executions",
-          to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
-          class: "button is-primary is-outlined" %>
-        <a href="#" role="button" phx-click="execute" class="button is-primary">Execute now</a>
-      </div>
-
-      <div class="row">
-        <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
-      </div>
+  <div class="box code-content">
+    <div id=”plan-definition-content”
+         class="border border-primary"
+         phx-hook="LoadPlanDefinitionContent"
+         data-content="<%= @plan_definition.content %>">
     </div>
   </div>
 </div>
