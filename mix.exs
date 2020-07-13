@@ -3,11 +3,16 @@ defmodule Smokex.Umbrella.MixProject do
 
   def project do
     [
+      aliases: aliases(),
       apps_path: "apps",
-      version: "0.1.0",
-      start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      start_permanent: Mix.env() == :prod,
+      version: "0.1.0",
+      releases: [
+        smokex: [
+          applications: [runtime_tools: :permanent]
+        ]
+      ]
     ]
   end
 
