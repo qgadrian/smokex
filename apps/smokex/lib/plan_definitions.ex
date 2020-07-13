@@ -4,6 +4,9 @@ defmodule Smokex.PlanDefinitions do
   """
 
   alias Smokex.PlanDefinition
+  alias Smokex.PlanExecution
+
+  import Ecto.Query
 
   @doc """
   Creates a new plan definition
@@ -21,6 +24,22 @@ defmodule Smokex.PlanDefinitions do
   @spec all() :: list(PlanExecution.t())
   def all() do
     Smokex.Repo.all(PlanDefinition)
+  end
+
+  @doc """
+  Preloads the `executions` field with the last updated execution.
+  """
+  @spec preload_last_execution(PlanDefinition.t()) :: list(PlanDefinition.t())
+  def preload_last_execution(%PlanDefinition{} = plan_definition) do
+    Smokex.Repo.preload(
+      plan_definition,
+      executions:
+        from(plan_execution in PlanExecution,
+          distinct: plan_execution.plan_definition_id,
+          order_by: [desc: :updated_at],
+          limit: 1
+        )
+    )
   end
 
   @doc """
