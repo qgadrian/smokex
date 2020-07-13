@@ -5,7 +5,7 @@ defmodule SmokexWeb.PlanExecutions.Components.FilterView do
 
   # disabled
   # active
-  @default_class "list-group-item list-group-item-action d-flex justify-content-between align-items-center hover-cursor"
+  @default_class "button"
 
   @typep filter_name :: PlanExecution.state() | String.t()
 
@@ -33,7 +33,7 @@ defmodule SmokexWeb.PlanExecutions.Components.FilterView do
   defp filter_tag(label, filter_name, active_filter) do
     class =
       if is_active(filter_name, active_filter) do
-        "#{@default_class} active"
+        "#{@default_class} is-info is-selected"
       else
         @default_class
       end

@@ -1,7 +1,5 @@
 <div class="container-fluid">
-  <div class="row">
-    <h1><%= @plan_definition.name %></h1>
-  </div>
+  <h2 class="title"><%= @plan_definition.name %></h2>
 
   <div class="row">
     <div class="container">
@@ -22,14 +20,14 @@
   </div>
 
   <div class="row">
-    <h2>Last 5 executions of <%= @plan_definition.name %></h2>
+    <p class="subtitle">Last 5 executions of <%= @plan_definition.name %></p>
 
     <div class="container">
       <div class="row">
         <%= live_patch "View executions",
           to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
-          class: "btn btn-outline-primary" %>
-        <a href="#" role="button" phx-click="execute" class="btn btn-primary">Execute now</a>
+          class: "button is-primary is-outlined" %>
+        <a href="#" role="button" phx-click="execute" class="button is-primary">Execute now</a>
       </div>
 
       <div class="row">
