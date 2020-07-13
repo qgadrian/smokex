@@ -1,3 +1,5 @@
+import Config
+
 config :smokex, SmokexWeb.Endpoint,
   http: [port: {:system, "PORT"}],
   secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
