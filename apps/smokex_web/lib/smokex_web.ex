@@ -23,6 +23,7 @@ defmodule SmokexWeb do
 
       import Plug.Conn
       import SmokexWeb.Gettext
+
       alias SmokexWeb.Router.Helpers, as: Routes
     end
   end
