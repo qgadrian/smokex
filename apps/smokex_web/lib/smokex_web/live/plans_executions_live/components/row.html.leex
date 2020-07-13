@@ -11,7 +11,7 @@ class: "nav-link" %>
     <%= @plan_execution.finished_at %>
   </td>
   <td scope="row">
-    <%= RowView.status_badge(@plan_execution) %>
+    <%= StatusBadge.new(@plan_execution) %>
   </td>
 </tr>
 
