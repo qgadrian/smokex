@@ -1,7 +1,7 @@
 defmodule SmokexWeb.PlansExecutionsLive.Components.Row do
   use SmokexWeb, :live_component
 
-  alias SmokexWeb.PlanExecutions.Components.RowView
+  alias SmokexWeb.PlanExecutions.Components.StatusBadge
 
   def mount(socket) do
     {:ok, socket}
