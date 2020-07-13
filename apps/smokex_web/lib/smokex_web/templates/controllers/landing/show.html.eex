@@ -1,4 +1,9 @@
 <section class="section">
+  <div class="container has-text-centered">
+    <img src="<%= Routes.static_path(@conn, "/images/landing.png") %>"
+         class="landing" alt="Landing image"/>
+  </div>
+
   <div class="container py-4">
     <h2 class="title has-text-centered mb-6">Some of our awesome features</h2>
     <div class="columns is-multiline">
@@ -60,7 +65,7 @@
         matters the most.</p>
       </div>
       <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Perfect for legacy project</h4>
+        <h4 class="title is-4">Perfect for legacy projects</h4>
         <p>Nobody wants to spend time writing tests against old projects. No
         matter what language or how old your code is, Smokex provides a non
         intrusive and up-to-date way to create acceptance tests and ensure your
