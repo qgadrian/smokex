@@ -10,7 +10,12 @@ defmodule Smokex.Umbrella.MixProject do
       version: "0.1.0",
       releases: [
         smokex: [
-          applications: [runtime_tools: :permanent]
+          applications: [
+            runtime_tools: :permanent,
+            smokex: :permanent,
+            smokex_web: :permanent,
+            smokex_client: :permanent
+          ]
         ]
       ]
     ]
