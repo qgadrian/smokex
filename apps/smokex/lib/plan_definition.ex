@@ -19,7 +19,6 @@ defmodule Smokex.PlanDefinition do
   """
   use Ecto.Schema
 
-  alias Smokex.Result
   alias Smokex.PlanExecution
 
   @required_fields [:name, :content]
