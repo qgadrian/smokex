@@ -17,7 +17,6 @@ defmodule SmokexWeb.Router do
   scope "/", SmokexWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
     get "/", Controllers.Landing, :show
     get "/landing", Controllers.Landing, :show
     get "/pricing", Controllers.Pricing, :show
