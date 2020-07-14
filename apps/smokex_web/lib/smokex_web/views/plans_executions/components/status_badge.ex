@@ -3,7 +3,7 @@ defmodule SmokexWeb.PlanExecutions.Components.StatusBadge do
 
   alias Smokex.PlanExecution
 
-  @default_class "tag is-medium"
+  @default_class "tag is-small"
 
   def new(%PlanExecution{status: :created}) do
     content_tag(:span, "Created", class: "#{@default_class} is-dark")
@@ -21,4 +21,3 @@ defmodule SmokexWeb.PlanExecutions.Components.StatusBadge do
     content_tag(:span, "Running", class: "#{@default_class} is-info")
   end
 end
-
