@@ -16,6 +16,12 @@ main#main-content {
 
 img.landing {
   width: 600px;
+
+  &.logo {
+    max-width: 500px;
+    display: block;
+    margin: auto;
+  }
 }
 
 @import "~bulma/bulma";

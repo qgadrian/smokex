@@ -12,11 +12,11 @@
           <li>Up to 2 plans</li>
           <li>Limited to 3 executions per day</li>
           <li>One execution at a time</li>
-          <li>Basic support</li>
+          <li>Premium support</li>
         </ul>
         <hr>
         <div class="buttons is-centered">
-          <button class="button is-primary" type="button">Create my account</button>
+          <button class="button is-large is-primary is-outlined" type="button">Create my account</button>
         </div>
       </div>
       <div class="column">
@@ -31,7 +31,7 @@
           <li>Premium support</li>
         </ul>
         <hr>
-        <button class="button is-primary is-outlined" type="button">Get my subscription</button>
+        <button class="button is-large is-primary" type="button">Get my subscription</button>
       </div>
       <div class="column">
         <h3 class="title is-4">Smokex Enterprise</h3>
@@ -45,7 +45,7 @@
           <li>Anything you need</li>
         </ul>
         <hr>
-        <button class="button is-primary is-outlined" type="button">Contact us</button>
+        <button class="button is-large is-primary is-outlined" type="button">Contact us</button>
       </div>
     </div>
   </div>

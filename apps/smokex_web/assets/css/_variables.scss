@@ -2,8 +2,25 @@ $primary: #7f5af0;
 
 $scheme-main: #242629;
 $scheme-main-bis: #16161a;
+$scheme-invert: #010101;
+
 $body-color: #fffffe;
 
+$navbar-tab-hover-background-color: #242629;
+$navbar-item-hover-background-color: #242629;
+
+$success: #2cb67d;
+$dark: #94a1b2;
+$danger: #ff5470;
+$info: #3da9fc;
+
 $link: #7f5af0;
+$link-hover: #2cb67d;
+
+$button-hover-color: #7f5af0;
+$button-hover-border-color: #7f5af0;
+
 $text: #fffffe;
 $text-strong: #fffffe;
+
+$box-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.5), 0 0px 0 1px rgba($scheme-invert, 0.02);

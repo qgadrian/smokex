@@ -5,7 +5,7 @@ defmodule SmokexWeb.PlanExecutions.Components.FilterView do
 
   # disabled
   # active
-  @default_class "button"
+  @default_class "button is-primary"
 
   @typep filter_name :: PlanExecution.state() | String.t()
 
@@ -33,9 +33,9 @@ defmodule SmokexWeb.PlanExecutions.Components.FilterView do
   defp filter_tag(label, filter_name, active_filter) do
     class =
       if is_active(filter_name, active_filter) do
-        "#{@default_class} is-info is-selected"
+        "#{@default_class} is-selected"
       else
-        @default_class
+        "#{@default_class} is-outlined"
       end
 
     content_tag :a, class: class, phx_click: "filter_executions", phx_value_filter: filter_name do
