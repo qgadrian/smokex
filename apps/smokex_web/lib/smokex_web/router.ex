@@ -21,6 +21,7 @@ defmodule SmokexWeb.Router do
     get "/landing", Controllers.Landing, :show
     get "/pricing", Controllers.Pricing, :show
     live "/plans", PlansDefinitionsLive.List
+    live "/stats", StatusLive.Show
     live "/plans/:id", PlansDefinitionsLive.Show
     live "/executions", PlansExecutionsLive.All
     live "/plans/:plan_definition_id/executions", PlansExecutionsLive.List

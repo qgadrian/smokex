@@ -68,6 +68,22 @@ defmodule Smokex.PlanExecutions do
   end
 
   @doc """
+  Returns the last *number* of executions of any plan definition.
+  """
+  @spec last_executions(integer) :: list(PlanExecution.t())
+  # TODO add a config to limit
+  def last_executions(limit) when is_number(limit) do
+    query =
+      from(plan_execution in PlanExecution,
+        limit: ^limit,
+        order_by: [desc: :updated_at],
+        select: plan_execution
+      )
+
+    Smokex.Repo.all(query)
+  end
+
+  @doc """
   Returns the last *number* of executions of a plan definition.
   """
   @spec last_executions(integer, integer) :: list(PlanExecution.t())
@@ -82,6 +98,35 @@ defmodule Smokex.PlanExecutions do
       )
 
     Smokex.Repo.all(query)
+  end
+
+  @doc """
+  Returns the summary of the executions.
+  """
+  @spec executions_summary() :: list(PlanExecution.t())
+  # TODO add the user to the query filtering
+  def executions_summary() do
+    query =
+      from(plan_execution in PlanExecution,
+        group_by: plan_execution.status,
+        select: {plan_execution.status, count(plan_execution.status)}
+      )
+
+    Smokex.Repo.all(query)
+  end
+
+  @doc """
+  Returns the total number of executions.
+  """
+  @spec total_executions() :: list(PlanExecution.t())
+  # TODO add the user to the query filtering
+  def total_executions() do
+    query =
+      from(plan_execution in PlanExecution,
+        select: count(plan_execution.id)
+      )
+
+    Smokex.Repo.one!(query)
   end
 
   @doc """

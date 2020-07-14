@@ -6,7 +6,7 @@
          <div class="container has-text-centered pb-6">
            <h2 class="title">Validate your applications with smoke tests</h2>
            <p>Smokex is a tool to validate your build and deployments by running
-           verifications against them using <a
+           verifications against them using <a target="_blank"
                                               href="https://en.wikipedia.org/wiki/Smoke_testing_(software)">smoke
                                               tests</a>. Using our tool you will avoid and react earlier to problems and
                                             you will build a trust that everything will run smoothly, allowing you what
@@ -25,7 +25,7 @@
         <h4 class="title is-4">Unleash the smoke tests</h4>
         <p class="block">Unit tests, integration tests, functional tests...
         There is a lot of testing practices and any combination suits best for
-        each of us. With <a
+        each of us. With <a target="_blank"
         href="https://martinfowler.com/articles/originalContinuousIntegration.html#WhatIsASuccessfulBuild">smoke
       tests</a> you will get a easy way to ensure your build and deployments
     are correct.</p>
