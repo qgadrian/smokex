@@ -1,0 +1,42 @@
+<section class="section">
+  <div class="container">
+    <h2 class="title">Executions summary</h2>
+    <p class="subtitle">List of all executions</p>
+    <div class="columns has-text-centered">
+      <div class="column is-4">
+        <div class="box has-background-primary">
+          <h3 class="title is-2 has-text-white"><%= @total_executions %></h3>
+          <p class="subtitle has-text-white">Total Executions</p>
+        </div>
+      </div>
+      <div class="column is-2">
+        <div class="box has-background-dark">
+          <h3 class="title is-2 has-text-white"><%= Keyword.get(@executions_summary, :created, 0) %></h3>
+          <p class="subtitle has-text-white">Created</p>
+        </div>
+      </div>
+      <div class="column is-2">
+        <div class="box has-background-success has-text-white">
+          <h3 class="title is-2 has-text-white"><%= Keyword.get(@executions_summary, :finished, 0) %></h3>
+          <p class="subtitle has-text-white">Successful</p>
+        </div>
+      </div>
+      <div class="column is-2">
+        <div class="box has-background-info">
+          <h3 class="title is-2 has-text-white"><%= Keyword.get(@executions_summary, :running, 0) %></h3>
+          <p class="subtitle has-text-white">Running</p>
+        </div>
+      </div>
+      <div class="column is-2">
+        <div class="box has-background-danger">
+          <h3 class="title is-2 has-text-white"><%= Keyword.get(@executions_summary, :halted, 0) %></h3>
+          <p class="subtitle has-text-white">Halted</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
+    </div>
+  </div>
+</section>
