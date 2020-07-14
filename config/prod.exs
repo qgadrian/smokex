@@ -12,7 +12,7 @@ use Mix.Config
 config :smokex_web, SmokexWeb.Endpoint,
   url: [
     scheme: "https",
-    host: "smokex.gigalixir.com",
+    host: "smokex.gigalixirapp.com",
     port: 443
   ],
   cache_static_manifest: "priv/static/cache_manifest.json"
