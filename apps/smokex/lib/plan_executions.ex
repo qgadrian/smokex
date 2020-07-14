@@ -176,6 +176,8 @@ defmodule Smokex.PlanExecutions do
   Subscribes to the plan execution.
   """
   @spec subscribe(list(PlanExecution.t())) :: :ok | {:error, term}
+  def subscribe([]), do: :ok
+
   def subscribe([%PlanExecution{} | _] = plan_executions) when is_list(plan_executions) do
     Enum.each(plan_executions, &subscribe/1)
   end
