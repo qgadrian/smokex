@@ -1,14 +1,10 @@
-<div class="container-fluid">
-  <div class="row">
-    <h1>Plan execution details</h1>
-  </div>
+<h2 class="title">Plan execution details</h2>
 
-  <div class="row">
-    Current status: <%= StatusBadge.new(@plan_execution) %>
-  </div>
+<section class="section">
+  <div class="container mb-6">
+    <div class="box">
+      <p class="subtitle">Current status: <%= StatusBadge.new(@plan_execution) %></p>
 
-  <div class="row">
-    <div class="container">
       <table class="table is-fullwidth">
         <thead>
           <tr>
@@ -29,4 +25,4 @@
       </table>
     </div>
   </div>
-</div>
+</section>

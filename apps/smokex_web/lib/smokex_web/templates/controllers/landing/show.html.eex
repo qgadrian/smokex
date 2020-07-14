@@ -1,10 +1,24 @@
 <section class="section">
-  <div class="container has-text-centered">
+  <div class="container has-text-centered pb-6">
+    <img src="<%= Routes.static_path(@conn, "/images/smokex_logo.png") %>"
+         class="landing logo mb-6" alt="Smokex Logo"/>
+
+         <div class="container has-text-centered pb-6">
+           <h2 class="title">Validate your applications with smoke tests</h2>
+           <p>Smokex is a tool to validate your build and deployments by running
+           verifications against them using <a
+                                              href="https://en.wikipedia.org/wiki/Smoke_testing_(software)">smoke
+                                              tests</a>. Using our tool you will avoid and react earlier to problems and
+                                            you will build a trust that everything will run smoothly, allowing you what
+                                            really is important.</p>
+         </div>
+
     <img src="<%= Routes.static_path(@conn, "/images/landing.png") %>"
          class="landing" alt="Landing image"/>
   </div>
 
-  <div class="container py-4">
+
+  <div class="container pb-6">
     <h2 class="title has-text-centered mb-6">Some of our awesome features</h2>
     <div class="columns is-multiline">
       <div class="column is-6 is-3-desktop">
@@ -41,8 +55,8 @@
 </section>
 
 <section class="section">
-  <div class="container has-text-centered">
-    <h2 class="title mb-6">Still not sure?</h2>
+  <div class="container has-text-centered pb-6">
+    <h2 class="title mb-6">Want more?</h2>
     <div class="columns is-multiline">
       <div class="column is-6 is-3-desktop">
         <h4 class="title is-4">Simplicity</h4>
