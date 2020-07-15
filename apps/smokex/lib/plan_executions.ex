@@ -30,22 +30,6 @@ defmodule Smokex.PlanExecutions do
   end
 
   @doc """
-  Returns all plans definitions executions.
-  """
-  @spec all(integer, integer) :: list(PlanExecution.t())
-  def all(current_page, per_page) do
-    query =
-      from(plan_execution in PlanExecution,
-        order_by: [desc: :updated_at],
-        offset: ^((current_page - 1) * per_page),
-        limit: ^per_page,
-        select: plan_execution
-      )
-
-    Smokex.Repo.all(query)
-  end
-
-  @doc """
   Returns the plan execution with the given id. If no execution is found,
   returns `nil`.
   """
@@ -55,36 +39,22 @@ defmodule Smokex.PlanExecutions do
   end
 
   @doc """
-  Returns all plans definitions.
-  """
-  @spec by_status(String.t(), integer, integer) ::
-          list(PlanExecution.t())
-  def by_status("all", current_page, per_page) do
-    query =
-      from(plan_execution in PlanExecution,
-        offset: ^((current_page - 1) * per_page),
-        limit: ^per_page,
-        order_by: [desc: :updated_at],
-        select: plan_execution
-      )
-
-    Smokex.Repo.all(query)
-  end
-
-  @doc """
   Returns all plans definitions by the given params.
   """
   @spec by_status(PlanExecution.status() | String.t(), integer, integer) ::
           list(PlanExecution.t())
-  def by_status(status, current_page, per_page) do
+  def by_status(status, current_page, per_page, opts \\ []) do
+    plan_definition_id = Keyword.get(opts, :plan_definition_id)
+
     query =
       from(plan_execution in PlanExecution,
-        where: plan_execution.status == ^status,
         offset: ^((current_page - 1) * per_page),
         limit: ^per_page,
         order_by: [desc: :updated_at],
         select: plan_execution
       )
+      |> maybe_query_by_status(status)
+      |> maybe_query_by_plan_definition(plan_definition_id)
 
     Smokex.Repo.all(query)
   end
@@ -264,5 +234,19 @@ defmodule Smokex.PlanExecutions do
     end
 
     result
+  end
+
+  @spec maybe_query_by_plan_definition(Ecto.Query.t(), integer) :: Ecto.Query
+  defp maybe_query_by_plan_definition(query, nil), do: query
+
+  defp maybe_query_by_plan_definition(query, plan_definition_id) do
+    where(query, plan_definition_id: ^plan_definition_id)
+  end
+
+  @spec maybe_query_by_status(Ecto.Query.t(), String.t()) :: Ecto.Query
+  defp maybe_query_by_status(query, "all"), do: query
+
+  defp maybe_query_by_status(query, status) do
+    where(query, status: ^status)
   end
 end
