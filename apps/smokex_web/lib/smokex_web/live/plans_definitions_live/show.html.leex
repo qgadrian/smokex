@@ -4,7 +4,7 @@
   <div class="box mb-6">
     <div class="column has-text-centered">
       <p class="title">This plan will execute</p>
-      <p class="title"><%= @plan_definition.cron_sentence %></p>
+      <p class="title" phx-hook="PrintCronHumanFriendly" data-cron-sentence="<%= @plan_definition.cron_sentence %>"></p>
     </div>
   </div>
 
