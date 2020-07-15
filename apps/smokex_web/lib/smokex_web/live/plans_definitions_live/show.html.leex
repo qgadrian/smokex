@@ -26,7 +26,8 @@
         to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
         class: "button is-primary is-outlined" %>
 
-      <a href="#" role="button" phx-click="execute" class="button is-primary is-outlined">Start new execution</a>
+      <a href="#" role="button" phx-click="execute" phx-disable-with="Starting..."
+        class="button is-primary is-outlined">Start new execution</a>
     </div>
   </div>
 </div>
