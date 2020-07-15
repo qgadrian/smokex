@@ -29,7 +29,7 @@ defmodule SmokexWeb.PlanDefinitions.ListView do
       date
     else
       _ ->
-        Logger.error("Error parsing cron sentence: #{cron_sentence}")
+        Logger.error("Error parsing cron expression: #{cron_sentence}")
         ""
     end
   end
