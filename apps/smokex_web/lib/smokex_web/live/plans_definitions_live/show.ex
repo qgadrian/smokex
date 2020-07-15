@@ -6,8 +6,6 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
   alias Smokex.PlanExecutions
   alias Smokex.PlanExecution
 
-  alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
-
   @impl true
   def mount(_params, _session, socket) do
     {:ok, socket}

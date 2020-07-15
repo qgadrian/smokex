@@ -52,6 +52,24 @@ defmodule Smokex.PlanDefinitions do
   end
 
   @doc """
+  Updates a plan definition.
+
+  ## Examples
+      iex> update(plan_definition, %{name: "test"})
+      {:ok, %PlanDefinition{}}
+      iex> update(plan_definition, %{name: nil})
+      {:error, %Ecto.Changeset{}}
+  """
+  def update(%PlanDefinition{} = plan_definition, attrs) do
+    plan_definition
+    |> PlanDefinition.changeset(attrs)
+    |> Smokex.Repo.update()
+
+    # TODO notify about the update
+    # |> notify_subscribers([:plan_definition, :updated])
+  end
+
+  @doc """
   Subscribes to the plan definition.
   """
   @spec subscribe(PlanDefinition.t() | String.t()) :: :ok | {:error, term}
