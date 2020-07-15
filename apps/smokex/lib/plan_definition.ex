@@ -21,10 +21,15 @@ defmodule Smokex.PlanDefinition do
 
   alias Smokex.PlanExecution
 
-  @required_fields [:name, :content]
+  @required_fields [:name, :cron_sentence, :content]
+  @optional_fields [:description]
+
+  @schema_fields @optional_fields ++ @required_fields
 
   schema "plans_definitions" do
-    field(:name, :string)
+    field(:name, :string, null: false)
+    field(:description, :string, null: true)
+    field(:cron_sentence, :string, null: false)
     field(:content, :string, null: false)
 
     # belongs_to(:user, User)
@@ -35,8 +40,9 @@ defmodule Smokex.PlanDefinition do
   end
 
   def changeset(changeset, params \\ %{}) do
+    # TODO validate cron sentence
     changeset
-    |> Ecto.Changeset.cast(params, @required_fields)
+    |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
 
     # |> Ecto.Changeset.put_assoc(:user, params[:user])
