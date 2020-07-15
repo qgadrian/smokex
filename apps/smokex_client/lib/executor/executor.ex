@@ -38,9 +38,18 @@ defmodule SmokexClient.Executor do
         try do
           {:ok, plan_execution} = PlanExecutions.start(plan_execution)
 
-          Enum.each(list_of_requests, &Worker.execute(&1, plan_execution))
+          # Enum.each(list_of_requests, &Worker.execute(&1, plan_execution))
+          spawn(fn ->
+            Enum.each(list_of_requests, fn request ->
+              Process.sleep(2000)
 
-          PlanExecutions.finish(plan_execution)
+              Worker.execute(request, plan_execution)
+            end)
+
+            PlanExecutions.finish(plan_execution)
+          end)
+
+          {:ok, plan_execution}
         catch
           {:error, reason} ->
             Logger.error("Execution #{id} error: #{inspect(reason)}")

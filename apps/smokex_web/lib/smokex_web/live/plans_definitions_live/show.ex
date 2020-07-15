@@ -33,9 +33,15 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
     {:ok, plan_execution} = PlanExecutions.create_plan_execution(plan_definition)
     Smokex.PlanExecutions.subscribe(plan_execution)
 
-    SmokexClient.Executor.execute(plan_execution)
+    with {:ok, %PlanExecution{id: id}} <- SmokexClient.Executor.execute(plan_execution) do
+      redirect_path = Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.Show, id)
 
-    {:noreply, socket}
+      {:noreply, redirect(socket, to: redirect_path)}
+    else
+      _ ->
+        # TODO handle error
+        {:noreply, socket}
+    end
   end
 
   defp fetch_plan_definition(%Socket{assigns: %{id: id}} = socket) do
