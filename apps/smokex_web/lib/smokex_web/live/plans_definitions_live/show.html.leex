@@ -3,7 +3,7 @@
 
   <div class="box mb-6">
     <div class="column has-text-centered">
-      <p class="title">Schedule</p>
+      <p class="title">This plan will execute</p>
       <p class="title"><%= @plan_definition.cron_sentence %></p>
     </div>
   </div>
@@ -19,7 +19,7 @@
   <div class="box mb-6">
     <div class="column has-text-centered">
       <%= live_patch "Edit plan",
-        to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
+        to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition.id),
         class: "button is-primary" %>
 
       <%= live_patch "View all executions",
