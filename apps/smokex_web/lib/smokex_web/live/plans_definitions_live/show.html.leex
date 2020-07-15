@@ -1,33 +1,59 @@
-<div class="container is-fullwidth">
-  <h2 class="title"><%= @plan_definition.name %></h2>
+<h2 class="title"><%= @plan_definition.name %></h2>
 
-  <div class="box mb-6">
-    <div class="column has-text-centered">
-      <p class="title">This plan will execute</p>
-      <p class="title" phx-hook="PrintCronHumanFriendly" data-cron-sentence="<%= @plan_definition.cron_sentence %>"></p>
+<section class="section">
+  <div class="container is-fullwidth">
+
+    <div class="box mb-6">
+      <%= form_for Smokex.PlanDefinition.changeset(@plan_definition), "#", [class: "form"], fn f -> %>
+        <div class="field">
+          <%= label(:name,"Name", class: "label") %>
+          <div class="control">
+            <%= text_input f, :name, class: "input", readonly: true %>
+          </div>
+        </div>
+
+        <div class="field">
+          <%= label(:description,"Description", class: "label") %>
+          <div class="control">
+            <%= text_input f, :description, class: "input", readonly: true %>
+          </div>
+        </div>
+
+        <div class="field">
+          <%= label(:cron_sentence,"Cron sentence", class: "label") %>
+          <div class="control">
+            <%= text_input f, :cron_sentence, class: "input", readonly: true %>
+          </div>
+        </div>
+      <% end %>
     </div>
-  </div>
 
-  <div class="box code-content">
-    <div id=”plan-definition-content”
-         class="border border-primary"
-         phx-hook="LoadPlanDefinitionContent"
-         data-content="<%= @plan_definition.content %>">
+    <div class="box mb-6 hidden">
+      <div class="column has-text-centered">
+        <p class="title">This plan will execute</p>
+        <p class="title" phx-hook="PrintCronHumanFriendly" data-cron-sentence="<%= @plan_definition.cron_sentence %>"></p>
+      </div>
     </div>
-  </div>
 
-  <div class="box mb-6">
+    <div class="box code-content">
+      <div id=”plan-definition-content”
+           class="border border-primary"
+           phx-hook="LoadPlanDefinitionContent"
+           data-content="<%= @plan_definition.content %>">
+      </div>
+    </div>
+
     <div class="column has-text-centered">
       <%= live_patch "Edit plan",
-        to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition.id),
-        class: "button is-primary" %>
+to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition.id),
+class: "button is-primary" %>
 
-      <%= live_patch "View all executions",
-        to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
-        class: "button is-primary is-outlined" %>
+<%= live_patch "View all executions",
+to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
+class: "button is-primary is-outlined" %>
 
-      <a href="#" role="button" phx-click="execute" phx-disable-with="Starting..."
-        class="button is-primary is-outlined">Start new execution</a>
+<a href="#" role="button" phx-click="execute" phx-disable-with="Starting..."
+                                              class="button is-primary is-outlined">Start new execution</a>
     </div>
   </div>
-</div>
+</section>

@@ -10,10 +10,9 @@ main#main-content {
   padding-top: 20px;
 }
 
-.box.code-content {
+.box.code-content, .code-content {
   padding: 0;
-  max-height: 400px;
-  min-height: 400px;
+  height: 400px!important;
   overflow: scroll;
 }
 
@@ -25,6 +24,10 @@ img.landing {
     display: block;
     margin: auto;
   }
+}
+
+.hidden {
+  display: none!important;
 }
 
 // Code editor syntax override
