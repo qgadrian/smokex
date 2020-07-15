@@ -2,11 +2,11 @@
   <div class="box">
     <p class="subtitle has-text-left">Execution status</p>
     <div class="buttons has-addons">
-      <%= FilterView.plan_execution_filter(:all, @active_filter) %>
-      <%= FilterView.plan_execution_filter(:created, @active_filter) %>
-      <%= FilterView.plan_execution_filter(:finished, @active_filter) %>
-      <%= FilterView.plan_execution_filter(:halted, @active_filter) %>
-      <%= FilterView.plan_execution_filter(:running, @active_filter) %>
+      <%= FilterView.plan_execution_filter(:all, @active_filter, @socket) %>
+      <%= FilterView.plan_execution_filter(:created, @active_filter, @socket) %>
+      <%= FilterView.plan_execution_filter(:finished, @active_filter, @socket) %>
+      <%= FilterView.plan_execution_filter(:halted, @active_filter, @socket) %>
+      <%= FilterView.plan_execution_filter(:running, @active_filter, @socket) %>
     </div>
   </div>
 </div>

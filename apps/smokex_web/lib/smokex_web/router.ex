@@ -25,6 +25,7 @@ defmodule SmokexWeb.Router do
     live "/plans/:id", PlansDefinitionsLive.Show
     live "/plans/:id/edit", PlansDefinitionsLive.Edit
     live "/executions", PlansExecutionsLive.All
+    live "/executions/:status/page/:page", PlansExecutionsLive.All
     live "/plans/:plan_definition_id/executions", PlansExecutionsLive.List
     live "/executions/:id", PlansExecutionsLive.Show
   end

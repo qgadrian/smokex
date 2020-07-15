@@ -32,11 +32,13 @@ defmodule Smokex.PlanExecutions do
   @doc """
   Returns all plans definitions executions.
   """
-  @spec all() :: list(PlanExecution.t())
-  def all() do
+  @spec all(integer, integer) :: list(PlanExecution.t())
+  def all(current_page, per_page) do
     query =
       from(plan_execution in PlanExecution,
         order_by: [desc: :updated_at],
+        offset: ^((current_page - 1) * per_page),
+        limit: ^per_page,
         select: plan_execution
       )
 
@@ -53,13 +55,33 @@ defmodule Smokex.PlanExecutions do
   end
 
   @doc """
+  Returns all plans definitions.
+  """
+  @spec by_status(String.t(), integer, integer) ::
+          list(PlanExecution.t())
+  def by_status("all", current_page, per_page) do
+    query =
+      from(plan_execution in PlanExecution,
+        offset: ^((current_page - 1) * per_page),
+        limit: ^per_page,
+        order_by: [desc: :updated_at],
+        select: plan_execution
+      )
+
+    Smokex.Repo.all(query)
+  end
+
+  @doc """
   Returns all plans definitions by the given params.
   """
-  @spec by_status(PlanExecution.status() | String.t()) :: list(PlanExecution.t())
-  def by_status(status) do
+  @spec by_status(PlanExecution.status() | String.t(), integer, integer) ::
+          list(PlanExecution.t())
+  def by_status(status, current_page, per_page) do
     query =
       from(plan_execution in PlanExecution,
         where: plan_execution.status == ^status,
+        offset: ^((current_page - 1) * per_page),
+        limit: ^per_page,
         order_by: [desc: :updated_at],
         select: plan_execution
       )
