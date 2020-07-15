@@ -48,12 +48,14 @@
 to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition.id),
 class: "button is-primary" %>
 
-<%= live_patch "View all executions",
-to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
-class: "button is-primary is-outlined" %>
 
-<a href="#" role="button" phx-click="execute" phx-disable-with="Starting..."
-                                              class="button is-primary is-outlined">Start new execution</a>
+  <%= live_patch "View executions",
+    to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, :all, 1, plan: @plan_definition.id),
+    class: "button is-primary is-outlined" %>
+
+  <a href="#" role="button" phx-click="execute"
+                            phx-disable-with="Starting..."
+                            class="button is-primary is-outlined">Start new execution</a>
     </div>
   </div>
 </section>

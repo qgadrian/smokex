@@ -7,8 +7,19 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Filter do
     {:ok, socket}
   end
 
-  def update(%{plan_executions: plan_executions, active_filter: active_filter}, socket) do
-    {:ok, assign(socket, plan_executions: plan_executions, active_filter: active_filter)}
+  def update(
+        %{
+          plan_executions: plan_executions,
+          active_filter: active_filter,
+          plan_definition_id: plan_definition_id
+        },
+        socket
+      ) do
+    {:ok,
+     assign(socket,
+       plan_executions: plan_executions,
+       active_filter: active_filter,
+       plan_definition_id: plan_definition_id
+     )}
   end
 end
-
