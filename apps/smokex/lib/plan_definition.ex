@@ -44,7 +44,18 @@ defmodule Smokex.PlanDefinition do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
+    |> validate_cron_expression()
 
     # |> Ecto.Changeset.put_assoc(:user, params[:user])
+  end
+
+  @spec validate_cron_expression(Ecto.Changeset.t()) :: keyword
+  defp validate_cron_expression(changeset) do
+    Ecto.Changeset.validate_change(changeset, :cron_sentence, fn _current_field, value ->
+      case Crontab.CronExpression.Parser.parse(value) do
+        {:ok, _cron_expression} -> []
+        _ -> [{:cron_sentence, "The cron expression is not valid"}]
+      end
+    end)
   end
 end
