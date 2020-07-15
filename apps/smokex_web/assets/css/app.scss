@@ -13,6 +13,7 @@ main#main-content {
 .box.code-content {
   padding: 0;
   max-height: 400px;
+  min-height: 400px;
   overflow: scroll;
 }
 
