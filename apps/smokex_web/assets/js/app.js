@@ -16,6 +16,7 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
+import cronstrue from 'cronstrue'
 
 import {EditorView, basicSetup} from "@codemirror/next/basic-setup"
 import {EditorState} from "@codemirror/next/state"
@@ -23,6 +24,17 @@ import {tagExtension} from "@codemirror/next/state"
 import {javascript} from "@codemirror/next/lang-javascript"
 
 let Hooks = {}
+
+Hooks.PrintCronHumanFriendly = {
+  cronSentence() { return this.el.dataset.cronSentence },
+  targetElement() { return this.el },
+  mounted() {
+    const cronSentence = this.cronSentence()
+    const humanFriendlyCron = cronstrue.toString(cronSentence)
+
+    this.targetElement().textContent = humanFriendlyCron
+  }
+}
 
 Hooks.LoadPlanDefinitionContent = {
   content() { return this.el.dataset.content },
