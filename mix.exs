@@ -12,6 +12,7 @@ defmodule Smokex.Umbrella.MixProject do
         smokex: [
           applications: [
             runtime_tools: :permanent,
+            crontab: :permanent,
             smokex: :permanent,
             smokex_web: :permanent,
             smokex_client: :permanent
