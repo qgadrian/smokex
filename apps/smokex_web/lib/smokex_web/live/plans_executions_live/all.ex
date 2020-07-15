@@ -9,25 +9,20 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
   alias SmokexWeb.PlansExecutionsLive.Components.Filter, as: FilterComponent
 
-  @default_assigns [
-    active_filter: :all
-  ]
-
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    socket =
-      socket
-      |> assign(@default_assigns)
-      |> fetch_executions
-
     {:ok, socket}
   end
 
   @impl Phoenix.LiveView
-  def handle_event("filter_executions", %{"filter" => "all"}, %Socket{} = socket) do
+  def handle_params(params, _url, socket) do
+    {page, ""} = Integer.parse(params["page"] || "1")
+    status = Map.get(params, "status", "all")
+
     socket =
       socket
-      |> assign(active_filter: :all)
+      |> assign(page: page)
+      |> assign(active_filter: status)
       |> fetch_executions
 
     {:noreply, socket}
@@ -39,9 +34,12 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
         %{"filter" => filter_name},
         %Socket{} = socket
       ) do
-    plan_executions = PlanExecutions.by_status(filter_name)
+    socket =
+      socket
+      |> assign(active_filter: filter_name)
+      |> fetch_executions
 
-    {:noreply, assign(socket, active_filter: filter_name, plan_executions: plan_executions)}
+    {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
@@ -51,9 +49,11 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
     {:noreply, socket}
   end
 
-  defp fetch_executions(%Socket{} = socket) do
+  defp fetch_executions(%Socket{assigns: %{active_filter: status, page: page}} = socket) do
+    # TODO make this configurable
     plans_executions =
-      PlanExecutions.all()
+      status
+      |> PlanExecutions.by_status(page, 20)
       |> subscribe_to_changes()
 
     assign(socket, plan_executions: plans_executions)

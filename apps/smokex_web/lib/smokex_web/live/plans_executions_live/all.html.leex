@@ -9,4 +9,28 @@ plan_executions: @plan_executions %>
       <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
     </div>
   </div>
+
+  <nav class="pagination is-centered mt-6" role="navigation" aria-label="pagination">
+    <%= if @page > 1 do %>
+      <%= live_patch "Previous", to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, @active_filter, @page - 1),
+        class: "pagination-previous" %>
+    <% end %>
+
+    <%= unless @plan_executions == [] do %>
+      <%= live_patch "Next", to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, @active_filter, @page + 1),
+class: "pagination-next" %>
+    <% end%>
+
+    <ul class="pagination-list">
+      <% next_pages = if @plan_executions == [] do @page else (@page + 5) end %>
+
+      <%= for i <- (@page - 5)..next_pages, i > 0 do %>
+        <% active_class = if @page == i do "is-current" else "" end %>
+
+        <%= live_patch "#{i}", to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, @active_filter, i),
+          class: "pagination-link #{active_class}" %>
+      <% end %>
+    </ul>
+  </nav>
+
 </section>
