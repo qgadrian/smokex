@@ -15,7 +15,9 @@ for plan_definition_index <- 1..10 do
 
   {:ok, plan_definition} =
     Smokex.PlanDefinitions.create(%{
-      name: "plan_definition_#{plan_definition_index}",
+      name: "plan_#{plan_definition_index}",
+      description: "This is the description for plan #{plan_definition_index}",
+      cron_sentence: "0 2 * * *",
       content: File.read!(example_file_path)
     })
 
