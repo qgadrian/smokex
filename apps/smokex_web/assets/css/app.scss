@@ -8,6 +8,11 @@
 
 main#main-content {
   padding-top: 20px;
+  min-height: calc(100vh - 55px - 6rem - 3rem);
+}
+
+footer {
+  height: 50px;
 }
 
 .box.code-content, .code-content {
