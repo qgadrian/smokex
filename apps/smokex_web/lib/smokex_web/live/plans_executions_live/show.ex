@@ -6,6 +6,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
   alias Smokex.PlanExecution
   alias Smokex.Result
   alias SmokexWeb.PlanExecutions.Components.StatusBadge
+  alias SmokexWeb.PlanExecutions.Components.Progress
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do

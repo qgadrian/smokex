@@ -3,6 +3,29 @@
 <section class="section">
   <div class="container mb-6">
     <div class="box">
+      <div class="columns has-text-centered">
+        <div class="column is-4">
+          <div class="box has-background-primary">
+            <%= Progress.total_progress(@results) %>
+            <p class="subtitle has-text-white">Executed</p>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="box has-background-success has-text-white">
+            <%= Progress.success(@results) %>
+            <p class="subtitle has-text-white">Successful</p>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="box has-background-danger">
+            <%= Progress.failed(@results) %>
+            <p class="subtitle has-text-white">Failed</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
       <p class="subtitle">Current status: <%= StatusBadge.new(@plan_execution) %></p>
 
       <table class="table is-fullwidth">
