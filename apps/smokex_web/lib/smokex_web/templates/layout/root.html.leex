@@ -23,13 +23,13 @@
               <%= live_patch "Stats", to: Routes.live_path(@conn, SmokexWeb.StatusLive.Show),
 class: "navbar-item" %>
 
-<%= live_patch "Plans", to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.List),
-class: "navbar-item" %>
+              <%= live_patch "Test plans", to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.List),
+              class: "navbar-item" %>
 
-<%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All),
-class: "navbar-item" %>
+              <%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All),
+              class: "navbar-item" %>
 
-<%= link "Pricing", to: Routes.pricing_path(SmokexWeb.Endpoint, :show) , class: "navbar-item" %>
+              <%= link "Pricing", to: Routes.pricing_path(SmokexWeb.Endpoint, :show) , class: "navbar-item" %>
             </div>
           </div>
         </div>
