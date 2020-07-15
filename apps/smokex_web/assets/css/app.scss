@@ -12,6 +12,8 @@ main#main-content {
 
 .box.code-content {
   padding: 0;
+  max-height: 400px;
+  overflow: scroll;
 }
 
 img.landing {
@@ -22,6 +24,16 @@ img.landing {
     display: block;
     margin: auto;
   }
+}
+
+// Code editor syntax override
+.cm-activeLine {
+  background-color: transparent!important;
+}
+
+.cm-gutters {
+  background-color: transparent!important;
+  color: $text!important;
 }
 
 @import "~bulma/bulma";

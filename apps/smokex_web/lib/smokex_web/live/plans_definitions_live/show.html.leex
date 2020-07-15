@@ -1,17 +1,11 @@
 <div class="container is-fullwidth">
   <h2 class="title"><%= @plan_definition.name %></h2>
 
-  <div class="box">
+  <div class="box mb-6">
     <div class="column has-text-centered">
-      <%= live_patch "View all executions",
-        to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
-        class: "button is-large is-primary is-outlined" %>
-
-      <a href="#" role="button" phx-click="execute" class="button is-large is-primary">Start new execution</a>
+      <p class="title">Schedule</p>
+      <p class="title"> * * * /5</p>
     </div>
-
-    <%= live_component @socket, TableComponent, plan_executions: @plan_executions,
-title: "Last 5 executions of #{@plan_definition.name}" %>
   </div>
 
   <div class="box code-content">
@@ -19,6 +13,20 @@ title: "Last 5 executions of #{@plan_definition.name}" %>
          class="border border-primary"
          phx-hook="LoadPlanDefinitionContent"
          data-content="<%= @plan_definition.content %>">
+    </div>
+  </div>
+
+  <div class="box mb-6">
+    <div class="column has-text-centered">
+      <%= live_patch "Edit plan",
+        to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
+        class: "button is-primary" %>
+
+      <%= live_patch "View all executions",
+        to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, @plan_definition.id),
+        class: "button is-primary is-outlined" %>
+
+      <a href="#" role="button" phx-click="execute" class="button is-primary is-outlined">Start new execution</a>
     </div>
   </div>
 </div>
