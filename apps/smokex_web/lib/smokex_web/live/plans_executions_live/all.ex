@@ -108,8 +108,8 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   @impl Phoenix.LiveView
   def handle_info(message, socket) do
     # TODO handle messages in this view
-    Logger.error(inspect(message))
-    Logger.error(inspect(socket))
+    Logger.debug(inspect(message))
+    Logger.debug(inspect(socket))
     {:noreply, socket}
   end
 
