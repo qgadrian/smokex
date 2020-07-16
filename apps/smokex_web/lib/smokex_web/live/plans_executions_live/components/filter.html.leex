@@ -17,11 +17,11 @@
     <p class="subtitle has-text-left">Execution status</p>
 
     <div class="control status-filter-vertical">
-      <%= for status <- ["all", "created", "finished", "halted", "running"] do %>
+      <%= for status <- [:all, :created, :finished, :halted, :running] do %>
         <label class="radio">
           <% checked = status == @active_filter %>
           <%= radio_button(form, :status, status, checked: checked) %>
-          <span> <%= String.capitalize(status) %></span>
+          <span> <%= status |> Atom.to_string |> String.capitalize() %></span>
         </label>
       <% end %>
     </div>

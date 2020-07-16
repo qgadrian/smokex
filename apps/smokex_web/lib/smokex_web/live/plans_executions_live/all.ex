@@ -18,7 +18,11 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   @impl Phoenix.LiveView
   def handle_params(params, _url, socket) do
     {page, ""} = Integer.parse(params["page"] || "1")
-    status = Map.get(params, "status", "all")
+
+    status =
+      params
+      |> Map.get("status", "all")
+      |> String.to_existing_atom()
 
     plan_definition_id =
       params
@@ -26,7 +30,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       |> Integer.parse()
       |> case do
         {plan_definition_id, ""} -> plan_definition_id
-        :error -> ""
+        :error -> nil
       end
 
     socket =
@@ -34,6 +38,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       |> assign(page: page)
       |> assign(active_filter: status)
       |> assign(plan_definition_id: plan_definition_id)
+      |> maybe_subscribe_to_plan_definition()
       |> fetch_executions
       |> fetch_plan_definitions
 
@@ -49,8 +54,10 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
     plan_definition_id =
       case Integer.parse(plan_definition_id) do
         {plan_definition_id, ""} -> plan_definition_id
-        :error -> ""
+        :error -> nil
       end
+
+    status_filter = String.to_existing_atom(status_filter)
 
     socket =
       socket
@@ -60,7 +67,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
 
     path_to =
       case plan_definition_id do
-        "" ->
+        nil ->
           Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, status_filter, 1)
 
         plan_definition_id ->
@@ -69,19 +76,46 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
           )
       end
 
-    {:noreply,
-     socket
-     |> push_patch(to: path_to)}
+    {:noreply, push_patch(socket, to: path_to)}
+  end
 
-    # {:noreply, socket}
+  @impl Phoenix.LiveView
+  def handle_info(
+        {:created, %PlanExecution{}},
+        %Socket{assigns: %{active_filter: :all}} = socket
+      ) do
+    socket =
+      socket
+      |> fetch_executions()
+      |> subscribe_to_changes()
+
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_info(
+        {:created, %PlanExecution{status: status}},
+        %Socket{assigns: %{active_filter: status}} = socket
+      ) do
+    socket =
+      socket
+      |> fetch_executions()
+      |> subscribe_to_changes()
+
+    {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
   def handle_info(message, socket) do
     # TODO handle messages in this view
     Logger.error(inspect(message))
+    Logger.error(inspect(socket))
     {:noreply, socket}
   end
+
+  #
+  # Private functions
+  #
 
   @spec fetch_executions(Socket.t()) :: Socket.t()
   defp fetch_executions(
@@ -109,5 +143,35 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   defp subscribe_to_changes(plan_executions) when is_list(plan_executions) do
     Smokex.PlanExecutions.subscribe(plan_executions)
     plan_executions
+  end
+
+  @spec subscribe_to_changes(Socket.t()) :: list(PlanExecution.t())
+  defp subscribe_to_changes(%Socket{assigns: %{plan_executions: plan_executions}} = socket)
+       when is_list(plan_executions) do
+    Smokex.PlanExecutions.subscribe(plan_executions)
+    socket
+  end
+
+  @spec maybe_subscribe_to_plan_definition(Socket.t()) :: Socket.t()
+  defp maybe_subscribe_to_plan_definition(
+         %Socket{assigns: %{plan_definition_id: plan_definition_id}} = socket
+       )
+       when is_number(plan_definition_id) do
+    PlanDefinitions.subscribe("#{plan_definition_id}")
+
+    socket
+  end
+
+  defp maybe_subscribe_to_plan_definition(%Socket{} = socket), do: socket
+
+  @spec page_path(Socket.t(), PlanExecution.status(), integer, integer | nil) :: term
+  defp page_path(socket, active_filter, page, nil) do
+    Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, active_filter, page)
+  end
+
+  defp page_path(socket, active_filter, page, plan_definition_id) do
+    Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, active_filter, page,
+      plan: plan_definition_id
+    )
   end
 end

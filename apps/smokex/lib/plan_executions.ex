@@ -245,7 +245,7 @@ defmodule Smokex.PlanExecutions do
   defp maybe_query_by_plan_definition(query, _), do: query
 
   @spec maybe_query_by_status(Ecto.Query.t(), String.t()) :: Ecto.Query
-  defp maybe_query_by_status(query, "all"), do: query
+  defp maybe_query_by_status(query, :all), do: query
 
   defp maybe_query_by_status(query, status) do
     where(query, status: ^status)
