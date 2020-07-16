@@ -4,7 +4,8 @@
   <div class="container">
     <div class="box">
       <div class="column has-text-centered">
-        <a href="#" role="button" phx-click="execute" class="button is-large is-primary">Create new plan</a>
+        <%= live_patch "Create plan", class: "button is-primary",
+          to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %>
       </div>
 
       <table class="table is-fullwidth">
@@ -20,7 +21,8 @@
           <%= for plan_definition <- @plan_definitions do %>
             <tr>
               <td scope="row">
-                <%= live_patch plan_definition.name, to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Show, plan_definition.id) %>
+                <%= live_patch plan_definition.name, to:
+                  Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Show, plan_definition.id) %>
               </td>
               <td scope="row">
                 <%= ListView.last_execution_started(plan_definition) %>

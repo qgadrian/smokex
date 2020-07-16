@@ -17,16 +17,20 @@ defmodule SmokexWeb.Router do
   scope "/", SmokexWeb do
     pipe_through :browser
 
-    live "/", StatusLive.Show
     get "/landing", Controllers.Landing, :show
     get "/pricing", Controllers.Pricing, :show
-    live "/plans", PlansDefinitionsLive.List
+
+    live "/", StatusLive.Show
     live "/stats", StatusLive.Show
+
+    live "/plans", PlansDefinitionsLive.List
+    live "/plans/new", PlansDefinitionsLive.New
     live "/plans/:id", PlansDefinitionsLive.Show
     live "/plans/:id/edit", PlansDefinitionsLive.Edit
+    live "/plans/:plan_definition_id/executions", PlansExecutionsLive.List
+
     live "/executions", PlansExecutionsLive.All
     live "/executions/:status/page/:page", PlansExecutionsLive.All
-    live "/plans/:plan_definition_id/executions", PlansExecutionsLive.List
     live "/executions/:id", PlansExecutionsLive.Show
   end
 
