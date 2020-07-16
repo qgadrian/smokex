@@ -4,13 +4,13 @@ defmodule SmokexWeb.PlansDefinitionsLive.List do
   alias SmokexWeb.PlanDefinitions.ListView
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanDefinitions
-  alias Smokex.PlanDefinition
 
   @impl true
   def mount(_params, _session, socket) do
     socket =
       socket
       |> fetch_plan_definitions()
+      |> assign(page_title: "Test plans")
 
     {:ok, socket}
   end
