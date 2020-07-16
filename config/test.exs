@@ -26,3 +26,5 @@ config :httparrot,
   https_port: 5743,
   ssl: true,
   unix_socket: false
+
+config :ex_unit, assert_receive_timeout: 2_000

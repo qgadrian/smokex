@@ -10,7 +10,6 @@ defmodule SmokexClient.Executor do
 
   require Logger
 
-  alias SmokexClient.ExecutionState
   alias SmokexClient.Worker
   alias SmokexClient.Parsers.Yaml.Parser, as: YamlParser
 
@@ -26,35 +25,30 @@ defmodule SmokexClient.Executor do
           plan_definition: %PlanDefinition{content: content}
         } = plan_execution
       ) do
-    # TODO stop using a process to handle the state here
-    ExecutionState.start_link()
-
     # TODO this code is currently expecting a YAML file, but the parser could
     # be different depending on the type of content
     content
     |> YamlParser.parse()
     |> case do
       {:ok, list_of_requests} ->
-        try do
-          {:ok, plan_execution} = PlanExecutions.start(plan_execution)
+        {:ok, plan_execution} = PlanExecutions.start(plan_execution)
 
-          # Enum.each(list_of_requests, &Worker.execute(&1, plan_execution))
-          spawn(fn ->
+        #  TODO do not just spawn a process
+        spawn(fn ->
+          try do
             Enum.each(list_of_requests, fn request ->
-              Process.sleep(2000)
-
               Worker.execute(request, plan_execution)
             end)
 
             PlanExecutions.finish(plan_execution)
-          end)
+          catch
+            {:error, reason} ->
+              Logger.error("Execution #{id} error: #{inspect(reason)}")
+              PlanExecutions.halt(plan_execution)
+          end
+        end)
 
-          {:ok, plan_execution}
-        catch
-          {:error, reason} ->
-            Logger.error("Execution #{id} error: #{inspect(reason)}")
-            PlanExecutions.halt(plan_execution)
-        end
+        {:ok, plan_execution}
 
       {:error, reason} ->
         Logger.error("Execution #{id} error: #{inspect(reason)}")

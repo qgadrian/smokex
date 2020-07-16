@@ -38,7 +38,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
         |> process_validation(step, plan_execution)
 
       {:error, %HTTPoison.Error{reason: reason}} ->
-        process_request_error(step, reason)
+        process_request_error(step, reason, plan_execution)
         throw({:error, reason})
     end
   end
@@ -62,13 +62,6 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
             result: :error
           })
 
-        ExecutionState.put_result(%Result{
-          action: step.action,
-          host: step.host,
-          failed_assertions: info,
-          result: :error
-        })
-
         throw({:error, message})
 
       {:ok, response_body} ->
@@ -82,40 +75,43 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
             host: step.host,
             result: :ok
           })
-
-        ExecutionState.put_result(%Result{
-          action: step.action,
-          host: step.host,
-          result: :ok
-        })
     end
   end
 
-  @spec process_request_error(Request.t(), any) :: :ok
-  defp process_request_error(%Request{} = step, reason) do
+  @spec process_request_error(Request.t(), any, PlanExecution.t()) :: :ok
+  defp process_request_error(%Request{} = step, reason, plan_execution) do
     case reason do
       :nxdomain ->
-        ExecutionState.put_result(%Result{
-          action: step.action,
-          host: step.host,
-          failed_assertions: %{error: "Invalid host"},
-          result: :error
-        })
+        # TODO save in database and notify the result via PubSub
+        {:ok, result} =
+          Smokex.Results.create(%{
+            plan_execution: plan_execution,
+            action: step.action,
+            host: step.host,
+            failed_assertions: [%{error: "Invalid host"}],
+            result: :error
+          })
 
       nil ->
-        ExecutionState.put_result(%Result{
-          action: step.action,
-          host: step.host,
-          result: :error
-        })
+        # TODO save in database and notify the result via PubSub
+        {:ok, result} =
+          Smokex.Results.create(%{
+            plan_execution: plan_execution,
+            action: step.action,
+            host: step.host,
+            result: :error
+          })
 
       _other ->
-        ExecutionState.put_result(%Result{
-          action: step.action,
-          host: step.host,
-          failed_assertions: %{error: reason},
-          result: :error
-        })
+        # TODO save in database and notify the result via PubSub
+        {:ok, result} =
+          Smokex.Results.create(%{
+            plan_execution: plan_execution,
+            action: step.action,
+            host: step.host,
+            failed_assertions: [%{error: reason}],
+            result: :error
+          })
     end
   end
 
