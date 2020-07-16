@@ -19,13 +19,15 @@
 
   <nav class="pagination is-centered mt-6" role="navigation" aria-label="pagination">
     <%= if @page > 1 do %>
-      <%= live_patch "Previous", to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, @active_filter, @page - 1, plan: @plan_definition_id),
-class: "pagination-previous" %>
+      <%= live_patch "Previous",
+        to: page_path(@socket, @active_filter, @page - 1, @plan_definition_id),
+        class: "pagination-previous" %>
     <% end %>
 
     <%= unless @plan_executions == [] do %>
-      <%= live_patch "Next", to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, @active_filter, @page + 1, plan: @plan_definition_id),
-class: "pagination-next" %>
+      <%= live_patch "Next",
+        to: page_path(@socket, @active_filter, @page + 1, @plan_definition_id),
+        class: "pagination-next" %>
     <% end%>
 
     <ul class="pagination-list">
@@ -35,8 +37,7 @@ class: "pagination-next" %>
         <% active_class = if @page == i do "is-current" else "" end %>
 
         <%= live_patch "#{i}",
-          to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, @active_filter, i,
-          plan: @plan_definition_id),
+          to: page_path(@socket, @active_filter, i, @plan_definition_id),
           class: "pagination-link #{active_class}" %>
       <% end %>
     </ul>
