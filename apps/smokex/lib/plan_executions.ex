@@ -236,12 +236,13 @@ defmodule Smokex.PlanExecutions do
     result
   end
 
-  @spec maybe_query_by_plan_definition(Ecto.Query.t(), integer) :: Ecto.Query
-  defp maybe_query_by_plan_definition(query, nil), do: query
-
-  defp maybe_query_by_plan_definition(query, plan_definition_id) do
+  @spec maybe_query_by_plan_definition(Ecto.Query.t(), integer | binary) :: Ecto.Query
+  defp maybe_query_by_plan_definition(query, plan_definition_id)
+       when is_number(plan_definition_id) do
     where(query, plan_definition_id: ^plan_definition_id)
   end
+
+  defp maybe_query_by_plan_definition(query, _), do: query
 
   @spec maybe_query_by_status(Ecto.Query.t(), String.t()) :: Ecto.Query
   defp maybe_query_by_status(query, "all"), do: query

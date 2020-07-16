@@ -21,6 +21,16 @@ footer {
   overflow: scroll;
 }
 
+.status-filter-vertical {
+  display: flex;
+  flex-direction: column;
+
+  .radio {
+    margin-left: 0!important;
+    margin-top: 0.5em!important;
+  }
+}
+
 img.landing {
   width: 600px;
 
