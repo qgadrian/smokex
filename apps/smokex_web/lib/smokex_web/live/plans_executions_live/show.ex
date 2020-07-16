@@ -21,6 +21,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
       socket
       |> assign(id: id)
       |> fetch_plan_execution()
+      |> assign(page_title: "Execution #{id}")
 
     {:noreply, socket}
   end

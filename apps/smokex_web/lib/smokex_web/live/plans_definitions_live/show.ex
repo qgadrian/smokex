@@ -20,6 +20,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
       |> assign(id: id)
       |> fetch_plan_definition()
       |> fetch_plan_executions()
+      |> put_page_title()
 
     {:noreply, socket}
   end
@@ -42,16 +43,6 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
         # TODO handle error
         {:noreply, socket}
     end
-  end
-
-  defp fetch_plan_definition(%Socket{assigns: %{id: id}} = socket) do
-    plan_definition = PlanDefinitions.get(id)
-    assign(socket, plan_definition: plan_definition)
-  end
-
-  defp fetch_plan_executions(%Socket{assigns: %{id: id}} = socket) do
-    plan_executions = PlanExecutions.last_executions(id, 5)
-    assign(socket, plan_executions: plan_executions)
   end
 
   @impl Phoenix.LiveView
@@ -80,5 +71,23 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
   @impl Phoenix.LiveView
   def handle_info(_message, socket) do
     {:noreply, socket}
+  end
+
+  #
+  # Private functions
+  #
+
+  defp fetch_plan_definition(%Socket{assigns: %{id: id}} = socket) do
+    plan_definition = PlanDefinitions.get(id)
+    assign(socket, plan_definition: plan_definition)
+  end
+
+  defp fetch_plan_executions(%Socket{assigns: %{id: id}} = socket) do
+    plan_executions = PlanExecutions.last_executions(id, 5)
+    assign(socket, plan_executions: plan_executions)
+  end
+
+  defp put_page_title(%Socket{assigns: %{plan_definition: plan_definition}} = socket) do
+    assign(socket, page_title: plan_definition.name)
   end
 end

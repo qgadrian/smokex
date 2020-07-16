@@ -16,6 +16,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Edit do
       socket
       |> assign(id: id)
       |> fetch_plan_definition()
+      |> put_page_title
 
     {:noreply, socket}
   end
@@ -50,10 +51,18 @@ defmodule SmokexWeb.PlansDefinitionsLive.Edit do
     end
   end
 
+  #
+  # Private functions
+  #
+
   defp fetch_plan_definition(%Socket{assigns: %{id: id}} = socket) do
     plan_definition = PlanDefinitions.get(id)
     changeset = Ecto.Changeset.change(plan_definition)
 
     assign(socket, plan_definition: plan_definition, changeset: changeset)
+  end
+
+  defp put_page_title(%Socket{assigns: %{plan_definition: plan_definition}} = socket) do
+    assign(socket, page_title: "Edit #{plan_definition.name}")
   end
 end

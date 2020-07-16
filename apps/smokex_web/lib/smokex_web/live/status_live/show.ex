@@ -9,6 +9,7 @@ defmodule SmokexWeb.StatusLive.Show do
   def mount(_params, _session, socket) do
     socket =
       socket
+      |> assign(page_title: "Stats")
       |> fetch_plan_executions()
       |> fetch_total_executions()
       |> fetch_executions_summary()
