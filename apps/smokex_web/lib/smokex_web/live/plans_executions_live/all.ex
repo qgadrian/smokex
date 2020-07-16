@@ -5,6 +5,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
 
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanExecutions
+  alias Smokex.PlanDefinitions
   alias Smokex.PlanExecution
   alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
   alias SmokexWeb.PlansExecutionsLive.Components.Filter, as: FilterComponent
@@ -18,7 +19,15 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   def handle_params(params, _url, socket) do
     {page, ""} = Integer.parse(params["page"] || "1")
     status = Map.get(params, "status", "all")
-    plan_definition_id = Map.get(params, "plan")
+
+    plan_definition_id =
+      params
+      |> Map.get("plan", "")
+      |> Integer.parse()
+      |> case do
+        {plan_definition_id, ""} -> plan_definition_id
+        :error -> ""
+      end
 
     socket =
       socket
@@ -26,22 +35,45 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       |> assign(active_filter: status)
       |> assign(plan_definition_id: plan_definition_id)
       |> fetch_executions
+      |> fetch_plan_definitions
 
     {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
   def handle_event(
-        "filter_executions",
-        %{"filter" => filter_name},
+        "filter_update",
+        %{"filter" => %{"plan_definition_id" => plan_definition_id, "status" => status_filter}},
         %Socket{} = socket
       ) do
+    plan_definition_id =
+      case Integer.parse(plan_definition_id) do
+        {plan_definition_id, ""} -> plan_definition_id
+        :error -> ""
+      end
+
     socket =
       socket
-      |> assign(active_filter: filter_name)
+      |> assign(active_filter: status_filter)
+      |> assign(plan_definition_id: plan_definition_id)
       |> fetch_executions
 
-    {:noreply, socket}
+    path_to =
+      case plan_definition_id do
+        "" ->
+          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, status_filter, 1)
+
+        plan_definition_id ->
+          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, status_filter, 1,
+            plan: plan_definition_id
+          )
+      end
+
+    {:noreply,
+     socket
+     |> push_patch(to: path_to)}
+
+    # {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
@@ -51,6 +83,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
     {:noreply, socket}
   end
 
+  @spec fetch_executions(Socket.t()) :: Socket.t()
   defp fetch_executions(
          %Socket{
            assigns: %{active_filter: status, page: page, plan_definition_id: plan_definition_id}
@@ -63,6 +96,13 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       |> subscribe_to_changes()
 
     assign(socket, plan_executions: plans_executions)
+  end
+
+  @spec fetch_plan_definitions(Socket.t()) :: Socket.t()
+  defp fetch_plan_definitions(%Socket{} = socket) do
+    plan_definitions = PlanDefinitions.all()
+
+    assign(socket, plan_definitions: plan_definitions)
   end
 
   @spec subscribe_to_changes(list(PlanExecution.t())) :: list(PlanExecution.t())

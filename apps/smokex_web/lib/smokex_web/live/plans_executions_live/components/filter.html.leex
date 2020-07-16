@@ -1,12 +1,29 @@
-<div class="column is-two-fifths">
+<%= form = form_for :filter, "#", [phx_change: "filter_update"] %>
   <div class="box">
     <p class="subtitle has-text-left">Execution status</p>
-    <div class="buttons has-addons">
-      <%= FilterView.plan_execution_filter(:all, @active_filter, socket: @socket, plan_definition_id: @plan_definition_id) %>
-      <%= FilterView.plan_execution_filter(:created, @active_filter, socket: @socket, plan_definition_id: @plan_definition_id) %>
-      <%= FilterView.plan_execution_filter(:finished, @active_filter, socket: @socket, plan_definition_id: @plan_definition_id) %>
-      <%= FilterView.plan_execution_filter(:halted, @active_filter, socket: @socket, plan_definition_id: @plan_definition_id) %>
-      <%= FilterView.plan_execution_filter(:running, @active_filter, socket: @socket, plan_definition_id: @plan_definition_id) %>
+
+    <div class="control status-filter-vertical">
+      <%= for status <- ["all", "created", "finished", "halted", "running"] do %>
+        <label class="radio">
+          <% checked = status == @active_filter %>
+          <%= radio_button(form, :status, status, checked: checked) %>
+          <span> <%= String.capitalize(status) %></span>
+        </label>
+      <% end %>
     </div>
   </div>
-</div>
+
+  <div class="box">
+    <p class="subtitle has-text-left">Test plan</p>
+
+    <div class="select">
+      <%= select(form, :plan_definition_id, Enum.map(["all" | @plan_definitions], fn
+        %Smokex.PlanDefinition{id: id, name: name} ->
+          selected = id == @plan_definition_id
+          [key: name, value: id, selected: selected]
+        "all" ->
+          [key: "All", value: "", selected: true]
+        end)) %>
+    </div>
+  </div>
+</form>

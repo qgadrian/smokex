@@ -2,18 +2,25 @@
 
 <section class="section">
   <div class="container">
-    <%= live_component @socket, FilterComponent, active_filter: @active_filter,
-plan_executions: @plan_executions, plan_definition_id: @plan_definition_id %>
+    <div class="columns">
+      <div class="column is-one-quarter">
+        <%= live_component @socket, FilterComponent, active_filter: @active_filter,
+          plan_executions: @plan_executions, plan_definition_id: @plan_definition_id,
+          plan_definitions: @plan_definitions %>
+      </div>
 
-    <div class="box">
-      <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
+      <div class="column">
+        <div class="box">
+          <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
+        </div>
+      </div>
     </div>
   </div>
 
   <nav class="pagination is-centered mt-6" role="navigation" aria-label="pagination">
     <%= if @page > 1 do %>
       <%= live_patch "Previous", to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, @active_filter, @page - 1, plan: @plan_definition_id),
-        class: "pagination-previous" %>
+class: "pagination-previous" %>
     <% end %>
 
     <%= unless @plan_executions == [] do %>
@@ -28,8 +35,9 @@ class: "pagination-next" %>
         <% active_class = if @page == i do "is-current" else "" end %>
 
         <%= live_patch "#{i}",
-to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, @active_filter, i, plan: @plan_definition_id),
-class: "pagination-link #{active_class}" %>
+          to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, @active_filter, i,
+          plan: @plan_definition_id),
+          class: "pagination-link #{active_class}" %>
       <% end %>
     </ul>
   </nav>

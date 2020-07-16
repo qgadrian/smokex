@@ -15,7 +15,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.List do
     {:ok, socket}
   end
 
-  @spec fetch_plan_definitions(Socket.t()) :: list(PlanDefinition.t())
+  @spec fetch_plan_definitions(Socket.t()) :: Socket.t()
   defp fetch_plan_definitions(%Socket{} = socket) do
     plan_definitions =
       PlanDefinitions.all()
