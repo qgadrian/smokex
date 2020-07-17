@@ -1,7 +1,7 @@
-<h2 class="title"><%= @plan_definition.name %></h2>
 
 <section class="section">
   <div class="container is-fullwidth">
+    <h2 class="title"><%= @plan_definition.name %></h2>
 
     <div class="box mb-6">
       <%= form_for Smokex.PlanDefinition.changeset(@plan_definition), "#", [class: "form"], fn f -> %>
