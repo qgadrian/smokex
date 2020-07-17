@@ -29,24 +29,23 @@ defmodule SmokexWeb.Router do
   scope "/", SmokexWeb do
     pipe_through :browser
 
+    get "/", Controllers.Landing, :show
     get "/landing", Controllers.Landing, :show
     get "/pricing", Controllers.Pricing, :show
-
-    live "/", StatusLive.Show
-    live "/stats", StatusLive.Show
-
-    live "/plans/new", PlansDefinitionsLive.New
-    live "/plans/:id", PlansDefinitionsLive.Show
-    live "/plans/:id/edit", PlansDefinitionsLive.Edit
-
-    live "/executions", PlansExecutionsLive.All
-    live "/executions/:status/page/:page", PlansExecutionsLive.All
-    live "/executions/:id", PlansExecutionsLive.Show
 
     scope "/" do
       pipe_through :protected
 
+      live "/stats", StatusLive.Show
+
       live "/plans", PlansDefinitionsLive.List
+      live "/plans/new", PlansDefinitionsLive.New
+      live "/plans/:id", PlansDefinitionsLive.Show
+      live "/plans/:id/edit", PlansDefinitionsLive.Edit
+
+      live "/executions", PlansExecutionsLive.All
+      live "/executions/:status/page/:page", PlansExecutionsLive.All
+      live "/executions/:id", PlansExecutionsLive.Show
     end
   end
 
