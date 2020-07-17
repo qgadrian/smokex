@@ -153,11 +153,12 @@ defmodule Smokex.PlanExecutions do
   @doc """
   Updates a plan execution as started.
   """
-  @spec start(PlanExecution.t()) :: {:ok, PlanExecution.t()} | {:error, term}
-  def start(%PlanExecution{} = plan_execution) do
+  @spec start(PlanExecution.t(), integer) :: {:ok, PlanExecution.t()} | {:error, term}
+  def start(%PlanExecution{} = plan_execution, total_executions \\ nil) do
     plan_execution
-    |> update_plan_execution(%{
+    |> __MODULE__.update(%{
       status: :running,
+      total_executions: total_executions,
       started_at: NaiveDateTime.utc_now()
     })
     |> notify_change(:started)
@@ -169,7 +170,7 @@ defmodule Smokex.PlanExecutions do
   @spec halt(PlanExecution.t()) :: {:ok, PlanExecution.t()} | {:error, term}
   def halt(%PlanExecution{} = plan_execution) do
     plan_execution
-    |> update_plan_execution(%{status: :halted, finished_at: NaiveDateTime.utc_now()})
+    |> __MODULE__.update(%{status: :halted, finished_at: NaiveDateTime.utc_now()})
     |> notify_change(:halted)
   end
 
@@ -179,7 +180,7 @@ defmodule Smokex.PlanExecutions do
   @spec finish(PlanExecution.t()) :: {:ok, PlanExecution.t()} | {:error, term}
   def finish(%PlanExecution{} = plan_execution) do
     plan_execution
-    |> update_plan_execution(%{
+    |> __MODULE__.update(%{
       status: :finished,
       finished_at: NaiveDateTime.utc_now()
     })
@@ -189,8 +190,8 @@ defmodule Smokex.PlanExecutions do
   @doc """
   Updates a plan execution
   """
-  @spec update_plan_execution(PlanExecution.t(), map) :: {:ok, PlanExecution.t()} | {:error, term}
-  def update_plan_execution(%PlanExecution{} = plan_execution, attrs) when is_map(attrs) do
+  @spec update(PlanExecution.t(), map) :: {:ok, PlanExecution.t()} | {:error, term}
+  def update(%PlanExecution{} = plan_execution, attrs) when is_map(attrs) do
     plan_execution
     |> PlanExecution.update_changeset(attrs)
     |> Smokex.Repo.update()

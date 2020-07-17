@@ -36,17 +36,19 @@ defmodule Smokex.PlanExecution do
           started_at: NaiveDateTime.t(),
           finished_at: NaiveDateTime.t(),
           plan_definition: PlanDefinition.t(),
+          total_executions: integer,
           results: list(Result.t())
         }
 
   # @required_fields [:plan_definition_id]
   @required_fields []
-  @optional_fields [:status, :started_at, :finished_at]
+  @optional_fields [:status, :started_at, :finished_at, :total_executions]
 
   @schema_fields @optional_fields ++ @required_fields
 
   schema "plans_executions" do
     field(:status, PlanExecutionStatus, null: false, default: :created)
+    field(:total_executions, :integer, null: true)
 
     field(:started_at, :naive_datetime, null: true)
     field(:finished_at, :naive_datetime, null: true)
