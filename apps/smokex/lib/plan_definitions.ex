@@ -52,6 +52,15 @@ defmodule Smokex.PlanDefinitions do
   end
 
   @doc """
+  Returns the plan definition with the given id. If no plan is found, raises an
+  error.
+  """
+  @spec get!(integer) :: PlanDefinition.t() | nil
+  def get!(id) do
+    Smokex.Repo.get!(PlanDefinition, id)
+  end
+
+  @doc """
   Updates a plan definition.
 
   ## Examples

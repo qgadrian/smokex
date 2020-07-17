@@ -45,17 +45,11 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
 
   @spec fetch_plan_execution(Socket.t()) :: Socket.t()
   defp fetch_plan_execution(%Socket{assigns: %{id: id}} = socket) do
-    with plan_execution when not is_nil(plan_execution) <- PlanExecutions.get(id),
-         plan_execution when not is_nil(plan_execution) <-
-           Smokex.Repo.preload(plan_execution, :results) do
+    with plan_execution <- PlanExecutions.get!(id),
+         plan_execution <- Smokex.Repo.preload(plan_execution, :results) do
       socket
       |> assign(plan_execution: plan_execution)
       |> assign(results: plan_execution.results)
-    else
-      _ ->
-        # TODO create a 404 page
-        raise "REDIRECT TO 404"
-        {:noreply, socket}
     end
   end
 end
