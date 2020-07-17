@@ -33,7 +33,16 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :smokex_client, :default_options, timeout: 2000, verbose: true, quiet: false
+config :smokex_client,
+       :default_options,
+       timeout: 2000,
+       verbose: true,
+       quiet: false
+
+config :smokex_web, :pow,
+  user: Smokex.Users.User,
+  repo: Smokex.Repo,
+  web_module: SmokexWeb
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

@@ -1,0 +1,72 @@
+<section class="section">
+  <div class="container">
+    <div class="box">
+      <div class="columns is-centered">
+        <div class="column is-5">
+          <h4 class="title is-4">Sign in</h4>
+
+          <%= form_for @changeset, @action, [as: :user, role: "sign-in"], fn f -> %>
+            <%= if @changeset.action do %>
+              <div class="notification is-danger">
+                <p>Oops, something went wrong! Please check the errors below.</p>
+              </div>
+            <% end %>
+
+            <div class="field">
+              <div class="field-label is-normal has-text-left pb-2">
+                <%= label f, Pow.Ecto.Schema.user_id_field(@changeset),
+                  class: "label" %>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset),
+                      class: "input is-medium", type: "email",
+                      placeholder: "e.g. luke@skywalker.com" %>
+                  </div>
+                </div>
+              </div>
+
+              <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+            </div>
+
+            <div class="field">
+              <div class="field-label is-normal has-text-left pb-2">
+                  <%= label f, :password, class: "label" %>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <%= password_input f, :password, class: "input is-medium",
+                      placeholder: "e.g. password" %>
+                  </div>
+                </div>
+              </div>
+
+              <%= error_tag f, :password %>
+            </div>
+
+            <div class="field pt-2">
+              <div class="control">
+                <%= submit "Sign in!", class: "button is-primary is-fullwidth" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="column is-5 is-offset-1">
+          <h4 class="title is-spaced is-4">Create new account</h4>
+          <p class="subtitle">
+          Unleash the power of the smoke tests! <strong>Get your free
+            account</strong> to witness the power of Smokex, start creating
+          your smoke tests and increase the confidence over your applications
+          and deployments!
+          </p>
+
+          <%= link "Create my account", class: "button is-primary is-outlined is-fullwidth",
+            to: Routes.pow_registration_path(@conn, :new) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

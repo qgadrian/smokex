@@ -32,6 +32,23 @@ class: "navbar-item" %>
               <%= link "Pricing", to: Routes.pricing_path(SmokexWeb.Endpoint, :show) , class: "navbar-item" %>
             </div>
           </div>
+
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <%= if Pow.Plug.current_user(@conn) do %>
+                <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete),
+                  method: :delete, class: "button is-light is-outlined" %>
+              <% else %>
+                <div class="buttons">
+                  <%= link "Sign in", class: "button is-light",
+                    to: Routes.pow_session_path(@conn, :new) %>
+
+                  <%= link "Sign up", class: "button is-primary",
+                    to: Routes.pow_registration_path(@conn, :new) %>
+                </div>
+              <% end %>
+            </div>
+          </div>
         </div>
       </nav>
     </header>

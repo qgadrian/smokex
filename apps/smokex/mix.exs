@@ -36,11 +36,12 @@ defmodule Smokex.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:ecto_enum, "~> 1.4"},
       {:ecto_sql, "~> 3.4"},
       {:jason, "~> 1.0"},
       {:phoenix_pubsub, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
-      {:ecto_enum, "~> 1.4"}
+      {:pow, "~> 1.0.20"}
     ]
   end
 

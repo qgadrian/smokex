@@ -1,0 +1,83 @@
+<section class="section">
+  <div class="container">
+    <div class="box">
+      <h2 class="title has-text-centered">Sign up</h2>
+
+      <div class="columns is-centered">
+        <div class="column is-5 is-4-desktop">
+          <%= form_for @changeset, @action, [as: :user], fn f -> %>
+            <%= if @changeset.action do %>
+              <div class="notification is-danger">
+                <p>Oops, something went wrong! Please check the errors below.</p>
+              </div>
+            <% end %>
+
+            <div class="field">
+              <div class="field-label is-normal has-text-left pb-2">
+                <%= label f, Pow.Ecto.Schema.user_id_field(@changeset),
+                  class: "label" %>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset),
+                      class: "input is-medium", type: "email",
+                      placeholder: "e.g. luke@skywalker.com" %>
+                  </div>
+                </div>
+              </div>
+
+              <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+            </div>
+
+            <div class="field">
+              <div class="field-label is-normal has-text-left pb-2">
+                  <%= label f, :password, class: "label" %>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <%= password_input f, :password, class: "input is-medium",
+                      placeholder: "e.g. password" %>
+                  </div>
+                </div>
+              </div>
+
+              <%= error_tag f, :password %>
+            </div>
+
+            <div class="field">
+              <div class="field-label is-normal has-text-left pb-2">
+                <%= label f, :password_confirmation, class: "label" %>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <%= password_input f, :password_confirmation,
+                      placeholder: "e.g. password", class: "input is-medium" %>
+                  </div>
+                </div>
+              </div>
+
+              <%= error_tag f, :password_confirmation %>
+            </div>
+
+            <div class="field is-grouped pt-2">
+              <div class="control is-expanded">
+                <%= link "Have an account?", class: "button is-primary is-outlined is-fullwidth",
+                  to: Routes.pow_session_path(@conn, :new) %>
+              </div>
+              <div class="control is-expanded">
+                <button class="button is-primary is-fullwidth">Sign up!</button>
+              </div>
+            </div>
+            <p>By signing up you agree with the
+            <%= link "Terms and conditions", to: Routes.pricing_path(SmokexWeb.Endpoint, :show) %>
+            and
+            <%= link "Privacy policy", to: Routes.pricing_path(SmokexWeb.Endpoint, :show) %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
