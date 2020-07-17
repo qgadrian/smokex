@@ -30,8 +30,28 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
   def assertion_error_details(_result), do: nil
 
   def assertion_error_detail(failed_assertion) when is_map(failed_assertion) do
-    [{key, %{"expected" => expected, "received" => received}}] = Map.to_list(failed_assertion)
+    failed_assertion
+    |> Map.to_list()
+    |> create_tag
+  end
 
+  defp create_tag([{key, %{"expected" => expected, "received" => received}}]) do
+    build_tag(key, expected, received)
+  end
+
+  defp create_tag([{"error", reason}]) do
+    build_tag("request", "to be successfully sent", reason)
+  end
+
+  defp create_tag(error: reason) do
+    build_tag("request", "to be successfully sent", reason)
+  end
+
+  defp create_tag(status_code: %{expected: expected, received: received}) do
+    build_tag("status_code", expected, received)
+  end
+
+  defp build_tag(key, expected, received) do
     content_tag(:tr, class: "is-not-hoverable details-row ml-6") do
       content_tag(:td, colspan: "6") do
         content_tag(:div, class: "columns ml-4") do
