@@ -3,8 +3,6 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Filter do
 
   use Phoenix.HTML
 
-  alias SmokexWeb.PlanExecutions.Components.FilterView
-
   def mount(socket) do
     {:ok, socket}
   end
