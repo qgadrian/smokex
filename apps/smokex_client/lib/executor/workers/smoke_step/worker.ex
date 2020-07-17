@@ -11,8 +11,8 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
 
   @type validation_result :: {:ok, any} | {:error, any, String.t()}
 
-  @spec execute(Request.t(), PlanExecution.t()) :: atom | no_return
-  def execute(%Request{} = step, %PlanExecution{} = plan_execution) do
+  @spec execute(Request.t(), PlanExecution.t(), keyword) :: atom | no_return
+  def execute(%Request{} = step, %PlanExecution{} = plan_execution, opts \\ []) do
     step = StepVarsReplacer.process_step_variables_(step)
 
     body = get_body(step.body, step.action)
@@ -35,11 +35,14 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
       {:ok, response} ->
         step.expect
         |> Validator.validate(response)
-        |> process_validation(step, plan_execution)
+        |> process_validation(step, plan_execution, opts)
 
       {:error, %HTTPoison.Error{reason: reason}} ->
         process_request_error(step, reason, plan_execution)
-        throw({:error, reason})
+
+        if opts[:halt] do
+          throw({:error, reason})
+        end
     end
   end
 
@@ -48,8 +51,13 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   defp get_body(body, _action) when is_binary(body), do: body
   defp get_body(body, _action), do: Jason.encode!(body)
 
-  @spec process_validation(validation_result, Request.t(), PlanExecution.t()) :: atom
-  defp process_validation(validation_result, %Request{} = step, %PlanExecution{} = plan_execution) do
+  @spec process_validation(validation_result, Request.t(), PlanExecution.t(), keyword) :: atom
+  defp process_validation(
+         validation_result,
+         %Request{} = step,
+         %PlanExecution{} = plan_execution,
+         opts \\ []
+       ) do
     case validation_result do
       {:error, info, message} ->
         # TODO save in database and notify the result via PubSub
@@ -62,7 +70,9 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
             result: :error
           })
 
-        throw({:error, message})
+        if opts[:halt] do
+          throw({:error, message})
+        end
 
       {:ok, response_body} ->
         save_from_response(step.save_from_response, response_body)
