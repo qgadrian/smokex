@@ -1,5 +1,6 @@
 defmodule SmokexWeb.Router do
   use SmokexWeb, :router
+  use Pow.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -10,8 +11,19 @@ defmodule SmokexWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :protected do
+    plug Pow.Plug.RequireAuthenticated,
+      error_handler: Pow.Phoenix.PlugErrorHandler
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  scope "/" do
+    pipe_through :browser
+
+    pow_routes()
   end
 
   scope "/", SmokexWeb do
@@ -23,7 +35,6 @@ defmodule SmokexWeb.Router do
     live "/", StatusLive.Show
     live "/stats", StatusLive.Show
 
-    live "/plans", PlansDefinitionsLive.List
     live "/plans/new", PlansDefinitionsLive.New
     live "/plans/:id", PlansDefinitionsLive.Show
     live "/plans/:id/edit", PlansDefinitionsLive.Edit
@@ -31,6 +42,12 @@ defmodule SmokexWeb.Router do
     live "/executions", PlansExecutionsLive.All
     live "/executions/:status/page/:page", PlansExecutionsLive.All
     live "/executions/:id", PlansExecutionsLive.Show
+
+    scope "/" do
+      pipe_through :protected
+
+      live "/plans", PlansDefinitionsLive.List
+    end
   end
 
   # Other scopes may use custom stacks.
