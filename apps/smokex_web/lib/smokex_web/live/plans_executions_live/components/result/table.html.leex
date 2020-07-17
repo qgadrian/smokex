@@ -1,0 +1,14 @@
+<table id="results-table" class="table is-hoverable results-table is-fullwidth">
+  <thead>
+    <tr>
+      <th scope="col">Action</th>
+      <th scope="col">Host</th>
+      <th scope="col">Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for %Result{} = result <- @results do %>
+      <%= live_component @socket, Row, id: result.id, result: result %>
+    <% end %>
+  </tbody>
+</table>

@@ -31,6 +31,10 @@ footer {
   }
 }
 
+table.is-hoverable > tbody > tr.is-not-hoverable:hover {
+  background-color: transparent!important;
+}
+
 img.navbar-item {
   max-height: 50px;
 }

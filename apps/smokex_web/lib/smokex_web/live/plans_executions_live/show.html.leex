@@ -28,24 +28,7 @@
     <div class="box">
       <p class="subtitle">Current status: <%= StatusBadge.new(@plan_execution) %></p>
 
-      <table class="table is-fullwidth">
-        <thead>
-          <tr>
-            <th scope="col">Action</th>
-            <th scope="col">Host</th>
-            <th scope="col">Result</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= for %Result{} = result <- @results do %>
-            <tr>
-              <td scope="row"><%= result.action %></td>
-              <td scope="row"><%= result.host %></td>
-              <td scope="row"><%= result.result %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <%= live_component @socket, ResultsTable, results: @results %>
     </div>
   </div>
 </section>
