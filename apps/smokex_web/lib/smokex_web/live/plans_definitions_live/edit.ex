@@ -56,7 +56,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Edit do
   #
 
   defp fetch_plan_definition(%Socket{assigns: %{id: id}} = socket) do
-    plan_definition = PlanDefinitions.get(id)
+    plan_definition = PlanDefinitions.get!(id)
     changeset = Ecto.Changeset.change(plan_definition)
 
     assign(socket, plan_definition: plan_definition, changeset: changeset)

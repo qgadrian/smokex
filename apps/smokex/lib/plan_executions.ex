@@ -39,6 +39,15 @@ defmodule Smokex.PlanExecutions do
   end
 
   @doc """
+  Returns the plan execution with the given id. If no execution is found,
+  raises an exception.
+  """
+  @spec get!(integer) :: PlanExecution.t() | no_return
+  def get!(id) do
+    Smokex.Repo.get!(PlanExecution, id)
+  end
+
+  @doc """
   Returns all plans definitions by the given params.
   """
   @spec by_status(PlanExecution.status() | String.t(), integer, integer) ::

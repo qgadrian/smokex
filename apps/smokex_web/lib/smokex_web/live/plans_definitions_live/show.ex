@@ -78,7 +78,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
   #
 
   defp fetch_plan_definition(%Socket{assigns: %{id: id}} = socket) do
-    plan_definition = PlanDefinitions.get(id)
+    plan_definition = PlanDefinitions.get!(id)
     assign(socket, plan_definition: plan_definition)
   end
 
