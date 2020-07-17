@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "Smoke tests made easy", suffix: " · Smokex" %>
+    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar" role="navigation">
+        <div class="container">
+          <a href="/" class="navbar-brand">
+            <img src="<%= Routes.static_path(@conn, "/images/smokex_logo.png") %>"
+                 class="navbar-item" width="160" height="50" alt="Smokex Logo"/>
+          </a>
+
+          <div class="navbar-menu is-active">
+            <div class="navbar-start">
+              <%= live_patch "Stats", to: Routes.live_path(@conn, SmokexWeb.StatusLive.Show),
+class: "navbar-item" %>
+
+              <%= live_patch "Test plans", to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.List),
+              class: "navbar-item" %>
+
+              <%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All),
+              class: "navbar-item" %>
+
+              <%= link "Pricing", to: Routes.pricing_path(SmokexWeb.Endpoint, :show) , class: "navbar-item" %>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main role="main" class="container">
+      <section class="section">
+        <div class="container has-text-centered">
+          <div class="columns is-centered">
+            <div class="column is-7">
+              <h1 class="title is-1">404</h1>
+              <p class="subtitle is-3">Page not found</p>
+              <p>There is nothing here... yet.</p>
+            </div>
+          </div>
+
+          <a class="button is-primary" href="/stats">Go somewhere else</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-4 has-text-centered is-hidden-tablet"><a class="title is-4" href="#">Smokex</a></div>
+          <div class="column is-4">
+            <div class="level">
+              <a class="level-item" href="/landing">Features</a>
+              <a class="level-item" href="/pricing">Pricing</a>
+            </div>
+          </div>
+          <div class="column is-4 has-text-centered is-hidden-mobile">
+            <a class="title is-4" href="#">Smokex</a>
+          </div>
+          <div class="column is-4 has-text-right">
+            <div class="level">
+              <a class="level-item" href="#">Support</a>
+              <a class="level-item" href="/executions">Executions</a>
+            </div>
+          </div>
+        </div>
+        <p class="subtitle has-text-centered is-6">© 2020 Smokex. All right reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
