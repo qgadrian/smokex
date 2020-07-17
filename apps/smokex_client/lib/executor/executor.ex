@@ -31,7 +31,7 @@ defmodule SmokexClient.Executor do
     |> YamlParser.parse()
     |> case do
       {:ok, list_of_requests} ->
-        {:ok, plan_execution} = PlanExecutions.start(plan_execution)
+        {:ok, plan_execution} = PlanExecutions.start(plan_execution, length(list_of_requests))
 
         #  TODO do not just spawn a process
         spawn(fn ->
