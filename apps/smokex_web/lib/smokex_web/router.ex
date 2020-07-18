@@ -36,7 +36,7 @@ defmodule SmokexWeb.Router do
     scope "/" do
       pipe_through :protected
 
-      live "/stats", StatusLive.Show
+      live "/stats", StatsLive.Show
 
       live "/plans", PlansDefinitionsLive.List
       live "/plans/new", PlansDefinitionsLive.New

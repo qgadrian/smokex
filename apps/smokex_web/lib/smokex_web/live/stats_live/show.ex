@@ -1,4 +1,4 @@
-defmodule SmokexWeb.StatusLive.Show do
+defmodule SmokexWeb.StatsLive.Show do
   use SmokexWeb, :live_view
 
   alias Phoenix.LiveView.Socket
