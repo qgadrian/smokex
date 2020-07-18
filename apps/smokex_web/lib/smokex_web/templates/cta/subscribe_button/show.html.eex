@@ -1,0 +1,61 @@
+<% random_id = :crypto.strong_rand_bytes(5) |> Base.url_encode64 |> binary_part(0, 5) %>
+
+<!-- Create a button that your customers click to complete their purchase. Customize the styling to suit your branding. -->
+<button
+  phx-hook="LoadStripeButton"
+  data-button-id="<%= random_id %>"
+  data-user-id="<%= @user.id %>"
+  data-user-email="<%= @user.email %>"
+  data-success-url='<%= "#{SmokexWeb.Endpoint.url}/payments/success" %>'
+  data-cancel-url='<%= "#{SmokexWeb.Endpoint.url}/payments/cancel" %>'
+  class="button is-primary <%= assigns[:extra_class] %>"
+  type="button"
+  id="checkout-button-price_1H6HGgKn5R3yiQjr22Xadcwk-<%= random_id %>"
+  role="link"
+>
+  <%= assigns[:text] || "Buy subscription" %>
+</button>
+
+<div id="error-message-<%= random_id %>"></div>
+
+<%= unless Map.get(assigns, :skip_init, false) do %>
+  <!-- Load Stripe.js on your website. -->
+  <script src="https://js.stripe.com/v3"></script>
+
+  <script>
+    (function() {
+      var stripe = Stripe('***REMOVED***');
+
+      window.Stripe = stripe;
+
+    var checkoutButton = document.getElementById('checkout-button-price_1H6HGgKn5R3yiQjr22Xadcwk-<%= random_id %>');
+
+    checkoutButton.addEventListener('click', function () {
+      // When the customer clicks on the button, redirect
+      // them to Checkout.
+      stripe.redirectToCheckout({
+        lineItems: [{price: 'price_1H6HGgKn5R3yiQjr22Xadcwk', quantity: 1}],
+        mode: 'subscription',
+        clientReferenceId: '<%= @user.id %>',
+        customerEmail: '<%= @user.email %>',
+        // Do not rely on the redirect to the successUrl for fulfilling
+        // purchases, customers may not always reach the success_url after
+        // a successful payment.
+        // Instead use one of the strategies described in
+        // https://stripe.com/docs/payments/checkout/fulfillment
+        successUrl: '<%= "#{SmokexWeb.Endpoint.url}/payments/success" %>',
+        cancelUrl: '<%= "#{SmokexWeb.Endpoint.url}/payments/cancel" %>'
+      })
+      .then(function (result) {
+        if (result.error) {
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, display the localized error message to your customer.
+          var displayError = document.getElementById('error-message-<%= random_id %>');
+          displayError.textContent = result.error.message;
+        }
+      });
+    });
+  })();
+  </script>
+<% end %>
+
