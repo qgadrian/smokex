@@ -19,7 +19,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
   def handle_event("validate", %{"plan_definition" => plan_definition_attrs}, %Socket{} = socket) do
     plan_definition =
       %PlanDefinition{}
-      |> PlanDefinition.changeset(plan_definition_attrs)
+      |> PlanDefinition.create_changeset(plan_definition_attrs)
       |> Map.put(:action, :update)
 
     {:noreply, assign(socket, changeset: plan_definition)}

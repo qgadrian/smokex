@@ -2,7 +2,7 @@
   <h2 class="title"><%= @plan_definition.name %></h2>
 
   <div class="box mb-6">
-    <%= form_for Smokex.PlanDefinition.changeset(@plan_definition), "#", [class: "form"], fn f -> %>
+    <%= form_for Ecto.Changeset.change(@plan_definition), "#", [class: "form"], fn f -> %>
       <div class="field">
         <%= label(:name,"Name", class: "label") %>
         <div class="control">

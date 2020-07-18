@@ -10,7 +10,11 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
   alias SmokexWeb.PlansExecutionsLive.Components.Result.Table, as: ResultsTable
 
   @impl Phoenix.LiveView
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    socket =
+      socket
+      |> SessionHelper.assign_user!(session)
+
     {:ok, socket}
   end
 
@@ -44,8 +48,8 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
   #
 
   @spec fetch_plan_execution(Socket.t()) :: Socket.t()
-  defp fetch_plan_execution(%Socket{assigns: %{id: id}} = socket) do
-    with plan_execution <- PlanExecutions.get!(id),
+  defp fetch_plan_execution(%Socket{assigns: %{id: id, current_user: user}} = socket) do
+    with plan_execution <- PlanExecutions.get!(user, id),
          plan_execution <- Smokex.Repo.preload(plan_execution, :results) do
       socket
       |> assign(plan_execution: plan_execution)

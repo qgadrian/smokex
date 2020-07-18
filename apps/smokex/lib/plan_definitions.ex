@@ -57,18 +57,38 @@ defmodule Smokex.PlanDefinitions do
   Returns the plan definition with the given id. If no plan is found, returns
   `nil`.
   """
-  @spec get(integer) :: PlanDefinition.t() | nil
-  def get(id) do
-    Smokex.Repo.get(PlanDefinition, id)
+  @spec get(User.t(), integer) :: PlanDefinition.t() | nil
+  def get(%User{id: user_id}, id) do
+    query =
+      from(plan_definition in PlanDefinition,
+        join: plan_definition_user in "plans_definitions_users",
+        on:
+          plan_definition_user.user_id == ^user_id and
+            plan_definition_user.plan_definition_id == plan_definition.id,
+        where: plan_definition.id == ^id,
+        select: plan_definition
+      )
+
+    Smokex.Repo.one(query)
   end
 
   @doc """
   Returns the plan definition with the given id. If no plan is found, raises an
   error.
   """
-  @spec get!(integer) :: PlanDefinition.t() | nil
-  def get!(id) do
-    Smokex.Repo.get!(PlanDefinition, id)
+  @spec get!(User.t(), integer) :: PlanDefinition.t() | nil
+  def get!(%User{id: user_id}, id) do
+    query =
+      from(plan_definition in PlanDefinition,
+        join: plan_definition_user in "plans_definitions_users",
+        on:
+          plan_definition_user.user_id == ^user_id and
+            plan_definition_user.plan_definition_id == plan_definition.id,
+        where: plan_definition.id == ^id,
+        select: plan_definition
+      )
+
+    Smokex.Repo.one!(query)
   end
 
   @doc """
