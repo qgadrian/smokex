@@ -18,6 +18,11 @@ defmodule Smokex.PlanExecutions do
           status: PlanExecution.status()
         ]
 
+  @type last_execution_opts :: [
+          plan_definition_id: integer,
+          limit: integer
+        ]
+
   @doc """
   Creates a new plan execution
   """
@@ -88,34 +93,31 @@ defmodule Smokex.PlanExecutions do
   end
 
   @doc """
-  Returns the last *number* of executions of any plan definition.
+  Returns the *limit* number of executions.
+
+  See `t:last_execution_opts/0` to check the available filter.
   """
-  @spec last_executions(integer) :: list(PlanExecution.t())
+  # TODO get the plan definition in opts and create a maybe function
+  @spec last_executions(User.t(), last_execution_opts) :: list(PlanExecution.t())
   # TODO add a config to limit
-  def last_executions(limit) when is_number(limit) do
+  def last_executions(%User{id: user_id}, opts) do
+    plan_definition_id = Keyword.get(opts, :plan_definition_id)
+    # TODO make the limit configurable
+    limit = Keyword.get(opts, :limit, 10)
+
     query =
       from(plan_execution in PlanExecution,
+        join: plan_definition in PlanDefinition,
+        on: plan_execution.plan_definition_id == plan_definition.id,
+        join: plan_definition_user in "plans_definitions_users",
+        on:
+          plan_definition_user.user_id == ^user_id and
+            plan_definition_user.plan_definition_id == plan_definition.id,
         limit: ^limit,
         order_by: [desc: :updated_at],
         select: plan_execution
       )
-
-    Smokex.Repo.all(query)
-  end
-
-  @doc """
-  Returns the last *number* of executions of a plan definition.
-  """
-  @spec last_executions(integer, integer) :: list(PlanExecution.t())
-  # TODO add a config to limit
-  def last_executions(plan_definition_id, limit \\ 10) when is_number(limit) do
-    query =
-      from(plan_execution in PlanExecution,
-        where: plan_execution.plan_definition_id == ^plan_definition_id,
-        limit: ^limit,
-        order_by: [desc: :updated_at],
-        select: plan_execution
-      )
+      |> maybe_query_by_plan_definition(plan_definition_id)
 
     Smokex.Repo.all(query)
   end
@@ -123,11 +125,16 @@ defmodule Smokex.PlanExecutions do
   @doc """
   Returns the summary of the executions.
   """
-  @spec executions_summary() :: list(PlanExecution.t())
-  # TODO add the user to the query filtering
-  def executions_summary() do
+  @spec executions_summary(User.t()) :: list(PlanExecution.t())
+  def executions_summary(%User{id: user_id}) do
     query =
       from(plan_execution in PlanExecution,
+        join: plan_definition in PlanDefinition,
+        on: plan_execution.plan_definition_id == plan_definition.id,
+        join: plan_definition_user in "plans_definitions_users",
+        on:
+          plan_definition_user.user_id == ^user_id and
+            plan_definition_user.plan_definition_id == plan_definition.id,
         group_by: plan_execution.status,
         select: {plan_execution.status, count(plan_execution.status)}
       )
@@ -138,11 +145,16 @@ defmodule Smokex.PlanExecutions do
   @doc """
   Returns the total number of executions.
   """
-  @spec total_executions() :: list(PlanExecution.t())
-  # TODO add the user to the query filtering
-  def total_executions() do
+  @spec total_executions(User.t()) :: list(PlanExecution.t())
+  def total_executions(%User{id: user_id}) do
     query =
       from(plan_execution in PlanExecution,
+        join: plan_definition in PlanDefinition,
+        on: plan_execution.plan_definition_id == plan_definition.id,
+        join: plan_definition_user in "plans_definitions_users",
+        on:
+          plan_definition_user.user_id == ^user_id and
+            plan_definition_user.plan_definition_id == plan_definition.id,
         select: count(plan_execution.id)
       )
 

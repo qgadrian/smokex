@@ -15,6 +15,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
   def handle_params(%{"id" => id}, _url, socket) do
     if connected?(socket), do: PlanDefinitions.subscribe(id)
 
+    # TODO restrict access to user
     socket =
       socket
       |> assign(id: id)
