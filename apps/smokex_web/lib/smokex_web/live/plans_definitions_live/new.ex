@@ -6,11 +6,12 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
   alias Smokex.PlanDefinition
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     socket =
       socket
       |> assign(changeset: Ecto.Changeset.change(%PlanDefinition{}))
       |> assign(page_title: "Create test plan")
+      |> SessionHelper.assign_user!(session)
 
     {:ok, socket}
   end
@@ -29,9 +30,9 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
   def handle_event(
         "save",
         %{"plan_definition" => plan_definition_attrs},
-        %Socket{} = socket
+        %Socket{assigns: %{current_user: user}} = socket
       ) do
-    case PlanDefinitions.create(plan_definition_attrs) do
+    case PlanDefinitions.create(user, plan_definition_attrs) do
       {:ok, plan_definition} ->
         redirect_path =
           Routes.live_path(socket, SmokexWeb.PlansDefinitionsLive.Show, plan_definition.id)
