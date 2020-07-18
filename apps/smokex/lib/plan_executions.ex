@@ -5,8 +5,18 @@ defmodule Smokex.PlanExecutions do
 
   import Ecto.Query
 
+  alias Smokex.Users.User
   alias Smokex.PlanExecution
   alias Smokex.PlanDefinition
+
+  @typedoc """
+  The optional parameters to filter plan executions.
+  """
+  @type filter_opts :: [
+          per_page: integer,
+          plan_definition_id: integer,
+          status: PlanExecution.status()
+        ]
 
   @doc """
   Creates a new plan execution
@@ -50,13 +60,22 @@ defmodule Smokex.PlanExecutions do
   @doc """
   Returns all plans definitions by the given params.
   """
-  @spec by_status(PlanExecution.status() | String.t(), integer, integer) ::
-          list(PlanExecution.t())
-  def by_status(status, current_page, per_page, opts \\ []) do
+  # TODO rename this function, is not longer filter by just status
+  @spec all(User.t(), integer, filter_opts()) :: list(PlanExecution.t())
+  def all(%User{id: user_id}, current_page, opts \\ []) do
     plan_definition_id = Keyword.get(opts, :plan_definition_id)
+    # TODO make this configurable
+    per_page = Keyword.get(opts, :per_page, 20)
+    status = Keyword.get(opts, :status, :all)
 
     query =
       from(plan_execution in PlanExecution,
+        join: plan_definition in PlanDefinition,
+        on: plan_execution.plan_definition_id == plan_definition.id,
+        join: plan_definition_user in "plans_definitions_users",
+        on:
+          plan_definition_user.user_id == ^user_id and
+            plan_definition_user.plan_definition_id == plan_definition.id,
         offset: ^((current_page - 1) * per_page),
         limit: ^per_page,
         order_by: [desc: :updated_at],
