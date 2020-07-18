@@ -20,6 +20,7 @@ defmodule Smokex.PlanDefinition do
   use Ecto.Schema
 
   alias Smokex.PlanExecution
+  alias Smokex.Users.User
 
   @required_fields [:name, :cron_sentence, :content]
   @optional_fields [:description]
@@ -32,21 +33,26 @@ defmodule Smokex.PlanDefinition do
     field(:cron_sentence, :string, null: false)
     field(:content, :string, null: false)
 
-    # belongs_to(:user, User)
+    many_to_many(:users, User, join_through: "plans_definitions_users")
 
     has_many(:executions, PlanExecution)
 
     timestamps()
   end
 
-  def changeset(changeset, params \\ %{}) do
-    # TODO validate cron sentence
+  def create_changeset(changeset, params \\ %{}) do
+    changeset
+    |> Ecto.Changeset.cast(params, @schema_fields)
+    |> Ecto.Changeset.validate_required(@required_fields)
+    |> Ecto.Changeset.put_assoc(:users, params[:users])
+    |> validate_cron_expression()
+  end
+
+  def update_changeset(changeset, params \\ %{}) do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
     |> validate_cron_expression()
-
-    # |> Ecto.Changeset.put_assoc(:user, params[:user])
   end
 
   @spec validate_cron_expression(Ecto.Changeset.t()) :: keyword

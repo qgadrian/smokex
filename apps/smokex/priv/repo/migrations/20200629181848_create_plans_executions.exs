@@ -6,7 +6,7 @@ defmodule Smokex.Repo.Migrations.CreatePlansExecutions do
       add(:status, :string, null: false)
       add(:total_executions, :integer, null: true)
 
-      add(:plan_definition_id, references(:plans_definitions))
+      add(:plan_definition_id, references(:plans_definitions), null: false)
 
       add(:started_at, :naive_datetime)
       add(:finished_at, :naive_datetime)

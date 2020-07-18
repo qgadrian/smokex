@@ -10,12 +10,23 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
+{:ok, user} =
+  Pow.Ecto.Context.create(
+    %{
+      email: "test@local.host",
+      password: "fgdfkgmdfkgsfmewsfsd",
+      password_confirmation: "fgdfkgmdfkgsfmewsfsd"
+    },
+    otp_app: :smokex_web
+  )
+
 for plan_definition_index <- 1..10 do
   example_file_path = Path.absname("./apps/smokex/priv/repo/plan_definition_content_example.yml")
 
   {:ok, plan_definition} =
     Smokex.PlanDefinitions.create(%{
       name: "plan_#{plan_definition_index}",
+      users: [user],
       description: "This is the description for plan #{plan_definition_index}",
       cron_sentence: "0 2 * * *",
       content: File.read!(example_file_path)
