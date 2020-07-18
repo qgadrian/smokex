@@ -4,12 +4,14 @@ defmodule SmokexWeb.StatusLive.Show do
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanExecutions
   alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
+  alias SmokexWeb.SessionHelper
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     socket =
       socket
       |> assign(page_title: "Stats")
+      |> SessionHelper.assign_user!(session)
       |> fetch_plan_executions()
       |> fetch_total_executions()
       |> fetch_executions_summary()
