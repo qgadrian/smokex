@@ -48,6 +48,8 @@ defmodule SmokexWeb do
       use Phoenix.LiveView,
         layout: {SmokexWeb.LayoutView, "live.html"}
 
+      alias SmokexWeb.SessionHelper
+
       unquote(view_helpers())
     end
   end

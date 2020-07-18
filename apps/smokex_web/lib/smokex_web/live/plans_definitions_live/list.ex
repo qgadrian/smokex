@@ -4,7 +4,6 @@ defmodule SmokexWeb.PlansDefinitionsLive.List do
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanDefinitions
   alias SmokexWeb.PlanDefinitions.ListView
-  alias SmokexWeb.SessionHelper
 
   @impl true
   def mount(_params, session, socket) do
