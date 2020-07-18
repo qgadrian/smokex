@@ -12,8 +12,10 @@ defmodule Smokex.PlanDefinitions do
   @doc """
   Creates a new plan definition
   """
-  @spec create(map) :: {:ok, PlanDefinition.t()} | {:error, term}
-  def create(attrs) do
+  @spec create(User.t(), map) :: {:ok, PlanDefinition.t()} | {:error, term}
+  def create(%User{} = user, attrs) do
+    attrs = Map.put(attrs, "users", [user])
+
     %PlanDefinition{}
     |> PlanDefinition.create_changeset(attrs)
     |> Smokex.Repo.insert()

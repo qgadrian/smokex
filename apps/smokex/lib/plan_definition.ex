@@ -44,7 +44,7 @@ defmodule Smokex.PlanDefinition do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
-    |> Ecto.Changeset.put_assoc(:users, params[:users])
+    |> Ecto.Changeset.put_assoc(:users, Map.get(params, :users) || Map.get(params, "users"))
     |> validate_cron_expression()
   end
 
