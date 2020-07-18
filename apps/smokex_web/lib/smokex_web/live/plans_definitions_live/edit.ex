@@ -6,7 +6,11 @@ defmodule SmokexWeb.PlansDefinitionsLive.Edit do
   alias Smokex.PlanDefinition
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    socket =
+      socket
+      |> SessionHelper.assign_user!(session)
+
     {:ok, socket}
   end
 
@@ -25,7 +29,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Edit do
   def handle_event("validate", %{"plan_definition" => plan_definition_attrs}, %Socket{} = socket) do
     plan_definition =
       %PlanDefinition{}
-      |> PlanDefinition.changeset(plan_definition_attrs)
+      |> PlanDefinition.update_changeset(plan_definition_attrs)
       |> Map.put(:action, :update)
 
     {:noreply, assign(socket, changeset: plan_definition)}
@@ -55,8 +59,8 @@ defmodule SmokexWeb.PlansDefinitionsLive.Edit do
   # Private functions
   #
 
-  defp fetch_plan_definition(%Socket{assigns: %{id: id}} = socket) do
-    plan_definition = PlanDefinitions.get!(id)
+  defp fetch_plan_definition(%Socket{assigns: %{id: id, current_user: user}} = socket) do
+    plan_definition = PlanDefinitions.get!(user, id)
     changeset = Ecto.Changeset.change(plan_definition)
 
     assign(socket, plan_definition: plan_definition, changeset: changeset)

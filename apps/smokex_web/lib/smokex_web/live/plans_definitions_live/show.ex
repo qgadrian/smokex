@@ -7,7 +7,11 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
   alias Smokex.PlanExecution
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    socket =
+      socket
+      |> SessionHelper.assign_user!(session)
+
     {:ok, socket}
   end
 
@@ -15,7 +19,6 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
   def handle_params(%{"id" => id}, _url, socket) do
     if connected?(socket), do: PlanDefinitions.subscribe(id)
 
-    # TODO restrict access to user
     socket =
       socket
       |> assign(id: id)
@@ -78,13 +81,13 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
   # Private functions
   #
 
-  defp fetch_plan_definition(%Socket{assigns: %{id: id}} = socket) do
-    plan_definition = PlanDefinitions.get!(id)
+  defp fetch_plan_definition(%Socket{assigns: %{id: id, current_user: user}} = socket) do
+    plan_definition = PlanDefinitions.get!(user, id)
     assign(socket, plan_definition: plan_definition)
   end
 
-  defp fetch_plan_executions(%Socket{assigns: %{id: id}} = socket) do
-    plan_executions = PlanExecutions.last_executions(id, 5)
+  defp fetch_plan_executions(%Socket{assigns: %{current_user: user, id: id}} = socket) do
+    plan_executions = PlanExecutions.last_executions(user, plan_definition_id: id, limit: 5)
     assign(socket, plan_executions: plan_executions)
   end
 
