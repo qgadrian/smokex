@@ -11,7 +11,7 @@
                                               tests</a>. Using our tool you will avoid and react earlier to problems and
                                             you will build a trust that everything will run smoothly, allowing you what
                                             really is important.</p>
-           <%= live_patch "Start the awesomeness", to: Routes.live_path(@conn, SmokexWeb.StatusLive.Show),
+           <%= live_patch "Start the awesomeness", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
 class: "button is-primary is-medium mt-6" %>
          </div>
 
