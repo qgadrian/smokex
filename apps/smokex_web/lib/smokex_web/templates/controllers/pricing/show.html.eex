@@ -32,7 +32,8 @@
           <li>Premium support</li>
         </ul>
         <hr>
-        <button class="button is-large is-primary" type="button">Get my subscription</button>
+        <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user,
+          extra_class: "is-large", text: "Get my subscription" %>
       </div>
       <div class="column">
         <h3 class="title is-4">Smokex Enterprise</h3>
