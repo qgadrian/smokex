@@ -3,6 +3,7 @@ defmodule Smokex.PlanDefinitions do
   Context module to handle plan executions.
   """
 
+  alias Smokex.Users.User
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
 
@@ -14,16 +15,26 @@ defmodule Smokex.PlanDefinitions do
   @spec create(map) :: {:ok, PlanDefinition.t()} | {:error, term}
   def create(attrs) do
     %PlanDefinition{}
-    |> PlanDefinition.changeset(attrs)
+    |> PlanDefinition.create_changeset(attrs)
     |> Smokex.Repo.insert()
   end
 
   @doc """
   Returns all plan definitions
   """
-  @spec all() :: list(PlanExecution.t())
-  def all() do
-    Smokex.Repo.all(PlanDefinition)
+  @spec all(User.t()) :: list(PlanExecution.t())
+  def all(%User{id: user_id}) do
+    query =
+      from(plan_definition in PlanDefinition,
+        order_by: [desc: :updated_at],
+        join: plan_definition_user in "plans_definitions_users",
+        on:
+          plan_definition_user.user_id == ^user_id and
+            plan_definition_user.plan_definition_id == plan_definition.id,
+        select: plan_definition
+      )
+
+    Smokex.Repo.all(query)
   end
 
   @doc """
@@ -71,7 +82,7 @@ defmodule Smokex.PlanDefinitions do
   """
   def update(%PlanDefinition{} = plan_definition, attrs) do
     plan_definition
-    |> PlanDefinition.changeset(attrs)
+    |> PlanDefinition.update_changeset(attrs)
     |> Smokex.Repo.update()
 
     # TODO notify about the update
