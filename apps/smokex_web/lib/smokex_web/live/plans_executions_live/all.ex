@@ -4,15 +4,20 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   require Logger
 
   alias Phoenix.LiveView.Socket
-  alias Smokex.PlanExecutions
   alias Smokex.PlanDefinitions
   alias Smokex.PlanExecution
-  alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
+  alias Smokex.PlanExecutions
   alias SmokexWeb.PlansExecutionsLive.Components.Filter, as: FilterComponent
+  alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
 
   @impl Phoenix.LiveView
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "Executions")}
+  def mount(_params, session, socket) do
+    socket =
+      socket
+      |> assign(page_title: "Executions")
+      |> SessionHelper.assign_user!(session)
+
+    {:ok, socket}
   end
 
   @impl Phoenix.LiveView
@@ -120,21 +125,25 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   @spec fetch_executions(Socket.t()) :: Socket.t()
   defp fetch_executions(
          %Socket{
-           assigns: %{active_filter: status, page: page, plan_definition_id: plan_definition_id}
+           assigns: %{
+             current_user: user,
+             active_filter: status,
+             page: page,
+             plan_definition_id: plan_definition_id
+           }
          } = socket
        ) do
-    # TODO make this configurable
     plans_executions =
-      status
-      |> PlanExecutions.by_status(page, 20, plan_definition_id: plan_definition_id)
+      user
+      |> PlanExecutions.all(page, status: status, plan_definition_id: plan_definition_id)
       |> subscribe_to_changes()
 
     assign(socket, plan_executions: plans_executions)
   end
 
   @spec fetch_plan_definitions(Socket.t()) :: Socket.t()
-  defp fetch_plan_definitions(%Socket{} = socket) do
-    plan_definitions = PlanDefinitions.all()
+  defp fetch_plan_definitions(%Socket{assigns: %{current_user: user}} = socket) do
+    plan_definitions = PlanDefinitions.all(user)
 
     assign(socket, plan_definitions: plan_definitions)
   end
