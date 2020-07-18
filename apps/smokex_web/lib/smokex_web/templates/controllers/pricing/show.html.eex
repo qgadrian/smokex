@@ -4,30 +4,31 @@
     <hr class="my-6">
     <div class="columns">
       <div class="column">
-        <h3 class="title is-4">Smokex basic</h3>
-        <h4 class="title is-spaced is-5">$10 <small>Per user / month</small></h4>
-        <p class="subtitle">Perfect for starters. Flexible pay per user and basic access.</p>
+        <h3 class="title is-4">Smokex Basic</h3>
+        <h4 class="title is-spaced is-5">Free <small>forever</small></h4>
+        <p class="subtitle">Perfect for starters, free usage with limited access.</p>
         <hr>
         <ul>
           <li>Up to 2 plans</li>
           <li>Limited to 3 executions per day</li>
           <li>One execution at a time</li>
-          <li>Premium support</li>
+          <li>Basic support</li>
         </ul>
         <hr>
         <div class="buttons is-centered">
-          <button class="button is-large is-primary is-outlined" type="button">Create my account</button>
+          <%= link "Create my account", class: "button is-large is-primary is-outlined",
+            to: Routes.pow_registration_path(@conn, :new) %>
         </div>
       </div>
       <div class="column">
-        <h3 class="title is-4">Smokex premium</h3>
+        <h3 class="title is-4">Smokex Premium</h3>
         <h4 class="title is-spaced is-5">$100 <small>Unlimited users / month</small></h4>
         <p class="subtitle">No users limit, create infinite plans and run unlimited executions.</p>
         <hr>
         <ul>
           <li>Pay per month, not for users</li>
+          <li>Unlimited test plans</li>
           <li>Unlimited executions</li>
-          <li>Unlimited plans</li>
           <li>Premium support</li>
         </ul>
         <hr>
@@ -42,10 +43,10 @@
           <li>Standalone installation</li>
           <li>Custom features</li>
           <li>Custom integrations</li>
-          <li>Anything you need</li>
+          <li>Premium support</li>
         </ul>
         <hr>
-        <button class="button is-large is-primary is-outlined" type="button">Contact us</button>
+        <a href="mailto:enterprise@smokex.io?subject=Enterprise plan" class="button is-large is-primary is-outlined" type="button">Contact us</a>
       </div>
     </div>
   </div>
