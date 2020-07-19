@@ -41,7 +41,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
     with {:ok, %PlanExecution{id: id}} <- SmokexClient.Executor.execute(plan_execution) do
       redirect_path = Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.Show, id)
 
-      {:noreply, redirect(socket, to: redirect_path)}
+      {:noreply, push_redirect(socket, to: redirect_path)}
     else
       _ ->
         # TODO handle error

@@ -48,7 +48,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Edit do
 
         # TODO investigate about the stop response
         # Check https://github.com/chrismccord/phoenix_live_view_example/blob/master/lib/demo_web/live/user_live/edit.ex#L35
-        {:noreply, redirect(socket, to: redirect_path)}
+        {:noreply, push_redirect(socket, to: redirect_path)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
