@@ -21,15 +21,16 @@
           <div class="navbar-menu is-active">
             <div class="navbar-start">
               <%= live_patch "Stats", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
-class: "navbar-item" %>
+                class: "navbar-item" %>
 
               <%= live_patch "Test plans", to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.List),
-              class: "navbar-item" %>
+                class: "navbar-item" %>
 
               <%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All),
-              class: "navbar-item" %>
+                class: "navbar-item" %>
 
-              <%= link "Pricing", to: Routes.pricing_path(SmokexWeb.Endpoint, :show) , class: "navbar-item" %>
+              <%= live_patch "Pricing", to: Routes.live_path(@conn, SmokexWeb.PricingLive.Show),
+                class: "navbar-item" %>
             </div>
           </div>
 
