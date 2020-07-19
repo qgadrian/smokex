@@ -66,7 +66,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
               content_tag(:p) do
                 [
                   content_tag(:strong, "Expected "),
-                  content_tag(:span, expected)
+                  content_tag(:span, inspect(expected))
                 ]
               end,
               content_tag(:p) do
