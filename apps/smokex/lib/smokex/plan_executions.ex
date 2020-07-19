@@ -24,13 +24,17 @@ defmodule Smokex.PlanExecutions do
         ]
 
   @doc """
-  Creates a new plan execution
+  Creates a new plan execution.
+
+  The user can be the user that triggered a manual execution, or `nil` if the
+  execution was scheduled.
   """
-  @spec create_plan_execution(PlanDefinition.t()) :: {:ok, PlanExecution.t()} | {:error, term}
-  def create_plan_execution(%PlanDefinition{} = plan_definition) do
+  @spec create_plan_execution(User.t() | nil, PlanDefinition.t()) ::
+          {:ok, PlanExecution.t()} | {:error, term}
+  def create_plan_execution(user_or_nil, %PlanDefinition{} = plan_definition) do
     result =
       %PlanExecution{}
-      |> PlanExecution.create_changeset(%{plan_definition: plan_definition})
+      |> PlanExecution.create_changeset(%{plan_definition: plan_definition, user: user_or_nil})
       |> Smokex.Repo.insert()
 
     with {:ok, plan_execution} <- result do
@@ -194,43 +198,6 @@ defmodule Smokex.PlanExecutions do
   end
 
   @doc """
-  Updates a plan execution as started.
-  """
-  @spec start(PlanExecution.t(), integer) :: {:ok, PlanExecution.t()} | {:error, term}
-  def start(%PlanExecution{} = plan_execution, total_executions \\ nil) do
-    plan_execution
-    |> __MODULE__.update(%{
-      status: :running,
-      total_executions: total_executions,
-      started_at: NaiveDateTime.utc_now()
-    })
-    |> notify_change(:started)
-  end
-
-  @doc """
-  Finishes a plan execution and sets it as `halted`.
-  """
-  @spec halt(PlanExecution.t()) :: {:ok, PlanExecution.t()} | {:error, term}
-  def halt(%PlanExecution{} = plan_execution) do
-    plan_execution
-    |> __MODULE__.update(%{status: :halted, finished_at: NaiveDateTime.utc_now()})
-    |> notify_change(:halted)
-  end
-
-  @doc """
-  Updates a plan execution as finished.
-  """
-  @spec finish(PlanExecution.t()) :: {:ok, PlanExecution.t()} | {:error, term}
-  def finish(%PlanExecution{} = plan_execution) do
-    plan_execution
-    |> __MODULE__.update(%{
-      status: :finished,
-      finished_at: NaiveDateTime.utc_now()
-    })
-    |> notify_change(:finished)
-  end
-
-  @doc """
   Updates a plan execution
   """
   @spec update(PlanExecution.t(), map) :: {:ok, PlanExecution.t()} | {:error, term}
@@ -238,46 +205,6 @@ defmodule Smokex.PlanExecutions do
     plan_execution
     |> PlanExecution.update_changeset(attrs)
     |> Smokex.Repo.update()
-  end
-
-  @doc """
-  Subscribes to the plan execution.
-  """
-  @spec subscribe(PlanExecution.t()) :: :ok | {:error, term}
-  def subscribe(%PlanExecution{} = plan_execution) do
-    Phoenix.PubSub.subscribe(Smokex.PubSub, "#{plan_execution.id}", link: true)
-  end
-
-  @spec subscribe(String.t()) :: :ok | {:error, term}
-  def subscribe(plan_execution_id) when is_binary(plan_execution_id) do
-    Phoenix.PubSub.subscribe(Smokex.PubSub, plan_execution_id, link: true)
-  end
-
-  @doc """
-  Subscribes to the plan execution.
-  """
-  @spec subscribe(list(PlanExecution.t())) :: :ok | {:error, term}
-  def subscribe([]), do: :ok
-
-  def subscribe([%PlanExecution{} | _] = plan_executions) when is_list(plan_executions) do
-    Enum.each(plan_executions, &subscribe/1)
-  end
-
-  #
-  # Private functions
-  #
-
-  @spec notify_change(term, PlanExecution.status()) :: term
-  defp notify_change(result, event) do
-    with {:ok, plan_execution} <- result do
-      Phoenix.PubSub.broadcast(
-        Smokex.PubSub,
-        "#{plan_execution.id}",
-        {event, plan_execution}
-      )
-    end
-
-    result
   end
 
   @spec maybe_query_by_plan_definition(Ecto.Query.t(), integer | binary) :: Ecto.Query
@@ -294,4 +221,6 @@ defmodule Smokex.PlanExecutions do
   defp maybe_query_by_status(query, status) do
     where(query, status: ^status)
   end
+
+  defdelegate subscribe(plan_execution), to: Smokex.PlanExecutions.Subscriber
 end

@@ -33,9 +33,9 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
   def handle_event(
         "execute",
         _params,
-        %Socket{assigns: %{plan_definition: plan_definition}} = socket
+        %Socket{assigns: %{current_user: user, plan_definition: plan_definition}} = socket
       ) do
-    {:ok, plan_execution} = PlanExecutions.create_plan_execution(plan_definition)
+    {:ok, plan_execution} = PlanExecutions.create_plan_execution(user, plan_definition)
     Smokex.PlanExecutions.subscribe(plan_execution)
 
     with {:ok, %PlanExecution{id: id}} <- SmokexClient.Executor.execute(plan_execution) do

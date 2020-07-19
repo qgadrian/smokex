@@ -10,7 +10,9 @@ defmodule Smokex.Application do
       # Start the Ecto repository
       Smokex.Repo,
       # Start the PubSub system
-      {Phoenix.PubSub, name: Smokex.PubSub}
+      {Phoenix.PubSub, name: Smokex.PubSub},
+      # Cache module to store limited features
+      %{id: :daily_executions, start: {Cachex, :start_link, [:daily_executions, []]}}
       # Start a worker by calling: Smokex.Worker.start_link(arg)
       # {Smokex.Worker, arg}
     ]

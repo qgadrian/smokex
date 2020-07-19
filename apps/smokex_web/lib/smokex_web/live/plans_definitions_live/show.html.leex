@@ -51,9 +51,15 @@
       to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, :all, 1, plan: @plan_definition.id),
       class: "button is-primary is-outlined" %>
 
+
+    <%= if Smokex.Limits.can_start_execution?(@current_user, @plan_definition) do %>
       <a href="#" role="button" class="button is-primary is-outlined"
                phx-click="execute" phx-disable-with="Starting...">
         Start new execution
       </a>
+    <% else %>
+      <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user,
+        extra_class: "is-light", text: "Get my subscription" %>
+    <% end %>
   </div>
 </section>

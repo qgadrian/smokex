@@ -8,6 +8,7 @@ defmodule Smokex.PlanExecution do
 
   alias Smokex.Result
   alias Smokex.PlanDefinition
+  alias Smokex.Users.User
   alias Smokex.Enums.PlanExecutionStatus
 
   @typedoc """
@@ -32,12 +33,13 @@ defmodule Smokex.PlanExecution do
   execution.
   """
   @type t :: %__MODULE__{
-          status: status(),
-          started_at: NaiveDateTime.t(),
           finished_at: NaiveDateTime.t(),
           plan_definition: PlanDefinition.t(),
+          results: list(Result.t()),
+          started_at: NaiveDateTime.t(),
+          status: status(),
           total_executions: integer,
-          results: list(Result.t())
+          user: User.t()
         }
 
   # @required_fields [:plan_definition_id]
@@ -53,6 +55,7 @@ defmodule Smokex.PlanExecution do
     field(:started_at, :naive_datetime, null: true)
     field(:finished_at, :naive_datetime, null: true)
 
+    belongs_to(:user, User)
     belongs_to(:plan_definition, PlanDefinition)
 
     has_many(:results, Result)
@@ -68,6 +71,7 @@ defmodule Smokex.PlanExecution do
       :plan_definition,
       params[:plan_definition] || changeset.plan_definition
     )
+    |> maybe_put_user(params)
     |> Ecto.Changeset.assoc_constraint(:plan_definition)
   end
 
@@ -75,5 +79,19 @@ defmodule Smokex.PlanExecution do
   def update_changeset(%__MODULE__{} = changeset, params \\ %{}) do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
+  end
+
+  #
+  # Private functions
+  #
+
+  defp maybe_put_user(changeset, %{user: user}) do
+    require IEx
+    IEx.pry()
+
+    case user do
+      nil -> changeset
+      user -> Ecto.Changeset.put_assoc(changeset, :user, user)
+    end
   end
 end
