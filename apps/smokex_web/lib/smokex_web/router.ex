@@ -32,6 +32,8 @@ defmodule SmokexWeb.Router do
     get "/", Controllers.Landing, :show
     get "/landing", Controllers.Landing, :show
     live "/pricing", PricingLive.Show
+    get "/privacy-policy", Controllers.Legal, :privacy_policy
+    get "/terms-and-conditions", Controllers.Legal, :terms_and_conditions
 
     scope "/" do
       pipe_through :protected

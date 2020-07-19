@@ -72,9 +72,9 @@
               </div>
             </div>
             <p>By signing up you agree with the
-            <%= link "Terms and conditions", to: Routes.landing_path(SmokexWeb.Endpoint, :show) %>
+            <%= link "Terms and conditions", to: Routes.legal_path(SmokexWeb.Endpoint, :terms_and_conditions) %>
             and
-            <%= link "Privacy policy", to: Routes.landing_path(SmokexWeb.Endpoint, :show) %>
+            <%= link "Privacy policy", to: Routes.legal_path(SmokexWeb.Endpoint, :privacy_policy) %>
           <% end %>
         </div>
       </div>
