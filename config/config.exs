@@ -44,6 +44,11 @@ config :smokex_web, :pow,
   repo: Smokex.Repo,
   web_module: SmokexWeb
 
+config :stripity_stripe,
+  api_key:
+    "***REMOVED***",
+  signing_secret: "whsec_vJAPzkwCEd8N0c0pK0d83ST5dYGSzphc"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
