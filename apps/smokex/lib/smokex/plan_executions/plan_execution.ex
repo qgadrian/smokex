@@ -86,9 +86,6 @@ defmodule Smokex.PlanExecution do
   #
 
   defp maybe_put_user(changeset, %{user: user}) do
-    require IEx
-    IEx.pry()
-
     case user do
       nil -> changeset
       user -> Ecto.Changeset.put_assoc(changeset, :user, user)
