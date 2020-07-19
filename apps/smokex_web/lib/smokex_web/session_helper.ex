@@ -30,7 +30,7 @@ defmodule SmokexWeb.SessionHelper do
          {user, _metadata} <- CredentialsCache.get([backend: Pow.Store.Backend.EtsCache], token) do
       {:ok, user}
     else
-      any -> nil
+      _any -> nil
     end
   end
 
@@ -52,7 +52,7 @@ defmodule SmokexWeb.SessionHelper do
   end
 
   @doc """
-  Call the plug and update the cached credentials.
+  Call the plug and update the user in the cached credentials.
 
   See: https://hexdocs.pm/pow/sync_user.html#update-user-in-the-credentials-cache
   """

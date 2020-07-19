@@ -20,10 +20,25 @@ defmodule SmokexWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :skip_csrf_protection do
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_flash)
+    plug(:put_secure_browser_headers)
+  end
+
   scope "/" do
     pipe_through :browser
 
     pow_routes()
+  end
+
+  scope "/", SmokexWeb do
+    pipe_through(:skip_csrf_protection)
+
+    scope "/payments/stripe" do
+      post("/webhooks", Payments.Stripe.Webhooks, :handle_webhook)
+    end
   end
 
   scope "/", SmokexWeb do
@@ -48,6 +63,11 @@ defmodule SmokexWeb.Router do
       live "/executions", PlansExecutionsLive.All
       live "/executions/:status/page/:page", PlansExecutionsLive.All
       live "/executions/:id", PlansExecutionsLive.Show
+
+      scope "/payments" do
+        get "/success", Payments.Stripe.Callbacks, :success
+        get "/cancel", Payments.Stripe.Callbacks, :cancel
+      end
     end
   end
 
