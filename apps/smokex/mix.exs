@@ -36,6 +36,7 @@ defmodule Smokex.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:cachex, "~> 3.2"},
       {:ecto_enum, "~> 1.4"},
       {:ecto_sql, "~> 3.4"},
       {:jason, "~> 1.0"},

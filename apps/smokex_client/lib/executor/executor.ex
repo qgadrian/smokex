@@ -13,7 +13,7 @@ defmodule SmokexClient.Executor do
   alias SmokexClient.Worker
   alias SmokexClient.Parsers.Yaml.Parser, as: YamlParser
 
-  alias Smokex.PlanExecutions
+  alias Smokex.PlanExecutions.Executor
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
 
@@ -31,7 +31,7 @@ defmodule SmokexClient.Executor do
     |> YamlParser.parse()
     |> case do
       {:ok, list_of_requests} ->
-        {:ok, plan_execution} = PlanExecutions.start(plan_execution, length(list_of_requests))
+        {:ok, plan_execution} = Executor.start(plan_execution, length(list_of_requests))
 
         #  TODO do not just spawn a process
         spawn(fn ->
@@ -40,11 +40,11 @@ defmodule SmokexClient.Executor do
               Worker.execute(request, plan_execution)
             end)
 
-            PlanExecutions.finish(plan_execution)
+            Executor.finish(plan_execution)
           catch
             {:error, reason} ->
               Logger.error("Execution #{id} error: #{inspect(reason)}")
-              PlanExecutions.halt(plan_execution)
+              Executor.halt(plan_execution)
           end
         end)
 
@@ -52,7 +52,7 @@ defmodule SmokexClient.Executor do
 
       {:error, reason} ->
         Logger.error("Execution #{id} error: #{inspect(reason)}")
-        PlanExecutions.halt(plan_execution)
+        Executor.halt(plan_execution)
     end
   end
 end
