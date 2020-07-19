@@ -71,6 +71,51 @@ Hooks.LoadPlanDefinitionContent = {
   }
 }
 
+Hooks.LoadStripeButton = {
+  buttonId() { return this.el.dataset.buttonId },
+  userId() { return this.el.dataset.userId },
+  userEmail() { return this.el.dataset.userEmail },
+  successUrl() { return this.el.dataset.successUrl },
+  cancelUrl() { return this.el.dataset.cancelUrl },
+  mounted() {
+    var checkoutButton = document.getElementById(`checkout-button-price_1H6HGgKn5R3yiQjr22Xadcwk-${this.buttonId()}`);
+
+    var _buttonId = this.buttonId();
+    var _userId = this.userId();
+    var _userEmail = this.userEmail();
+    var _successUrl = this.successUrl();
+    var _cancelUrl = this.cancelUrl();
+
+    checkoutButton.addEventListener('click', function () {
+      // When the customer clicks on the button, redirect
+      // them to Checkout.
+      if (!window.Stripe) { return };
+
+      window.Stripe.redirectToCheckout({
+        lineItems: [{price: 'price_1H6HGgKn5R3yiQjr22Xadcwk', quantity: 1}],
+        mode: 'subscription',
+        clientReferenceId: _userId,
+        customerEmail: _userEmail,
+        // Do not rely on the redirect to the successUrl for fulfilling
+        // purchases, customers may not always reach the success_url after
+        // a successful payment.
+        // Instead use one of the strategies described in
+        // https://stripe.com/docs/payments/checkout/fulfillment
+        successUrl: _successUrl,
+        cancelUrl: _cancelUrl
+      })
+        .then(function (result) {
+          if (result.error) {
+            // If `redirectToCheckout` fails due to a browser or network
+            // error, display the localized error message to your customer.
+            var displayError = document.getElementById(`error-message-${_buttonId}`);
+            displayError.textContent = result.error.message;
+          }
+        });
+    });
+  }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks, params: {_csrf_token: csrfToken}})
 
