@@ -8,7 +8,7 @@
           to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %>
       <% else %>
         <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user,
-          extra_class: "is-medium", text: "Get my subscription" %>
+          extra_class: "is-light is-medium", text: "Get my subscription" %>
       <% end %>
     </div>
 
@@ -26,7 +26,7 @@
           <tr>
             <td scope="row">
               <%= live_patch plan_definition.name, to:
-Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Show, plan_definition.id) %>
+                Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Show, plan_definition.id) %>
             </td>
             <td scope="row">
               <%= ListView.last_execution_started(plan_definition) %>
