@@ -1,7 +1,36 @@
 defmodule Smokex.Limits do
+  @moduledoc """
+  This module provides function to track the usage limit of the application.
+
+  ## Scope
+
+  The scope of the limitations affect to users that have a non premium
+  subscription only.
+
+  ## Limits
+
+  ### Plan definition limit
+
+  There is a limit of 2 plan definitions per user.
+
+  ### Execution limit
+
+  There is a limit of 1 execution per plan per day. After 24 hours, this limit
+  gets removed and the plan can be executed again.
+  """
+
   alias Smokex.PlanDefinition
-  alias Smokex.Users.User
+  alias Smokex.PlanDefinitions
   alias Smokex.Users
+  alias Smokex.Users.User
+
+  @doc """
+  Whether a new plan definition can be created or not.
+  """
+  @spec can_create_plan_definition?(User.t()) :: boolean
+  def can_create_plan_definition?(%User{} = user) do
+    Users.subscribed?(user) || length(PlanDefinitions.all(user)) <= 2
+  end
 
   @doc """
   Whether the plan definition can start a new execution.

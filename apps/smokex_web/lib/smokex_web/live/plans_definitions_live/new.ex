@@ -2,6 +2,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
   use SmokexWeb, :live_view
 
   alias Phoenix.LiveView.Socket
+  alias Smokex.Limits
   alias Smokex.PlanDefinitions
   alias Smokex.PlanDefinition
 
@@ -9,9 +10,10 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
   def mount(_params, session, socket) do
     socket =
       socket
+      |> SessionHelper.assign_user!(session)
+      |> check_permission()
       |> assign(changeset: Ecto.Changeset.change(%PlanDefinition{}))
       |> assign(page_title: "Create test plan")
-      |> SessionHelper.assign_user!(session)
 
     {:ok, socket}
   end
@@ -37,12 +39,25 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
         redirect_path =
           Routes.live_path(socket, SmokexWeb.PlansDefinitionsLive.Show, plan_definition.id)
 
-        # TODO investigate about the stop response
-        # Check https://github.com/chrismccord/phoenix_live_view_example/blob/master/lib/demo_web/live/user_live/edit.ex#L35
-        {:noreply, redirect(socket, to: redirect_path)}
+        {:noreply, push_redirect(socket, to: redirect_path)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
+
+  #
+  # Private functions
+  #
+
+  @spec check_permission(Socket.t()) :: Socket.t()
+  defp check_permission(%Socket{assigns: %{current_user: user}} = socket) do
+    if Limits.can_create_plan_definition?(user) do
+      socket
+    else
+      redirect_path = Routes.live_path(socket, SmokexWeb.PlansDefinitionsLive.List)
+
+      push_redirect(socket, to: redirect_path)
     end
   end
 end
