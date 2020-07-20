@@ -2,6 +2,22 @@ defmodule Smokex.Users do
   alias Smokex.Users.User
 
   @doc """
+  Updates a user.
+
+  ## Examples
+      iex> update(user, %{stripe_id: "test"})
+      {:ok, %User{}}
+      iex> update(user, %{stripe_id: 1234})
+      {:error, %Ecto.Changeset{}}
+  """
+  @spec update(User.t(), map) :: {:ok, User.t} | {:error, Ecto.Changeset.t}
+  def update(%User{} = user, params) do
+    user
+    |> User.update_changeset(params)
+    |> Smokex.Repo.update()
+  end
+
+  @doc """
   Whether the user can create a new plan definition.
 
   In order to create a new plan definition the user has to have premium access

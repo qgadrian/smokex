@@ -47,7 +47,7 @@ config :smokex_web, :pow,
 config :stripity_stripe,
   api_key:
     "***REMOVED***",
-  signing_secret: "whsec_vJAPzkwCEd8N0c0pK0d83ST5dYGSzphc"
+  signing_secret: "***REMOVED***"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
