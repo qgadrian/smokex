@@ -6,9 +6,11 @@ config :smokex_web, SmokexWeb.Endpoint,
   server: true,
   url: [port: 443]
 
-config :smokex, Smokex.Repo, url: System.fetch_env!("DATABASE_URL")
+config :smokex, Smokex.Repo,
+  database: System.fetch_env!("DATABASE_NAME"),
+  pool_size: System.fetch_env!("POOL_SIZE"),
+  url: System.fetch_env!("DATABASE_URL")
 
-config :smokex, Smokex.Repo, System.fetch_env!("POOL_SIZE")
 
 config :stripity_stripe,
   api_key: System.fetch_env!("STRIPE_API_KEY"),

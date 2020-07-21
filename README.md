@@ -40,6 +40,22 @@ And create a proc file with
 web: _build/prod/rel/smokex/bin/smokex start
 ```
 
+* Add runtime configurations
+
+```bash
+heroku config:set PORT=4000
+...
+```
+
+* Run migrations
+
+```bash
+heroku run "POOL_SIZE=2 mix ecto.migrate"
+```
+
+> We use a pool size of `2` with an application configured with a pool size of
+`18`, so we will avoid issues with database connections.
+
 ### Gigalixir
 
 #### Working with umbrella projects
