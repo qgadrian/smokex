@@ -8,6 +8,8 @@ config :smokex_web, SmokexWeb.Endpoint,
 
 config :smokex, Smokex.Repo, url: System.fetch_env!("DATABASE_URL")
 
+config :smokex, Smokex.Repo, System.fetch_env!("POOL_SIZE")
+
 config :stripity_stripe,
   api_key: System.fetch_env!("STRIPE_API_KEY"),
   signing_secret: System.fetch_env!("STRIPE_SIGNING_SECRET")
