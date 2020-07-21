@@ -1,5 +1,7 @@
 use Mix.Config
 
+config :logger, level: :info
+
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
 # when generating URLs.
@@ -17,7 +19,9 @@ config :smokex_web, SmokexWeb.Endpoint,
   ],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
-config :smokex, Smokex.Repo, pool_size: 2
+config :smokex, Smokex.Repo,
+  database: "smokex_prod",
+  pool_size: 2
 
 # ## SSL Support
 #
@@ -53,5 +57,3 @@ config :smokex, Smokex.Repo, pool_size: 2
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
 
-# Do not print debug messages in production
-config :logger, level: :info
