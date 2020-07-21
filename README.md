@@ -2,6 +2,44 @@
 
 ## Deployment
 
+## Heroku
+
+* Install hero client
+
+```bash
+brew tap heroku/brew && brew install heroku
+```
+
+* Install the Elixir and Phoenix buildpacks in the application (skip the `-a` to create a new
+    one)
+
+```bash
+heroku buildpacks:set hashnuke/elixir -a smokex
+heroku buildpacks:add https://github.com/gjaldon/heroku-buildpack-phoenix-static.git
+```
+
+> Remember to defined the build pack config in the project root path.
+
+* Add remote branch to deploy on heroku (not mandatory, you can also connect
+    Github from the Heroku dashboard)
+
+```bash
+heroku git:remote -a smokex
+git push heroku master
+```
+
+* **To use releases** add the following to the elixir buildpack
+
+```buildpack
+release=true
+```
+
+And create a proc file with
+
+```procfile
+web: _build/prod/rel/smokex/bin/smokex start
+```
+
 ### Gigalixir
 
 #### Working with umbrella projects
