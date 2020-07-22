@@ -11,6 +11,10 @@ main#main-content {
   min-height: calc(100vh - 55px - 6rem - 3rem);
 }
 
+#nprogress .bar {
+  background: $primary !important;
+}
+
 footer {
   height: 50px;
 }

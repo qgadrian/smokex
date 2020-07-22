@@ -61,6 +61,11 @@ heroku run "POOL_SIZE=2 _build/prod/rel/smokex/bin/smokex eval \"Smokex.Release.
 > We use a pool size of `2` with an application configured with a pool size of
 > `18`, so we will avoid issues with database connections.
 
+#### Docker containers
+
+* Login into Heroku registry `heroku container:login`
+* Build and push an image `heroku container:push web`
+
 ### Gigalixir
 
 #### Working with umbrella projects
