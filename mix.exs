@@ -5,6 +5,7 @@ defmodule Smokex.Umbrella.MixProject do
     [
       aliases: aliases(),
       apps_path: "apps",
+      build_embedded: Mix.env == :prod,
       deps: deps(),
       start_permanent: Mix.env() == :prod,
       version: "0.1.0",
