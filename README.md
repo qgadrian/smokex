@@ -49,12 +49,17 @@ heroku config:set PORT=4000
 
 * Run migrations
 
+> Heroku only deployes the release to the Dyno, so the module `Smokex.Release`
+> needs to be used in order to run the migrations.
+
+
 ```bash
-heroku run "POOL_SIZE=2 mix ecto.migrate"
+heroku run "POOL_SIZE=2 _build/prod/rel/smokex/bin/smokex eval \"Smokex.Release.create_database()\""
+heroku run "POOL_SIZE=2 _build/prod/rel/smokex/bin/smokex eval \"Smokex.Release.migrate()\""
 ```
 
 > We use a pool size of `2` with an application configured with a pool size of
-`18`, so we will avoid issues with database connections.
+> `18`, so we will avoid issues with database connections.
 
 ### Gigalixir
 
