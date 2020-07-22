@@ -8,9 +8,8 @@ config :smokex_web, SmokexWeb.Endpoint,
 
 config :smokex, Smokex.Repo,
   database: System.fetch_env!("DATABASE_NAME"),
-  pool_size: System.fetch_env!("POOL_SIZE"),
+  pool_size: System.fetch_env!("POOL_SIZE") |> String.to_integer(),
   url: System.fetch_env!("DATABASE_URL")
-
 
 config :stripity_stripe,
   api_key: System.fetch_env!("STRIPE_API_KEY"),
