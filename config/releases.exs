@@ -7,7 +7,10 @@ config :smokex_web, SmokexWeb.Endpoint,
   url: [port: 443]
 
 config :smokex, Smokex.Repo,
+  username: System.fetch_env!("DATABASE_USERNAME"),
+  password: System.fetch_env!("DATABASE_PASSWORD"),
   database: System.fetch_env!("DATABASE_NAME"),
+  hostname: System.fetch_env!("DATABASE_HOSTNAME"),
   pool_size: System.fetch_env!("POOL_SIZE") |> String.to_integer(),
   url: System.fetch_env!("DATABASE_URL")
 
