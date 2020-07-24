@@ -1,5 +1,5 @@
 defmodule SmokexWeb.PlansExecutionsLive.Components.Filter do
-  use Phoenix.LiveComponent
+  use SmokexWeb, :live_component
 
   use Phoenix.HTML
 

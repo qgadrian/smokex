@@ -42,7 +42,8 @@ config :smokex_client,
 config :smokex_web, :pow,
   user: Smokex.Users.User,
   repo: Smokex.Repo,
-  web_module: SmokexWeb
+  web_module: SmokexWeb,
+  routes_backend: SmokexWeb.Pow.Routes
 
 config :stripity_stripe,
   api_key:
