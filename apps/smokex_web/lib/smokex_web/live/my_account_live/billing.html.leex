@@ -1,0 +1,59 @@
+<section class="section">
+  <h2 class="title">Subscription</h2>
+
+  <div class="columns">
+    <%= live_component @socket, SideMenu %>
+
+    <div class="column">
+      <div class="box">
+        <%= form_for Ecto.Changeset.change(@current_user), "#", [class: "form"], fn f -> %>
+          <div class="field">
+            <%= label(:name,"Current subscription ends at", class: "label") %>
+            <div class="control">
+              <%= text_input f, :subscription_expires_at, class: "input", readonly: true %>
+            </div>
+          </div>
+
+          <div class="column has-text-centered">
+            <button type="button"
+                    class="button is-primary is-outlined"
+                    phx-click="show_cancel_subscription_modal"
+                    phx-disable-with="...">
+              Cancel subscription
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+  <%= if assigns[:show_confirm_modal] do %>
+    <div class="modal is-clipped is-active">
+      <div class="modal-background"></div>
+      <div class="modal-content content">
+        <div class="box">
+          <h1 class="title">We are really sad to see you go...</h1>
+
+          <p>If you experience any issue please, want to give valuable feedback please don't hesitate to <a href="mailto:enterprise@smokex.io?subject=Subscription help" class="link" type="button">contact us</a> first.</p>
+
+          <h3>Current subscription</h3>
+
+          <p>
+            Your subscription will remain active <strong>until <%= @current_user.subscription_expires_at %></strong>
+          </p>
+
+          <p>No charges will be made after that date.</p>
+
+          <div class="buttons is-centered mt-5">
+            <button class="button is-primary"
+              phx-click="hide_cancel_subscription_modal">I don't want to cancel</button>
+
+            <button class="button is-primary is-outlined"
+              phx-click="cancel_subscription">Cancel subscription</button>
+          </div>
+        </div>
+        <button phx-click="hide_cancel_subscription_modal"
+          class="modal-close is-large" aria-label="close"></button>
+      </div>
+    </div>
+  <% end %>
+</section>
