@@ -57,6 +57,10 @@ img.landing {
   display: none!important;
 }
 
+.notification:empty {
+  display: none;
+}
+
 // Code editor syntax override
 .cm-activeLine {
   background-color: transparent!important;
