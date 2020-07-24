@@ -1,5 +1,5 @@
 defmodule SmokexWeb.PlansExecutionsLive.Components.Table do
-  use Phoenix.LiveComponent
+  use SmokexWeb, :live_component
 
   alias SmokexWeb.PlansExecutionsLive.Components.Row, as: RowComponent
 
@@ -15,4 +15,3 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Table do
     {:ok, socket}
   end
 end
-

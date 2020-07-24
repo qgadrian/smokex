@@ -39,8 +39,8 @@
       <%= submit "Save", class: "button is-primary", phx_disable_with: "Saving..." %>
 
       <%= live_patch "Cancel",
-to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.List),
-class: "button is-primary is-outlined" %>
+        to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.List),
+        class: "button is-primary is-outlined" %>
     </div>
   <% end %>
 </section>

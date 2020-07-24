@@ -1,0 +1,24 @@
+<section class="section">
+  <h2 class="title">My account</h2>
+
+  <div class="columns">
+    <%= live_component @socket, SideMenu %>
+
+    <div class="column">
+      <div class="box">
+        <%= form_for Ecto.Changeset.change(@current_user), "#", [class: "form"], fn f -> %>
+          <div class="field">
+            <%= label(:name,"Email", class: "label") %>
+            <div class="control">
+              <%= text_input f, :email, class: "input", readonly: true, disabled: true %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="column has-text-centered">
+          <%= live_patch "Change password", class: "button is-primary",
+            to: Routes.pow_registration_path(@socket, :edit) %>
+        </div>
+      </div>
+    </div>
+</section>

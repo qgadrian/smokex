@@ -40,12 +40,19 @@ defmodule SmokexWeb.SessionHelper do
     nil
   end
 
+  @doc """
+  Gets the user from the session and assigns it to the Socket.
+
+  This function assumes the session belongs to an authenticated user and raises
+  an error if not.
+  """
   @spec assign_user!(socket :: Socket.t(), session :: map) :: Socket.t()
   def assign_user!(%Socket{} = socket, session) do
     with {:ok, user} <- get_user(socket, session) do
       Phoenix.LiveView.assign(socket, current_user: user)
     else
       _ ->
+        # TODO so raise an error or not?
         # raise "User not present in the socket session"
         Phoenix.LiveView.assign(socket, current_user: nil)
     end
