@@ -1,6 +1,8 @@
 defmodule SmokexWeb.Router do
   use SmokexWeb, :router
+
   use Pow.Phoenix.Router
+  use Sentry.PlugCapture
 
   pipeline :browser do
     plug :accepts, ["html"]
