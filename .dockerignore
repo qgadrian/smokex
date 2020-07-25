@@ -1,0 +1,6 @@
+.tool-versions
+.git/
+.gitignore
+_build/
+doc/
+apps/smokex_web/assets/node_modules
