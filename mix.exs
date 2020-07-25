@@ -5,7 +5,7 @@ defmodule Smokex.Umbrella.MixProject do
     [
       aliases: aliases(),
       apps_path: "apps",
-      build_embedded: Mix.env == :prod,
+      build_embedded: Mix.env() == :prod,
       deps: deps(),
       start_permanent: Mix.env() == :prod,
       version: "0.1.0",
@@ -25,8 +25,9 @@ defmodule Smokex.Umbrella.MixProject do
 
   defp deps do
     [
+      {:crontab, "~> 1.1"},
       {:ex_machina, "~> 2.4"},
-      {:crontab, "~> 1.1"}
+      {:sentry, "~> 8.0"}
     ]
   end
 

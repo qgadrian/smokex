@@ -26,9 +26,16 @@ config :smokex_web, SmokexWeb.Endpoint,
   live_view: [signing_salt: "***REMOVED***"]
 
 # Configures Elixir's Logger
+config :logger,
+  backends: [:console, Sentry.LoggerBackend]
+
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
+
+config :logger, Sentry.LoggerBackend,
+  capture_log_messages: true,
+  level: :warn
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
@@ -49,6 +56,13 @@ config :stripity_stripe,
   api_key:
     "***REMOVED***",
   signing_secret: "***REMOVED***"
+
+config :sentry,
+  dsn: "https://376e278a12cb49e0943fca342a8cea89@o425345.ingest.sentry.io/5360041",
+  environment_name: Mix.env(),
+  included_environments: [:prod],
+  enable_source_code_context: true,
+  root_source_code_path: File.cwd!()
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
