@@ -88,3 +88,15 @@ heroku run "POOL_SIZE=2 _build/prod/rel/smokex/bin/smokex eval \"Smokex.Release.
 * Won't require technical knowledge
 * Won't be coupled to any testing library and making changes transparent to the
     repo
+
+## TODO
+
+* [ ] Cancel subscription
+* [ ] Create table with Stripe subscriptions
+* [ ] Generate the Docker image and deploy to Heroku
+* [x] Setup Sentry errors
+* [ ] Setup Datadog logs & monitoring
+* [ ] Setup domain
+* [ ] Setup Oban
+* [ ] Start and trigger Oban jobs
+* [ ] Create page to document the YAML templates
