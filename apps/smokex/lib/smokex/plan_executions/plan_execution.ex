@@ -23,7 +23,7 @@ defmodule Smokex.PlanExecution do
   @type status :: :created | :running | :halted | :finished
 
   @typedoc """
-  Represents a [plan definition](`t:#{PlanDefinition}/0`):
+  Represents a plan execution:
 
   * `status`: The [status](`t:#{__MODULE__}.status/0`) of the execution.
   * `started_at`: When the execution was started, without timezone.
@@ -31,6 +31,8 @@ defmodule Smokex.PlanExecution do
   * `plan_definition`: [action](`t:#{RequestActionEnum}/0`) that was executed.
   * `results`: The total [results](`t:#{RequestResultEnum}/0`) of the
   execution.
+  * `user`: The user who the trigger the execution. If the execution was
+  executed automatically will be `nil`.
   """
   @type t :: %__MODULE__{
           finished_at: NaiveDateTime.t(),
@@ -67,6 +69,7 @@ defmodule Smokex.PlanExecution do
   def create_changeset(%__MODULE__{} = changeset, params \\ %{}) do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
+    |> Ecto.Changeset.validate_required(params, @required_fields)
     |> Ecto.Changeset.put_assoc(
       :plan_definition,
       params[:plan_definition] || changeset.plan_definition
@@ -87,8 +90,13 @@ defmodule Smokex.PlanExecution do
 
   defp maybe_put_user(changeset, %{user: user}) do
     case user do
-      nil -> changeset
-      user -> Ecto.Changeset.put_assoc(changeset, :user, user)
+      nil ->
+        changeset
+
+      user ->
+        changeset
+        |> Ecto.Changeset.put_assoc(:user, user)
+        |> Ecto.Changeset.assoc_constraint(:user)
     end
   end
 end
