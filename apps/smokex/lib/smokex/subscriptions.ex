@@ -34,11 +34,11 @@ defmodule Smokex.StripeSubscriptions do
   @doc """
   Updates a Stripe subscription with the `subscription_id`.
   """
-  @spec update_subscription(user :: User.t(), customer_id :: String.t()) ::
+  @spec update_subscription(subscription :: StripeSubscription.t(), subscription_id :: String.t()) ::
           {:ok, StripeSubscription.t()} | {:error, Ecto.Changeset.t()}
-  def update_subscription(%StripeSubscription{} = user, subscription_id)
+  def update_subscription(%StripeSubscription{} = subscription, subscription_id)
       when is_binary(subscription_id) do
-    %StripeSubscription{}
+    subscription
     |> StripeSubscription.update_changeset(%{
       subscription_id: subscription_id
     })
