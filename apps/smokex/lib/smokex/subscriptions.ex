@@ -1,7 +1,8 @@
 defmodule Smokex.StripeSubscriptions do
-  alias Smokex.Users.User
+  require Logger
 
   alias Smokex.Subscriptions.StripeSubscription
+  alias Smokex.Users.User
   alias Smokex.Users.User
 
   @doc """
@@ -43,5 +44,34 @@ defmodule Smokex.StripeSubscriptions do
       subscription_id: subscription_id
     })
     |> Smokex.Repo.insert()
+  end
+
+  @doc """
+  Cancels an active subscription for the user.
+
+  If the user has multiple active subscriptions, an error will be returned an
+  manual intervention will be needed.
+  """
+  @spec cancel_subscription(User.t()) :: {:ok, :deleted} | {:error, term}
+  def cancel_subscription(%User{} = user) do
+    with {:ok, %StripeSubscription{customer_id: customer_id}} <- __MODULE__.get_by(user: user),
+         {:ok, %Stripe.List{data: [%Stripe.Subscription{id: subscription_id}]}} <-
+           Stripe.Subscription.list(customer: customer_id, status: "active"),
+         {:ok, _subscription} <- Stripe.Subscription.delete(subscription_id) do
+      {:ok, :deleted}
+    else
+      {:ok, %Stripe.List{data: subscriptions}} ->
+        Logger.error("Multiple subscriptions active: #{inspect(subscriptions)}")
+        {:error, :multiple_subscriptions}
+
+      nil ->
+        {:error, "user_not_found"}
+
+      {:error, _reason} = error ->
+        error
+
+      error ->
+        {:error, inspect(error)}
+    end
   end
 end

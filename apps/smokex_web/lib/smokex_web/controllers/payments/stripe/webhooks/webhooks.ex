@@ -11,6 +11,8 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
 
   @spec handle_webhook(Plug.Conn.t(), map) :: Plug.Conn.t()
   def handle_webhook(%Plug.Conn{assigns: %{stripe_event: stripe_event}} = conn, _params) do
+    Logger.info("Stripe event: #{inspect(stripe_event)}")
+
     case handle_event(conn, stripe_event) do
       {:ok, _} -> handle_success(conn)
       {:error, error} -> handle_error(conn, error)
@@ -47,8 +49,6 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
            }
          } = stripe_event
        ) do
-    Logger.info("Stripe event `customer_created`: #{inspect(stripe_event)}")
-
     with user when not is_nil(user) <- Repo.get_by(User, email: email),
          {:ok, user} <- Subscriptions.create_customer(user, id) do
       Logger.info("Updated user customer_id: #{user.id}")
@@ -57,9 +57,9 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
 
       {:ok, :success}
     else
-      error ->
-        Logger.error("Error processing customer created: #{inspect(error)}")
-        {:error, error}
+      {:error, reason} ->
+        Logger.error("Error processing customer created: #{inspect(reason)}")
+        {:error, reason}
     end
   end
 
@@ -89,8 +89,6 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
            }
          } = stripe_event
        ) do
-    Logger.info("Stripe event `invoice_paid`: #{inspect(stripe_event)}")
-
     customer_id =
       case customer do
         %Stripe.Customer{id: id} -> id
@@ -102,9 +100,9 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
          {:ok, _user} <- Users.update(user, %{subscription_expires_at: subscription_expires_at}) do
       {:ok, :success}
     else
-      error ->
-        Logger.error("Error processing invoice payment: #{inspect(error)}")
-        {:error, error}
+      {:error, reason} ->
+        Logger.error("Error processing invoice payment: #{inspect(reason)}")
+        {:error, reason}
     end
   end
 
@@ -125,17 +123,11 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
            data: %{
              object: %Stripe.Subscription{
                customer: customer,
-               items: %Stripe.List{
-                 data: [
-                   %Stripe.SubscriptionItem{id: subscription_id}
-                 ]
-               }
+               id: subscription_id
              }
            }
          } = stripe_event
        ) do
-    Logger.info("Stripe event `customer.subscription.created`: #{inspect(stripe_event)}")
-
     customer_id =
       case customer do
         %Stripe.Customer{id: id} -> id
@@ -149,17 +141,17 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
     else
       nil ->
         Logger.error("Subscription not found for customer: #{customer_id}")
-        {:error, error}
+        {:error, "subscription not found"}
 
-      error ->
-        Logger.error("Error processing subscription creation: #{inspect(error)}")
-        {:error, error}
+      {:error, reason} ->
+        Logger.error("Error processing subscription creation: #{inspect(reason)}")
+        {:error, reason}
     end
   end
 
   # TODO handle subscriptions cancelled
   defp handle_event(_conn, %{type: event_type} = _event) do
-    Logger.warn("Unknown Stripe event: #{event_type}")
+    Logger.warn("Unknown Stripe event")
 
     {:ok, :unsupported_event}
   end
