@@ -61,6 +61,12 @@ heroku run "POOL_SIZE=2 _build/prod/rel/smokex/bin/smokex eval \"Smokex.Release.
 > We use a pool size of `2` with an application configured with a pool size of
 > `18`, so we will avoid issues with database connections.
 
+* Enable datadog metrics:
+
+```bash
+heroku drains:add 'https://http-intake.logs.datadoghq.com/v1/input/<DD_API_KEY>?ddsource=heroku&service=smokex&host=<HOST>' -a smokex
+```
+
 #### Docker containers
 
 * Login into Heroku registry `heroku container:login`
@@ -75,6 +81,24 @@ heroku run "POOL_SIZE=2 _build/prod/rel/smokex/bin/smokex eval \"Smokex.Release.
 * [ ] [Set which release
     profile](https://gigalixir.readthedocs.io/en/latest/config.html#gigalixir-release-options) should be used
 * [ ] Run migration `gigalixir ps:migrate` with `--migration_app_name` flag
+
+#### Logs
+
+```bash
+heroku drains:add 'https://http-intake.logs.datadoghq.com/v1/input/<DD_APY_KEY>?ddsource=heroku&service=smokex&host=gigalixir' -a smokex
+
+```
+
+## Development
+
+### Run a release locally
+
+There are multiple environment variables that are expected to be set in order to
+run a release:
+
+```bash
+SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5 DATABASE_HOSTNAME=postgres-free-tier-1.gigalixir.com DATABASE_USERNAME=test DATABASE_PASSWORD=test DATABASE_NAME=test PORT=4000 POOL_SIZE=1 DATABASE_URL="" STRIPE_API_KEY="" STRIPE_SIGNING_SECRET="" _build/prod/rel/smokex/bin/smokex start_iex
+```
 
 ## Why?
 
