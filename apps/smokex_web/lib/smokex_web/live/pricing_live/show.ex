@@ -9,4 +9,9 @@ defmodule SmokexWeb.PricingLive.Show do
 
     {:ok, socket}
   end
+
+  @impl Phoenix.LiveView
+  def handle_params(_params, _url, socket) do
+    {:noreply, socket}
+  end
 end
