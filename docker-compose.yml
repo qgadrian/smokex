@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  smokex:
+    build: .
+    environment:
+      # Forces the server startup after the command execution
+      - SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
+      - DATABASE_HOSTNAME=postgres-free-tier-1.gigalixir.com
+      - DATABASE_USERNAME=test
+      - DATABASE_PASSWORD=test
+      - DATABASE_NAME=test
+      - PORT=4000
+      - POOL_SIZE=1
+      - STRIPE_API_KEY=""
+      - STRIPE_SIGNING_SECRET=""
+    ports:
+      - 4000:4000
+    #depends_on:
+      #- postgres
+    container_name: smokex
+    networks:
+      - localhost
+
+  #postgres:
+    #image: postgres:9.6.11
+    #ports:
+      #- 5432:5432
+    #environment:
+      #- POSTGRES_USER=postgres
+      #- POSTGRES_DATABASE=smokex-dev
+    #container_name: postgres
+    #networks:
+      #- localhost
+
+networks:
+  localhost:
+    driver: bridge
+
