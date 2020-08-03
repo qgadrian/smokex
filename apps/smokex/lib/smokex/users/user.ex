@@ -2,13 +2,12 @@ defmodule Smokex.Users.User do
   use Ecto.Schema
   use Pow.Ecto.Schema
 
-  @optional_fields [:subscription_expires_at, :stripe_customer_id]
+  @optional_fields [:subscription_expires_at]
 
   @schema_fields @optional_fields
 
   schema "users" do
     field(:subscription_expires_at, :utc_datetime)
-    field(:stripe_customer_id, :string, null: true)
 
     pow_user_fields()
 
