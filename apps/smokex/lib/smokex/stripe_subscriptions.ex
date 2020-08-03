@@ -12,7 +12,7 @@ defmodule Smokex.StripeSubscriptions do
   """
   @spec get_by(keyword) :: StripeSubscription.t()
   def get_by(params) do
-    Smokex.Repo.get_by!(StripeSubscription, params)
+    Smokex.Repo.get_by(StripeSubscription, params)
   end
 
   @doc """
@@ -43,7 +43,7 @@ defmodule Smokex.StripeSubscriptions do
     |> StripeSubscription.update_changeset(%{
       subscription_id: subscription_id
     })
-    |> Smokex.Repo.insert()
+    |> Smokex.Repo.update()
   end
 
   @doc """
