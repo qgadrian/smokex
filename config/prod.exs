@@ -14,7 +14,7 @@ config :logger, level: :info
 config :smokex_web, SmokexWeb.Endpoint,
   url: [
     scheme: "https",
-    host: "smokex.gigalixirapp.com",
+    host: "smokex.herokuapp.com",
     port: 443
   ],
   cache_static_manifest: "priv/static/cache_manifest.json"
@@ -56,4 +56,3 @@ config :smokex, Smokex.Repo,
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
-
