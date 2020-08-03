@@ -35,7 +35,7 @@ defmodule Smokex.Subscriptions.StripeSubscription do
   def create_changeset(%__MODULE__{} = changeset, params \\ %{}) do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
-    |> Ecto.Changeset.validate_required(params, @required_fields)
+    |> Ecto.Changeset.validate_required(@required_fields)
     |> Ecto.Changeset.put_assoc(:user, params[:user])
     |> Ecto.Changeset.assoc_constraint(:user)
   end

@@ -96,10 +96,16 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
       end
 
     with {:ok, subscription_expires_at} <- DateTime.from_unix(period_end_timestamp),
-         user when not is_nil(user) <- Repo.get_by(User, stripe_customer_id: customer_id),
+         %StripeSubscription{customer_id: ^customer_id} = subscription <-
+           Subscriptions.get_by(customer_id: customer_id),
+         %StripeSubscription{user: user} <- Repo.preload(subscription, :user),
          {:ok, _user} <- Users.update(user, %{subscription_expires_at: subscription_expires_at}) do
       {:ok, :success}
     else
+      nil ->
+        Logger.error("Subscription not found for customer: #{customer_id}")
+        {:error, "subscription not found"}
+
       {:error, reason} ->
         Logger.error("Error processing invoice payment: #{inspect(reason)}")
         {:error, reason}
@@ -134,7 +140,8 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
         id when is_binary(id) -> id
       end
 
-    with {:ok, subscription} <- Subscriptions.get_by(customer_id: customer_id),
+    with %StripeSubscription{customer_id: ^customer_id} = subscription <-
+           Subscriptions.get_by(customer_id: customer_id),
          {:ok, %StripeSubscription{subscription_id: ^subscription_id}} <-
            Subscriptions.update_subscription(subscription, subscription_id) do
       {:ok, :success}
