@@ -50,6 +50,7 @@ defmodule SmokexWeb.MixProject do
       {:stripity_stripe, "~> 2.9"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
+      {:telemetry_metrics_statsd, "~> 0.4.0"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"}
     ]
