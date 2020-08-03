@@ -151,7 +151,7 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
 
   # TODO handle subscriptions cancelled
   defp handle_event(_conn, %{type: event_type} = _event) do
-    Logger.warn("Unknown Stripe event")
+    Logger.warn("Unknown Stripe event: #{event_type}")
 
     {:ok, :unsupported_event}
   end
