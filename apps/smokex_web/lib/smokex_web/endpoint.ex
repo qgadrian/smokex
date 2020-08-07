@@ -43,12 +43,10 @@ defmodule SmokexWeb.Endpoint do
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
-  # This needs to be places before the parser plug, to get the raw body
-  plug SmokexWeb.Payments.Stripe.Webhooks.Plug
-
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
+    body_reader: {SmokexWeb.CacheBodyReader, :read_body, []},
     json_decoder: Phoenix.json_library()
 
   plug Sentry.PlugContext

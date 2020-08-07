@@ -2,6 +2,16 @@ defmodule Smokex.Users do
   alias Smokex.Users.User
 
   @doc """
+  Gets a user by the given fields.
+
+  If no user is found, returns `nil`.
+  """
+  @spec get_by(keyword) :: User.t()
+  def get_by(params) do
+    Smokex.Repo.get_by(User, params)
+  end
+
+  @doc """
   Updates a user.
 
   ## Examples
@@ -10,7 +20,7 @@ defmodule Smokex.Users do
       iex> update(user, %{stripe_id: 1234})
       {:error, %Ecto.Changeset{}}
   """
-  @spec update(User.t(), map) :: {:ok, User.t} | {:error, Ecto.Changeset.t}
+  @spec update(User.t(), map) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
   def update(%User{} = user, params) do
     user
     |> User.update_changeset(params)

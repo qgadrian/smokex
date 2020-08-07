@@ -27,15 +27,18 @@ config :smokex_web, SmokexWeb.Endpoint,
 
 # Configures Elixir's Logger
 config :logger,
-  backends: [:console, Sentry.LoggerBackend]
+  backends: [:console, Sentry.LoggerBackend],
+  handle_otp_reports: false,
+  handle_sasl_reports: false
 
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id, :mfa, :pid]
+  metadata: [:request_id, :mfa, :file, :line, :pid, :stripe_event]
 
 config :logger, Sentry.LoggerBackend,
   capture_log_messages: true,
-  level: :warn
+  level: :warn,
+  metadata: :all
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

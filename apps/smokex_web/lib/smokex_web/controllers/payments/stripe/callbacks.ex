@@ -9,13 +9,13 @@ defmodule SmokexWeb.Payments.Stripe.Callbacks do
   plug :reload_user
 
   def success(conn, _params) do
-    Logger.info("Received a success transaction")
+    Logger.info("Callback received for success transaction")
 
     redirect(conn, to: "/plans")
   end
 
   def cancel(conn, _params) do
-    Logger.warn("Received a canceled transaction")
+    Logger.info("Callback received for cancelled transaction")
 
     redirect(conn, to: "/plans")
   end
@@ -37,6 +37,8 @@ defmodule SmokexWeb.Payments.Stripe.Callbacks do
     config = Pow.Plug.fetch_config(conn)
     user = Pow.Plug.current_user(conn, config)
     reloaded_user = Repo.get!(User, user.id)
+
+    Logger.info("Callback received for user #{reloaded_user.id}")
 
     conn
     |> Pow.Plug.assign_current_user(reloaded_user, config)

@@ -16,7 +16,8 @@ defmodule Smokex.StripeSubscriptions do
   end
 
   @doc """
-  Creates a new user entry in the `stripe_subscriptions` table with the customer info.
+  Creates a new user entry in the `stripe_subscriptions` table with the
+  customer info.
 
   This does not mean the user has an active subscription yet, but it creates
   the information to track the user information is Stripe.
@@ -28,6 +29,27 @@ defmodule Smokex.StripeSubscriptions do
     |> StripeSubscription.create_changeset(%{
       user: user,
       customer_id: customer_id
+    })
+    |> Smokex.Repo.insert()
+  end
+
+  @doc """
+  Creates a Stripe subscription with the `subscription_id` for the given
+  customer.
+  """
+  @spec create_subscription(
+          user_id :: integer | nil,
+          subscription_id :: String.t(),
+          customer_id :: String.t()
+        ) ::
+          {:ok, StripeSubscription.t()} | {:error, Ecto.Changeset.t()}
+  def create_subscription(user_id, subscription_id, customer_id)
+      when is_binary(subscription_id) and is_binary(customer_id) do
+    %StripeSubscription{}
+    |> StripeSubscription.update_changeset(%{
+      user_id: user_id,
+      customer_id: customer_id,
+      subscription_id: subscription_id
     })
     |> Smokex.Repo.insert()
   end

@@ -9,6 +9,8 @@ defmodule Smokex.Repo.Migrations.CreatePlansExecutionsStepsResults do
       add(:host, :string, null: true)
       add(:failed_assertions, {:array, :map}, null: false)
       add(:result, :string, null: false)
+
+      timestamps()
     end
   end
 end

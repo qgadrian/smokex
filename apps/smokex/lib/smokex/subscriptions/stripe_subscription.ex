@@ -21,6 +21,7 @@ defmodule Smokex.Subscriptions.StripeSubscription do
 
   @required_fields [:customer_id]
   @optional_fields [:subscription_id]
+  @updatable_fields [:subscription_id]
 
   @schema_fields @optional_fields ++ @required_fields
 
@@ -29,6 +30,8 @@ defmodule Smokex.Subscriptions.StripeSubscription do
     field(:subscription_id, :string, null: true)
 
     belongs_to(:user, User)
+
+    timestamps()
   end
 
   @spec create_changeset(__MODULE__.t(), map) :: Ecto.Changeset.t()
@@ -36,13 +39,28 @@ defmodule Smokex.Subscriptions.StripeSubscription do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
-    |> Ecto.Changeset.put_assoc(:user, params[:user])
-    |> Ecto.Changeset.assoc_constraint(:user)
+    |> maybe_put_user(params)
   end
 
   @spec update_changeset(__MODULE__.t(), map) :: Ecto.Changeset.t()
   def update_changeset(%__MODULE__{} = changeset, params \\ %{}) do
     changeset
-    |> Ecto.Changeset.cast(params, @optional_fields)
+    |> Ecto.Changeset.cast(params, @updatable_fields)
+  end
+
+  #
+  # Private functions
+  #
+
+  defp maybe_put_user(changeset, %{user: user}) do
+    case user do
+      nil ->
+        changeset
+
+      user ->
+        changeset
+        |> Ecto.Changeset.put_assoc(:user, user)
+        |> Ecto.Changeset.assoc_constraint(:user)
+    end
   end
 end

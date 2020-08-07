@@ -24,6 +24,9 @@ defmodule Smokex.PlanDefinitions do
   @doc """
   Returns all plan definitions
   """
+  @spec all(nil) :: []
+  def all(nil), do: []
+
   @spec all(User.t()) :: list(PlanExecution.t())
   def all(%User{id: user_id}) do
     query =

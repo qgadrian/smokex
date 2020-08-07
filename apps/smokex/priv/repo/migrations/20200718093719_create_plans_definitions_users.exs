@@ -5,6 +5,8 @@ defmodule Smokex.Repo.Migrations.CreatePlansDefinitionsUsers do
     create table(:plans_definitions_users) do
       add(:plan_definition_id, references(:plans_definitions), null: false)
       add(:user_id, references(:users), null: false)
+
+      timestamps()
     end
   end
 end

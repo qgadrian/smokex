@@ -1,6 +1,10 @@
 use Mix.Config
 
-config :logger, level: :info
+config :logger,
+  level: :info,
+  compile_time_purge_matching: [
+    [level_lower_than: :info]
+  ]
 
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
@@ -18,10 +22,6 @@ config :smokex_web, SmokexWeb.Endpoint,
     port: 443
   ],
   cache_static_manifest: "priv/static/cache_manifest.json"
-
-config :smokex, Smokex.Repo,
-  database: "smokex_prod",
-  pool_size: 2
 
 # ## SSL Support
 #
