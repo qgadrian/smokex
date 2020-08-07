@@ -29,6 +29,10 @@ defmodule SmokexWeb.Router do
     plug(:put_secure_browser_headers)
   end
 
+  pipeline :stripe_webhooks do
+    plug SmokexWeb.Payments.Stripe.Webhooks.Plug
+  end
+
   scope "/" do
     pipe_through :browser
 
@@ -36,9 +40,11 @@ defmodule SmokexWeb.Router do
   end
 
   scope "/", SmokexWeb do
-    pipe_through(:skip_csrf_protection)
+    pipe_through([:skip_csrf_protection, :api])
 
     scope "/payments/stripe" do
+      pipe_through(:stripe_webhooks)
+
       post("/webhooks", Payments.Stripe.Webhooks, :handle_webhook)
     end
   end
