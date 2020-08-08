@@ -10,5 +10,7 @@ defmodule Smokex.Repo.Migrations.CreateStripeSubscriptions do
 
       timestamps()
     end
+
+    create unique_index(:stripe_subscriptions, [:user_id, :customer_id, :subscription_id])
   end
 end

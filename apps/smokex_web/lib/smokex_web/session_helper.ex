@@ -9,6 +9,7 @@ defmodule SmokexWeb.SessionHelper do
   require Logger
 
   alias Smokex.Users.User
+  alias SmokexWeb.Tracer
   alias Phoenix.LiveView.Socket
   alias Pow.Store.CredentialsCache
 
@@ -28,6 +29,8 @@ defmodule SmokexWeb.SessionHelper do
 
     with {:ok, token} <- Pow.Plug.verify_token(conn, salt, signed_token, config),
          {user, _metadata} <- CredentialsCache.get([backend: Pow.Store.Backend.EtsCache], token) do
+      Tracer.trace_user(user)
+
       {:ok, user}
     else
       _any -> nil

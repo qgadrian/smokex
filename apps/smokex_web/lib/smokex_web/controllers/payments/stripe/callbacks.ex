@@ -3,6 +3,7 @@ defmodule SmokexWeb.Payments.Stripe.Callbacks do
 
   require Logger
 
+  alias SmokexWeb.Tracer
   alias Smokex.Users.User
   alias Smokex.Repo
 
@@ -38,7 +39,8 @@ defmodule SmokexWeb.Payments.Stripe.Callbacks do
     user = Pow.Plug.current_user(conn, config)
     reloaded_user = Repo.get!(User, user.id)
 
-    Logger.info("Callback received for user #{reloaded_user.id}")
+    Tracer.trace_user(reloaded_user)
+    Logger.info("Reload user because a Stripe callback was received")
 
     conn
     |> Pow.Plug.assign_current_user(reloaded_user, config)

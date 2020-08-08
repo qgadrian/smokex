@@ -6,14 +6,14 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
   alias Smokex.Repo
   alias Smokex.Users.User
   alias Smokex.Users
+  alias SmokexWeb.Tracer
   alias Smokex.Users.User
   alias Smokex.StripeSubscriptions, as: Subscriptions
   alias Smokex.Subscriptions.StripeSubscription
 
   @spec handle_webhook(Plug.Conn.t(), map) :: Plug.Conn.t()
   def handle_webhook(%Plug.Conn{assigns: %{stripe_event: stripe_event}} = conn, _params) do
-    %{type: stripe_event_type} = stripe_event
-    Logger.metadata(stripe_event: stripe_event_type)
+    Tracer.trace_stripe_event(stripe_event)
 
     Logger.info("Stripe event: #{inspect(stripe_event)}")
 
@@ -53,9 +53,13 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
            }
          }
        ) do
-    with user when not is_nil(user) <- Repo.get_by(User, email: email),
-         {:ok, user} <- Subscriptions.create_customer(user, id) do
-      Logger.info("Created stripe customer for user: #{user.id}")
+    with %User{id: user_id} = user <- Repo.get_by(User, email: email),
+         {:ok, %StripeSubscription{customer_id: ^id, user_id: ^user_id}} <-
+           Subscriptions.create_customer(user, id) do
+      Tracer.trace_user(user)
+      Tracer.trace_stripe_customer(id)
+
+      Logger.info("Created stripe customer")
 
       SmokexWeb.SessionHelper.sync_user(conn, user)
 
@@ -106,12 +110,18 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
         id when is_binary(id) -> id
       end
 
+    Tracer.trace_stripe_customer(customer_id)
+    Tracer.trace_stripe_subscription(subscription_id)
+
     with {:ok, subscription_expires_at} <- DateTime.from_unix(period_end_timestamp),
-         %StripeSubscription{customer_id: ^customer_id} = subscription <-
-           Subscriptions.get_by(customer_id: customer_id),
+         %StripeSubscription{customer_id: ^customer_id, subscription_id: ^subscription_id} =
+           subscription <-
+           Subscriptions.get_by(customer_id: customer_id, subscription_id: subscription_id),
          %StripeSubscription{user: user} <- Repo.preload(subscription, :user),
          {:ok, %User{id: user_id}} <-
            Users.update(user, %{subscription_expires_at: subscription_expires_at}) do
+      Tracer.trace_user(user_id)
+
       Logger.info("Updated subscription_expires_at to user #{user_id}")
 
       {:ok, :success}
@@ -155,8 +165,11 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
         id when is_binary(id) -> id
       end
 
-    with %StripeSubscription{customer_id: ^customer_id} = subscription <-
-           Subscriptions.get_by(customer_id: customer_id),
+    Tracer.trace_stripe_customer(customer_id)
+    Tracer.trace_stripe_subscription(subscription_id)
+
+    with %StripeSubscription{customer_id: ^customer_id, subscription_id: nil} = subscription <-
+           Subscriptions.with_customer_id_only(customer_id),
          {:ok, %StripeSubscription{subscription_id: ^subscription_id}} <-
            Subscriptions.update_subscription(subscription, subscription_id) do
       Logger.info("Updated subscription #{subscription_id} for customer #{customer_id}")
@@ -175,8 +188,8 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
   end
 
   # TODO handle subscriptions cancelled
-  defp handle_event(_conn, %{type: event_type} = _event) do
-    Logger.warn("Unknown Stripe event: #{event_type}")
+  defp handle_event(_conn, _event) do
+    Logger.warn("Unknown Stripe event")
 
     {:ok, :unsupported_event}
   end
@@ -186,16 +199,16 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
   # information is present in the database.
   #
   defp create_subscription(customer_id, subscription_id) do
-    Logger.info("Creating subscription #{subscription_id} for customer #{customer_id}")
+    Logger.info("Creating subscription #{subscription_id} for user #{customer_id}")
 
     with {:ok, %StripeSubscription{subscription_id: ^subscription_id}} <-
-           Subscriptions.create_subscription(nil, subscription_id, customer_id) do
-      Logger.info("Created subscription #{subscription_id} for customer #{customer_id}")
+           Subscriptions.create_or_update_subscription(nil, customer_id, subscription_id) do
+      Logger.info("Created subscription")
 
       {:ok, :success}
     else
       {:error, changeset} ->
-        Logger.error("Cannot create subscription: #{inspect(changeset)}")
+        Logger.error("Error creating subscription: #{inspect(changeset)}")
         {:error, "error creating subscription"}
     end
   end
