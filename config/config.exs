@@ -33,7 +33,17 @@ config :logger,
 
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id, :mfa, :file, :line, :pid, :stripe_event]
+  metadata: [
+    :request_id,
+    :mfa,
+    :file,
+    :line,
+    :pid,
+    :stripe_event,
+    :stripe_customer_id,
+    :stripe_subscription_id,
+    :user_id
+  ]
 
 config :logger, Sentry.LoggerBackend,
   capture_log_messages: true,

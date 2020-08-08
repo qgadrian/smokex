@@ -5,14 +5,33 @@ defmodule Smokex.StripeSubscriptions do
   alias Smokex.Users.User
   alias Smokex.Users.User
 
+  import Ecto.Query
+
   @doc """
   Gets a subscription by the `customer id`.
 
-  If no subscription is found, raises an error.
+  If no subscription is found, returns `nil`.
   """
   @spec get_by(keyword) :: StripeSubscription.t()
   def get_by(params) do
     Smokex.Repo.get_by(StripeSubscription, params)
+  end
+
+  @doc """
+  Gets a subscription by that only has the `customer id` field, and no
+  `subscription_id`.
+
+  If no subscription is found, returns `nil`.
+  """
+  @spec with_customer_id_only(customer_id :: String.t()) :: StripeSubscription.t()
+  def with_customer_id_only(customer_id) when is_binary(customer_id) do
+    query =
+      from(subscription in StripeSubscription,
+        where: subscription.customer_id == ^customer_id,
+        where: is_nil(subscription.subscription_id)
+      )
+
+    Smokex.Repo.one(query)
   end
 
   @doc """
@@ -37,21 +56,27 @@ defmodule Smokex.StripeSubscriptions do
   Creates a Stripe subscription with the `subscription_id` for the given
   customer.
   """
-  @spec create_subscription(
+  @spec create_or_update_subscription(
           user_id :: integer | nil,
           subscription_id :: String.t(),
           customer_id :: String.t()
         ) ::
           {:ok, StripeSubscription.t()} | {:error, Ecto.Changeset.t()}
-  def create_subscription(user_id, subscription_id, customer_id)
+  def create_or_update_subscription(user_id, customer_id, subscription_id)
       when is_binary(subscription_id) and is_binary(customer_id) do
-    %StripeSubscription{}
-    |> StripeSubscription.update_changeset(%{
-      user_id: user_id,
-      customer_id: customer_id,
-      subscription_id: subscription_id
-    })
-    |> Smokex.Repo.insert()
+    with %StripeSubscription{customer_id: ^customer_id, subscription_id: nil} = subscription <-
+           __MODULE__.with_customer_id_only(customer_id) do
+      __MODULE__.update_subscription(subscription, subscription_id)
+    else
+      nil ->
+        %StripeSubscription{}
+        |> StripeSubscription.create_changeset(%{
+          user_id: user_id,
+          customer_id: customer_id,
+          subscription_id: subscription_id
+        })
+        |> Smokex.Repo.insert()
+    end
   end
 
   @doc """

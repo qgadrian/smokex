@@ -16,7 +16,7 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks.Plug do
     with {:ok, body} <- SmokexWeb.CacheBodyReader.read_cached_body(conn),
          {:ok, stripe_event} <-
            Stripe.Webhook.construct_event(body, stripe_signature, signing_secret) do
-      Logger.info("Stripe webhook parsed", metadata: [stripe_event: stripe_event])
+      Logger.info("Stripe webhook parsed")
 
       Plug.Conn.assign(conn, :stripe_event, stripe_event)
     else

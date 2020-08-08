@@ -20,7 +20,7 @@ defmodule Smokex.Subscriptions.StripeSubscription do
         }
 
   @required_fields [:customer_id]
-  @optional_fields [:subscription_id]
+  @optional_fields [:subscription_id, :user_id]
   @updatable_fields [:subscription_id]
 
   @schema_fields @optional_fields ++ @required_fields
@@ -52,15 +52,13 @@ defmodule Smokex.Subscriptions.StripeSubscription do
   # Private functions
   #
 
-  defp maybe_put_user(changeset, %{user: user}) do
-    case user do
-      nil ->
-        changeset
+  defp maybe_put_user(changeset, %{user: nil}), do: changeset
 
-      user ->
-        changeset
-        |> Ecto.Changeset.put_assoc(:user, user)
-        |> Ecto.Changeset.assoc_constraint(:user)
-    end
+  defp maybe_put_user(changeset, %{user: %User{} = user}) do
+    changeset
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Ecto.Changeset.assoc_constraint(:user)
   end
+
+  defp maybe_put_user(changeset, _params), do: changeset
 end
