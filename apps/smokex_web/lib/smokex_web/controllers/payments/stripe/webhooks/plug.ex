@@ -5,8 +5,10 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks.Plug do
 
   import Plug.Conn
 
+  @impl Plug
   def init(config), do: config
 
+  @impl Plug
   def call(%{request_path: "/payments/stripe/webhooks"} = conn, _) do
     Logger.info("Stripe webhook received")
 
