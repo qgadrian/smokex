@@ -33,7 +33,7 @@ defmodule Smokex.PlanDefinition do
     field(:cron_sentence, :string, null: false)
     field(:content, :string, null: false)
 
-    many_to_many(:users, User, join_through: "plans_definitions_users")
+    many_to_many(:users, User, join_through: Smokex.PlansDefinitionsUsers)
 
     has_many(:executions, PlanExecution)
 

@@ -69,7 +69,7 @@ defmodule Smokex.PlanExecution do
   def create_changeset(%__MODULE__{} = changeset, params \\ %{}) do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
-    |> Ecto.Changeset.validate_required(params, @required_fields)
+    # |> Ecto.Changeset.validate_required(params, @required_fields)
     |> Ecto.Changeset.put_assoc(
       :plan_definition,
       params[:plan_definition] || changeset.plan_definition
@@ -91,7 +91,7 @@ defmodule Smokex.PlanExecution do
   defp maybe_put_user(changeset, %{user: user}) do
     case user do
       nil ->
-        changeset
+        Ecto.Changeset.put_assoc(changeset, :user, nil)
 
       user ->
         changeset

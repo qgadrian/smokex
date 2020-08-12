@@ -44,6 +44,8 @@ defmodule Smokex.Result do
     field(:result, RequestResultEnum)
 
     belongs_to(:plan_execution, PlanExecution)
+
+    timestamps()
   end
 
   @spec changeset(__MODULE__.t(), map) :: Ecto.Changeset.t()
