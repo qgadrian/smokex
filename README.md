@@ -117,7 +117,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 * [ ] Cancel subscription
 * [ ] Show code examples page
-* [ ] File upload VS YAML copy and paste
+* [x] File upload VS YAML copy and paste (uses the WYSIWYG editor)
 * [x] Create table with Stripe subscriptions
 * [x] Generate the Docker image and deploy to Heroku
 * [x] Setup Sentry errors
