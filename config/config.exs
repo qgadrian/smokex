@@ -28,7 +28,7 @@ config :smokex_web, SmokexWeb.Endpoint,
 # Configures Elixir's Logger
 config :logger,
   backends: [:console, Sentry.LoggerBackend],
-  handle_otp_reports: false,
+  handle_otp_reports: true,
   handle_sasl_reports: false
 
 config :logger, :console,
