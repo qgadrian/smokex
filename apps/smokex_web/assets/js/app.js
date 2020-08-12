@@ -38,13 +38,23 @@ Hooks.PrintCronHumanFriendly = {
 
 Hooks.LoadPlanDefinitionContent = {
   content() { return this.el.dataset.content },
+  allowEdit() { return this.el.dataset.allowEdit },
   targetElement() { return this.el },
   mounted() {
     let state = EditorState.create({
       doc:  this.content(),
       extensions: [
         basicSetup,
-        EditorView.contentAttributes.of({ contenteditable: false }),
+        EditorView.contentAttributes.of({ contenteditable: this.allowEdit() === "true" }),
+        EditorView.theme({ content: {color: "white"} }),
+        EditorView.updateListener.of(viewUpdate => {
+          const planDefinitionContentElement = document.getElementById('plan-definition-content')
+
+          if (planDefinitionContentElement) {
+            const updatedText = viewUpdate.state.toJSON().doc
+            planDefinitionContentElement.value = updatedText
+          }
+        }),
         tagExtension(Symbol("language"), javascript()),
       ]
     })
@@ -59,7 +69,16 @@ Hooks.LoadPlanDefinitionContent = {
       doc:  this.content(),
       extensions: [
         basicSetup,
-        EditorView.contentAttributes.of({ contenteditable: false }),
+        EditorView.contentAttributes.of({ contenteditable: this.allowEdit() === "true" }),
+        EditorView.theme({ content: {color: "white"} }),
+        EditorView.updateListener.of(viewUpdate => {
+          const planDefinitionContentElement = document.getElementById('plan-definition-content')
+
+          if (planDefinitionContentElement) {
+            const updatedText = viewUpdate.state.toJSON().doc
+            planDefinitionContentElement.value = updatedText
+          }
+        }),
         tagExtension(Symbol("language"), javascript()),
       ]
     })

@@ -24,7 +24,7 @@ for plan_definition_index <- 1..10 do
   example_file_path = Path.absname("./apps/smokex/priv/repo/plan_definition_content_example.yml")
 
   # XXX this needs to be string keys to avoid the mixed keys error. This is
-  # because the cahngeset is using the form from the client, which are string
+  # because the changeset is using the form from the client, which are string
   # keys.
   {:ok, plan_definition} =
     Smokex.PlanDefinitions.create(user, %{
