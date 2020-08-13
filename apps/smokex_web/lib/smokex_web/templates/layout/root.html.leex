@@ -32,6 +32,9 @@
               <%= live_patch "Pricing", to: Routes.live_path(@conn, SmokexWeb.PricingLive.Show),
                 class: "navbar-item" %>
 
+              <%= live_patch "Documentation", to: Routes.live_path(@conn, SmokexWeb.DocumentationLive.Show),
+                class: "navbar-item" %>
+
               <%= if Pow.Plug.current_user(@conn) do %>
                 <%= live_patch "My account", to: Routes.live_path(@conn, SmokexWeb.MyAccountLive.Show),
                   class: "navbar-item" %>

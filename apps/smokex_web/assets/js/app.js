@@ -16,12 +16,14 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
-import cronstrue from 'cronstrue'
 
 import {EditorView, basicSetup} from "@codemirror/next/basic-setup"
 import {EditorState} from "@codemirror/next/state"
 import {tagExtension} from "@codemirror/next/state"
 import {javascript} from "@codemirror/next/lang-javascript"
+
+import cronstrue from 'cronstrue'
+import Prism from "prismjs"
 
 let Hooks = {}
 
