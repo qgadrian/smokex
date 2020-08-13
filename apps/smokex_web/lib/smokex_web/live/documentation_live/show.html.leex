@@ -1,0 +1,172 @@
+<section class="hero is-primary">
+  <div class="hero-body">
+    <div class="columns">
+      <div class="column is-12">
+        <div class="container content">
+          <h1 class="title">Test <em>all</em> the things</h1>
+          <h3 class="subtitle">
+            Collection of code goodies to create Smoke tests on your plan definitions
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section cheatsheet">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-3">
+        <aside class="is-medium menu">
+          <p class="menu-label">
+          categories
+          </p>
+          <ul class="menu-list">
+            <li><a href="#http-requests" class="is-active">HTTP requests</a></li>
+            <li><a href="#expects" class="is-active">Expects</a></li>
+            <li><a href="#variables" class="is-active">Variables</a></li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="column is-9">
+        <div class="content is-medium">
+
+          <h3 id="http-requests" class="title is-3">HTTP requests</h3>
+
+          <article class="message is-primary">
+            <div class="message-body">
+              To make an HTTP request, just specify any valid HTTP method and a
+              target host.
+            </div>
+          </article>
+
+          <div class="box">
+            <h4 class="title is-3">Simple request</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
+    host: "http://smokex.io"</span></code></pre>
+          </div>
+
+          <div class="box">
+            <h4 class="title is-3">Headers</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
+    host: "http://smokex.io"
+    headers:
+      - content-type: "application/json"</span></code></pre>
+          </div>
+
+          <div class="box">
+            <h4 class="title is-3">Query params</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
+    host: "http://smokex.io"
+    query:
+      search: "my-query-search"
+      filter: "all"</span></code></pre>
+          </div>
+
+          <div class="box">
+            <h4 class="title is-3">Adding a request body</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- post:
+    host: "http://smokex.io"
+    body:
+      name: "Michael"
+      last-name: "Jordan"
+      number: 23</span></code></pre>
+          </div>
+
+          <h3 id="expects" class="title is-3">Expects</h3>
+
+          <article class="message is-primary">
+            <div class="message-body">
+              By default all request will match by default a <strong>HTTP/200</strong>
+              response code, but more assertions can be defined.
+            </div>
+          </article>
+
+          <div class="box">
+            <h4 class="title is-3">Status code</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- post:
+    host: "http://smokex.io"
+    body:
+      name: "Michael"
+      last-name: "Jordan"
+      number: 23
+    expect:
+      status_code: 200</span></code></pre>
+          </div>
+
+          <div class="box">
+            <h4 class="title is-3">Headers</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- post:
+    host: "http://smokex.io"
+    body:
+      name: "Michael"
+      last-name: "Jordan"
+      number: 23
+    expect:
+      headers:
+        content-type: "application/json"</span></code></pre>
+          </div>
+
+          <div class="box">
+            <h4 class="title is-3">Response body</h4>
+            <article class="message is-primary">
+              <div class="message-body">
+                Currently only <strong>JSON</strong> and
+                <strong>string</strong> body expect are supported.
+              </div>
+            </article>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
+    host: "http://smokex.io"
+    query:
+      id: 23
+    expect:
+      body:
+        available: true
+        status: "healthy"
+        stats:
+          points: 734
+          rebounds: 458</span></code></pre>
+
+            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
+    host: "http://smokex.io"
+    query:
+      id: 23
+    expect:
+      body: "{ \"available\": true, \"status\": \"healthy\", \"stats\": { \"points\": 723, \"rebounds\": 458 } }"</span></code></pre>
+          </div>
+
+          <h3 id="variables" class="title is-3">Variables</h3>
+
+          <article class="message is-primary">
+            <div class="message-body">
+              You can reuse data from a response by <strong>creating
+                variables</strong> that can be used in further tests. To do so,
+              define a variable name and a <strong>JSON path</strong> where
+              retrieve the data from.
+            </div>
+          </article>
+
+          <div class="box">
+            <h4 class="title is-3">Save data from response</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- post:
+    host: "http://smokex.io"
+    body:
+      name: "Michael"
+      last-name: "Jordan"
+      number: 23
+    save_from_response:
+      - variable_name: "current_points"
+        json_path: "stats.points"
+
+  - put:
+    host: "http://smokex.io/players/23"
+    body:
+      points: ${current_points}</span></code></pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

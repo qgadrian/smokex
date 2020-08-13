@@ -31,6 +31,9 @@
 
               <%= live_patch "Pricing", to: Routes.live_path(@conn, SmokexWeb.PricingLive.Show),
                 class: "navbar-item" %>
+
+              <%= live_patch "Documentation", to: Routes.live_path(@conn, SmokexWeb.DocumentationLive.Show),
+                class: "navbar-item" %>
             </div>
           </div>
         </div>
