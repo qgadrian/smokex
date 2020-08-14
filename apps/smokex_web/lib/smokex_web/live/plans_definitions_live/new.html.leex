@@ -25,13 +25,17 @@
           <%= error_tag f, :cron_sentence %>
         </div>
       </div>
+    </div>
 
-      <div class="field">
-        <%= label(:content,"Content", class: "label") %>
-        <div class="control">
-          <%= textarea f, :content, class: "textarea code-content" %>
-          <%= error_tag f, :content %>
-        </div>
+    <div class="box code-content">
+      <%= hidden_input f, :content, id: "plan-definition-content" %>
+
+      <div id="plan-definition-content-editor"
+          class="border border-primary"
+          phx-hook="LoadPlanDefinitionContent"
+          phx-update="ignore"
+          data-allow-edit="true"
+          data-content="">
       </div>
     </div>
 
