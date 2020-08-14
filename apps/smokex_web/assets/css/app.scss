@@ -21,12 +21,6 @@ footer {
   height: 50px;
 }
 
-.box.code-content, .code-content {
-  padding: 0;
-  height: 400px!important;
-  overflow: scroll;
-}
-
 .status-filter-vertical {
   display: flex;
   flex-direction: column;
@@ -64,6 +58,16 @@ img.landing {
 }
 
 // Code editor syntax override
+.box.code-content, .code-content {
+  padding: 0;
+  height: 400px!important;
+  overflow: scroll;
+}
+
+.cm-content {
+  caret-color: white!important;
+}
+
 .cm-activeLine {
   background-color: transparent!important;
 }

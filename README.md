@@ -129,6 +129,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [ ] Setup Oban
 * [ ] Start and trigger Oban jobs
 * [ ] Create page to document the YAML templates
+* [ ] No validation message when creating a plan definition with an empty
+    content
 
 ### New features
 
