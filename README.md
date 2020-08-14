@@ -121,8 +121,11 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Create table with Stripe subscriptions
 * [x] Generate the Docker image and deploy to Heroku
 * [x] Setup Sentry errors
+* [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
+* [ ] Support variables concat on host names or any other keys
 * [ ] Setup Datadog logs & monitoring
 * [ ] Setup domain
+* [ ] Add `finished with error` state?
 * [ ] Setup Oban
 * [ ] Start and trigger Oban jobs
 * [ ] Create page to document the YAML templates
