@@ -36,8 +36,9 @@ defmodule SmokexClient.Executor do
         #  TODO do not just spawn a process
         spawn(fn ->
           try do
-            Enum.each(list_of_requests, fn request ->
-              Worker.execute(request, plan_execution)
+            Enum.reduce(list_of_requests, nil, fn
+              request, nil -> Worker.execute(request, plan_execution)
+              request, state -> Worker.execute(request, plan_execution, state: state)
             end)
 
             Executor.finish(plan_execution)
