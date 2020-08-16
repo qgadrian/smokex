@@ -115,20 +115,20 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ## TODO
 
-* [ ] Cancel subscription
-* [ ] Show code examples page
+* [ ] Cancel user subscriptions
+* [x] Show code examples page
 * [x] File upload VS YAML copy and paste (uses the WYSIWYG editor)
 * [x] Create table with Stripe subscriptions
 * [x] Generate the Docker image and deploy to Heroku
 * [x] Setup Sentry errors
 * [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
 * [ ] Support variables concat on host names or any other keys
-* [ ] Setup Datadog logs & monitoring
+* [x] Setup Datadog logs & monitoring
 * [ ] Setup domain
 * [ ] Add `finished with error` state?
 * [ ] Setup Oban
 * [ ] Start and trigger Oban jobs
-* [ ] Create page to document the YAML templates
+* [x] Create page to document the YAML templates
 * [ ] No validation message when creating a plan definition with an empty
     content
 
