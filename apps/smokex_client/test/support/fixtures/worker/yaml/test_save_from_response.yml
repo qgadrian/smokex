@@ -7,9 +7,9 @@
           another_value_child: "another_value_child_value"
     save_from_response:
       - variable_name: "save_test"
-        json_path: "json.test.value"
+        json_path: "test.value"
       - variable_name: "save_another_value"
-        json_path: "json.test.another_value.another_value_child"
+        json_path: "test.another_value.another_value_child"
 - get:
     host: "https://localhost:5743/headers"
     headers:

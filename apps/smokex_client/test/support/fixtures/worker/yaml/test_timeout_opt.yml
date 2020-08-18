@@ -1,5 +1,5 @@
 - get:
-    host: "http://httpbin.org/get"
+    host: "http://httpbin.org/delay/2"
     expect:
       status_code: 200
     options:

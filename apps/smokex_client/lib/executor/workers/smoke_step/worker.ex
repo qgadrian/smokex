@@ -22,7 +22,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
     body = get_body(step.body, step.action)
 
     # SSL issue in Erlang 19: https://bugs.erlang.org/browse/ERL-192
-    options = [
+    http_client_options = [
       params: Map.to_list(step.query),
       ssl: [
         {:versions, [:"tlsv1.2"]}
@@ -33,7 +33,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
 
     headers = Map.to_list(step.headers)
 
-    response = HTTPoison.request(step.action, step.host, body, headers, options)
+    response = HTTPoison.request(step.action, step.host, body, headers, http_client_options)
 
     case response do
       {:ok, response} ->

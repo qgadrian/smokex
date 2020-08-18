@@ -42,12 +42,25 @@ defmodule SmokexClient.Utils.StepVarsReplacer do
       end)
 
     expect_map = Map.get(updated_step, :expect)
-    reconstructed_expect = struct(%Smokex.Step.Request.Expect{}, expect_map)
+
+    reconstructed_expect =
+      case expect_map do
+        nil -> nil
+        expect_map -> struct(%Smokex.Step.Request.Expect{}, expect_map)
+      end
+
+    save_from_response = Map.get(updated_step, :save_from_response)
+
+    reconstructed_save_from_response =
+      Enum.map(save_from_response, fn save_from_response ->
+        struct(%Smokex.Step.Request.SaveFromResponse{}, save_from_response)
+      end)
 
     reconstructed_step =
       %Request{}
       |> struct(updated_step)
       |> Map.put(:expect, reconstructed_expect)
+      |> Map.put(:save_from_response, reconstructed_save_from_response)
 
     replace_env_variables(rest, reconstructed_step, available_variables)
   end
