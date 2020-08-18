@@ -54,10 +54,10 @@ config :logger, Sentry.LoggerBackend,
 config :phoenix, :json_library, Jason
 
 config :smokex_client,
-       :default_options,
-       timeout: 2000,
-       verbose: true,
-       quiet: false
+  timeout: 2000,
+  verbose: true,
+  quiet: false,
+  halt_on_error: true
 
 config :smokex_web, :pow,
   user: Smokex.Users.User,

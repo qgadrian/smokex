@@ -1,6 +1,6 @@
 defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   alias SmokexClient.Validator
-  alias SmokexClient.Executor.State, as: ExecutorState
+  alias SmokexClient.ExecutionContext
 
   alias Smokex.Step.Request.SaveFromResponse
   alias Smokex.Step.Request
@@ -10,14 +10,14 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
 
   @type validation_result :: {:ok, any} | {:error, any, String.t()}
 
-  @spec execute(Request.t(), PlanExecution.t(), keyword) :: ExecutorState.t() | no_return
+  @spec execute(Request.t(), PlanExecution.t(), ExecutionContext.t()) ::
+          ExecutionContext.t() | no_return
   def execute(
         %Request{} = step,
         %PlanExecution{} = plan_execution,
-        opts \\ []
+        %ExecutionContext{halt_on_error: halt_on_error} = execution_context
       ) do
-    executor_state = Keyword.get(opts, :state, %ExecutorState{})
-    step = StepVarsReplacer.process_step_variables_(step, executor_state)
+    step = StepVarsReplacer.process_step_variables_(step, execution_context)
 
     body = get_body(step.body, step.action)
 
@@ -39,15 +39,15 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
       {:ok, response} ->
         step.expect
         |> Validator.validate(response)
-        |> process_validation(step, plan_execution, executor_state, opts)
+        |> process_validation(step, plan_execution, execution_context)
 
       {:error, %HTTPoison.Error{reason: reason}} ->
         process_request_error(step, reason, plan_execution)
 
-        if opts[:halt] do
+        if halt_on_error do
           throw({:error, reason})
         else
-          executor_state
+          execution_context
         end
     end
   end
@@ -61,20 +61,18 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
           validation_result,
           Request.t(),
           PlanExecution.t(),
-          ExecutorState.t(),
-          keyword
+          ExecutionContext.t()
         ) :: atom
   defp process_validation(
          validation_result,
          %Request{} = step,
          %PlanExecution{} = plan_execution,
-         %ExecutorState{} = executor_state,
-         opts \\ []
+         %ExecutionContext{halt_on_error: halt_on_error} = execution_context
        ) do
     case validation_result do
       {:error, info, message} ->
         # TODO save in database and notify the result via PubSub
-        {:ok, result} =
+        {:ok, _result} =
           Smokex.Results.create(%{
             plan_execution: plan_execution,
             action: step.action,
@@ -83,15 +81,15 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
             result: :error
           })
 
-        if opts[:halt] do
+        if halt_on_error do
           throw({:error, message})
         else
-          executor_state
+          execution_context
         end
 
       {:ok, response_body} ->
         # TODO save in database and notify the result via PubSub
-        {:ok, result} =
+        {:ok, _result} =
           Smokex.Results.create(%{
             plan_execution: plan_execution,
             action: step.action,
@@ -99,8 +97,8 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
             result: :ok
           })
 
-        %ExecutorState{
-          executor_state
+        %ExecutionContext{
+          execution_context
           | save_from_responses: save_from_response(step.save_from_response, response_body)
         }
     end
@@ -111,7 +109,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
     case reason do
       :nxdomain ->
         # TODO save in database and notify the result via PubSub
-        {:ok, result} =
+        {:ok, _result} =
           Smokex.Results.create(%{
             plan_execution: plan_execution,
             action: step.action,
@@ -122,7 +120,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
 
       nil ->
         # TODO save in database and notify the result via PubSub
-        {:ok, result} =
+        {:ok, _result} =
           Smokex.Results.create(%{
             plan_execution: plan_execution,
             action: step.action,
@@ -132,7 +130,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
 
       _other ->
         # TODO save in database and notify the result via PubSub
-        {:ok, result} =
+        {:ok, _result} =
           Smokex.Results.create(%{
             plan_execution: plan_execution,
             action: step.action,

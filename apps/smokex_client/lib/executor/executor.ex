@@ -11,6 +11,7 @@ defmodule SmokexClient.Executor do
   require Logger
 
   alias SmokexClient.Worker
+  alias SmokexClient.ExecutionContext
   alias SmokexClient.Parsers.Yaml.Parser, as: YamlParser
 
   alias Smokex.PlanExecutions.Executor
@@ -40,12 +41,14 @@ defmodule SmokexClient.Executor do
           try do
             Enum.reduce(list_of_requests, nil, fn
               request, nil ->
-                worker_opts = Keyword.take(opts, [:halt])
-                Worker.execute(request, plan_execution, worker_opts)
+                execution_context = %ExecutionContext{
+                  halt_on_error: Keyword.get(opts, :halt)
+                }
 
-              request, state ->
-                worker_opts = opts |> Keyword.take([:halt]) |> Keyword.merge(state: state)
-                Worker.execute(request, plan_execution, worker_opts)
+                Worker.execute(request, plan_execution, execution_context)
+
+              request, execution_context ->
+                Worker.execute(request, plan_execution, execution_context)
             end)
 
             Executor.finish(plan_execution)

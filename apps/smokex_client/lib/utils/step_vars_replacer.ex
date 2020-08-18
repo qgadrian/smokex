@@ -1,8 +1,8 @@
 defmodule SmokexClient.Utils.StepVarsReplacer do
   alias Smokex.Step.Request
-  alias SmokexClient.Executor.State, as: ExecutorState
+  alias SmokexClient.ExecutionContext
 
-  @spec process_step_variables(list(Request.t()), ExecutorState.t()) :: list(Request.t())
+  @spec process_step_variables(list(Request.t()), map) :: list(Request.t())
   def process_step_variables(steps, available_variables \\ %{}) when is_list(steps) do
     Enum.map(steps, fn
       step -> process_step_variables_(step, available_variables)
@@ -10,10 +10,10 @@ defmodule SmokexClient.Utils.StepVarsReplacer do
   end
 
   # TODO this can be handled by pattern matching
-  @spec process_step_variables_(Request.t(), ExecutorState.t() | map) :: Request.t()
+  @spec process_step_variables_(Request.t(), ExecutionContext.t() | map) :: Request.t()
   def process_step_variables_(step, state_or_available_variables \\ %{})
 
-  def process_step_variables_(step, %ExecutorState{save_from_responses: save_from_responses}) do
+  def process_step_variables_(step, %ExecutionContext{save_from_responses: save_from_responses}) do
     step
     |> SmokexClient.Utils.Map.key_paths()
     |> replace_env_variables(step, save_from_responses)
