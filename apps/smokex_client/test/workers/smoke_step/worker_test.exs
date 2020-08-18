@@ -110,7 +110,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
       plan_execution =
       create_plan_execution("test/support/fixtures/worker/yaml/test_invalid_host.yml")
 
-    Executor.execute(plan_execution, halt: true)
+    Executor.execute(plan_execution)
 
     assert_receive {:started, %PlanExecution{id: ^id}}
 
@@ -179,7 +179,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
         plan_execution =
         create_plan_execution("test/support/fixtures/worker/yaml/test_timeout_opt.yml")
 
-      Executor.execute(plan_execution, halt: true)
+      Executor.execute(plan_execution)
 
       assert_received {:started, %PlanExecution{id: ^id}}
 
@@ -218,7 +218,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
         plan_execution =
         create_plan_execution("test/support/fixtures/worker/yaml/test_save_from_response.yml")
 
-      Executor.execute(plan_execution, halt: false)
+      Executor.execute(plan_execution)
 
       assert_receive {:started, %PlanExecution{id: ^id}}
 
