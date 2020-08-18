@@ -11,21 +11,21 @@ defmodule SmokexClient.Utils.StepVarsReplacerTest do
         action: "get",
         host: "${ENV_VAR_TEST}",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       },
       %Smokex.Step.Request{
         action: "put",
         host: "ENV_VAR_TEST",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       },
       %Smokex.Step.Request{
         action: "post",
         host: "$ENV_VAR_TEST",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       }
     ]
@@ -35,21 +35,21 @@ defmodule SmokexClient.Utils.StepVarsReplacerTest do
         action: "get",
         host: "a_var_test_value",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       },
       %Smokex.Step.Request{
         action: "put",
         host: "ENV_VAR_TEST",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       },
       %Smokex.Step.Request{
         action: "post",
         host: "$ENV_VAR_TEST",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       }
     ]
@@ -65,21 +65,21 @@ defmodule SmokexClient.Utils.StepVarsReplacerTest do
         action: "get",
         host: "test",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       },
       %Smokex.Step.Request{
         action: "put",
         host: "ENV_VAR_TEST",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       },
       %Smokex.Step.Request{
         action: "post",
         host: "$ENV_VAR_TEST",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       }
     ]
@@ -89,21 +89,75 @@ defmodule SmokexClient.Utils.StepVarsReplacerTest do
         action: "get",
         host: "test",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       },
       %Smokex.Step.Request{
         action: "put",
         host: "ENV_VAR_TEST",
         query: %{},
-        expect: %{},
+        expect: nil,
         headers: %{}
       },
       %Smokex.Step.Request{
         action: "post",
         host: "$ENV_VAR_TEST",
         query: %{},
-        expect: %{},
+        expect: nil,
+        headers: %{}
+      }
+    ]
+
+    assert expected_result_state == StepVarsReplacer.process_step_variables(mock_structs)
+  end
+
+  test "Given a struct list when it a expect then returns the request with the expect" do
+    System.put_env("ENV_VAR_TEST", "a_var_test_value")
+
+    mock_structs = [
+      %Smokex.Step.Request{
+        action: "get",
+        host: "test",
+        query: %{},
+        expect: %Smokex.Step.Request.Expect{},
+        headers: %{}
+      },
+      %Smokex.Step.Request{
+        action: "put",
+        host: "ENV_VAR_TEST",
+        query: %{},
+        expect: %Smokex.Step.Request.Expect{},
+        headers: %{}
+      },
+      %Smokex.Step.Request{
+        action: "post",
+        host: "$ENV_VAR_TEST",
+        query: %{},
+        expect: %Smokex.Step.Request.Expect{},
+        headers: %{}
+      }
+    ]
+
+    expected_result_state = [
+      %Smokex.Step.Request{
+        action: "get",
+        host: "test",
+        query: %{},
+        expect: %Smokex.Step.Request.Expect{},
+        headers: %{}
+      },
+      %Smokex.Step.Request{
+        action: "put",
+        host: "ENV_VAR_TEST",
+        query: %{},
+        expect: %Smokex.Step.Request.Expect{},
+        headers: %{}
+      },
+      %Smokex.Step.Request{
+        action: "post",
+        host: "$ENV_VAR_TEST",
+        query: %{},
+        expect: %Smokex.Step.Request.Expect{},
         headers: %{}
       }
     ]

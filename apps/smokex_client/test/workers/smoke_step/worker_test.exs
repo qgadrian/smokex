@@ -1,6 +1,14 @@
 defmodule SmokexClient.Test.Workers.Yaml do
   use ExUnit.Case
 
+  #
+  # There are `error case` scenarios here and the log messages are not being
+  # asserted at the moment. For this reason, all logs will be captured to avoid
+  # adding noise to tests.
+  #
+  # https://hexdocs.pm/ex_unit/ExUnit.Case.html#module-module-and-describe-tags
+  @moduletag capture_log: true
+
   import Smokex.TestSupport.Factories
 
   alias SmokexClient.Executor
@@ -102,7 +110,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
       plan_execution =
       create_plan_execution("test/support/fixtures/worker/yaml/test_invalid_host.yml")
 
-    Executor.execute(plan_execution)
+    Executor.execute(plan_execution, halt: true)
 
     assert_receive {:started, %PlanExecution{id: ^id}}
 
@@ -166,19 +174,19 @@ defmodule SmokexClient.Test.Workers.Yaml do
   end
 
   describe "Given a yaml plan" do
-    test "when a request takes more time than the configured timout then an error is returned" do
+    test "when a request takes more time than the configured timeout then an error is returned" do
       %PlanExecution{id: id} =
         plan_execution =
         create_plan_execution("test/support/fixtures/worker/yaml/test_timeout_opt.yml")
 
-      Executor.execute(plan_execution)
+      Executor.execute(plan_execution, halt: true)
 
       assert_received {:started, %PlanExecution{id: ^id}}
 
       assert_receive {:result,
                       %Result{
                         action: :get,
-                        host: "http://httpbin.org/get",
+                        host: "http://httpbin.org/delay/2",
                         failed_assertions: [%{error: :timeout}],
                         result: :error
                       }}
@@ -210,7 +218,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
         plan_execution =
         create_plan_execution("test/support/fixtures/worker/yaml/test_save_from_response.yml")
 
-      Executor.execute(plan_execution)
+      Executor.execute(plan_execution, halt: false)
 
       assert_receive {:started, %PlanExecution{id: ^id}}
 
