@@ -89,8 +89,11 @@ defmodule SmokexClient.Utils.StepVarsReplacer do
               ^original_string ->
                 original_string
 
-              replacement_value ->
+              replacement_value when is_binary(replacement_value) ->
                 String.replace(original_string, var_key, replacement_value)
+
+              replacement_value ->
+                String.replace(original_string, var_key, "#{replacement_value}")
             end
           end
         )
