@@ -3,8 +3,6 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
   alias Smokex.Step.Request.Expect
   alias Smokex.Step.Request.SaveFromResponse
 
-  alias SmokexClient.Utils.StepVarsReplacer
-
   @expect_params ["status_code", "headers", "body"]
 
   @step_opts ["timeout"]
@@ -44,7 +42,7 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
   def parse(yaml_as_string) do
     with {:ok, yaml_map} <- YamlElixir.read_from_string(yaml_as_string) do
       steps_maps = Enum.map(yaml_map, &parse_step(&1))
-      {:ok, StepVarsReplacer.process_step_variables(steps_maps)}
+      {:ok, steps_maps}
     else
       {:error, _message} ->
         {:error, "Invalid yaml file"}

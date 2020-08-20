@@ -85,7 +85,13 @@ defmodule SmokexClient.Utils.StepVarsReplacer do
             replacement_value =
               get_var_value(replacement_key, available_variables, original_string)
 
-            String.replace(original_string, var_key, replacement_value)
+            case replacement_value do
+              ^original_string ->
+                original_string
+
+              replacement_value ->
+                String.replace(original_string, var_key, replacement_value)
+            end
           end
         )
 
