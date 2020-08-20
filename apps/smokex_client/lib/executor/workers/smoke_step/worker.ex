@@ -67,7 +67,8 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
          validation_result,
          %Request{} = step,
          %PlanExecution{} = plan_execution,
-         %ExecutionContext{halt_on_error: halt_on_error} = execution_context
+         %ExecutionContext{halt_on_error: halt_on_error, save_from_responses: save_from_responses} =
+           execution_context
        ) do
     case validation_result do
       {:error, info, message} ->
@@ -97,9 +98,17 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
             result: :ok
           })
 
+        updated_save_from_responses = save_from_response(step.save_from_response, response_body)
+
+        new_save_from_responses =
+          Map.merge(
+            save_from_responses,
+            updated_save_from_responses
+          )
+
         %ExecutionContext{
           execution_context
-          | save_from_responses: save_from_response(step.save_from_response, response_body)
+          | save_from_responses: new_save_from_responses
         }
     end
   end
@@ -141,7 +150,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
     end
   end
 
-  @spec save_from_response(list(SaveFromResponse.t()), String.t()) :: :ok
+  @spec save_from_response(list(SaveFromResponse.t()), map) :: map
   defp save_from_response(save_from_responses, response_body) do
     save_from_responses
     |> Enum.map(fn save_from_response ->
