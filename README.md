@@ -122,7 +122,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Generate the Docker image and deploy to Heroku
 * [x] Setup Sentry errors
 * [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
-* [ ] Support variables concat on host names or any other keys
+* [x] Support variables concat on host names or any other keys
 * [x] Setup Datadog logs & monitoring
 * [ ] Setup domain
 * [ ] Add `finished with error` state?
@@ -131,6 +131,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Create page to document the YAML templates
 * [ ] No validation message when creating a plan definition with an empty
     content
+* [ ] Add the reason details of failed request. For example, a wrong
+    `save_from_response` won't return any details in the request error.
 
 ### New features
 
