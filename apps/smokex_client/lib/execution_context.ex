@@ -8,11 +8,13 @@ defmodule SmokexClient.ExecutionContext do
 
   @halt_on_error Application.compile_env!(:smokex_client, :halt_on_error)
 
+  @type variables :: %{required(String.t()) => String.t() | boolean | number}
+
   @type t :: %__MODULE__{
           halt_on_error: boolean,
-          save_from_responses: map()
+          variables: variables()
         }
 
   defstruct halt_on_error: @halt_on_error,
-            save_from_responses: %{}
+            variables: %{}
 end

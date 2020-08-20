@@ -71,7 +71,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
          validation_result,
          %Request{} = step,
          %PlanExecution{} = plan_execution,
-         %ExecutionContext{halt_on_error: halt_on_error, save_from_responses: save_from_responses} =
+         %ExecutionContext{halt_on_error: halt_on_error, variables: context_variables} =
            execution_context
        ) do
     case validation_result do
@@ -102,17 +102,17 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
             result: :ok
           })
 
-        updated_save_from_responses = save_from_response(step.save_from_response, response_body)
+        updated_context_variables = save_from_response(step.save_from_response, response_body)
 
-        new_save_from_responses =
+        new_context_variables =
           Map.merge(
-            save_from_responses,
-            updated_save_from_responses
+            context_variables,
+            updated_context_variables
           )
 
         %ExecutionContext{
           execution_context
-          | save_from_responses: new_save_from_responses
+          | variables: new_context_variables
         }
     end
   end
@@ -155,9 +155,10 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   end
 
   @spec save_from_response(list(SaveFromResponse.t()), map) :: map
-  defp save_from_response(save_from_responses, response_body) do
-    save_from_responses
+  defp save_from_response(context_variables, response_body) do
+    context_variables
     |> Enum.map(fn save_from_response ->
+      # TODO use JSON path here
       json_path_as_list = String.split(save_from_response.json_path, ".")
       value_from_response = get_in(response_body["json"], json_path_as_list)
 
