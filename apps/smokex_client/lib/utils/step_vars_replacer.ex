@@ -1,4 +1,10 @@
 defmodule SmokexClient.Utils.StepVarsReplacer do
+  @moduledoc """
+  Module that replaces any value in a #{Request} structure with a variable
+  reference.
+  """
+  require Logger
+
   alias Smokex.Step.Request
   alias SmokexClient.ExecutionContext
 
@@ -68,19 +74,23 @@ defmodule SmokexClient.Utils.StepVarsReplacer do
   @spec replace_env_variables_in_string(String.t() | term, map) :: String.t()
   defp replace_env_variables_in_string(value, available_variables)
        when is_binary(value) do
-    case Regex.run(~r/\${(\w+)}/, value) do
+    case Regex.run(~r/^\${(\w+)}$/, value) do
       nil ->
         Regex.replace(
-          ~r/.*\${(\w+)}.*/,
+          ~r/.*(\${\w+}).*/,
           value,
           fn original_string, var_key ->
-            get_var_value(var_key, available_variables, original_string)
-          end,
-          capture: :all_but_first
+            [_, replacement_key] = Regex.run(~r/^\${(\w+)}$/, var_key)
+
+            replacement_value =
+              get_var_value(replacement_key, available_variables, original_string)
+
+            String.replace(original_string, var_key, replacement_value)
+          end
         )
 
-      [original_string, matched_key] ->
-        get_var_value(matched_key, available_variables, original_string)
+      [original_string, replacement_key] ->
+        get_var_value(replacement_key, available_variables, original_string)
     end
   end
 
@@ -88,6 +98,10 @@ defmodule SmokexClient.Utils.StepVarsReplacer do
 
   @spec get_var_value(String.t(), map, String.t()) :: String.t()
   defp get_var_value(key, available_variables, default_value) do
+    if is_atom(key) do
+      Logger.warn("Variables key should not be atoms, found: #{key}")
+    end
+
     case System.get_env(key) do
       nil ->
         case Map.get(available_variables, key) do
