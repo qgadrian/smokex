@@ -1,4 +1,6 @@
 defimpl SmokexClient.Worker, for: Smokex.Step.Request do
+  require Logger
+
   alias SmokexClient.Validator
   alias SmokexClient.ExecutionContext
 
@@ -17,6 +19,8 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
         %PlanExecution{} = plan_execution,
         %ExecutionContext{halt_on_error: halt_on_error} = execution_context
       ) do
+    Logger.debug("Executing #{inspect(step)}")
+
     step = StepVarsReplacer.process_step_variables_(step, execution_context)
 
     body = get_body(step.body, step.action)
