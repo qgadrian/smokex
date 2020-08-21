@@ -124,12 +124,13 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Support variables concat on host names or any other keys
 * [x] Setup Datadog logs & monitoring
 * [ ] Setup domain
-* [ ] Setup Oban
-* [ ] Start and trigger Oban jobs
+* [x] Setup Oban
+* [x] Start and trigger Oban jobs
 * [x] Create page to document the YAML templates
 * [ ] No validation message when creating a plan definition with an empty
     content `save_from_response` won't return any details in the request error.
 * [ ] Persist scheduled jobs or respawn them on node restart
+* [ ] Subscribe to all user plan definitions and executions to update the proper view
 
 ### New features
 
