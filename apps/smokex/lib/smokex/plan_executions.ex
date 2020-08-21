@@ -90,10 +90,17 @@ defmodule Smokex.PlanExecutions do
 
   @doc """
   Returns all plans definitions by the given params.
+
+  TODO remove the nil asserting once the persisted session storage works fine.
+  But keep in mind possible unauthenticated error as well once the session
+  expires.
   """
-  # TODO rename this function, is not longer filter by just status
   @spec all(User.t(), integer, filter_opts()) :: list(PlanExecution.t())
-  def all(%User{id: user_id}, current_page, opts \\ []) do
+  def all(user_or_nil, current_page, opts \\ [])
+
+  def all(nil, _current_page, _opts), do: []
+
+  def all(%User{id: user_id}, current_page, opts) do
     plan_definition_id = Keyword.get(opts, :plan_definition_id)
     # TODO make this configurable
     per_page = Keyword.get(opts, :per_page, 20)
