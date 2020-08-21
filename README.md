@@ -121,19 +121,42 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Create table with Stripe subscriptions
 * [x] Generate the Docker image and deploy to Heroku
 * [x] Setup Sentry errors
-* [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
 * [x] Support variables concat on host names or any other keys
 * [x] Setup Datadog logs & monitoring
 * [ ] Setup domain
-* [ ] Add `finished with error` state?
 * [ ] Setup Oban
 * [ ] Start and trigger Oban jobs
 * [x] Create page to document the YAML templates
 * [ ] No validation message when creating a plan definition with an empty
-    content
-* [ ] Add the reason details of failed request. For example, a wrong
-    `save_from_response` won't return any details in the request error.
+    content `save_from_response` won't return any details in the request error.
+* [ ] Persist scheduled jobs or respawn them on node restart
 
 ### New features
 
+* [ ] Delete plans
+* [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
+* [ ] Add `finished with error` state?
+* [ ] Add the reason details of failed request. For example, a wrong
+* [ ] Migrate to a distributed application, so far it is a single instance
 * Connect to Github and auto create a plan based on the files under `.smokex`
+
+#### Distributed application
+
+The current application is a single monolith, although it uses umbrella
+applications to provide _microservices_.
+
+The goal is release several application instances with role _worker_ that will
+be executing the actions triggered by an orchestrator, which can be considered
+as _producer_.
+
+Considerations for distributed architecture:
+
+* We are using `quantum` to schedule jobs, it can use mnesia to store the
+    schedule jobs but keep in mind the network partition problems. This
+    application uses Cachex already so consider implementing a backend for it
+    (https://hexdocs.pm/quantum/configuration.html#persistent-storage). To solve
+    this problem we can have a _producer_ node that will be handling the
+    schedule jobs and when the node taking the role starts just puts all the
+    scheduled jobs in a cache, so everytime the _producer_ node dies the new one
+    will regenerate the state.
+* Oban might need distributed extra configurations
