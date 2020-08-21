@@ -54,12 +54,14 @@ heroku config:set PORT=4000
 
 
 ```bash
-heroku run "POOL_SIZE=2 _build/prod/rel/smokex/bin/smokex eval \"Smokex.Release.create_database()\""
-heroku run "POOL_SIZE=2 _build/prod/rel/smokex/bin/smokex eval \"Smokex.Release.migrate()\""
+heroku run "eval \"Smokex.Release.create_database()\""
+heroku run "eval \"Smokex.Release.migrate()\""
 ```
 
 > We use a pool size of `2` with an application configured with a pool size of
-> `18`, so we will avoid issues with database connections.
+> `18`, so we will avoid issues with database connections. If you still have
+> problems try to update the `POOL_SIZE` environment variable to a lower value
+> and try again.
 
 * Enable datadog metrics:
 
@@ -131,10 +133,13 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
     content `save_from_response` won't return any details in the request error.
 * [ ] Persist scheduled jobs or respawn them on node restart
 * [ ] Subscribe to all user plan definitions and executions to update the proper view
+* [ ] Add metadata plugs
+* [ ] Add execution limit to scheduled jobs
 
 ### New features
 
 * [ ] Delete plans
+* [ ] Provide interface or module to manage the scheduled jobs
 * [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
 * [ ] Add `finished with error` state?
 * [ ] Add the reason details of failed request. For example, a wrong
