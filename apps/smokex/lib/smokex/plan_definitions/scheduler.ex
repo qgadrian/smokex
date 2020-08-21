@@ -7,6 +7,7 @@ defmodule Smokex.PlanDefinitions.Scheduler do
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
   alias Smokex.PlanExecutions
+  alias Smokex.Oban.PlanExecutionWorker, as: JobWorker
 
   @doc """
   Enqueues a new job that will be executed.
@@ -73,14 +74,14 @@ defmodule Smokex.PlanDefinitions.Scheduler do
   #
 
   defp build_job_spec(%PlanExecution{id: plan_execution_id}, %User{id: user_id}) do
-    Smokex.Oban.PlanDefinitionWorker.new(%{
+    JobWorker.new(%{
       user_id: user_id,
       plan_execution_id: plan_execution_id
     })
   end
 
   defp build_job_spec(%PlanExecution{id: plan_execution_id}, nil) do
-    Smokex.Oban.PlanDefinitionWorker.new(%{
+    JobWorker.new(%{
       user_id: nil,
       plan_execution_id: plan_execution_id
     })

@@ -1,4 +1,4 @@
-defmodule Smokex.Oban.PlanDefinitionWorker do
+defmodule Smokex.Oban.PlanExecutionWorker do
   use Oban.Worker, queue: :plan_executions
 
   require Logger
