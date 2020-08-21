@@ -30,18 +30,15 @@ defmodule SmokexClient.Mixfile do
 
   defp deps do
     [
-      {:smokex, in_umbrella: true},
-      # Main deps
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:ex_doc, "~> 0.22.1"},
+      {:httparrot, "~> 1.2", only: :test, git: "https://github.com/qgadrian/httparrot.git"},
       {:httpoison, "~> 1.6"},
       {:jason, "~> 1.2"},
-      {:yaml_elixir, "~> 2.4.0"},
       {:kitchen_sink, "~> 1.3"},
-
-      # Test, docs and QA deps
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:smokex, in_umbrella: true},
       {:sobelow, "~> 0.10.3"},
-      {:httparrot, "~> 1.2", only: :test, git: "https://github.com/qgadrian/httparrot.git"},
-      {:ex_doc, "~> 0.22.1"}
+      {:yaml_elixir, "~> 2.4.0"}
     ]
   end
 

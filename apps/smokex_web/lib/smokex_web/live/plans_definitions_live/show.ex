@@ -3,6 +3,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
 
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanDefinitions
+  alias Smokex.PlanDefinitions.Scheduler, as: PlanDefinitionScheduler
   alias Smokex.PlanExecutions
   alias Smokex.PlanExecution
 
@@ -35,16 +36,15 @@ defmodule SmokexWeb.PlansDefinitionsLive.Show do
         _params,
         %Socket{assigns: %{current_user: user, plan_definition: plan_definition}} = socket
       ) do
-    {:ok, plan_execution} = PlanExecutions.create_plan_execution(user, plan_definition)
-    Smokex.PlanExecutions.subscribe(plan_execution)
-
-    with {:ok, %PlanExecution{id: id}} <- SmokexClient.Executor.execute(plan_execution) do
-      redirect_path = Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.Show, id)
+    with {:ok, plan_execution_id} <- PlanDefinitionScheduler.enqueue_job(plan_definition, user) do
+      redirect_path =
+        Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.Show, plan_execution_id)
 
       {:noreply, push_redirect(socket, to: redirect_path)}
     else
-      _ ->
-        # TODO handle error
+      error ->
+        # TODO handle error and show feedback to user
+        Logger.error(inspect(error))
         {:noreply, socket}
     end
   end

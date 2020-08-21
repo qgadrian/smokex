@@ -28,3 +28,7 @@ config :httparrot,
   unix_socket: false
 
 config :ex_unit, assert_receive_timeout: 2_000
+
+# disable plugins, enqueuing scheduled jobs and job dispatching altogether when
+# testing
+config :smokex, Oban, crontab: false, queues: false, plugins: false

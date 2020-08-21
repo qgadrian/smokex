@@ -49,8 +49,27 @@ defmodule Smokex.PlanExecutions do
   end
 
   @doc """
-  Returns the plan execution with the given id. If no execution is found,
-  raises an exception.
+  Returns the plan execution with the given id.
+
+  If no execution is found, raises an exception.
+  """
+  @spec get(id :: integer) :: PlanExecution.t() | no_return
+  def get(id) do
+    query =
+      from(plan_execution in PlanExecution,
+        join: plan_definition in PlanDefinition,
+        on: plan_execution.plan_definition_id == plan_definition.id,
+        where: plan_execution.id == ^id,
+        select: plan_execution
+      )
+
+    Smokex.Repo.one(query)
+  end
+
+  @doc """
+  Returns the plan execution with the given id.
+
+  If no execution is found, raises an exception.
   """
   @spec get!(User.t(), id :: integer) :: PlanExecution.t() | no_return
   def get!(%User{id: user_id}, id) do
