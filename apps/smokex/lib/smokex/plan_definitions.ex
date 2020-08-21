@@ -6,6 +6,7 @@ defmodule Smokex.PlanDefinitions do
   alias Smokex.Users.User
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
+  alias Smokex.PlanDefinitions.Scheduler, as: PlanDefinitionScheduler
 
   import Ecto.Query
 
@@ -19,6 +20,7 @@ defmodule Smokex.PlanDefinitions do
     %PlanDefinition{}
     |> PlanDefinition.create_changeset(attrs)
     |> Smokex.Repo.insert()
+    |> ensure_job_is_scheduled()
   end
 
   @doc """
@@ -109,6 +111,7 @@ defmodule Smokex.PlanDefinitions do
     plan_definition
     |> PlanDefinition.update_changeset(attrs)
     |> Smokex.Repo.update()
+    |> ensure_job_is_scheduled()
 
     # TODO notify about the update
     # |> notify_subscribers([:plan_definition, :updated])
@@ -117,12 +120,31 @@ defmodule Smokex.PlanDefinitions do
   @doc """
   Subscribes to the plan definition.
   """
-  @spec subscribe(PlanDefinition.t() | String.t()) :: :ok | {:error, term}
+  @spec subscribe(PlanDefinition.t() | String.t() | number) :: :ok | {:error, term}
   def subscribe(plan_definition_id) when is_binary(plan_definition_id) do
     Phoenix.PubSub.subscribe(Smokex.PubSub, plan_definition_id, link: true)
   end
 
+  def subscribe(plan_definition_id) when is_number(plan_definition_id) do
+    Phoenix.PubSub.subscribe(Smokex.PubSub, "#{plan_definition_id}", link: true)
+  end
+
   def subscribe(%PlanDefinition{} = plan_definition) do
     Phoenix.PubSub.subscribe(Smokex.PubSub, "#{plan_definition.id}", link: true)
+  end
+
+  #
+  # Private functions
+  #
+
+  @spec ensure_job_is_scheduled({:ok, PlanDefinition.t()} | {:error, term}) ::
+          {:ok, PlanDefinition.t()} | {:error, term}
+  defp ensure_job_is_scheduled(result) do
+    with {:ok, %PlanDefinition{} = plan_definition} <- result do
+      PlanDefinitionScheduler.update_scheduled_job(plan_definition)
+      result
+    else
+      error -> error
+    end
   end
 end

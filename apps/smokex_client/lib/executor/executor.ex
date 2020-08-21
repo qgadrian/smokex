@@ -15,7 +15,6 @@ defmodule SmokexClient.Executor do
   alias SmokexClient.Parsers.Yaml.Parser, as: YamlParser
 
   alias Smokex.PlanExecutions.Executor
-  alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
 
   # TODO provide a `halt` option feature
@@ -23,11 +22,18 @@ defmodule SmokexClient.Executor do
   def execute(
         %PlanExecution{
           id: id,
-          status: :created,
-          plan_definition: %PlanDefinition{content: content}
+          status: :created
         } = plan_execution,
         opts \\ [halt: true]
       ) do
+    Logger.info("Start execution #{id}")
+
+    content =
+      plan_execution
+      |> Smokex.Repo.preload(:plan_definition)
+      |> Map.get(:plan_definition)
+      |> Map.get(:content)
+
     # TODO this code is currently expecting a YAML file, but the parser could
     # be different depending on the type of content
     content

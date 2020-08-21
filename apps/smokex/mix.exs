@@ -40,9 +40,12 @@ defmodule Smokex.MixProject do
       {:ecto_enum, "~> 1.4"},
       {:ecto_sql, "~> 3.4"},
       {:jason, "~> 1.0"},
+      {:oban, "~> 2.0.0"},
       {:phoenix_pubsub, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
-      {:pow, "~> 1.0.20"}
+      {:pow, "~> 1.0.20"},
+      {:quantum, "~> 3.0"},
+      {:stripity_stripe, "~> 2.9"}
     ]
   end
 
