@@ -23,4 +23,25 @@ defmodule Smokex.Application do
 
     Supervisor.start_link(children, strategy: :one_for_one, name: Smokex.Supervisor)
   end
+
+  # TODO
+  #
+  # This is DANGEROUS, it will slow down the application start as long a the
+  # plan definitions are created. This should be done asynchronous when the
+  # application starts.
+  #
+  # Read the README about the Quantum job persistence.
+  #
+  def start_phase(:start_scheduled_jobs, _start_type, _args) do
+    require Logger
+
+    Smokex.PlanDefinition
+    |> Smokex.Repo.all()
+    |> Enum.each(fn plan_definition ->
+      Smokex.PlanDefinitions.Scheduler.create_scheduled_job(plan_definition)
+      Logger.info("Scheduled plan definition #{plan_definition.id}")
+    end)
+
+    :ok
+  end
 end

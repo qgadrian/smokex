@@ -23,6 +23,7 @@ defmodule Smokex.MixProject do
   def application do
     [
       mod: {Smokex.Application, []},
+      start_phases: [start_scheduled_jobs: []],
       extra_applications: [:logger, :runtime_tools]
     ]
   end

@@ -133,18 +133,18 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
     content `save_from_response` won't return any details in the request error.
 * [ ] Persist scheduled jobs or respawn them on node restart
 * [ ] Subscribe to all user plan definitions and executions to update the proper view
-* [ ] Add metadata plugs
 * [ ] Add execution limit to scheduled jobs
 
 ### New features
 
+* [ ] Add metadata plugs
 * [ ] Delete plans
-* [ ] Provide interface or module to manage the scheduled jobs
+* [ ] Provide interface or module to manage the scheduled jobs (aka `Smokex.PlanDefinitions.Scheduler.jobs`)
 * [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
 * [ ] Add `finished with error` state?
 * [ ] Add the reason details of failed request. For example, a wrong
 * [ ] Migrate to a distributed application, so far it is a single instance
-* Connect to Github and auto create a plan based on the files under `.smokex`
+* [ ] Connect to Github and auto create a plan based on the files under `.smokex`
 
 #### Distributed application
 
