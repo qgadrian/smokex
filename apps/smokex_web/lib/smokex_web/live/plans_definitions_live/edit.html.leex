@@ -31,11 +31,19 @@
     <div class="box code-content">
       <%= hidden_input f, :content, id: "plan-definition-content" %>
 
-      <div id="plan-definition-content-editor"
-          class="border border-primary"
-          phx-hook="LoadPlanDefinitionContent"
-          data-allow-edit="true"
-          data-content="<%= @plan_definition.content %>">
+      <div class="field">
+        <%= label(:content,"Content", class: "label") %>
+
+        <div class="control">
+          <div id="plan-definition-content-editor"
+               class="border border-primary"
+               phx-hook="LoadPlanDefinitionContent"
+               data-allow-edit="true"
+               data-content="<%= @plan_definition.content %>">
+          </div>
+        </div>
+
+        <%= error_tag f, :content %>
       </div>
     </div>
 

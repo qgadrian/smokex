@@ -129,12 +129,14 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Setup Oban
 * [x] Start and trigger Oban jobs
 * [x] Create page to document the YAML templates
-* [ ] No validation message when creating a plan definition with an empty
+* [x] No validation message when creating a plan definition with an empty
     content `save_from_response` won't return any details in the request error.
 * [x] Persist scheduled jobs or respawn them on node restart (uses a
     `start_phase` to spawn the schedules
 * [ ] Subscribe to all user plan definitions and executions to update the proper view
 * [ ] Add execution limit to scheduled jobs
+* [ ] Password reset view
+* [ ] Emailing for confirm account an password reset
 
 ### New features
 

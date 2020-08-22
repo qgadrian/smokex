@@ -59,12 +59,18 @@ img.landing {
 
 // Code editor syntax override
 .box.code-content, .code-content {
-  padding: 0;
   height: 400px!important;
   overflow: scroll;
+  padding-bottom: 0.5rem;
+
+  span.help {
+    position: sticky;
+    bottom: 0;
+    background-color: $scheme-main;
+  }
 }
 
-.cm-content {
+.cm-content, .ͼ2o .cm-content {
   caret-color: white!important;
 }
 
