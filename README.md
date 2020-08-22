@@ -117,7 +117,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ## TODO
 
-* [ ] Cancel user subscriptions
+* [ ] Cancel user subscriptions (implemented, needs testing)
 * [x] Show code examples page
 * [x] File upload VS YAML copy and paste (uses the WYSIWYG editor)
 * [x] Create table with Stripe subscriptions
@@ -131,7 +131,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Create page to document the YAML templates
 * [ ] No validation message when creating a plan definition with an empty
     content `save_from_response` won't return any details in the request error.
-* [ ] Persist scheduled jobs or respawn them on node restart
+* [x] Persist scheduled jobs or respawn them on node restart (uses a
+    `start_phase` to spawn the schedules
 * [ ] Subscribe to all user plan definitions and executions to update the proper view
 * [ ] Add execution limit to scheduled jobs
 
@@ -145,6 +146,12 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [ ] Add the reason details of failed request. For example, a wrong
 * [ ] Migrate to a distributed application, so far it is a single instance
 * [ ] Connect to Github and auto create a plan based on the files under `.smokex`
+* [ ] Allow remote console access on Heroku (see
+    https://medium.com/@karmajunkie/distributed-elixir-on-heroku-59b691d9868e
+    and https://github.com/phoenixframework/phoenix/issues/2558)
+* [ ] Improve the scheduled jobs management, by either persisting them or
+    finding a better solution than using a `start_phase`
+* [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (see https://github.com/danschultzer/pow/issues/176)
 
 #### Distributed application
 
