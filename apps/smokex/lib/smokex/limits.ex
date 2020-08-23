@@ -20,6 +20,7 @@ defmodule Smokex.Limits do
   """
 
   alias Smokex.PlanDefinition
+  alias Smokex.PlanExecution
   alias Smokex.PlanDefinitions
   alias Smokex.Users
   alias Smokex.Users.User
@@ -29,7 +30,7 @@ defmodule Smokex.Limits do
   """
   @spec can_create_plan_definition?(User.t()) :: boolean
   def can_create_plan_definition?(%User{} = user) do
-    Users.subscribed?(user) || length(PlanDefinitions.all(user)) <= 2
+    Users.subscribed?(user) || length(PlanDefinitions.all(user)) < 2
   end
 
   @doc """
