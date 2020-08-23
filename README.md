@@ -134,14 +134,19 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Persist scheduled jobs or respawn them on node restart (uses a
     `start_phase` to spawn the schedules
 * [ ] Subscribe to all user plan definitions and executions to update the proper view
-* [ ] Add execution limit to scheduled jobs
+* [o] Add execution limit to scheduled jobs
 * [ ] Password reset view
 * [ ] Emailing for confirm account an password reset
+* [ ] Add YAML parse validation to plan definition new/edit
 
 ### New features
 
+* [ ] Create environment variables for configurations, for example
+    `apps/smokex/lib/smokex/users.ex`
 * [ ] Add metadata plugs
 * [ ] Delete plans
+* [ ] Create organizations model (mind some logic needs to be replaced, for
+    example `Limits`)
 * [ ] Provide interface or module to manage the scheduled jobs (aka `Smokex.PlanDefinitions.Scheduler.jobs`)
 * [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
 * [ ] Add `finished with error` state?

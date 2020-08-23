@@ -23,6 +23,10 @@ defmodule Smokex.Oban.PlanExecutionWorker do
         Logger.error("Plan definition not found: #{plan_execution_id}")
         :error
 
+      {:error, :reached_free_limit} ->
+        Logger.error("Plan execution cannot be run because of limit: #{plan_execution_id}")
+        :ok
+
       error ->
         Logger.error("Error executing scheduled job: #{inspect(error)}")
         :error

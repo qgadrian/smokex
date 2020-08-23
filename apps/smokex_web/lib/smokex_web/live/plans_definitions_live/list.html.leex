@@ -33,7 +33,7 @@
     </table>
 
     <div class="column has-text-centered">
-      <%= if Smokex.Users.can_create_plan_definition?(@current_user) do %>
+      <%= if Smokex.Limits.can_create_plan_definition?(@current_user) do %>
         <%= live_patch "Create test plan", class: "button is-primary",
           to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %>
       <% else %>

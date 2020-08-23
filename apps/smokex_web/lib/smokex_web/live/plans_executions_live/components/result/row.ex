@@ -39,6 +39,24 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
     build_tag(key, expected, received)
   end
 
+  defp create_tag([{"error", "Free limit reached"}]) do
+    content_tag(:tr, class: "is-not-hoverable details-row ml-6") do
+      content_tag(:td, colspan: "6") do
+        content_tag(:div, class: "columns ml-4") do
+          content_tag(:div, class: "column content") do
+            [
+              content_tag(:p) do
+                [
+                  content_tag(:strong, "Free limit executions reached ")
+                ]
+              end
+            ]
+          end
+        end
+      end
+    end
+  end
+
   defp create_tag([{"error", reason}]) do
     build_tag("request", "to be successfully sent", reason)
   end
@@ -56,29 +74,33 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
       content_tag(:td, colspan: "6") do
         content_tag(:div, class: "columns ml-4") do
           content_tag(:div, class: "column content") do
-            [
-              content_tag(:p) do
-                [
-                  content_tag(:strong, "Field "),
-                  content_tag(:span, key)
-                ]
-              end,
-              content_tag(:p) do
-                [
-                  content_tag(:strong, "Expected "),
-                  content_tag(:span, inspect(expected))
-                ]
-              end,
-              content_tag(:p) do
-                [
-                  content_tag(:strong, "Received "),
-                  content_tag(:span, received)
-                ]
-              end
-            ]
+            content_tags(key, expected, received)
           end
         end
       end
     end
+  end
+
+  defp content_tags(key, expected, received) do
+    [
+      content_tag(:p) do
+        [
+          content_tag(:strong, "Field "),
+          content_tag(:span, key)
+        ]
+      end,
+      content_tag(:p) do
+        [
+          content_tag(:strong, "Expected "),
+          content_tag(:span, inspect(expected))
+        ]
+      end,
+      content_tag(:p) do
+        [
+          content_tag(:strong, "Received "),
+          content_tag(:span, received)
+        ]
+      end
+    ]
   end
 end
