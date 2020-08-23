@@ -10,6 +10,8 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
+alias Smokex.PlanExecutions.Status, as: PlanExecutionStatus
+
 {:ok, user} =
   Pow.Ecto.Context.create(
     %{
@@ -41,20 +43,20 @@ for plan_definition_index <- 1..10 do
   for _ <- 1..5 do
     {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(nil, plan_definition)
 
-    {:ok, _plan_execution} = Smokex.PlanExecutions.Executor.start(plan_execution, 3)
-    {:ok, _plan_execution} = Smokex.PlanExecutions.Executor.finish(plan_execution)
+    {:ok, _plan_execution} = PlanExecutionStatus.start(plan_execution, 3)
+    {:ok, _plan_execution} = PlanExecutionStatus.finish(plan_execution)
   end
 
   for _ <- 1..5 do
     {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(nil, plan_definition)
 
-    {:ok, _plan_execution} = Smokex.PlanExecutions.Executor.start(plan_execution, 3)
-    {:ok, _plan_execution} = Smokex.PlanExecutions.Executor.halt(plan_execution)
+    {:ok, _plan_execution} = PlanExecutionStatus.start(plan_execution, 3)
+    {:ok, _plan_execution} = PlanExecutionStatus.halt(plan_execution)
   end
 
   for _ <- 1..5 do
     {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(user, plan_definition)
 
-    {:ok, _plan_execution} = Smokex.PlanExecutions.Executor.start(plan_execution, 3)
+    {:ok, _plan_execution} = PlanExecutionStatus.start(plan_execution, 3)
   end
 end

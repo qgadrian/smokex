@@ -1,5 +1,4 @@
-# TODO rename module to `status_update`
-defmodule Smokex.PlanExecutions.Executor do
+defmodule Smokex.PlanExecutions.Status do
   @moduledoc """
   Context module to handle plan executions.
   """
