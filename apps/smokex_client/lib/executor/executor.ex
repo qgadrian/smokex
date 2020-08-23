@@ -18,7 +18,12 @@ defmodule SmokexClient.Executor do
   alias Smokex.PlanExecutions.Executor
   alias Smokex.PlanExecution
 
-  # TODO provide a `halt` option feature
+  @doc """
+  Starts an execution of a plan execution.
+
+  Keep in mind this can be a long living executing and the calling process
+  will be potentially blocked for a long time.
+  """
   @spec execute(PlanExecution.t()) :: {:ok, term} | {:error, term}
   def execute(
         %PlanExecution{
@@ -61,28 +66,25 @@ defmodule SmokexClient.Executor do
       {:ok, list_of_requests} ->
         {:ok, plan_execution} = Executor.start(plan_execution, length(list_of_requests))
 
-        #  TODO do not just spawn a process
-        spawn(fn ->
-          try do
-            Enum.reduce(list_of_requests, nil, fn
-              request, nil ->
-                execution_context = %ExecutionContext{
-                  halt_on_error: Keyword.get(opts, :halt)
-                }
+        try do
+          Enum.reduce(list_of_requests, nil, fn
+            request, nil ->
+              execution_context = %ExecutionContext{
+                halt_on_error: Keyword.get(opts, :halt)
+              }
 
-                Worker.execute(request, plan_execution, execution_context)
+              Worker.execute(request, plan_execution, execution_context)
 
-              request, execution_context ->
-                Worker.execute(request, plan_execution, execution_context)
-            end)
+            request, execution_context ->
+              Worker.execute(request, plan_execution, execution_context)
+          end)
 
-            Executor.finish(plan_execution)
-          catch
-            {:error, reason} ->
-              Logger.error("Execution #{id} error: #{inspect(reason)}")
-              Executor.halt(plan_execution)
-          end
-        end)
+          Executor.finish(plan_execution)
+        catch
+          {:error, reason} ->
+            Logger.error("Execution #{id} error: #{inspect(reason)}")
+            Executor.halt(plan_execution)
+        end
 
         {:ok, plan_execution}
 
