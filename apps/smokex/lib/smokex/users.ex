@@ -28,25 +28,6 @@ defmodule Smokex.Users do
   end
 
   @doc """
-  Whether the user can create a new plan definition.
-
-  In order to create a new plan definition the user has to have premium access
-  or meet the limited configuration.
-  """
-  @spec can_create_plan_definition?(User.t()) :: boolean
-  def can_create_plan_definition?(%User{} = user) do
-    if subscribed?(user) do
-      true
-    else
-      # TODO configure maximum plans value
-      user
-      |> Smokex.PlanDefinitions.all()
-      |> length
-      |> Kernel.<(2)
-    end
-  end
-
-  @doc """
   Returns whether the user has an premium access to the application.
 
   If the user is `nil` (is unauthenticated) or not subscribed, then the

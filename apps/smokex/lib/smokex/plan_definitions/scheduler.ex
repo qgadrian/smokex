@@ -12,7 +12,7 @@ defmodule Smokex.PlanDefinitions.Scheduler do
   @doc """
   Enqueues a new job that will be executed.
 
-  TODO create a queue for jobs to be executed inmediately
+  TODO create a queue for jobs to be executed immediately.
 
   Keep in mind that in order to run the job, the job will need to be next in the execution queue and a worker should be ready to take.
   it.
@@ -25,14 +25,6 @@ defmodule Smokex.PlanDefinitions.Scheduler do
     insert_job(nil, plan_definition)
   end
 
-  @doc """
-  Enqueues a new job that will be executed.
-
-  TODO create a queue for jobs to be executed inmediately
-
-  Keep in mind that in order to run the job, the job will need to be next in the execution queue and a worker should be ready to take.
-  it.
-  """
   @spec enqueue_job(PlanDefinition.t()) :: {:ok, number} | {:error, Ecto.Changeset.t()}
   def enqueue_job(%PlanDefinition{} = plan_definition, %User{} = user) do
     insert_job(user, plan_definition)

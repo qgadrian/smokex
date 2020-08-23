@@ -32,8 +32,8 @@ defmodule Smokex.Result do
           result: result
         }
 
-  @required_fields [:action, :result]
-  @optional_fields [:host, :failed_assertions]
+  @required_fields [:result]
+  @optional_fields [:action, :host, :failed_assertions]
 
   @schema_fields @required_fields ++ @optional_fields
 

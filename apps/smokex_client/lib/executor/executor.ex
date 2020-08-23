@@ -14,6 +14,7 @@ defmodule SmokexClient.Executor do
   alias SmokexClient.ExecutionContext
   alias SmokexClient.Parsers.Yaml.Parser, as: YamlParser
 
+  alias Smokex.Limits
   alias Smokex.PlanExecutions.Executor
   alias Smokex.PlanExecution
 
@@ -28,6 +29,24 @@ defmodule SmokexClient.Executor do
       ) do
     Logger.info("Start execution #{id}")
 
+    if Limits.can_start_execution?(plan_execution) do
+      do_execute(plan_execution, opts)
+    else
+      Executor.halt(plan_execution)
+
+      {:ok, _result} =
+        Smokex.Results.create(%{
+          plan_execution: plan_execution,
+          failed_assertions: [%{error: "Free limit reached"}],
+          result: :error
+        })
+
+      {:error, :reached_free_limit}
+    end
+  end
+
+  @spec do_execute(PlanExecution.t(), keyword) :: {:ok, term} | {:error, term}
+  defp do_execute(%PlanExecution{id: id} = plan_execution, opts) do
     content =
       plan_execution
       |> Smokex.Repo.preload(:plan_definition)

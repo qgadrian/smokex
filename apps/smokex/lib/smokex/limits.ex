@@ -40,7 +40,25 @@ defmodule Smokex.Limits do
   """
   @spec can_start_execution?(User.t(), PlanDefinition.t()) :: boolean
   def can_start_execution?(%User{} = user, %PlanDefinition{} = plan_definition) do
-    Users.subscribed?(user) || get_daily_executions(plan_definition) < 1
+    Users.subscribed?(user) || get_daily_executions(plan_definition) < 3
+  end
+
+  @doc """
+  Whether a worker can run a job with the plan execution.
+
+  In order to start a new plan execution the user has to have premium access
+  or meet the limited configuration.
+
+  TODO replace the `users` logic when `groups` is created
+  """
+  @spec can_start_execution?(PlanExecution.t()) :: boolean
+  def can_start_execution?(%PlanExecution{} = plan_execution) do
+    %PlanExecution{plan_definition: %PlanDefinition{users: users} = plan_definition} =
+      Smokex.Repo.preload(plan_execution, plan_definition: :users)
+
+    user_subscribed = Enum.any?(users, fn user -> Users.subscribed?(user) end)
+
+    user_subscribed || get_daily_executions(plan_definition) < 3
   end
 
   @doc """
