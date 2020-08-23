@@ -1,6 +1,8 @@
 defmodule SmokexWeb.PlansDefinitionsLive.Show do
   use SmokexWeb, :live_view
 
+  require Logger
+
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanDefinitions
   alias Smokex.PlanDefinitions.Scheduler, as: PlanDefinitionScheduler

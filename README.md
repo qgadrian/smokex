@@ -134,7 +134,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Persist scheduled jobs or respawn them on node restart (uses a
     `start_phase` to spawn the schedules
 * [ ] Subscribe to all user plan definitions and executions to update the proper view
-* [o] Add execution limit to scheduled jobs
+* [x] Add execution limit to scheduled jobs
 * [ ] Password reset view
 * [ ] Emailing for confirm account an password reset
 * [ ] Add YAML parse validation to plan definition new/edit

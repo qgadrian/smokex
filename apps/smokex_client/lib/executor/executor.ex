@@ -15,7 +15,7 @@ defmodule SmokexClient.Executor do
   alias SmokexClient.Parsers.Yaml.Parser, as: YamlParser
 
   alias Smokex.Limits
-  alias Smokex.PlanExecutions.Executor
+  alias Smokex.PlanExecutions.Status, as: PlanExecutionStatus
   alias Smokex.PlanExecution
 
   @doc """
@@ -37,7 +37,7 @@ defmodule SmokexClient.Executor do
     if Limits.can_start_execution?(plan_execution) do
       do_execute(plan_execution, opts)
     else
-      Executor.halt(plan_execution)
+      PlanExecutionStatus.halt(plan_execution)
 
       {:ok, _result} =
         Smokex.Results.create(%{
@@ -64,7 +64,8 @@ defmodule SmokexClient.Executor do
     |> YamlParser.parse()
     |> case do
       {:ok, list_of_requests} ->
-        {:ok, plan_execution} = Executor.start(plan_execution, length(list_of_requests))
+        {:ok, plan_execution} =
+          PlanExecutionStatus.start(plan_execution, length(list_of_requests))
 
         try do
           Enum.reduce(list_of_requests, nil, fn
@@ -79,18 +80,18 @@ defmodule SmokexClient.Executor do
               Worker.execute(request, plan_execution, execution_context)
           end)
 
-          Executor.finish(plan_execution)
+          PlanExecutionStatus.finish(plan_execution)
         catch
           {:error, reason} ->
             Logger.error("Execution #{id} error: #{inspect(reason)}")
-            Executor.halt(plan_execution)
+            PlanExecutionStatus.halt(plan_execution)
         end
 
         {:ok, plan_execution}
 
       {:error, reason} ->
         Logger.error("Execution #{id} error: #{inspect(reason)}")
-        Executor.halt(plan_execution)
+        PlanExecutionStatus.halt(plan_execution)
     end
   end
 end
