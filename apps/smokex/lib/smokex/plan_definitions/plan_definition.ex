@@ -46,6 +46,7 @@ defmodule Smokex.PlanDefinition do
     |> Ecto.Changeset.validate_required(@required_fields)
     |> Ecto.Changeset.put_assoc(:users, Map.get(params, :users) || Map.get(params, "users"))
     |> validate_cron_expression()
+    |> validate_content()
   end
 
   def update_changeset(changeset, params \\ %{}) do
@@ -53,6 +54,7 @@ defmodule Smokex.PlanDefinition do
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
     |> validate_cron_expression()
+    |> validate_content()
   end
 
   @spec validate_cron_expression(Ecto.Changeset.t()) :: keyword
@@ -61,6 +63,16 @@ defmodule Smokex.PlanDefinition do
       case Crontab.CronExpression.Parser.parse(value) do
         {:ok, _cron_expression} -> []
         _ -> [{:cron_sentence, "The cron expression is not valid"}]
+      end
+    end)
+  end
+
+  @spec validate_content(Ecto.Changeset.t()) :: keyword
+  defp validate_content(changeset) do
+    Ecto.Changeset.validate_change(changeset, :content, fn _current_field, value ->
+      case SmokexClient.Parsers.Yaml.Parser.parse(value) do
+        {:ok, _parsed_yaml} -> []
+        _ -> [{:content, "invalid content please check documentation"}]
       end
     end)
   end

@@ -23,8 +23,8 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
     with {:ok, file_content} <- File.read(yaml_file_path) do
       parse(file_content)
     else
-      _ ->
-        {:error, "Error reading yaml file"}
+      {:error, "Invalid yaml file"} = error -> error
+      _ -> {:error, "Error reading yaml file"}
     end
   end
 
@@ -47,6 +47,9 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
       {:error, _message} ->
         {:error, "Invalid yaml file"}
     end
+  rescue
+    _ ->
+      {:error, "Invalid yaml file"}
   end
 
   @spec parse_step(map) :: struct
