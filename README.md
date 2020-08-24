@@ -137,7 +137,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Add execution limit to scheduled jobs
 * [ ] Password reset view
 * [ ] Emailing for confirm account an password reset
-* [ ] Add YAML parse validation to plan definition new/edit
+* [x] Add YAML parse validation to plan definition new/edit
+* [ ] Enable production Stripe
 
 ### New features
 
@@ -159,6 +160,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [ ] Improve the scheduled jobs management, by either persisting them or
     finding a better solution than using a `start_phase`
 * [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (see https://github.com/danschultzer/pow/issues/176)
+* [ ] Proper YAML linting and format check. Ideally on the WYSIWYG editor
 
 #### Distributed application
 

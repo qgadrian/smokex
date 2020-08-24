@@ -3,6 +3,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
 
   require Logger
 
+  alias Smokex.PlanExecutions.Subscriber, as: PlanExecutionsSubscriber
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanDefinitions
   alias Smokex.PlanExecution
@@ -43,7 +44,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       |> assign(page: page)
       |> assign(active_filter: status)
       |> assign(plan_definition_id: plan_definition_id)
-      |> maybe_subscribe_to_plan_definition()
+      |> subscribe_to_changes()
       |> fetch_executions
       |> fetch_plan_definitions
 
@@ -111,10 +112,25 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   end
 
   @impl Phoenix.LiveView
+  def handle_info(
+        {_event, %PlanExecution{id: plan_execution_id} = plan_execution},
+        %Socket{assigns: %{plan_executions: plan_executions}} = socket
+      ) do
+    updated_plan_executions =
+      Enum.map(plan_executions, fn
+        %PlanExecution{id: ^plan_execution_id} -> plan_execution
+        other_plan_execution -> other_plan_execution
+      end)
+
+    socket = assign(socket, plan_executions: updated_plan_executions)
+
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
   def handle_info(message, socket) do
-    # TODO handle messages in this view
-    Logger.debug(inspect(message))
-    Logger.debug(inspect(socket))
+    Logger.warn("Received unhandled message #{inspect(message)}")
+
     {:noreply, socket}
   end
 
@@ -161,17 +177,22 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
     socket
   end
 
-  @spec maybe_subscribe_to_plan_definition(Socket.t()) :: Socket.t()
-  defp maybe_subscribe_to_plan_definition(
-         %Socket{assigns: %{plan_definition_id: plan_definition_id}} = socket
-       )
+  @spec subscribe_to_changes(Socket.t()) :: Socket.t()
+  defp subscribe_to_changes(%Socket{assigns: %{plan_definition_id: plan_definition_id}} = socket)
        when is_number(plan_definition_id) do
     PlanDefinitions.subscribe("#{plan_definition_id}")
 
     socket
   end
 
-  defp maybe_subscribe_to_plan_definition(%Socket{} = socket), do: socket
+  # TODO this will subscribe to all as a fallback. But this does not mean that
+  # with an active filter, for example `finished` the process will be
+  # subscribed (will not) and receive update messages
+  defp subscribe_to_changes(%Socket{} = socket) do
+    PlanExecutionsSubscriber.subscribe_to_any()
+
+    socket
+  end
 
   @spec page_path(Socket.t(), PlanExecution.status(), integer, integer | nil) :: term
   defp page_path(socket, active_filter, page, nil) do
