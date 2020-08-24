@@ -139,13 +139,16 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [ ] Emailing for confirm account an password reset
 * [x] Add YAML parse validation to plan definition new/edit
 * [ ] Enable production Stripe
+* [ ] Increase timeout config to 10 seconds
 
 ### New features
 
+* [ ] Add button to view plan definition from execution view
 * [ ] Create environment variables for configurations, for example
     `apps/smokex/lib/smokex/users.ex`
 * [ ] Add metadata plugs
 * [ ] Delete plans
+* [ ] Allow set custom timeout per each step
 * [ ] Create organizations model (mind some logic needs to be replaced, for
     example `Limits`)
 * [ ] Provide interface or module to manage the scheduled jobs (aka `Smokex.PlanDefinitions.Scheduler.jobs`)
