@@ -164,6 +164,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
     finding a better solution than using a `start_phase`
 * [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (see https://github.com/danschultzer/pow/issues/176)
 * [ ] Proper YAML linting and format check. Ideally on the WYSIWYG editor
+* [ ] Measure request time per plan step and show a graph view for performance
 
 #### Distributed application
 
