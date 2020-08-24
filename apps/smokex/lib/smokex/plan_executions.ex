@@ -38,11 +38,8 @@ defmodule Smokex.PlanExecutions do
       |> Smokex.Repo.insert()
 
     with {:ok, plan_execution} <- result do
-      Phoenix.PubSub.broadcast(
-        Smokex.PubSub,
-        "#{plan_definition.id}",
-        {:created, plan_execution}
-      )
+      Smokex.PlanExecutions.Subscriber.notify_created(plan_definition, plan_execution)
+      Smokex.PlanExecutions.Subscriber.notify_created(plan_execution)
     end
 
     result
