@@ -79,6 +79,16 @@ defmodule SmokexWeb do
     end
   end
 
+  def mailer_view do
+    quote do
+      use Phoenix.View,
+        root: "lib/smokex_web/templates",
+        namespace: SmokexWeb
+
+      use Phoenix.HTML
+    end
+  end
+
   defp view_helpers do
     quote do
       # Use all HTML functionality (forms, tags, etc)

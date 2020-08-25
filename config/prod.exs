@@ -23,6 +23,10 @@ config :smokex_web, SmokexWeb.Endpoint,
   ],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :smokex_web, SmokexWeb.Pow.Mailer,
+  adapter: Swoosh.Adapters.Sendgrid,
+  api_key: "***REMOVED***"
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

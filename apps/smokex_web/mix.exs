@@ -47,6 +47,7 @@ defmodule SmokexWeb.MixProject do
       {:phoenix_live_view, "~> 0.14.0", override: true},
       {:pow, "~> 1.0.20"},
       {:smokex, in_umbrella: true},
+      {:swoosh, "~> 1.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:telemetry_metrics_statsd, "~> 0.4.0"},

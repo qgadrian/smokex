@@ -135,7 +135,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
     `start_phase` to spawn the schedules
 * [ ] Subscribe to all user plan definitions and executions to update the proper view
 * [x] Add execution limit to scheduled jobs
-* [ ] Password reset view
+* [x] Password reset view
 * [ ] Emailing for confirm account an password reset
 * [x] Add YAML parse validation to plan definition new/edit
 * [ ] Enable production Stripe
