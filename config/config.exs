@@ -64,9 +64,11 @@ config :smokex_client,
 config :smokex_web, :pow,
   controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
   extensions: [PowResetPassword, PowEmailConfirmation],
+  mailer_backend: SmokexWeb.Pow.Mailer,
   repo: Smokex.Repo,
   routes_backend: SmokexWeb.Pow.Routes,
   user: Smokex.Users.User,
+  web_mailer_module: SmokexWeb,
   web_module: SmokexWeb
 
 config :stripity_stripe,
