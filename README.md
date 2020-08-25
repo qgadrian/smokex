@@ -133,13 +133,13 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
     content `save_from_response` won't return any details in the request error.
 * [x] Persist scheduled jobs or respawn them on node restart (uses a
     `start_phase` to spawn the schedules
-* [ ] Subscribe to all user plan definitions and executions to update the proper view
+* [x] Subscribe to all user plan definitions and executions to update the proper view
 * [x] Add execution limit to scheduled jobs
 * [x] Password reset view
-* [ ] Emailing for confirm account an password reset
+* [x] Emailing for confirm account an password reset
 * [x] Add YAML parse validation to plan definition new/edit
 * [ ] Enable production Stripe
-* [ ] Increase timeout config to 10 seconds
+* [x] Increase timeout config to 10 seconds
 
 ### New features
 
