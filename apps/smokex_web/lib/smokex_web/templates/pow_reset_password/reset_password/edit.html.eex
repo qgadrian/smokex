@@ -1,7 +1,7 @@
 <section class="section">
   <div class="container">
     <div class="box">
-      <h2 class="title has-text-centered">Sign up</h2>
+      <h2 class="title has-text-centered">Set a new password</h2>
 
       <div class="columns is-centered">
         <div class="column is-5 is-4-desktop">
@@ -11,24 +11,6 @@
                 <p>Oops, something went wrong! Please check the errors below.</p>
               </div>
             <% end %>
-
-            <div class="field">
-              <div class="field-label is-normal has-text-left pb-2">
-                <%= label f, Pow.Ecto.Schema.user_id_field(@changeset),
-                  class: "label" %>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset),
-                      class: "input is-medium", type: "email",
-                      placeholder: "e.g. luke@skywalker.com" %>
-                  </div>
-                </div>
-              </div>
-
-              <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
-            </div>
 
             <div class="field">
               <div class="field-label is-normal has-text-left pb-2">
@@ -64,19 +46,14 @@
 
             <div class="field is-grouped pt-2">
               <div class="control is-expanded">
-                <%= link "Have an account?", class: "button is-primary is-outlined is-fullwidth",
-                  to: Routes.pow_session_path(@conn, :new) %>
+                <%= submit "Change password", class: "button is-primary is-fullwidth" %>
               </div>
 
               <div class="control is-expanded">
-                <button class="button is-primary is-fullwidth">Sign up!</button>
+                <%= link "Sign in?", class: "button is-primary is-outlined is-fullwidth",
+                  to: Routes.pow_session_path(@conn, :new) %>
               </div>
             </div>
-
-            <p>By signing up you agree with the
-            <%= link "Terms and conditions", to: Routes.legal_path(SmokexWeb.Endpoint, :terms_and_conditions) %>
-            and
-            <%= link "Privacy policy", to: Routes.legal_path(SmokexWeb.Endpoint, :privacy_policy) %>
           <% end %>
         </div>
       </div>

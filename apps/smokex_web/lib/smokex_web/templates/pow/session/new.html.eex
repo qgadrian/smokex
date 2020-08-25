@@ -46,11 +46,16 @@
               <%= error_tag f, :password %>
             </div>
 
-            <div class="field pt-2">
-              <div class="control">
-                <%= submit "Sign in!", class: "button is-primary is-fullwidth" %>
+            <p class="help">
+              <%= link("Forgot password?",
+                to: Routes.pow_reset_password_reset_password_path(@conn, :new)) %>
+              </p>
+
+              <div class="field pt-2">
+                <div class="control">
+                  <%= submit "Sign in!", class: "button is-primary is-fullwidth" %>
+                </div>
               </div>
-            </div>
           <% end %>
         </div>
 
