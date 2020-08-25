@@ -1,6 +1,7 @@
 defmodule Smokex.Users.User do
   use Ecto.Schema
   use Pow.Ecto.Schema
+  use Pow.Extension.Ecto.Schema, extensions: [PowResetPassword, PowEmailConfirmation]
 
   @optional_fields [:subscription_expires_at]
 
@@ -18,6 +19,7 @@ defmodule Smokex.Users.User do
   def changeset(user_or_changeset, attrs) do
     user_or_changeset
     |> pow_changeset(attrs)
+    |> pow_extension_changeset(attrs)
     |> Ecto.Changeset.cast(attrs, @schema_fields)
   end
 

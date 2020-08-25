@@ -62,10 +62,12 @@ config :smokex_client,
   halt_on_error: true
 
 config :smokex_web, :pow,
-  user: Smokex.Users.User,
+  controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
+  extensions: [PowResetPassword, PowEmailConfirmation],
   repo: Smokex.Repo,
-  web_module: SmokexWeb,
-  routes_backend: SmokexWeb.Pow.Routes
+  routes_backend: SmokexWeb.Pow.Routes,
+  user: Smokex.Users.User,
+  web_module: SmokexWeb
 
 config :stripity_stripe,
   api_key:
