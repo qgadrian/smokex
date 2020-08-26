@@ -18,7 +18,7 @@ config :logger,
 config :smokex_web, SmokexWeb.Endpoint,
   url: [
     scheme: "https",
-    host: "smokex.herokuapp.com",
+    host: "smokex.io",
     port: 443
   ],
   cache_static_manifest: "priv/static/cache_manifest.json"
@@ -56,7 +56,11 @@ config :smokex_web, SmokexWeb.Pow.Mailer,
 # We also recommend setting `force_ssl` in your endpoint, ensuring
 # no data is ever sent via http, always redirecting to https:
 #
-#     config :smokex_web, SmokexWeb.Endpoint,
-#       force_ssl: [hsts: true]
-#
 # Check `Plug.SSL` for all available options in `force_ssl`.
+#
+# config :smokex_web, SmokexWeb.Endpoint, force_ssl: [hsts: true]
+#
+#
+# If the above does not work try:
+#
+config :smokex_web, SmokexWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
