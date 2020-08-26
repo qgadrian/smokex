@@ -125,7 +125,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Setup Sentry errors
 * [x] Support variables concat on host names or any other keys
 * [x] Setup Datadog logs & monitoring
-* [ ] Setup domain
+* [x] Setup domain
 * [x] Setup Oban
 * [x] Start and trigger Oban jobs
 * [x] Create page to document the YAML templates
