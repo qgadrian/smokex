@@ -77,7 +77,7 @@ config :stripity_stripe,
   signing_secret: "***REMOVED***"
 
 config :sentry,
-  dsn: "https://376e278a12cb49e0943fca342a8cea89@o425345.ingest.sentry.io/5360041",
+  dsn: "***REMOVED***",
   environment_name: Mix.env(),
   included_environments: [:prod],
   enable_source_code_context: true,
