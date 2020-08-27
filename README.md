@@ -140,7 +140,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Add YAML parse validation to plan definition new/edit
 * [ ] Enable production Stripe
 * [x] Increase timeout config to 10 seconds
-* [ ] Ensure all the important metrics are properly setup
+* [x] Ensure all the important metrics are properly setup
 
 ### New features
 
