@@ -17,6 +17,8 @@ defmodule SmokexWeb.Telemetry do
         {:telemetry_poller, measurements: periodic_measurements(), period: 10_000}
       ] ++ metrics_reporters()
 
+    attach_oban_handlers()
+
     Supervisor.init(children, strategy: :one_for_one)
   end
 
@@ -83,5 +85,16 @@ defmodule SmokexWeb.Telemetry do
       # This function must call :telemetry.execute/3 and a metric must be added above.
       # {SmokexWeb, :count_users, []}
     ]
+  end
+
+  defp attach_oban_handlers do
+    :ok = Oban.Telemetry.attach_default_logger()
+
+    :telemetry.attach_many(
+      "oban-errors",
+      [[:oban, :job, :exception], [:oban, :circuit, :trip]],
+      &SmokexWeb.Telemetry.ObanErrorReporter.handle_event/4,
+      %{}
+    )
   end
 end
