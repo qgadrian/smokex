@@ -2,29 +2,42 @@ defmodule SmokexWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 
+  @metrics_reporters Application.compile_env(:smokex_web, :metrics_reporters)
+
   def start_link(arg) do
     Supervisor.start_link(__MODULE__, arg, name: __MODULE__)
   end
 
   @impl true
   def init(_arg) do
-    children = [
-      # Telemetry poller will execute the given period measurements
-      # every 10_000ms. Learn more here: https://hexdocs.pm/telemetry_metrics
-      {:telemetry_poller, measurements: periodic_measurements(), period: 10_000},
-      # Add reporters as children of your supervision tree.
-      # {Telemetry.Metrics.ConsoleReporter, metrics: metrics()},
-      {TelemetryMetricsStatsd,
-       [
-         metrics: metrics(),
-         formatter: :datadog
-       ]}
-    ]
+    children =
+      [
+        # Telemetry poller will execute the given period measurements
+        # every 10_000ms. Learn more here: https://hexdocs.pm/telemetry_metrics
+        {:telemetry_poller, measurements: periodic_measurements(), period: 10_000}
+      ] ++ metrics_reporters()
 
     Supervisor.init(children, strategy: :one_for_one)
   end
 
-  def metrics do
+  defp metrics_reporters do
+    Enum.reduce(@metrics_reporters, [], fn
+      :console, acc ->
+        [{Telemetry.Metrics.ConsoleReporter, metrics: metrics()} | acc]
+
+      :statsd, acc ->
+        [
+          {TelemetryMetricsStatsd,
+           [
+             metrics: metrics(),
+             formatter: :datadog
+           ]}
+          | acc
+        ]
+    end)
+  end
+
+  defp metrics do
     [
       # Phoenix Metrics
       summary("phoenix.endpoint.stop.duration",
@@ -47,6 +60,20 @@ defmodule SmokexWeb.Telemetry do
       summary("vm.total_run_queue_lengths.total"),
       summary("vm.total_run_queue_lengths.cpu"),
       summary("vm.total_run_queue_lengths.io")
+    ] ++ custom_metrics()
+  end
+
+  defp custom_metrics do
+    [
+      # Custom metrics
+      counter("smokex_web.plan_definition.action",
+        measurement: :action,
+        tags: [:id, :result, :action]
+      ),
+      counter("smokex_web.plan_execution.action",
+        measurement: :action,
+        tags: [:id, :result, :status, :action]
+      )
     ]
   end
 
