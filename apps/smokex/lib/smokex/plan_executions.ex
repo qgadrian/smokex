@@ -8,6 +8,7 @@ defmodule Smokex.PlanExecutions do
   alias Smokex.Users.User
   alias Smokex.PlanExecution
   alias Smokex.PlanDefinition
+  alias SmokexWeb.Telemetry.Reporter, as: TelemetryReporter
 
   @typedoc """
   The optional parameters to filter plan executions.
@@ -36,6 +37,7 @@ defmodule Smokex.PlanExecutions do
       %PlanExecution{}
       |> PlanExecution.create_changeset(%{plan_definition: plan_definition, user: user_or_nil})
       |> Smokex.Repo.insert()
+      |> send_event(:create)
 
     with {:ok, plan_execution} <- result do
       Smokex.PlanExecutions.Subscriber.notify_created(plan_definition, plan_execution)
@@ -43,6 +45,17 @@ defmodule Smokex.PlanExecutions do
     end
 
     result
+  end
+
+  @doc """
+  Updates a plan execution
+  """
+  @spec update(PlanExecution.t(), map) :: {:ok, PlanExecution.t()} | {:error, term}
+  def update(%PlanExecution{} = plan_execution, attrs) when is_map(attrs) do
+    plan_execution
+    |> PlanExecution.update_changeset(attrs)
+    |> Smokex.Repo.update()
+    |> send_event(:update)
   end
 
   @doc """
@@ -220,15 +233,11 @@ defmodule Smokex.PlanExecutions do
     Smokex.Repo.all(query)
   end
 
-  @doc """
-  Updates a plan execution
-  """
-  @spec update(PlanExecution.t(), map) :: {:ok, PlanExecution.t()} | {:error, term}
-  def update(%PlanExecution{} = plan_execution, attrs) when is_map(attrs) do
-    plan_execution
-    |> PlanExecution.update_changeset(attrs)
-    |> Smokex.Repo.update()
-  end
+  defdelegate subscribe(plan_execution), to: Smokex.PlanExecutions.Subscriber
+
+  #
+  # Private functions
+  #
 
   @spec maybe_query_by_plan_definition(Ecto.Query.t(), integer | binary) :: Ecto.Query
   defp maybe_query_by_plan_definition(query, plan_definition_id)
@@ -245,5 +254,21 @@ defmodule Smokex.PlanExecutions do
     where(query, status: ^status)
   end
 
-  defdelegate subscribe(plan_execution), to: Smokex.PlanExecutions.Subscriber
+  defp send_event({:ok, %PlanExecution{id: id, status: status}} = result, event) do
+    measurement = Map.new([{:action, event}])
+    metadata = %{id: id, result: :ok, action: event, status: status}
+
+    TelemetryReporter.execute([:plan_execution], measurement, metadata)
+
+    result
+  end
+
+  defp send_event({:error, _changeset} = result, event) do
+    measurement = Map.new([{:action, event}])
+    metadata = %{result: :error, action: event}
+
+    TelemetryReporter.execute([:plan_execution], measurement, metadata)
+
+    result
+  end
 end

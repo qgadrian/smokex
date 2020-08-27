@@ -64,3 +64,5 @@ config :smokex_web, SmokexWeb.Pow.Mailer,
 # If the above does not work try:
 #
 config :smokex_web, SmokexWeb.Endpoint, force_ssl: [rewrite_on: [:x_forwarded_proto]]
+
+config :smokex_web, metrics_reporters: [:statsd]
