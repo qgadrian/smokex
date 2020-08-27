@@ -72,6 +72,9 @@ COPY ./docker-entrypoint.sh /
 # Expose DogStatsD and trace-agent ports
 EXPOSE 8125/udp 8126/tcp
 
+# Copy your Datadog configuration
+COPY datadog-config/ /etc/datadog-agent/
+
 ##############
 
 ARG MIX_ENV=prod
