@@ -70,8 +70,8 @@ class: "button is-primary is-medium mt-6" %>
       <div class="column is-6 is-3-desktop">
         <h4 class="title is-4">Secure</h4>
         <p>Give access to third parties to view the execution definitions
-        without giving access to your code! They will be able to get a
-        documentation about how your application works, without sharing
+        without giving access to your code! They will be able to get an
+        overall view about how your application works, without sharing
         anything else.</p>
       </div>
       <div class="column is-6 is-3-desktop">
@@ -81,11 +81,11 @@ class: "button is-primary is-medium mt-6" %>
         matters the most.</p>
       </div>
       <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Perfect for legacy projects</h4>
+        <h4 class="title is-4">Perfect for any kind of project</h4>
         <p>Nobody wants to spend time writing tests against old projects. No
-        matter what language or how old your code is, Smokex provides a non
-        intrusive and up-to-date way to create acceptance tests and ensure your
-        applications are running smoothly.</p>
+        matter what kind of project, language or how old your code is, Smokex
+        provides a non intrusive and up-to-date way to create acceptance tests
+        and ensure your applications are running smoothly.</p>
       </div>
     </div>
   </div>
