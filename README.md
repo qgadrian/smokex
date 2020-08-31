@@ -138,7 +138,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Password reset view
 * [x] Emailing for confirm account an password reset
 * [x] Add YAML parse validation to plan definition new/edit
-* [ ] Enable production Stripe
+* [x] Enable production Stripe
 * [x] Increase timeout config to 10 seconds
 * [x] Ensure all the important metrics are properly setup
 * [ ] Fix CTA buttons when the liveview is already loaded
@@ -152,6 +152,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [ ] Allow set custom timeout per each step
 * [ ] Add button to view plan definition from execution view
 * [ ] Measure request time per plan step and show a graph view for performance
+* [ ] Generate digest on Docker build
+* [ ] Slack notifications
 * [ ] Create environment variables for configurations, for example
     `apps/smokex/lib/smokex/users.ex`
 * [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (for that, for example see https://github.com/danschultzer/pow/issues/176)
