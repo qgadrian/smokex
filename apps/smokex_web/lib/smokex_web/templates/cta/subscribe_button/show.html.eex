@@ -8,9 +8,10 @@
   data-user-email="<%= @user.email %>"
   data-success-url='<%= "#{SmokexWeb.Endpoint.url}/payments/success" %>'
   data-cancel-url='<%= "#{SmokexWeb.Endpoint.url}/payments/cancel" %>'
+  data-price-id='<%= Smokex.StripeSubscriptions.get_price() %>'
   class="button is-primary <%= assigns[:extra_class] %>"
   type="button"
-  id="checkout-button-price_1H6HGgKn5R3yiQjr22Xadcwk-<%= random_id %>"
+  id="checkout-button-<%= Smokex.StripeSubscriptions.get_price() %>-<%= random_id %>"
   role="link"
 >
   <%= assigns[:text] || "Buy subscription" %>
@@ -24,17 +25,17 @@
 
   <script>
     (function() {
-      var stripe = Stripe('***REMOVED***');
+      var stripe = Stripe('<%= Application.get_env(:stripity_stripe, :publishable_api_key) %>');
 
       window.Stripe = stripe;
 
-    var checkoutButton = document.getElementById('checkout-button-price_1H6HGgKn5R3yiQjr22Xadcwk-<%= random_id %>');
+    var checkoutButton = document.getElementById('checkout-button-<%= Smokex.StripeSubscriptions.get_price() %>-<%= random_id %>');
 
     checkoutButton.addEventListener('click', function () {
       // When the customer clicks on the button, redirect
       // them to Checkout.
       stripe.redirectToCheckout({
-        lineItems: [{price: 'price_1H6HGgKn5R3yiQjr22Xadcwk', quantity: 1}],
+        lineItems: [{price: '<%= Smokex.StripeSubscriptions.get_price() %>', quantity: 1}],
         mode: 'subscription',
         clientReferenceId: '<%= @user.id %>',
         customerEmail: '<%= @user.email %>',

@@ -98,8 +98,9 @@ Hooks.LoadStripeButton = {
   userEmail() { return this.el.dataset.userEmail },
   successUrl() { return this.el.dataset.successUrl },
   cancelUrl() { return this.el.dataset.cancelUrl },
+  priceId() { return this.el.dataset.priceId },
   mounted() {
-    var checkoutButton = document.getElementById(`checkout-button-price_1H6HGgKn5R3yiQjr22Xadcwk-${this.buttonId()}`);
+    var checkoutButton = document.getElementById(`checkout-button-${this.priceId()}-${this.buttonId()}`);
 
     var _buttonId = this.buttonId();
     var _userId = this.userId();
@@ -113,7 +114,7 @@ Hooks.LoadStripeButton = {
       if (!window.Stripe) { return };
 
       window.Stripe.redirectToCheckout({
-        lineItems: [{price: 'price_1H6HGgKn5R3yiQjr22Xadcwk', quantity: 1}],
+        lineItems: [{price: this.priceId(), quantity: 1}],
         mode: 'subscription',
         clientReferenceId: _userId,
         customerEmail: _userEmail,
