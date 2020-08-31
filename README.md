@@ -117,7 +117,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ## TODO
 
-* [ ] Cancel user subscriptions (implemented, needs testing)
+* [x] Cancel user subscriptions (implemented, needs testing)
 * [x] Show code examples page
 * [x] File upload VS YAML copy and paste (uses the WYSIWYG editor)
 * [x] Create table with Stripe subscriptions
@@ -141,31 +141,36 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [ ] Enable production Stripe
 * [x] Increase timeout config to 10 seconds
 * [x] Ensure all the important metrics are properly setup
+* [ ] Fix CTA buttons when the liveview is already loaded
+* [ ] Improve the top bar links and navigation. For example hide pricing if
+    already PRO.
+* [ ] Improve subscription information shown
 
 ### New features
 
+* [ ] If no current subscription in billing view show info and CTA
+* [ ] Allow set custom timeout per each step
 * [ ] Add button to view plan definition from execution view
+* [ ] Measure request time per plan step and show a graph view for performance
 * [ ] Create environment variables for configurations, for example
     `apps/smokex/lib/smokex/users.ex`
-* [ ] Add metadata plugs
+* [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (for that, for example see https://github.com/danschultzer/pow/issues/176)
 * [ ] Delete plans
-* [ ] Allow set custom timeout per each step
+* [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
 * [ ] Create organizations model (mind some logic needs to be replaced, for
     example `Limits`)
 * [ ] Provide interface or module to manage the scheduled jobs (aka `Smokex.PlanDefinitions.Scheduler.jobs`)
-* [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
 * [ ] Add `finished with error` state?
 * [ ] Add the reason details of failed request. For example, a wrong
-* [ ] Migrate to a distributed application, so far it is a single instance
+* [ ] Add metadata plugs
 * [ ] Connect to Github and auto create a plan based on the files under `.smokex`
+* [ ] Migrate to a distributed application, so far it is a single instance
 * [ ] Allow remote console access on Heroku (see
     https://medium.com/@karmajunkie/distributed-elixir-on-heroku-59b691d9868e
     and https://github.com/phoenixframework/phoenix/issues/2558)
 * [ ] Improve the scheduled jobs management, by either persisting them or
     finding a better solution than using a `start_phase`
-* [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (see https://github.com/danschultzer/pow/issues/176)
 * [ ] Proper YAML linting and format check. Ideally on the WYSIWYG editor
-* [ ] Measure request time per plan step and show a graph view for performance
 * [ ] Run datadog agent with [supervisord](http://supervisord.org/)
 
 #### Distributed application
