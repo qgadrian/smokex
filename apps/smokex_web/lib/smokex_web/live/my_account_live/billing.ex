@@ -3,6 +3,7 @@ defmodule SmokexWeb.MyAccountLive.Billing do
 
   alias Phoenix.LiveView.Socket
   alias SmokexWeb.MyAccountLive.Components.SideMenu
+  alias Smokex.StripeSubscriptions
 
   @impl Phoenix.LiveView
   def mount(_params, session, socket) do
@@ -29,9 +30,23 @@ defmodule SmokexWeb.MyAccountLive.Billing do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("cancel_subscription", _params, socket) do
-    # TODO cancel subscription
-    {:noreply, hide_modal(socket)}
+  def handle_event(
+        "cancel_subscription",
+        _params,
+        %Socket{assigns: %{current_user: user}} = socket
+      ) do
+    with {:ok, :delete} <- StripeSubscriptions.cancel_subscription(user) do
+      {:noreply, hide_modal(socket)}
+    else
+      _error ->
+        put_flash(
+          socket,
+          :error,
+          "Error managing subscription, please email us at contact@smokex.io"
+        )
+
+        {:noreply, hide_modal(socket)}
+    end
   end
 
   #

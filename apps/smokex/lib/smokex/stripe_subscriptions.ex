@@ -112,12 +112,15 @@ defmodule Smokex.StripeSubscriptions do
         {:error, :multiple_subscriptions}
 
       nil ->
+        Logger.error("Cannot cancel subscription, user not found: #{user.id}")
         {:error, "user_not_found"}
 
       {:error, _reason} = error ->
+        Logger.error("Cannot cancel subscription: #{inspect(error)}")
         error
 
       error ->
+        Logger.error("Cannot cancel subscription: #{inspect(error)}")
         {:error, inspect(error)}
     end
   end

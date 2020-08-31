@@ -1,5 +1,6 @@
 defmodule SmokexWeb.Pow.Mailer do
   use Pow.Phoenix.Mailer
+  # TODO configure local adapter on dev profile
   use Swoosh.Mailer, otp_app: :smokex_web
 
   import Swoosh.Email
