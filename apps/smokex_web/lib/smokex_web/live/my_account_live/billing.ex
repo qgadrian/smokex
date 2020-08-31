@@ -51,7 +51,7 @@ defmodule SmokexWeb.MyAccountLive.Billing do
           socket
           |> put_flash(
             :error,
-            "Error managing subscription, please email us at contact@smokex.io"
+            "We found an error managing your subscription, please email us at contact@smokex.io"
           )
           |> hide_modal()
 
