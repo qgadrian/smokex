@@ -142,8 +142,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Increase timeout config to 10 seconds
 * [x] Ensure all the important metrics are properly setup
 * [ ] Fix CTA buttons when the liveview is already loaded
-* [ ] Improve the top bar links and navigation. For example hide pricing if
-    already PRO.
+* [ ] Improve the top bar links and navigation.
 * [x] Improve subscription information shown
 * [x] If no current subscription in billing view show info and CTA
 
