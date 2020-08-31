@@ -7,14 +7,14 @@
     <div class="column">
       <div class="box">
         <%= form_for Ecto.Changeset.change(@current_user), "#", [class: "form"], fn f -> %>
-          <%= if Smokex.StripeSubscriptions.has_subscription?(@current_user) do %>
-            <div class="field">
-              <%= label(:name,"Current subscription ends at", class: "label") %>
-              <div class="control">
-                <%= text_input f, :subscription_expires_at, class: "input", readonly: true %>
-              </div>
+          <div class="field">
+            <%= label(:name,"Current subscription ends at", class: "label") %>
+            <div class="control">
+              <%= text_input f, :subscription_expires_at, class: "input", readonly: true %>
             </div>
+          </div>
 
+          <%= if Smokex.StripeSubscriptions.has_subscription?(@current_user) do %>
             <div class="column has-text-centered">
               <button type="button"
                       class="button is-primary is-outlined"
@@ -24,13 +24,6 @@
               </button>
             </div>
           <% else %>
-            <div class="field">
-              <%= label(:name,"Current subscription ends at", class: "label") %>
-              <div class="control">
-                <input value="Never, you are using the free subscription" readonly="true" class="input" />
-              </div>
-            </div>
-
             <div class="column has-text-centered">
               <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user,
                 extra_class: "is-large", text: "Upgrade my subscription" %>
