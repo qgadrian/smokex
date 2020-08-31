@@ -29,8 +29,10 @@
               <%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All),
                 class: "navbar-item" %>
 
-              <%= live_patch "Pricing", to: Routes.live_path(@conn, SmokexWeb.PricingLive.Show),
-                class: "navbar-item" %>
+              <%= unless Smokex.StripeSubscriptions.has_subscription?(@current_user) do %>
+                <%= live_patch "Pricing", to: Routes.live_path(@conn, SmokexWeb.PricingLive.Show),
+                  class: "navbar-item" %>
+              <% end %>
 
               <%= live_patch "Documentation", to: Routes.live_path(@conn, SmokexWeb.DocumentationLive.Show),
                 class: "navbar-item" %>
