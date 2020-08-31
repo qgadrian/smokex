@@ -21,13 +21,15 @@ defmodule Smokex.StripeSubscriptions do
   Returns true or false depending if the user has a subscription reference in
   the database.
   """
-  @spec has_subscription?(User.t()) :: boolean
+  @spec has_subscription?(User.t() | nil) :: boolean
   def has_subscription?(%User{id: user_id}) do
     case Smokex.Repo.get_by(StripeSubscription, user_id: user_id) do
       nil -> false
       _ -> true
     end
   end
+
+  def has_subscription?(nil), do: false
 
   @doc """
   Gets a subscription by that only has the `customer id` field, and no
