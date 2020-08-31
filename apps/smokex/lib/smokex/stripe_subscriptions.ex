@@ -100,11 +100,13 @@ defmodule Smokex.StripeSubscriptions do
   manual intervention will be needed.
   """
   @spec cancel_subscription(User.t()) :: {:ok, :deleted} | {:error, term}
-  def cancel_subscription(%User{} = user) do
-    with {:ok, %StripeSubscription{customer_id: customer_id}} <- __MODULE__.get_by(user: user),
+  def cancel_subscription(%User{id: user_id}) do
+    with %StripeSubscription{customer_id: customer_id} = subscription_reference <-
+           __MODULE__.get_by(user_id: user_id),
          {:ok, %Stripe.List{data: [%Stripe.Subscription{id: subscription_id}]}} <-
-           Stripe.Subscription.list(customer: customer_id, status: "active"),
-         {:ok, _subscription} <- Stripe.Subscription.delete(subscription_id) do
+           Stripe.Subscription.list(%{customer: customer_id, status: "active"}),
+         {:ok, _subscription} <- Stripe.Subscription.delete(subscription_id),
+         {:ok, _subscription_reference} <- Smokex.Repo.delete(subscription_reference) do
       {:ok, :deleted}
     else
       {:ok, %Stripe.List{data: subscriptions}} ->
@@ -112,7 +114,7 @@ defmodule Smokex.StripeSubscriptions do
         {:error, :multiple_subscriptions}
 
       nil ->
-        Logger.error("Cannot cancel subscription, user not found: #{user.id}")
+        Logger.error("Cannot cancel subscription, user not found: #{user_id}")
         {:error, "user_not_found"}
 
       {:error, _reason} = error ->
