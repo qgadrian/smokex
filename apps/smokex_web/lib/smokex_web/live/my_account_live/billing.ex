@@ -35,17 +35,27 @@ defmodule SmokexWeb.MyAccountLive.Billing do
         _params,
         %Socket{assigns: %{current_user: user}} = socket
       ) do
-    with {:ok, :delete} <- StripeSubscriptions.cancel_subscription(user) do
-      {:noreply, hide_modal(socket)}
+    with {:ok, :deleted} <- StripeSubscriptions.cancel_subscription(user) do
+      socket =
+        socket
+        |> put_flash(
+          :info,
+          "Subscription cancelled, you will still have access until the end of the current subscription period"
+        )
+        |> hide_modal()
+
+      {:noreply, socket}
     else
       _error ->
-        put_flash(
-          socket,
-          :error,
-          "Error managing subscription, please email us at contact@smokex.io"
-        )
+        socket =
+          socket
+          |> put_flash(
+            :error,
+            "Error managing subscription, please email us at contact@smokex.io"
+          )
+          |> hide_modal()
 
-        {:noreply, hide_modal(socket)}
+        {:noreply, socket}
     end
   end
 
