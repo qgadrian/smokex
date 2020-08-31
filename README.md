@@ -144,11 +144,11 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [ ] Fix CTA buttons when the liveview is already loaded
 * [ ] Improve the top bar links and navigation. For example hide pricing if
     already PRO.
-* [ ] Improve subscription information shown
+* [x] Improve subscription information shown
+* [x] If no current subscription in billing view show info and CTA
 
 ### New features
 
-* [ ] If no current subscription in billing view show info and CTA
 * [ ] Allow set custom timeout per each step
 * [ ] Add button to view plan definition from execution view
 * [ ] Measure request time per plan step and show a graph view for performance
