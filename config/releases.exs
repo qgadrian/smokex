@@ -15,4 +15,8 @@ config :smokex, Smokex.Repo,
 
 config :stripity_stripe,
   api_key: System.fetch_env!("STRIPE_API_KEY"),
+  publishable_api_key: System.fetch_env!("STRIPE_PUBLISHABLE_API_KEY"),
   signing_secret: System.fetch_env!("STRIPE_SIGNING_SECRET")
+
+config :smokex,
+  stripe_price_id: System.fetch_env!("STRIPE_PRICE_ID")

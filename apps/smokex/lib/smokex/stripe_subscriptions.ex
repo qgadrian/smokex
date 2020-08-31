@@ -126,4 +126,12 @@ defmodule Smokex.StripeSubscriptions do
         {:error, inspect(error)}
     end
   end
+
+  @doc """
+  Returns the Stripe price that should be used by the clients.
+  """
+  @spec get_price() :: String.t()
+  def get_price() do
+    Application.get_env(:smokex, :stripe_price_id)
+  end
 end
