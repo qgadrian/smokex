@@ -107,6 +107,7 @@ Hooks.LoadStripeButton = {
     var _userEmail = this.userEmail();
     var _successUrl = this.successUrl();
     var _cancelUrl = this.cancelUrl();
+    var _priceId = this.priceId();
 
     checkoutButton.addEventListener('click', function () {
       // When the customer clicks on the button, redirect
@@ -114,7 +115,7 @@ Hooks.LoadStripeButton = {
       if (!window.Stripe) { return };
 
       window.Stripe.redirectToCheckout({
-        lineItems: [{price: this.priceId(), quantity: 1}],
+        lineItems: [{price: _priceId, quantity: 1}],
         mode: 'subscription',
         clientReferenceId: _userId,
         customerEmail: _userEmail,
