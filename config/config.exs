@@ -69,6 +69,7 @@ config :smokex_web, :pow,
   repo: Smokex.Repo,
   routes_backend: SmokexWeb.Pow.Routes,
   user: Smokex.Users.User,
+  users_context: Smokex.Users,
   web_mailer_module: SmokexWeb,
   web_module: SmokexWeb
 
