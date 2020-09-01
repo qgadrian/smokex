@@ -1,5 +1,26 @@
 defmodule Smokex.Users do
+  # For overridable functions see:
+  # https://github.com/danschultzer/pow/blob/master/lib/pow/ecto/context.ex
+  use Pow.Ecto.Context,
+    repo: Smokex.Repo,
+    user: Smokex.Users.User
+
   alias Smokex.Users.User
+  alias Smokex.Organizations
+  alias SmokexWeb.Telemetry.Reporter, as: TelemetryReporter
+
+  @spec create(map) :: {:ok, User.t()} | {:error, term}
+  def create(params) do
+    with {:ok, %User{} = user} = result <- pow_create(params) do
+      Organizations.create("organization_#{user.id}", user)
+
+      TelemetryReporter.execute([:user], %{new: 1}, %{id: user.id})
+
+      result
+    else
+      error -> error
+    end
+  end
 
   @doc """
   Gets a user by the given fields.
