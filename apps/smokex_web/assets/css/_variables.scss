@@ -1,35 +1,38 @@
-$primary: #7f5af0;
+$primary: #6246ea;
+$hightlight: #7f5af0;
+$tertiary: #e45858;
 
-$scheme-main: #242629;
-$scheme-main-bis: #16161a;
-$scheme-invert: #010101;
+$scheme-main: #fffffe;
+$scheme-main-bis: #d1d1e9;
+$scheme-invert: #2b2c34;
 
-$body-color: #fffffe;
+$body-color: #2b2c34;
 
-$navbar-tab-hover-background-color: #242629;
-$navbar-item-hover-background-color: #242629;
+$navbar-tab-hover-background-color: $scheme-main;
+$navbar-item-hover-background-color: $scheme-main;
 
 $menu-item-hover-color: $primary;
 
+$light: $primary;
 $success: #2cb67d;
 $dark: #94a1b2;
 $danger: #ff5470;
 $info: #3da9fc;
 
-$link: #7f5af0;
+$link: $primary;
 $link-hover: #2cb67d;
 
-$button-hover-color: #7f5af0;
-$button-hover-border-color: #7f5af0;
+$button-hover-color: $hightlight;
+$button-hover-border-color: $hightlight;
 
-$text: #fffffe;
-$text-strong: #fffffe;
+$text: #2b2c34;
+$text-strong: #2b2c34;
 
 $box-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.5), 0 0px 0 1px rgba($scheme-invert, 0.02);
 
-$table-row-hover-background-color: #3e4246;
+$table-row-hover-background-color: $scheme-main-bis;
 
-$content-color-key: #cc99cd;
-$content-color-string: #7ec699;
-$content-color-number: #f08d49;
-$content-color-boolean: #3da9fc;
+$content-color-key: $primary;
+$content-color-string: $tertiary;
+$content-color-number: #3da9fc;
+$content-color-boolean: #232946;
