@@ -33,23 +33,21 @@ class: "button is-primary is-medium mt-6" %>
     are correct.</p>
       </div>
       <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Ready to use</h4>
-        <p class="block">You company can't afford a CI/CD pipeline? Do not
-        worry! Smokex provides you a direct, clean, simple and reliable way to launch
-        smoke tests against your applications.</p>
+        <h4 class="title is-4">Simplicity</h4>
+        <p class="block">Tired of dealing with complex CI/CD pipelines? Do not
+        worry! Smokex provides you a straightforward, clean, simple and
+        reliable way to run smoke tests against your applications.</p>
       </div>
       <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Validate your deployments</h4>
-        <p class="block">Do you want to validate your production deployments?
-        No one ensures you that after all the tests run the deployment is going
-        to ok. Avoid headaches and validate the correct deployment of your
-        applications and ensure the correctness of your production
-        environment.</p>
+        <h4 class="title is-4">Secure deployments</h4>
+        <p class="block">No one ensures you that after all the tests run the
+        deployment is going to be ok so with Smokex you can ensure the
+        correctness of your releases.</p>
       </div>
       <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Human friendly</h4>
+        <h4 class="title is-4">Easy to use</h4>
         <p class="block">Forget about complex setups, dealing with Docker
-        containers, bash scripts... Everybody with a minimum technical
+        containers, bash scripts... Anyone with minimum technical
         knowledge can write validation tests for your application.</p>
       </div>
     </div>
@@ -61,29 +59,23 @@ class: "button is-primary is-medium mt-6" %>
     <h2 class="title mb-6">Want more?</h2>
     <div class="columns is-multiline">
       <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Simplicity</h4>
-        <p>Is you CI/CD tool becoming hard to maintain? It is
-        difficult to monitor you application between all the noise? We provide
-        you the focus you need by keeping a nice and clean way to monitor how
-        your application is performing.</p>
+        <h4 class="title is-4">Unlimited power</h4>
+        <p>Automate any HTTP request schedule, with Smokex there is no limit
+        to test your applications.</p>
       </div>
       <div class="column is-6 is-3-desktop">
         <h4 class="title is-4">Secure</h4>
-        <p>Give access to third parties to view the execution definitions
-        without giving access to your code! They will be able to get an
-        overall view about how your application works, without sharing
-        anything else.</p>
+        <p>No access to your source code, everything runs transparent and
+        detached from your applications.</p>
       </div>
       <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Transparent</h4>
-        <p>You application won't be couple to a specific version of any testing
-        library, everything will be transparent to you so you can focus on what
-        matters the most.</p>
+        <h4 class="title is-4">Flexible</h4>
+        <p>You can create any new test plan quickly and work with any request
+        information returned.</p>
       </div>
       <div class="column is-6 is-3-desktop">
         <h4 class="title is-4">Perfect for any kind of project</h4>
-        <p>Nobody wants to spend time writing tests against old projects. No
-        matter what kind of project, language or how old your code is, Smokex
+        <p>No matter what kind of project, language or how old your code is, Smokex
         provides a non intrusive and up-to-date way to create acceptance tests
         and ensure your applications are running smoothly.</p>
       </div>

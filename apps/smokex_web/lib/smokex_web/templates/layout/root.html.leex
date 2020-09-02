@@ -18,6 +18,12 @@
                  class="navbar-item logo" width="170" height="60" alt="Smokex Logo"/>
           </a>
 
+        <div id="feedback" class="mr-2">
+          <div class="navbar-item">
+            <a class="button is-primary" target="_blank" href="https://airtable.com/shrHMbYacikW8eGFI">Feedback 🙌<a>
+          </div>
+        </div>
+
           <div class="navbar-menu is-active">
             <div class="navbar-start">
               <%= live_patch "Stats", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
