@@ -74,7 +74,7 @@ defmodule SmokexWeb.Telemetry do
       ),
       counter("smokex_web.plan_execution.action",
         measurement: :action,
-        tags: [:id, :result, :status, :action]
+        tags: [:id, :result, :status, :action, :plan_definition_id]
       )
     ]
   end

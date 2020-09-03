@@ -254,9 +254,18 @@ defmodule Smokex.PlanExecutions do
     where(query, status: ^status)
   end
 
-  defp send_event({:ok, %PlanExecution{id: id, status: status}} = result, event) do
+  defp send_event({:ok, %PlanExecution{id: id, status: status} = plan_execution} = result, event) do
+    plan_execution = Smokex.Repo.preload(plan_execution, :plan_definition)
+
     measurement = Map.new([{:action, event}])
-    metadata = %{id: id, result: :ok, action: event, status: status}
+
+    metadata = %{
+      id: id,
+      result: :ok,
+      action: event,
+      status: status,
+      plan_definition_id: plan_execution.plan_definition.id
+    }
 
     TelemetryReporter.execute([:plan_execution], measurement, metadata)
 
