@@ -69,6 +69,14 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
     build_tag("status_code", expected, received)
   end
 
+  defp create_tag(
+         [{key, %{"expected" => expected, "received" => received}} | other] = tags_to_create
+       ) do
+    Enum.map(tags_to_create, fn {key, %{"expected" => expected, "received" => received}} ->
+      build_tag(key, expected, received)
+    end)
+  end
+
   defp build_tag(key, expected, received) do
     content_tag(:tr, class: "is-not-hoverable details-row ml-6") do
       content_tag(:td, colspan: "6") do
