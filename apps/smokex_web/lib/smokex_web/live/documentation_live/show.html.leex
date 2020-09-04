@@ -3,9 +3,10 @@
     <div class="columns">
       <div class="column is-12">
         <div class="container content">
-          <h1 class="title">Test <em>all</em> the things</h1>
+          <h1 class="title">Welcome to the smokex.io documentation</h1>
           <h3 class="subtitle">
-            Collection of code goodies to create Smoke tests on your plan definitions
+            Here you can find a collection of example code goodies to create
+            your test plans
           </h3>
         </div>
       </div>
@@ -22,6 +23,7 @@
           categories
           </p>
           <ul class="menu-list">
+            <li><a href="#overview" class="is-active">Overview</a></li>
             <li><a href="#http-requests" class="is-active">HTTP requests</a></li>
             <li><a href="#expects" class="is-active">Expects</a></li>
             <li><a href="#variables" class="is-active">Variables</a></li>
@@ -30,7 +32,44 @@
       </div>
 
       <div class="column is-9">
+        <div class="content is-medium mb-6">
+          <h2 id="overview" class="title is-2">Overview</h2>
+
+          <h3 class="title is-4">Smokex overview</h3>
+
+          <p>Smokex provide a quick and easy way to create and automate HTTP
+          requests to create smoke tests. These smoke tests can be used to validate
+          deployment of a release, uptime, etc...</p>
+
+          <h3 class="title is-4">Main concepts</h3>
+
+          <p>A <strong>test plan</strong> is a YAML content that defines a set
+          of configured requests. Those requests will be executed either
+          manually or automatically using a cron sentence.</p>
+
+          <p>A test plan supports <strong>asserting</strong> data from the
+          responses of the requests and storing information in variables for
+          further use.</p>
+
+          <p>Each <strong>execution</strong> sends the requests of a test plan
+          and asserts the response using the defined specs.</p>
+
+          <p>It is possible to save data from a response into
+          <strong>variables</strong> and reuse it on other requests. This is
+          handy if you want to call an authentication endpoint and use the
+          session token in subsequent requests.</p>
+
+          <h3 class="title is-4">Help us to be better</h3>
+
+          <p>We keep improving Smokex and this documentation so if you have any
+          feedback, got an idea, have any problem or suggestion you can contact
+          us by <a href="mailto:contact@smokex.io?subject=Documentation feedback">email</a>
+                   or using <a href="https://airtable.com/shrHMbYacikW8eGFI"
+                     target="_blank">this form</a>.</p>
+        </div>
+
         <div class="content is-medium">
+          <h2 id="overview" class="title is-2">Examples</h2>
 
           <h3 id="http-requests" class="title is-3">HTTP requests</h3>
 
@@ -42,13 +81,13 @@
           </article>
 
           <div class="box">
-            <h4 class="title is-3">Simple request</h4>
+            <h4 class="title is-4">Simple request</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
     host: "http://smokex.io"</span></code></pre>
           </div>
 
           <div class="box">
-            <h4 class="title is-3">Headers</h4>
+            <h4 class="title is-4">Headers</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
     host: "http://smokex.io"
     headers:
@@ -56,7 +95,7 @@
           </div>
 
           <div class="box">
-            <h4 class="title is-3">Query params</h4>
+            <h4 class="title is-4">Query params</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
     host: "http://smokex.io"
     query:
@@ -65,7 +104,7 @@
           </div>
 
           <div class="box">
-            <h4 class="title is-3">Adding a request body</h4>
+            <h4 class="title is-4">Adding a request body</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- post:
     host: "http://smokex.io"
     body:
@@ -84,7 +123,7 @@
           </article>
 
           <div class="box">
-            <h4 class="title is-3">Status code</h4>
+            <h4 class="title is-4">Status code</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- post:
     host: "http://smokex.io"
     body:
@@ -96,7 +135,7 @@
           </div>
 
           <div class="box">
-            <h4 class="title is-3">Headers</h4>
+            <h4 class="title is-4">Headers</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- post:
     host: "http://smokex.io"
     body:
@@ -109,7 +148,7 @@
           </div>
 
           <div class="box">
-            <h4 class="title is-3">Response body</h4>
+            <h4 class="title is-4">Response body</h4>
             <article class="message is-primary">
               <div class="message-body">
                 Currently only <strong>JSON</strong> and
@@ -148,7 +187,7 @@
           </article>
 
           <div class="box">
-            <h4 class="title is-3">Save data from response</h4>
+            <h4 class="title is-4">Save data from response</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- post:
     host: "http://smokex.io"
     body:
