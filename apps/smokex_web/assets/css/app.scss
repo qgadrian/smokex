@@ -47,6 +47,10 @@ img.landing {
     display: block;
     margin: auto;
   }
+
+  &.bottom {
+    width: 400px;
+  }
 }
 
 img.navbar-item.logo {
