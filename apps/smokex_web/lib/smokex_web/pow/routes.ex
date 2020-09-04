@@ -6,4 +6,9 @@ defmodule SmokexWeb.Pow.Routes do
   def after_user_updated_path(conn) do
     Routes.live_path(conn, SmokexWeb.MyAccountLive.Show)
   end
+
+  @impl Pow.Phoenix.Routes
+  def after_registration_path(conn) do
+    Routes.live_path(conn, SmokexWeb.WelcomeLive.Show)
+  end
 end
