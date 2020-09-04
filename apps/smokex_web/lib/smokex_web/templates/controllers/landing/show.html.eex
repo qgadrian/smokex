@@ -3,17 +3,17 @@
     <img src="<%= Routes.static_path(@conn, "/images/smokex_logo.png") %>"
          class="landing logo mb-6" alt="Smokex Logo"/>
 
-         <div class="container has-text-centered pb-6">
-           <h2 class="title">Validate your applications with smoke tests</h2>
-           <p>Smokex is a tool to validate your build and deployments by running
-           verifications against them using <a target="_blank"
-                                              href="https://en.wikipedia.org/wiki/Smoke_testing_(software)">smoke
-                                              tests</a>. Using our tool you will avoid and react earlier to problems and
-                                            you will build a trust that everything will run smoothly, allowing you what
-                                            really is important.</p>
-           <%= live_patch "Start the awesomeness", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
+      <div class="container has-text-centered pb-6">
+        <h2 class="title">Validate your applications with smoke tests</h2>
+        <p>Smokex is a tool to validate your build and deployments by running
+        verifications against them using <a target="_blank"
+                                          href="https://en.wikipedia.org/wiki/Smoke_testing_(software)">smoke
+                                          tests</a>. Using our tool you will avoid and react earlier to problems and
+                                        you will build a trust that everything will run smoothly, allowing you what
+                                        really is important.</p>
+        <%= live_patch "Start the awesomeness", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
 class: "button is-primary is-medium mt-6" %>
-         </div>
+      </div>
 
     <img src="<%= Routes.static_path(@conn, "/images/landing.png") %>"
          class="landing" alt="Landing image"/>

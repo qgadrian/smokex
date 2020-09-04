@@ -146,6 +146,13 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Improve subscription information shown
 * [x] If no current subscription in billing view show info and CTA
 
+### Post release features
+
+* [ ] Create welcome page with introduction to Smokex
+* [ ] Mail the welcome content to registered users
+* [ ] Add terms and conditions links to footer
+* [ ] Create a blog page with some explanations about what can do (?)
+
 ### New features
 
 * [ ] Allow set custom timeout per each step
