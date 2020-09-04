@@ -28,23 +28,28 @@ defmodule SmokexClient.Validator.Body do
   end
 
   @spec validate_expected_body(map, String.t()) :: tuple
-  defp validate_expected_body(expected_body, received_body) do
+  defp validate_expected_body(expected_body, received_body) when is_map(expected_body) do
     with {:ok, parsed_received_body} <- Jason.decode(received_body) do
-      if Map.equal?(expected_body, parsed_received_body) do
-        {:ok, received_body}
-      else
-        {
-          :error,
-          %{body: %{expected: expected_body, received: received_body}},
-          "\nExpected body:\n#{Jason.encode!(expected_body)}\nReceived:\n#{inspect(received_body)}\n"
-        }
+      expected_body
+      |> Map.to_list()
+      |> Enum.all?(&(&1 in parsed_received_body))
+      |> case do
+        true ->
+          {:ok, received_body}
+
+        false ->
+          {
+            :error,
+            %{body: %{expected: expected_body, received: received_body}},
+            "\nExpected body:\n#{inspect(expected_body)}\nReceived:\n#{received_body}\n"
+          }
       end
     else
-      _ ->
+      _error ->
         {
           :error,
           %{body: %{expected: expected_body, received: received_body}},
-          "\nExpected body:\n#{inspect(expected_body)}\nReceived:\n#{received_body}\n"
+          "\nError parsing the received body:\n#{received_body}\n"
         }
     end
   end
