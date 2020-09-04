@@ -3,16 +3,19 @@
     <img src="<%= Routes.static_path(@conn, "/images/smokex_logo.png") %>"
          class="landing logo mb-6" alt="Smokex Logo"/>
 
-      <div class="container has-text-centered pb-6">
+         <div class="container has-text-centered pb-6">
+           <div class="content is-large">
         <h2 class="title">Validate your applications with smoke tests</h2>
-        <p>Smokex is a tool to validate your build and deployments by running
-        verifications against them using <a target="_blank"
+        <p>Smokex is a tool to automate HTTP requests. It is focus in validate your application releases by running verifications using <a target="_blank"
                                           href="https://en.wikipedia.org/wiki/Smoke_testing_(software)">smoke
-                                          tests</a>. Using our tool you will avoid and react earlier to problems and
-                                        you will build a trust that everything will run smoothly, allowing you what
-                                        really is important.</p>
-        <%= live_patch "Start the awesomeness", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
-class: "button is-primary is-medium mt-6" %>
+                                          tests</a>. With Smokex you will be
+                                        able to create trust in the development
+                                        and release of you applications, so you
+                                        can spend effort on what it is really
+                                        is important.</p>
+        <%= live_patch "Lets get started! 🚀", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show),
+class: "button is-primary is-large mt-6" %>
+      </div>
       </div>
 
     <img src="<%= Routes.static_path(@conn, "/images/landing.png") %>"
@@ -21,7 +24,7 @@ class: "button is-primary is-medium mt-6" %>
 
 
   <div class="container pb-6">
-    <h2 class="title has-text-centered mb-6">Some of our awesome features</h2>
+    <h2 class="title has-text-centered mb-6">Some of our...</h2>
     <div class="columns is-multiline">
       <div class="column is-6 is-3-desktop">
         <h4 class="title is-4">Unleash the smoke tests</h4>
@@ -39,24 +42,28 @@ class: "button is-primary is-medium mt-6" %>
         reliable way to run smoke tests against your applications.</p>
       </div>
       <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Secure deployments</h4>
+        <h4 class="title is-4">Protect your deployments</h4>
         <p class="block">No one ensures you that after all the tests run the
-        deployment is going to be ok so with Smokex you can ensure the
+        deployment is going to be ok, so Smokex you can ensure the
         correctness of your releases.</p>
       </div>
       <div class="column is-6 is-3-desktop">
         <h4 class="title is-4">Easy to use</h4>
-        <p class="block">Forget about complex setups, dealing with Docker
-        containers, bash scripts... Anyone with minimum technical
+        <p class="block">Forget about complex setups, dealing with
+        containers, scripts... Anyone with minimum technical
         knowledge can write validation tests for your application.</p>
       </div>
     </div>
   </div>
 </section>
 
+  <div class="container has-text-centered pb-6">
+    <%= live_patch "Create my account 🙌", to: Routes.live_path(@conn, SmokexWeb.MyAccountLive.Show), class: "button is-primary is-large mt-6" %>
+    </div>
+
 <section class="section">
   <div class="container has-text-centered pb-6">
-    <h2 class="title mb-6">Want more?</h2>
+    <h2 class="title mb-6">...awesome features</h2>
     <div class="columns is-multiline">
       <div class="column is-6 is-3-desktop">
         <h4 class="title is-4">Unlimited power</h4>
