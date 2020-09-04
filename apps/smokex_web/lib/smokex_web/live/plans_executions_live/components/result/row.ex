@@ -100,7 +100,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
       content_tag(:p) do
         [
           content_tag(:strong, "Expected "),
-          content_tag(:span, inspect(expected))
+          content_tag(:span, parse_expected(expected))
         ]
       end,
       content_tag(:p) do
@@ -111,4 +111,10 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
       end
     ]
   end
+
+  defp parse_expected(expected) when is_map(expected) do
+    Jason.encode!(expected)
+  end
+
+  defp parse_expected(expected), do: inspect(expected)
 end
