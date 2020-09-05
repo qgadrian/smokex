@@ -10,8 +10,18 @@ module.exports = (env, options) => {
 
   return {
     optimization: {
+      minimize: !devMode,
       minimizer: [
-        new TerserPlugin({ cache: true, parallel: true, sourceMap: devMode }),
+        new TerserPlugin({
+          cache: true,
+          parallel: true,
+          extractComments: true,
+          sourceMap: devMode,
+          terserOptions: {
+            compress: {},
+            output: { comments: false },
+          }
+        }),
         new OptimizeCSSAssetsPlugin({})
       ]
     },
