@@ -75,7 +75,10 @@ defmodule SmokexWeb.Telemetry do
       counter("smokex_web.plan_execution.action",
         measurement: :action,
         tags: [:id, :result, :status, :action, :plan_definition_id]
-      )
+      ),
+
+      # User sessions
+      summary("smokex_web.session_count.count")
     ]
   end
 
@@ -83,7 +86,7 @@ defmodule SmokexWeb.Telemetry do
     [
       # A module, function and arguments to be invoked periodically.
       # This function must call :telemetry.execute/3 and a metric must be added above.
-      # {SmokexWeb, :count_users, []}
+      {SmokexWeb.Telemetry.CurrentSessionCount, :dispatch_session_count, []}
     ]
   end
 
