@@ -6,6 +6,7 @@ defmodule SmokexClient.Mixfile do
   def project do
     [
       app: :smokex_client,
+      description: description(),
       version: @version,
       elixir: "~> 1.6",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -49,5 +50,9 @@ defmodule SmokexClient.Mixfile do
       coveralls: ["coveralls.html"],
       "coveralls.html": ["coveralls.html"]
     ]
+  end
+
+  defp description do
+    "Business logic for the Smokex umbrella project"
   end
 end

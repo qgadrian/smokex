@@ -7,6 +7,7 @@ defmodule Smokex.Umbrella.MixProject do
       apps_path: "apps",
       build_embedded: Mix.env() == :prod,
       deps: deps(),
+      description: description(),
       start_permanent: Mix.env() == :prod,
       version: "0.1.0",
       releases: [
@@ -36,5 +37,9 @@ defmodule Smokex.Umbrella.MixProject do
     [
       setup: ["cmd mix setup"]
     ]
+  end
+
+  defp description do
+    "Model and contexts for the Smokex umbrella project"
   end
 end

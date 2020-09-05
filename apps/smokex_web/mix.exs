@@ -8,6 +8,7 @@ defmodule SmokexWeb.MixProject do
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
+      description: description(),
       lockfile: "../../mix.lock",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -64,5 +65,9 @@ defmodule SmokexWeb.MixProject do
       setup: ["deps.get", "cmd npm install --prefix assets"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
+  end
+
+  defp description do
+    "Web application for the Smokex umbrella project"
   end
 end
