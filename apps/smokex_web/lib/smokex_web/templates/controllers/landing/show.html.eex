@@ -58,8 +58,8 @@ class: "button is-primary is-large mt-6" %>
   </div>
 </section>
 
-  <div class="container has-text-centered pb-6">
-    <%= live_patch "Create my account 🙌", to: Routes.live_path(@conn, SmokexWeb.MyAccountLive.Show), class: "button is-primary is-large mt-6" %>
+  <div class="container has-text-centered">
+    <%= live_patch "Create my account 🙌", to: Routes.live_path(@conn, SmokexWeb.MyAccountLive.Show), class: "button is-primary is-large" %>
     </div>
 
 <section class="section">
@@ -91,7 +91,7 @@ class: "button is-primary is-large mt-6" %>
   </div>
 </section>
 
-<hr class="my-6">
+<hr class="my-1">
 
 <section class="section">
   <div class="container py-4">
@@ -103,7 +103,7 @@ class: "button is-primary is-large mt-6" %>
         <a class="button is-primary" href="/welcome">Here's how it works!</a>
       </div>
       <div class="column">
-        <img class="landing bottom ml-6" src="<%= Routes.static_path(@conn, "/images/landing-bottom.png") %>" alt="">
+        <img class="landing bottom" src="<%= Routes.static_path(@conn, "/images/landing-bottom.png") %>" alt="">
       </div>
     </div>
   </div>
