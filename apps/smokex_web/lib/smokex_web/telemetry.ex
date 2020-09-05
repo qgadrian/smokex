@@ -39,7 +39,7 @@ defmodule SmokexWeb.Telemetry do
     end)
   end
 
-  defp metrics do
+  def metrics do
     [
       # Phoenix Metrics
       summary("phoenix.endpoint.stop.duration",
