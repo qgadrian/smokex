@@ -20,3 +20,7 @@ config :stripity_stripe,
 
 config :smokex,
   stripe_price_id: System.fetch_env!("STRIPE_PRICE_ID")
+
+config :smokex_web, :basic_auth,
+  username: System.fetch_env!("DASHBOARD_AUTH_USERNAME"),
+  password: System.fetch_env!("DASHBOARD_AUTH_PASSWORD")
