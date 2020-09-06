@@ -26,12 +26,16 @@
 
           <div class="navbar-menu is-active">
             <div class="navbar-start">
-              <%= live_patch "Stats", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
-                class: "navbar-item" %>
+              <%= if Pow.Plug.current_user(@conn) do %>
+                <%= live_patch "Statistics", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
+                  class: "navbar-item" %>
 
-              <%= live_patch "Test plans", to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.List), class: "navbar-item" %>
+                <%= live_patch "Test plans", to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.List), class: "navbar-item" %>
 
-              <%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All), class: "navbar-item" %>
+                <%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All), class: "navbar-item" %>
+              <% else %>
+                <%= live_patch "Getting started", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "navbar-item" %>
+              <% end %>
 
               <%= unless Smokex.StripeSubscriptions.has_subscription?(@current_user) do %>
                 <%= live_patch "Pricing", to: Routes.live_path(@conn, SmokexWeb.PricingLive.Show),
