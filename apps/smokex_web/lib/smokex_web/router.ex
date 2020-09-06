@@ -65,7 +65,7 @@ defmodule SmokexWeb.Router do
 
     live "/pricing", PricingLive.Show
     live "/docs", DocumentationLive.Show
-    live "/welcome", WelcomeLive.Show
+    live "/getting-started", WelcomeLive.Show
 
     scope "/" do
       pipe_through :protected
