@@ -66,6 +66,11 @@ img.navbar-item.logo {
   display: none;
 }
 
+div.not-found > img {
+  max-width: 100%;
+  max-height: 400px;
+}
+
 // Code editor syntax override
 .box.code-content, .code-content {
   height: 400px!important;
