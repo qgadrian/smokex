@@ -22,15 +22,15 @@ defmodule Smokex.PlanDefinition do
   alias Smokex.PlanExecution
   alias Smokex.Users.User
 
-  @required_fields [:name, :cron_sentence, :content]
-  @optional_fields [:description]
+  @required_fields [:name, :content]
+  @optional_fields [:description, :cron_sentence]
 
   @schema_fields @optional_fields ++ @required_fields
 
   schema "plans_definitions" do
     field(:name, :string, null: false)
     field(:description, :string, null: true)
-    field(:cron_sentence, :string, null: false)
+    field(:cron_sentence, :string, null: true)
     field(:content, :string, null: false)
 
     many_to_many(:users, User, join_through: Smokex.PlansDefinitionsUsers)

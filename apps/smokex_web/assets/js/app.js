@@ -31,10 +31,11 @@ Hooks.PrintCronHumanFriendly = {
   cronSentence() { return this.el.dataset.cronSentence },
   targetElement() { return this.el },
   mounted() {
-    const cronSentence = this.cronSentence()
-    const humanFriendlyCron = cronstrue.toString(cronSentence)
+    "..."
+    //const cronSentence = this.cronSentence()
+    //const humanFriendlyCron = cronstrue.toString(cronSentence)
 
-    this.targetElement().textContent = humanFriendlyCron
+    //this.targetElement().textContent = humanFriendlyCron
   }
 }
 

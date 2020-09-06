@@ -22,8 +22,10 @@ defmodule SmokexWeb.PlanDefinitions.ListView do
     StatusBadge.new(plan_execution)
   end
 
-  @spec next_execution_started(PlanDefinition.t()) :: String.t() | DateTime.t()
-  def next_execution_started(%PlanDefinition{cron_sentence: cron_sentence}) do
+  @spec next_execution_starts_at(PlanDefinition.t()) :: String.t() | DateTime.t()
+  def next_execution_starts_at(%PlanDefinition{cron_sentence: nil}), do: "-"
+
+  def next_execution_starts_at(%PlanDefinition{cron_sentence: cron_sentence}) do
     with {:ok, cron_expression} <- Crontab.CronExpression.Parser.parse(cron_sentence),
          {:ok, date} <- Crontab.Scheduler.get_next_run_date(cron_expression) do
       date
