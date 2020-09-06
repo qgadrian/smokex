@@ -58,6 +58,8 @@ defmodule SmokexWeb.Router do
   scope "/", SmokexWeb do
     pipe_through :browser
 
+    get "/sitemap.xml", Controllers.Sitemap, :build
+
     get "/", Controllers.Landing, :show
     get "/landing", Controllers.Landing, :show
     get "/privacy-policy", Controllers.Legal, :privacy_policy

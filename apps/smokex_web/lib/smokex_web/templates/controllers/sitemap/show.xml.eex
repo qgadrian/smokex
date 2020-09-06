@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc><%= Routes.landing_url(@conn, :show) %></loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc><%= Routes.live_url(@conn, SmokexWeb.WelcomeLive.Show) %></loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc><%= Routes.live_url(@conn, SmokexWeb.PricingLive.Show) %></loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc><%= Routes.live_url(@conn, SmokexWeb.DocumentationLive.Show) %></loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc><%= Routes.legal_url(@conn, :privacy_policy) %></loc>
+    <changefreq>never</changefreq>
+    <priority>0.1</priority>
+  </url>
+  <url>
+    <loc><%= Routes.legal_url(@conn, :terms_and_conditions) %></loc>
+    <changefreq>never</changefreq>
+    <priority>0.1</priority>
+  </url>
+</urlset>
