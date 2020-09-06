@@ -148,10 +148,12 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ### Post release features
 
-* [ ] Create welcome page with introduction to Smokex
+* [x] Create welcome page with introduction to Smokex
 * [ ] Mail the welcome content to registered users
-* [ ] Add terms and conditions links to footer
+* [x] Add terms and conditions links to footer
 * [ ] Create a blog page with some explanations about what can do (?)
+* [x] Avoid make the cron sentence mandatory
+* [ ] First SEO steps (robots, sitemap..)
 
 ### New features
 
