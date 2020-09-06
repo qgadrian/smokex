@@ -2,6 +2,7 @@ defmodule SmokexWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 
+  @enable_system_metrics Application.compile_env(:smokex_web, :enable_system_metrics)
   @metrics_reporters Application.compile_env(:smokex_web, :metrics_reporters)
 
   def start_link(arg) do
@@ -40,29 +41,37 @@ defmodule SmokexWeb.Telemetry do
   end
 
   def metrics do
-    [
-      # Phoenix Metrics
-      summary("phoenix.endpoint.stop.duration",
-        unit: {:native, :millisecond}
-      ),
-      summary("phoenix.router_dispatch.stop.duration",
-        tags: [:route],
-        unit: {:native, :millisecond}
-      ),
+    system_metrics() ++ custom_metrics()
+  end
 
-      # Database Metrics
-      summary("smokex.repo.query.total_time", unit: {:native, :millisecond}),
-      summary("smokex.repo.query.decode_time", unit: {:native, :millisecond}),
-      summary("smokex.repo.query.query_time", unit: {:native, :millisecond}),
-      summary("smokex.repo.query.queue_time", unit: {:native, :millisecond}),
-      summary("smokex.repo.query.idle_time", unit: {:native, :millisecond}),
+  defp system_metrics() do
+    if @enable_system_metrics do
+      [
+        # Phoenix Metrics
+        summary("phoenix.endpoint.stop.duration",
+          unit: {:native, :millisecond}
+        ),
+        summary("phoenix.router_dispatch.stop.duration",
+          tags: [:route],
+          unit: {:native, :millisecond}
+        ),
 
-      # VM Metrics
-      summary("vm.memory.total", unit: {:byte, :kilobyte}),
-      summary("vm.total_run_queue_lengths.total"),
-      summary("vm.total_run_queue_lengths.cpu"),
-      summary("vm.total_run_queue_lengths.io")
-    ] ++ custom_metrics()
+        # Database Metrics
+        summary("smokex.repo.query.total_time", unit: {:native, :millisecond}),
+        summary("smokex.repo.query.decode_time", unit: {:native, :millisecond}),
+        summary("smokex.repo.query.query_time", unit: {:native, :millisecond}),
+        summary("smokex.repo.query.queue_time", unit: {:native, :millisecond}),
+        summary("smokex.repo.query.idle_time", unit: {:native, :millisecond}),
+
+        # VM Metrics
+        summary("vm.memory.total", unit: {:byte, :kilobyte}),
+        summary("vm.total_run_queue_lengths.total"),
+        summary("vm.total_run_queue_lengths.cpu"),
+        summary("vm.total_run_queue_lengths.io")
+      ]
+    else
+      []
+    end
   end
 
   defp custom_metrics do

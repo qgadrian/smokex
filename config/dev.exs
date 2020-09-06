@@ -75,4 +75,6 @@ config :phoenix, :plug_init_mode, :runtime
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
 
-config :smokex_web, metrics_reporters: [:console]
+config :smokex_web,
+  metrics_reporters: [:console],
+  enable_system_metrics: false
