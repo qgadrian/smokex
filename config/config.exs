@@ -15,7 +15,8 @@ config :smokex,
 
 config :smokex_web,
   ecto_repos: [Smokex.Repo],
-  generators: [context_app: :smokex]
+  generators: [context_app: :smokex],
+  enable_system_metrics: true
 
 # Configures the endpoint
 config :smokex_web, SmokexWeb.Endpoint,
