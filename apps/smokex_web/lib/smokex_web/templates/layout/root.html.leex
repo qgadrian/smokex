@@ -29,23 +29,19 @@
               <%= live_patch "Stats", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
                 class: "navbar-item" %>
 
-              <%= live_patch "Test plans", to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.List),
-                class: "navbar-item" %>
+              <%= live_patch "Test plans", to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.List), class: "navbar-item" %>
 
-              <%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All),
-                class: "navbar-item" %>
+              <%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All), class: "navbar-item" %>
 
               <%= unless Smokex.StripeSubscriptions.has_subscription?(@current_user) do %>
                 <%= live_patch "Pricing", to: Routes.live_path(@conn, SmokexWeb.PricingLive.Show),
                   class: "navbar-item" %>
               <% end %>
 
-              <%= live_patch "Documentation", to: Routes.live_path(@conn, SmokexWeb.DocumentationLive.Show),
-                class: "navbar-item" %>
+              <%= live_patch "Documentation", to: Routes.live_path(@conn, SmokexWeb.DocumentationLive.Show), class: "navbar-item" %>
 
               <%= if Pow.Plug.current_user(@conn) do %>
-                <%= live_patch "My account", to: Routes.live_path(@conn, SmokexWeb.MyAccountLive.Show),
-                  class: "navbar-item" %>
+                <%= live_patch "My account", to: Routes.live_path(@conn, SmokexWeb.MyAccountLive.Show), class: "navbar-item" %>
               <% end %>
             </div>
           </div>
@@ -78,7 +74,7 @@
           <div class="column is-4 has-text-centered is-hidden-tablet"><a class="title is-4" href="#">Smokex</a></div>
           <div class="column is-4">
             <div class="level">
-              <a class="level-item" href="/welcome">Getting started</a>
+              <%= live_patch "Getting started", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "level-item" %>
               <a class="level-item" href="/pricing">Pricing</a>
             </div>
           </div>

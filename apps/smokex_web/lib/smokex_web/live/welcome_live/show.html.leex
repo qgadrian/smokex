@@ -21,7 +21,11 @@
           <p>During our career, we faced the same question several times: <i>how can we ensure we don't deploy a broken release?</i> And the quick answer is, as always, you can't be sure of that. But you can minimize the impact by checking the correctness of your application and releases by running smoke tests periodically.</p>
         </div>
 
-        <div class="buttons"><a class="button is-primary" href="/plans/new">Create my first plan</a><a class="button is-text" href="/docs">Or read the documentation</a></div>
+        <div class="buttons">
+          <%= live_patch "Create test plan", class: "button is-primary",
+to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %>
+          <%= live_patch "Or read the documentation", to: Routes.live_path(@socket, SmokexWeb.DocumentationLive.Show), class: "button is-text" %>
+        </div>
       </div>
 
       <div class="column is-6">
@@ -37,7 +41,11 @@
           <div class="media-content">
             <div class="content">
               <h3>Create a plan</h3>
-              <p><a href="/plans/new">Create a test plan</a> that will assert a 200 response and a specific value in the response:</p>
+              <p>
+                <%= live_patch "Create test plan",
+to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %> that will
+assert a 200 response and a specific value in the response:
+              </p>
 
               <section class="cheatsheet">
                 <pre phx-update="ignore" class="box"><code class="language-yaml"><span>- post:
@@ -73,7 +81,8 @@
           <div class="media-content">
             <div class="content">
               <h3>Check the result</h3>
-              <p>You can check <a href="/executions">all the executions</a> of your plans, including the detail of any failed assertions or errors.</p>
+              <p>You can check
+              <%= live_patch "all the executions", to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All) %> of your plans, including the detail of any failed assertions or errors.</p>
             </div>
           </div>
         </div>
