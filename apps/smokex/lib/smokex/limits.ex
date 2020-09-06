@@ -28,7 +28,9 @@ defmodule Smokex.Limits do
   @doc """
   Whether a new plan definition can be created or not.
   """
-  @spec can_create_plan_definition?(User.t()) :: boolean
+  @spec can_create_plan_definition?(User.t() | nil) :: boolean
+  def can_create_plan_definition?(nil), do: false
+
   def can_create_plan_definition?(%User{} = user) do
     Users.subscribed?(user) || length(PlanDefinitions.all(user)) < 2
   end
