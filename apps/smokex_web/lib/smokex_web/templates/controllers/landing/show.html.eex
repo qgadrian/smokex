@@ -100,7 +100,8 @@ class: "button is-primary is-large mt-6" %>
       <div class="column">
         <h2 class="title is-spaced">First steps</h2>
         <p class="subtitle">Starting with Smokex is really easy! We've designed a simple, efficient process for companies to create smoke test plans.</p>
-        <a class="button is-primary" href="/welcome">Here's how it works!</a>
+
+        <%= live_patch "Here's how it works!", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "button is-primary" %>
       </div>
       <div class="column">
         <img class="landing bottom" src="<%= Routes.static_path(@conn, "/images/landing-bottom.png") %>" alt="">
