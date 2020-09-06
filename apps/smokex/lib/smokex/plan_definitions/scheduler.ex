@@ -1,4 +1,8 @@
 defmodule Smokex.PlanDefinitions.Scheduler do
+  @moduledoc """
+  This module creates a new entry in the Quantum application with the cron
+  sentence present in a plandefinition.
+  """
   use Quantum, otp_app: :smokex
 
   require Logger
@@ -10,30 +14,11 @@ defmodule Smokex.PlanDefinitions.Scheduler do
   alias Smokex.Oban.PlanExecutionWorker, as: JobWorker
 
   @doc """
-  Enqueues a new job that will be executed.
-
-  TODO create a queue for jobs to be executed immediately.
-
-  Keep in mind that in order to run the job, the job will need to be next in the execution queue and a worker should be ready to take.
-  it.
-  """
-  @spec enqueue_job(PlanDefinition.t(), User.t() | nil) ::
-          {:ok, number} | {:error, Ecto.Changeset.t()}
-  def enqueue_job(plan_definition, user_or_nil \\ nil)
-
-  def enqueue_job(%PlanDefinition{} = plan_definition, nil) do
-    insert_job(nil, plan_definition)
-  end
-
-  @spec enqueue_job(PlanDefinition.t()) :: {:ok, number} | {:error, Ecto.Changeset.t()}
-  def enqueue_job(%PlanDefinition{} = plan_definition, %User{} = user) do
-    insert_job(user, plan_definition)
-  end
-
-  @doc """
   Creates a job schedule with the plan definition cron sentence.
   """
   @spec create_scheduled_job(PlanDefinition.t()) :: :ok
+  def create_scheduled_job(%PlanDefinition{id: plan_definition_id, cron_sentence: nil}), do: :ok
+
   def create_scheduled_job(
         %PlanDefinition{id: plan_definition_id, cron_sentence: cron_sentence} = plan_definition
       ) do
@@ -58,6 +43,28 @@ defmodule Smokex.PlanDefinitions.Scheduler do
 
     :ok = __MODULE__.delete_job(:"#{plan_definition_id}")
     __MODULE__.create_scheduled_job(plan_definition)
+  end
+
+  @doc """
+  Enqueues a new job that will be executed.
+
+  TODO create a queue for jobs to be executed immediately.
+
+  Keep in mind that in order to run the job, the job will need to be next in
+  the execution queue and a worker should be ready to take.
+  it.
+  """
+  @spec enqueue_job(PlanDefinition.t(), User.t() | nil) ::
+          {:ok, number} | {:error, Ecto.Changeset.t()}
+  def enqueue_job(plan_definition, user_or_nil \\ nil)
+
+  def enqueue_job(%PlanDefinition{} = plan_definition, nil) do
+    insert_job(nil, plan_definition)
+  end
+
+  @spec enqueue_job(PlanDefinition.t()) :: {:ok, number} | {:error, Ecto.Changeset.t()}
+  def enqueue_job(%PlanDefinition{} = plan_definition, %User{} = user) do
+    insert_job(user, plan_definition)
   end
 
   #
