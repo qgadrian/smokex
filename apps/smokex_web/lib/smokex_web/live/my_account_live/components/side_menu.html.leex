@@ -8,15 +8,16 @@
       </li>
     </ul>
 
-    <p class="menu-label hidden">Administration</p>
+    <p class="menu-label">Administration</p>
 
-    <ul class="menu-list hidden">
-      <li><a>Team Settings</a></li>
+    <ul class="menu-list">
+      <li class="hidden"><a>Team Settings</a></li>
       <li>
-        <a class="is-active">Manage Your Team</a>
+        <a>Integrations</a>
         <ul>
-          <li><a>Members</a></li>
-          <li><a>Add a member</a></li>
+          <li>
+            <%= live_patch "Slack", to: Routes.live_path(@socket, SmokexWeb.MyAccountLive.Integrations.Slack) %>
+          </li>
         </ul>
       </li>
     </ul>

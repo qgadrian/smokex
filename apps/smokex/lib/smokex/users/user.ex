@@ -1,7 +1,13 @@
 defmodule Smokex.Users.User do
+  @moduledoc """
+  Represents a user in the application.
+  """
+
   use Ecto.Schema
   use Pow.Ecto.Schema
   use Pow.Extension.Ecto.Schema, extensions: [PowResetPassword, PowEmailConfirmation]
+
+  alias Smokex.Integrations.Slack.SlackUserIntegration
 
   @optional_fields [:subscription_expires_at]
 
@@ -12,10 +18,11 @@ defmodule Smokex.Users.User do
 
     pow_user_fields()
 
+    has_one(:slack_integration, SlackUserIntegration)
+
     timestamps()
   end
 
-  # TODO as in other modules, change this to `create_changeset`
   def changeset(user_or_changeset, attrs) do
     user_or_changeset
     |> pow_changeset(attrs)

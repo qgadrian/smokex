@@ -48,6 +48,10 @@ defmodule SmokexWeb.Router do
   scope "/", SmokexWeb do
     pipe_through([:skip_csrf_protection, :api])
 
+    scope "/auth" do
+      get "/slack/callback", Callbacks.Slack, :callback
+    end
+
     scope "/payments/stripe" do
       pipe_through(:stripe_webhooks)
 
@@ -74,9 +78,12 @@ defmodule SmokexWeb.Router do
 
       live "/stats", StatsLive.Show
 
-      live "/my-account", MyAccountLive.Show
-      live "/my-account/edit", MyAccountLive.Edit
-      live "/my-account/billing", MyAccountLive.Billing
+      scope "/my-account", MyAccountLive do
+        live "/", Show
+        live "/edit", Edit
+        live "/billing", Billing
+        live "/integrations/slack", Integrations.Slack
+      end
 
       live "/plans", PlansDefinitionsLive.List
       live "/plans/new", PlansDefinitionsLive.New

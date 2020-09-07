@@ -39,6 +39,7 @@ defmodule SmokexClient.Mixfile do
       {:kitchen_sink, "~> 1.3"},
       {:smokex, in_umbrella: true},
       {:sobelow, "~> 0.10.3"},
+      {:slack, "~> 0.23.5"},
       {:yaml_elixir, "~> 2.4.0"}
     ]
   end
