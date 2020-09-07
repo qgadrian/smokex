@@ -24,3 +24,7 @@ config :smokex,
 config :smokex_web, :basic_auth,
   username: System.fetch_env!("DASHBOARD_AUTH_USERNAME"),
   password: System.fetch_env!("DASHBOARD_AUTH_PASSWORD")
+
+config :slack,
+  client_id: System.fetch!("SLACK_CLIENT_ID"),
+  client_secret: System.fetch_env!("SLACK_CLIENT_SECRET")
