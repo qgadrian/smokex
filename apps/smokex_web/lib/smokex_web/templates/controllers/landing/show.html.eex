@@ -110,6 +110,6 @@ class: "button is-primary is-large mt-6" %>
   </div>
 </section>
 
-<div style="position:-webkit-sticky; position: sticky; bottom: 0; float: right; margin: 10px" id="product-hunt">
+<%# <div style="position:-webkit-sticky; position: sticky; bottom: 0; float: right; margin: 10px" id="product-hunt">
   <a href="https://www.producthunt.com/posts/smokex?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-smokex" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=249255&theme=light" alt="Smokex - Schedule automatic HTTP requests and create smoke tests | Product Hunt Embed" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-</div>
+</div> %>
