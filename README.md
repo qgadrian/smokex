@@ -153,19 +153,19 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Add terms and conditions links to footer
 * [ ] Create a blog page with some explanations about what can do (?)
 * [x] Avoid make the cron sentence mandatory
-* [ ] First SEO steps (robots, sitemap..)
+* [x] First SEO steps (robots, sitemap..)
+* [x] Slack notifications
 
 ### New features
 
 * [ ] Allow set custom timeout per each step
 * [ ] Add button to view plan definition from execution view
-* [ ] Measure request time per plan step and show a graph view for performance
-* [ ] Generate digest on Docker build
-* [ ] Slack notifications
-* [ ] Create environment variables for configurations, for example
-    `apps/smokex/lib/smokex/users.ex`
 * [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (for that, for example see https://github.com/danschultzer/pow/issues/176)
 * [ ] Delete plans
+* [ ] Measure request time per plan step and show a graph view for performance
+* [ ] Generate digest on Docker build
+* [ ] Create environment variables for configurations, for example
+    `apps/smokex/lib/smokex/users.ex`
 * [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
 * [ ] Create organizations model (mind some logic needs to be replaced, for
     example `Limits`)
