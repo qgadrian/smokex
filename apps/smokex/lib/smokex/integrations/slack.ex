@@ -5,8 +5,9 @@ defmodule Smokex.Integrations.Slack do
 
   require Logger
 
-  alias Smokex.Repo
+  alias Smokex.Integrations.Slack.SlackIntegrationPreferences
   alias Smokex.Integrations.Slack.SlackUserIntegration
+  alias Smokex.Repo
   alias Smokex.Users.User
 
   @doc """
@@ -52,15 +53,34 @@ defmodule Smokex.Integrations.Slack do
   @doc """
   Post a Slack message.
 
-  This function uses the configured token for the user Slack integration.
+  This function uses the configured token and channel of the user Slack integration.
+
+  If the channel to post to is blank, returns an empty map.
 
   See `Slack.Web.Chat.post_message/3` for more info.
   """
-  @spec post_message(User.t(), channel :: String.t(), message :: String.t()) :: map
-  def post_message(%User{} = user, channel, message) do
-    %User{slack_integration: slack_integration} = Smokex.Repo.preload(user, :slack_integration)
+  @spec post_message(SlackUserIntegration.t(), message :: String.t()) :: :ok
+  def post_message(
+        %SlackUserIntegration{options: %SlackIntegrationPreferences{post_to_channel: ""}},
+        _message
+      ) do
+    Logger.debug("Skip post message to a empty channel")
+    :ok
+  end
 
-    Slack.Web.Chat.post_message("smokex_test", message, %{token: slack_integration.token})
+  def post_message(
+        %SlackUserIntegration{
+          token: token,
+          options: %SlackIntegrationPreferences{post_to_channel: channel}
+        },
+        message
+      ) do
+    channel
+    |> Slack.Web.Chat.post_message(message, %{token: token})
+    |> case do
+      %{"ok" => true} -> :ok
+      error -> Logger.warn(inspect(error))
+    end
   end
 
   @doc """
