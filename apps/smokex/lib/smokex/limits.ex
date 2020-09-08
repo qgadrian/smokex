@@ -25,6 +25,9 @@ defmodule Smokex.Limits do
   alias Smokex.Users
   alias Smokex.Users.User
 
+  @max_plan_definitions 2
+  @max_daily_executions 10
+
   @doc """
   Whether a new plan definition can be created or not.
   """
@@ -32,7 +35,7 @@ defmodule Smokex.Limits do
   def can_create_plan_definition?(nil), do: false
 
   def can_create_plan_definition?(%User{} = user) do
-    Users.subscribed?(user) || length(PlanDefinitions.all(user)) < 2
+    Users.subscribed?(user) || length(PlanDefinitions.all(user)) < @max_plan_definitions
   end
 
   @doc """
@@ -43,7 +46,7 @@ defmodule Smokex.Limits do
   """
   @spec can_start_execution?(User.t(), PlanDefinition.t()) :: boolean
   def can_start_execution?(%User{} = user, %PlanDefinition{} = plan_definition) do
-    Users.subscribed?(user) || get_daily_executions(plan_definition) < 3
+    Users.subscribed?(user) || get_daily_executions(plan_definition) < @max_daily_executions
   end
 
   @doc """
@@ -61,7 +64,7 @@ defmodule Smokex.Limits do
 
     user_subscribed = Enum.any?(users, fn user -> Users.subscribed?(user) end)
 
-    user_subscribed || get_daily_executions(plan_definition) < 3
+    user_subscribed || get_daily_executions(plan_definition) < @max_daily_executions
   end
 
   @doc """
