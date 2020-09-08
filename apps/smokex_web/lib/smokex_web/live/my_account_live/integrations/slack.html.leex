@@ -4,7 +4,7 @@
   <div class="columns">
     <%= live_component @socket, SideMenu %>
 
-    <%= if @current_user.slack_integration.token == nil do %>
+    <%= if @current_user.slack_integration == nil do %>
       <div class="column">
         <div class="box">
           <div class="column has-text-centered">
@@ -24,10 +24,10 @@
 
             <%= form_for @changeset, "#", [phx_submit: :save, class: "form"], fn f -> %>
               <div class="field">
-                <%= label(:channel_to_post, "Slack channel", class: "label") %>
+                <%= label(:post_to_channel, "Slack channel", class: "label") %>
                 <div class="control">
-                  <%= text_input f, :channel_to_post, class: "input" %>
-                  <%= error_tag f, :channel_to_post %>
+                  <%= text_input f, :post_to_channel, class: "input" %>
+                  <%= error_tag f, :post_to_channel %>
                 </div>
               </div>
 
@@ -50,6 +50,8 @@
 
               <div class="column has-text-centered">
                 <%= submit "Save", class: "button is-primary", phx_disable_with: "Saving..." %>
+
+                <a class="button is-primary is-outlined" phx-click="remove_integration" phx-disable-with="Removing...">Remove integration</a>
               </div>
             <% end %>
           </div>
