@@ -37,9 +37,6 @@ defmodule SmokexWeb.Callbacks.Slack do
   # Slack verification https://api.slack.com/authentication/verifying-requests-from-slack
   @slack_version_number "v0"
 
-  @client_id Application.compile_env(:slack, :client_id)
-  @client_secret Application.compile_env(:slack, :client_secret)
-
   def callback(conn, %{"code" => code, "state" => user_id}) do
     Logger.info("Callback received for Slack authorization")
 
@@ -62,6 +59,9 @@ defmodule SmokexWeb.Callbacks.Slack do
   end
 
   defp get_access_token(_conn, code) do
+    client_id = Application.get_env(:slack, :client_id)
+    client_secret = Application.get_env(:slack, :client_secret)
+
     %{
       "access_token" => access_token,
       "app_id" => "A01AC9HHX7W",
