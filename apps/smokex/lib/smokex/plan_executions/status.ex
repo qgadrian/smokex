@@ -9,6 +9,7 @@ defmodule Smokex.PlanExecutions.Status do
   alias Smokex.Users
   alias Smokex.PlanExecution
   alias Smokex.PlanExecutions
+  alias Smokex.Notifications
 
   @typedoc """
   The optional parameters to filter plan executions.
@@ -44,6 +45,7 @@ defmodule Smokex.PlanExecutions.Status do
       started_at: NaiveDateTime.utc_now()
     })
     |> Subscriber.notify_change(:started)
+    |> Notifications.maybe_notify_change()
   end
 
   @doc """
@@ -54,6 +56,7 @@ defmodule Smokex.PlanExecutions.Status do
     plan_execution
     |> PlanExecutions.update(%{status: :halted, finished_at: NaiveDateTime.utc_now()})
     |> Subscriber.notify_change(:halted)
+    |> Notifications.maybe_notify_change()
   end
 
   @doc """
@@ -67,5 +70,6 @@ defmodule Smokex.PlanExecutions.Status do
       finished_at: NaiveDateTime.utc_now()
     })
     |> Subscriber.notify_change(:finished)
+    |> Notifications.maybe_notify_change()
   end
 end
