@@ -64,7 +64,7 @@ defmodule Smokex.Integrations.Slack do
   end
 
   @doc """
-  Updates a Slack integration.
+  Updates a Slack integration preferences.
   """
   @spec update_preferences(User.t(), preferences_attrs :: map) ::
           {:ok, SlackUserIntegration.t()} | {:error, Ecto.Changeset.t()}

@@ -17,6 +17,7 @@ defmodule Smokex.Integrations.Slack.SlackUserIntegration do
 
   schema "slack_users_integrations" do
     field(:token, :string, null: false)
+
     embeds_one(:options, SlackIntegrationPreferences, on_replace: :update)
 
     belongs_to(:user, User)
@@ -27,6 +28,10 @@ defmodule Smokex.Integrations.Slack.SlackUserIntegration do
   @spec create_changeset(__MODULE__.t(), map) ::
           {:ok, __MODULE__.t()} | {:error, Ecto.Changeset.t()}
   def create_changeset(changeset, params \\ %{}) do
+    # If no options is provided the embeded schema needs to be present. Since
+    # there is no default fields the default attrs need to be send instead.
+    params = Map.put_new(params, :options, %{post_to_channel: ""})
+
     changeset
     |> Smokex.Repo.preload(:user)
     |> Ecto.Changeset.cast(params, @schema_fields)
