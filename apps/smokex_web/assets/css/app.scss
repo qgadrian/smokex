@@ -3,22 +3,50 @@
 @import 'variables';
 @import 'cheatsheet';
 @import 'prismjs';
+@import "~bulma/bulma";
 
+// page container
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+// navbar
+img.navbar-item.logo {
+  width: 170px;
+  max-height: 56px;
+}
+
+// footer
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  div {
+    white-space: nowrap;
+    display: flex;
+    @include until($tablet) {
+      flex-direction: column;
+    }
+  }
+  ul {
+    display: flex;
+  }
+}
+
+// main content
+main#main-content {
+  padding-top: 20px;
+  padding-bottom: 4rem;    /* Footer height */
+}
+
+// rest
 .hover-cursor:hover {
  cursor: pointer;
 }
 
-main#main-content {
-  padding-top: 20px;
-  min-height: calc(100vh - 55px - 6rem - 3rem);
-}
-
 #nprogress .bar {
   background: $primary !important;
-}
-
-footer {
-  height: 50px;
 }
 
 .status-filter-vertical {
@@ -35,10 +63,6 @@ table.is-hoverable > tbody > tr.is-not-hoverable:hover {
   background-color: transparent!important;
 }
 
-img.navbar-item {
-  max-height: 50px;
-}
-
 img.landing {
   width: 600px;
 
@@ -51,11 +75,6 @@ img.landing {
   &.bottom {
     width: 400px;
   }
-}
-
-img.navbar-item.logo {
-  width: 170px;
-  max-height: 56px;
 }
 
 .hidden {
@@ -103,5 +122,3 @@ div.not-found > img {
 .ͼ21 { color: $content-color-string; }
 .ͼ20 { color: $content-color-number; }
 .ͼ1z.ͼ1y { color: $content-color-boolean; }
-
-@import "~bulma/bulma";
