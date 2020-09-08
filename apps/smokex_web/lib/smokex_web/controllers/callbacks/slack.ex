@@ -56,9 +56,9 @@ defmodule SmokexWeb.Callbacks.Slack do
   #
 
   defp validate_request!(conn) do
-    IO.inspect(conn)
     # [slack_timestamp] = Plug.Conn.get_req_header(conn, "X-Slack-Request-Timestamp")
     # [slack_signature] = Plug.Conn.get_req_header(conn, "X-Slack-Request-Timestamp")
+    conn
   end
 
   defp get_access_token(_conn, code) do
