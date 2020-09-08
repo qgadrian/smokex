@@ -36,26 +36,133 @@ defmodule Smokex.Notifications do
 
   @spec maybe_notify_slack(PlanExecution.t()) :: :ok
   defp maybe_notify_slack(%PlanExecution{} = plan_execution) do
-    %PlanExecution{status: status, plan_definition: %PlanDefinition{users: [user]}} =
-      Smokex.Repo.preload(plan_execution, plan_definition: :users)
+    %PlanExecution{plan_definition: %PlanDefinition{users: [user]}} =
+      plan_execution = Smokex.Repo.preload(plan_execution, plan_definition: :users)
 
     %User{slack_integration: slack_integration} = Smokex.Repo.preload(user, :slack_integration)
 
-    do_maybe_notify_slack(slack_integration, status)
+    do_maybe_notify_slack(slack_integration, plan_execution)
   end
 
-  @spec do_maybe_notify_slack(SlackUserIntegration.t(), PlanExecution.status()) :: :ok
+  @spec do_maybe_notify_slack(SlackUserIntegration.t(), PlanExecution.t()) :: :ok
   defp do_maybe_notify_slack(nil, _), do: :ok
 
-  defp do_maybe_notify_slack(%SlackUserIntegration{} = slack_integration, :running) do
-    SlackHelper.post_message(slack_integration, "The execution running")
+  defp do_maybe_notify_slack(
+         %SlackUserIntegration{} = slack_integration,
+         %PlanExecution{
+           id: plan_execution_id,
+           user: user,
+           status: :running,
+           started_at: started_at
+         } = plan_execution
+       ) do
+    plan_execution_url = plan_execution_url(plan_execution)
+    trigger_user = trigger_user(user)
+
+    SlackHelper.post_message(
+      slack_integration,
+      "",
+      %{
+        blocks:
+          Jason.encode!([
+            %{
+              "type" => "section",
+              "text" => %{
+                "type" => "mrkdwn",
+                "text" => "A execution is *running* ⚙️ \n*<#{plan_execution_url}|View execution>*"
+              }
+            },
+            %{
+              "type" => "section",
+              "fields" => [
+                %{"type" => "mrkdwn", "text" => "*Triggered by:*\n#{trigger_user}"},
+                %{"type" => "mrkdwn", "text" => "*Started at:*\n#{started_at}"}
+              ]
+            }
+          ])
+      }
+    )
   end
 
-  defp do_maybe_notify_slack(%SlackUserIntegration{} = slack_integration, :halted) do
-    SlackHelper.post_message(slack_integration, "The execution failed :(")
+  defp do_maybe_notify_slack(
+         %SlackUserIntegration{} = slack_integration,
+         %PlanExecution{
+           id: plan_execution_id,
+           user: user,
+           status: :halted,
+           started_at: started_at,
+           finished_at: finished_at
+         } = plan_execution
+       ) do
+    plan_execution_url = plan_execution_url(plan_execution)
+
+    SlackHelper.post_message(
+      slack_integration,
+      "",
+      %{
+        blocks:
+          Jason.encode!([
+            %{
+              "type" => "section",
+              "text" => %{
+                "type" => "mrkdwn",
+                "text" => "A execution *failed* ❌\n*<#{plan_execution_url}|View execution>*"
+              }
+            },
+            %{
+              "type" => "section",
+              "fields" => [
+                %{"type" => "mrkdwn", "text" => "*Started at:*\n#{started_at}"},
+                %{"type" => "mrkdwn", "text" => "*Failed at:*\n#{finished_at}"}
+              ]
+            }
+          ])
+      }
+    )
   end
 
-  defp do_maybe_notify_slack(%SlackUserIntegration{} = slack_integration, :finished) do
-    SlackHelper.post_message(slack_integration, "The execution is finish!!!")
+  defp do_maybe_notify_slack(
+         %SlackUserIntegration{} = slack_integration,
+         %PlanExecution{
+           id: plan_execution_id,
+           user: user,
+           status: :finished,
+           started_at: started_at,
+           finished_at: finished_at
+         } = plan_execution
+       ) do
+    plan_execution_url = "https://smokex.io/executions/#{plan_execution_id}"
+
+    SlackHelper.post_message(
+      slack_integration,
+      "",
+      %{
+        blocks:
+          Jason.encode!([
+            %{
+              "type" => "section",
+              "text" => %{
+                "type" => "mrkdwn",
+                "text" => "A execution is *finished* ✅\n*<#{plan_execution_url}|View execution>*"
+              }
+            },
+            %{
+              "type" => "section",
+              "fields" => [
+                %{"type" => "mrkdwn", "text" => "*Started at:*\n#{started_at}"},
+                %{"type" => "mrkdwn", "text" => "*Finished at:*\n#{finished_at}"}
+              ]
+            }
+          ])
+      }
+    )
   end
+
+  @spec plan_execution_url(PlanExecution.t()) :: String.t()
+  defp plan_execution_url(%PlanExecution{id: plan_execution_id}),
+    do: "https://smokex.io/executions/#{plan_execution_id}"
+
+  @spec trigger_user(nil | User.t()) :: String.t()
+  defp trigger_user(nil), do: "automatic"
+  defp trigger_user(%User{email: email}), do: email
 end
