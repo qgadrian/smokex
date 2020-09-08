@@ -59,10 +59,13 @@ defmodule Smokex.Integrations.Slack do
 
   See `Slack.Web.Chat.post_message/3` for more info.
   """
+  def post_message(_slack_user_integration, _message, _opts \\ %{})
+
   @spec post_message(SlackUserIntegration.t(), message :: String.t()) :: :ok
   def post_message(
         %SlackUserIntegration{options: %SlackIntegrationPreferences{post_to_channel: ""}},
-        _message
+        _message,
+        _opts
       ) do
     Logger.debug("Skip post message to a empty channel")
     :ok
@@ -73,10 +76,13 @@ defmodule Smokex.Integrations.Slack do
           token: token,
           options: %SlackIntegrationPreferences{post_to_channel: channel}
         },
-        message
+        message,
+        opts
       ) do
+    opts = Map.merge(opts, %{token: token})
+
     channel
-    |> Slack.Web.Chat.post_message(message, %{token: token})
+    |> Slack.Web.Chat.post_message(message, opts)
     |> case do
       %{"ok" => true} -> :ok
       error -> Logger.warn(inspect(error))
