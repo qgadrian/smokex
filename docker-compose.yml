@@ -5,7 +5,7 @@ services:
     build: .
     environment:
       - SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
-      - DATABASE_HOSTNAME=postgres
+      - DATABASE_HOSTNAME=postgres-smokex
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
       - DATABASE_PORT=5432
@@ -21,6 +21,7 @@ services:
       - STRIPE_PRICE_ID=""
       - SLACK_CLIENT_ID=""
       - SLACK_CLIENT_SECRET=""
+      - ENABLE_DATADOG_AGENT="false"
     ports:
       - 4000:4000
     depends_on:
@@ -38,7 +39,7 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=postgres-smokex
       - POSTGRES_DATABASE=postgres
     container_name: postgres
     networks:
