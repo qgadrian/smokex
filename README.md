@@ -106,6 +106,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 * The Stripe button to buy a subscription requires environment variables to be
     configured or it will throw the `unexpected item shape` error if not.
+* The Slack integration also requires a runtime configuration therefore it will
+    fail locally. Also, the redirection done by Slack is to production host.
 
 ## Random storm ideas & stuff
 
