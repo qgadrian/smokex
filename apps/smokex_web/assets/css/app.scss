@@ -12,9 +12,15 @@
 }
 
 // navbar
-img.navbar-item.logo {
-  width: 170px;
-  max-height: 56px;
+a.navbar-item img {
+  padding: 0;
+}
+
+a.navbar-item p {
+  color: $primary;
+  letter-spacing: 1px;
+  font-size: 18px;
+  padding-left: 8px;
 }
 
 // footer
