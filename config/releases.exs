@@ -11,6 +11,7 @@ config :smokex, Smokex.Repo,
   password: System.fetch_env!("DATABASE_PASSWORD"),
   database: System.fetch_env!("DATABASE_NAME"),
   hostname: System.fetch_env!("DATABASE_HOSTNAME"),
+  port: System.fetch_env!("DATABASE_PORT"),
   pool_size: System.fetch_env!("POOL_SIZE") |> String.to_integer()
 
 config :stripity_stripe,
