@@ -12,6 +12,8 @@ defmodule Smokex.Umbrella.MixProject do
       version: "0.1.0",
       releases: [
         smokex: [
+          include_erts: true,
+          include_executables_for: [:unix],
           applications: [
             runtime_tools: :permanent,
             crontab: :permanent,

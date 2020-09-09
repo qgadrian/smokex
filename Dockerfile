@@ -1,60 +1,81 @@
 #
-# Generate static files
+# The following Docker file provides an image with a release application in a
+# production ready environment.
 #
-FROM elixir:1.10-alpine as asset-builder
-
-RUN apk update \
- && apk add --no-cache gmp ncurses-libs
-
-RUN apk add build-base nodejs npm yarn python
-
-RUN mkdir /app
-WORKDIR /app
-
-COPY ./ ./
-
-RUN cd ./apps/smokex_web/assets \
-  && npm install \
-  && npm run deploy
-
+# We are using a Ubuntu base image (elixir:X.XX-slim) in the `deploy` image
+# because Datadog [only provides
+# information](https://docs.datadoghq.com/agent/basic_agent_usage/heroku/#using-heroku-with-docker-images)
+# to create an image using this system.
 #
-# Compiler image
+# Because of the `deploy` image uses and the Erlang binaries are generated
+# using the `build` image, the `build` image used to build a release of the
+# application needs to be Ubuntu based as well.
 #
 
-FROM elixir:1.10-slim as builder
+###################################
+########## BUILD IMAGE ############
+###################################
 
-WORKDIR /app
+FROM elixir:1.10-slim AS build
 
-ARG MIX_ENV=prod
+# install build dependencies
 
-RUN \
-  mix local.hex --force \
-  && mix local.rebar --force \
-  && mix hex.info
+# uncomment to build with `elixir:1.10-alpine`
+#RUN apk add --no-cache build-base npm git python
+#RUN apk add --no-cache gmp ncurses-libs
 
-COPY config ./
-COPY deps ./
+RUN apt-get -qq update
+RUN apt-get -qqy install \
+  git \
+  curl \
+  build-essential \
+  libssl1.1 \
+  libssl-dev \
+  inotify-tools
+
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -y nodejs
+
+# prepare build dir
+WORKDIR /tmp
+
+# install hex + rebar
+RUN mix local.hex --force && \
+    mix local.rebar --force
+
+# set build ENV
+ENV MIX_ENV=prod
+
+# install mix dependencies
 COPY mix.exs mix.lock ./
+COPY apps/smokex_web/mix.exs ./apps/smokex_web/
+COPY apps/smokex/mix.exs ./apps/smokex/
+COPY apps/smokex_client/mix.exs ./apps/smokex_client/
+COPY config config
+RUN mix do deps.get, deps.compile
 
-RUN mix deps.get
-RUN mix deps.compile
+# build assets
+COPY ./apps/smokex_web/priv/ ./apps/smokex_web/priv/
+COPY ./apps/smokex_web/assets/ ./apps/smokex_web/assets/
 
-COPY ./ ./
+RUN npm install --prefix=./apps/smokex_web/assets --progress=false --no-audit --loglevel=error
+RUN npm run --prefix=./apps/smokex_web/assets deploy
 
-COPY --from=asset-builder /app/apps/smokex_web/priv/static/ ./apps/smokex_web/priv/static/
+RUN mix phx.digest
 
+COPY apps apps
+
+RUN mix compile
 RUN mix release smokex
 
-#
-# Deployment image
-#
+###################################
+####### DEPLOYMENT IMAGE ##########
+###################################
 
-FROM elixir:1.10-slim
+FROM elixir:1.10-slim as deploy
+#FROM datadog/agent:7 as deploy
 
-#
-########## DATADOG AGENT
-#
-
+########## DATADOG AGENT ####################
 # Install GPG dependencies
 RUN apt-get update \
  && apt-get install -y gpg apt-transport-https gpg-agent curl ca-certificates
@@ -66,22 +87,17 @@ RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 A2923DFF56
 # Install the Datadog agent
 RUN apt-get update && apt-get -y --force-yes install --reinstall datadog-agent
 
-# Copy entrypoint
-COPY ./docker-entrypoint.sh /
-
 # Expose DogStatsD and trace-agent ports
 EXPOSE 8125/udp 8126/tcp
 
 # Copy your Datadog configuration
 COPY datadog-config/ /etc/datadog-agent/
-
-##############
-
-ARG MIX_ENV=prod
+########## DATADOG AGENT ####################
 
 WORKDIR /app
 
-COPY --from=builder /app/_build/${MIX_ENV}/rel/smokex/ ./
+COPY --from=build /tmp/_build/prod/rel/smokex/ ./
+COPY ./docker-entrypoint.sh /
 
 EXPOSE 4000
 
