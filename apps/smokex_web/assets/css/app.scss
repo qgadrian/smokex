@@ -46,6 +46,22 @@ main#main-content {
   padding-bottom: 4rem;    /* Footer height */
 }
 
+// hero section #show.htmol.leex
+
+div.hero-container {
+  display: flex;
+  align-items: center;
+  @include until($tablet) {
+    text-align: center;
+    flex-direction: column;
+  }
+}
+
+img.hero-image {
+  width: 50%;
+  object-fit: contain;
+}
+
 // rest
 .hover-cursor:hover {
  cursor: pointer;
@@ -67,20 +83,6 @@ main#main-content {
 
 table.is-hoverable > tbody > tr.is-not-hoverable:hover {
   background-color: transparent!important;
-}
-
-img.landing {
-  width: 600px;
-
-  &.logo {
-    max-width: 100%;
-    display: block;
-    margin: auto;
-  }
-
-  &.bottom {
-    width: 400px;
-  }
 }
 
 .hidden {
