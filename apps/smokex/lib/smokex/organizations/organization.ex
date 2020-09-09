@@ -39,6 +39,7 @@ defmodule Smokex.Organizations.Organization do
     struct
     |> Ecto.Changeset.cast(attrs, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
+    |> Ecto.Changeset.validate_length(:users, min: 1)
     |> Ecto.Changeset.put_assoc(:users, users)
   end
 end
