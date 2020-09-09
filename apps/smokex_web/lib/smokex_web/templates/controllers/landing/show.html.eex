@@ -1,25 +1,27 @@
-<section class="section">
-  <div class="container has-text-centered pb-6">
-    <div class="container has-text-centered pb-6">
-      <div class="content is-large">
-        <h2 class="title">Life it too short, smoke it</h2>
-        <p>Create trust in the development
+<section class="section hero">
+  <div class="hero-container container">
+    <div class="content is-large">
+      <h1 class="title">Life is too short, smoke it</h1>
+      <p class="mb-5">
+        Create trust in the development
         and release of you applications, so you
         can spend effort on what it is really
-        is important. <span class="is-hidden-mobile">With Smokex you can
+        is important.
+        <span class="is-hidden-mobile">
+          With Smokex you can
           automate your HTTP requests and create smoke tests to help in your
-          development.</span></p>
-        <%= live_patch "Lets get started!", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show),
-class: "button is-primary is-large mt-6" %>
-      </div>
+          development.
+        </span>
+      </p>
+      <%= live_patch "Lets get started!", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show),
+          class: "button is-primary is-large" %>
     </div>
-
-    <img src="<%= Routes.static_path(@conn, "/images/landing.png") %>"
-         class="landing" alt="Landing image"/>
+    <img src="<%= Routes.static_path(@conn, "/images/landing.png") %>" class="hero-image" alt="Landing image"/>
   </div>
 
-  <hr class="my-6">
-
+</section>
+<hr class="my-6">
+<section>
   <div class="container pb-6">
     <h2 class="title has-text-centered mb-6">Some of our awesome...</h2>
     <div class="columns is-multiline">
