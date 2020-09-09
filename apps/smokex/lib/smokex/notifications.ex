@@ -11,6 +11,7 @@ defmodule Smokex.Notifications do
 
   alias Smokex.Integrations.Slack, as: SlackHelper
   alias Smokex.Integrations.Slack.SlackUserIntegration
+  alias Smokex.Integrations.Slack.SlackIntegrationPreferences
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
   alias Smokex.Users.User
@@ -45,10 +46,9 @@ defmodule Smokex.Notifications do
   end
 
   @spec do_maybe_notify_slack(SlackUserIntegration.t(), PlanExecution.t()) :: :ok
-  defp do_maybe_notify_slack(nil, _), do: :ok
-
   defp do_maybe_notify_slack(
-         %SlackUserIntegration{} = slack_integration,
+         %SlackUserIntegration{options: %SlackIntegrationPreferences{post_on_run: true}} =
+           slack_integration,
          %PlanExecution{
            id: plan_execution_id,
            user: user,
@@ -85,7 +85,8 @@ defmodule Smokex.Notifications do
   end
 
   defp do_maybe_notify_slack(
-         %SlackUserIntegration{} = slack_integration,
+         %SlackUserIntegration{options: %SlackIntegrationPreferences{post_on_fail: true}} =
+           slack_integration,
          %PlanExecution{
            id: plan_execution_id,
            user: user,
@@ -122,7 +123,8 @@ defmodule Smokex.Notifications do
   end
 
   defp do_maybe_notify_slack(
-         %SlackUserIntegration{} = slack_integration,
+         %SlackUserIntegration{options: %SlackIntegrationPreferences{post_on_success: true}} =
+           slack_integration,
          %PlanExecution{
            id: plan_execution_id,
            user: user,
@@ -157,6 +159,8 @@ defmodule Smokex.Notifications do
       }
     )
   end
+
+  defp do_maybe_notify_slack(_, _), do: :ok
 
   @spec plan_execution_url(PlanExecution.t()) :: String.t()
   defp plan_execution_url(%PlanExecution{id: plan_execution_id}),

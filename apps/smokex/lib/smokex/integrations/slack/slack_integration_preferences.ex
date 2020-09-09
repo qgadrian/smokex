@@ -7,11 +7,12 @@ defmodule Smokex.Integrations.Slack.SlackIntegrationPreferences do
 
   @type t :: %__MODULE__{
           post_to_channel: String.t(),
+          post_on_run: boolean,
           post_on_success: boolean,
           post_on_fail: boolean
         }
 
-  @required_fields [:post_on_success, :post_on_fail]
+  @required_fields [:post_on_success, :post_on_fail, :post_on_run]
   @optional_fields [:post_to_channel]
 
   @schema_fields @required_fields ++ @optional_fields
@@ -20,6 +21,7 @@ defmodule Smokex.Integrations.Slack.SlackIntegrationPreferences do
   embedded_schema do
     field :post_to_channel, :string, default: ""
     field :post_on_success, :boolean, default: false
+    field :post_on_run, :boolean, default: false
     field :post_on_fail, :boolean, default: true
   end
 
