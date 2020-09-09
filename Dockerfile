@@ -2,6 +2,9 @@
 # The following Docker file provides an image with a release application in a
 # production ready environment.
 #
+# This image is based on the [_official image_ from
+# Phoenix](https://hexdocs.pm/phoenix/releases.html#containers).
+#
 # We are using a Ubuntu base image (elixir:X.XX-slim) in the `deploy` image
 # because Datadog [only provides
 # information](https://docs.datadoghq.com/agent/basic_agent_usage/heroku/#using-heroku-with-docker-images)

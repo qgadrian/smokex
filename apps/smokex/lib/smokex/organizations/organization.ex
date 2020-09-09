@@ -1,8 +1,23 @@
 defmodule Smokex.Organizations.Organization do
+  @moduledoc """
+  This module represents a `organization`.
+
+  A `organization` contains one or more members.
+
+  A premium access subscription it's at the organization level, so all the
+  member inside a organization will have the same premium access.
+  """
+
   use Ecto.Schema
 
   alias Smokex.Users.User
   alias Smokex.Organizations.OrganizationsUsers
+
+  @type t :: %__MODULE__{
+          name: String.t(),
+          subscription_expires_at: DateTime.t(),
+          users: list(User.t())
+        }
 
   @required_fields [:name]
   @optional_fields [:subscription_expires_at]
