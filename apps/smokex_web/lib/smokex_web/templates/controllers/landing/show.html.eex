@@ -13,8 +13,7 @@
           development.
         </span>
       </p>
-      <%= live_patch "Lets get started!", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show),
-          class: "button is-primary is-large" %>
+      <%= live_patch "Sign up for free", to: Routes.live_path(@conn, SmokexWeb.MyAccountLive.Show), class: "button is-primary" %>
     </div>
     <img src="<%= Routes.static_path(@conn, "/images/landing.png") %>" class="hero-image" alt="Landing image"/>
   </div>
@@ -56,9 +55,10 @@
   </div>
 </section>
 
-  <div class="container has-text-centered">
-    <%= live_patch "Create my account 🙌", to: Routes.live_path(@conn, SmokexWeb.MyAccountLive.Show), class: "button is-primary is-large" %>
-    </div>
+<div class="container has-text-centered">
+  <%= live_patch "Learn more about Smokex", to: Routes.live_path(@conn, SmokexWeb.DocumentationLive.Show),
+      class: "button is-primary is-outlined" %>
+</div>
 
 <section class="section">
   <div class="container has-text-centered pb-6">
@@ -99,7 +99,7 @@
         <h2 class="title is-spaced">First steps</h2>
         <p class="subtitle">Starting with Smokex is really easy! We've designed a simple, efficient process for companies to create smoke test plans.</p>
 
-        <%= live_patch "Here's how it works!", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "button is-primary" %>
+        <%= live_patch "Here's how it works!", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "button is-primary is-outlined" %>
       </div>
       <div class="column">
         <img class="landing bottom" src="<%= Routes.static_path(@conn, "/images/landing-bottom.png") %>" alt="">
