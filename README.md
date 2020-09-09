@@ -102,7 +102,14 @@ run a release:
 SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5 DATABASE_HOSTNAME=postgres-free-tier-1.gigalixir.com DATABASE_USERNAME=test DATABASE_PASSWORD=test DATABASE_NAME=test PORT=4000 POOL_SIZE=1 DATABASE_URL="" STRIPE_API_KEY="" STRIPE_SIGNING_SECRET="" _build/prod/rel/smokex/bin/smokex start_iex
 ```
 
-## Why?
+### Need to know
+
+* The Stripe button to buy a subscription requires environment variables to be
+    configured or it will throw the `unexpected item shape` error if not.
+
+## Random storm ideas & stuff
+
+### Why this product?
 
 * Not everybody has CI pipelines
 * You don't want to mix CI executions with smoke testing
