@@ -15,9 +15,9 @@
       <header>
         <nav class="navbar" role="navigation">
           <div class="navbar-brand">
-            <a href="/" class="navbar-brand">
-              <img src="<%= Routes.static_path(@conn, "/images/smokex_logo.png") %>"
-                  class="navbar-item logo" width="170" height="60" alt="Smokex Logo"/>
+            <a href="/" class="navbar-item">
+              <img src="<%= Routes.static_path(@conn, "/images/icon.svg") %>" alt="Smokex Logo"/>
+              <p>Smokex</p>
             </a>
 
             <a id="navbarBurger" role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarDropdown">
@@ -29,9 +29,6 @@
 
           <div id="navbarDropdown" class="navbar-menu">
             <div class="navbar-start">
-              <div class="navbar-item">
-                <a class="button is-primary" target="_blank" href="https://airtable.com/shrHMbYacikW8eGFI">Feedback 🙌<a>
-              </div>
               <%= if Pow.Plug.current_user(@conn) do %>
                 <%= live_patch "Statistics", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
                   class: "navbar-item" %>
@@ -57,16 +54,17 @@
 
             <div class="navbar-end">
               <div class="navbar-item">
+                <a class="button is-primary" target="_blank" href="https://airtable.com/shrHMbYacikW8eGFI">Feedback 🙌<a>
+              </div>
+              <div class="navbar-item">
                 <%= if Pow.Plug.current_user(@conn) do %>
                   <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete),
                     method: :delete, class: "button is-light" %>
                 <% else %>
                   <div class="buttons">
-                    <%= link "Sign in", class: "button is-light",
-                      to: Routes.pow_session_path(@conn, :new) %>
+                    <%= link "Sign in", class: "button is-white", to: Routes.pow_session_path(@conn, :new) %>
 
-                    <%= link "Sign up", class: "button is-primary",
-                      to: Routes.pow_registration_path(@conn, :new) %>
+                    <%= link "Sign up", class: "button", to: Routes.pow_registration_path(@conn, :new) %>
                   </div>
                 <% end %>
               </div>
