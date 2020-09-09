@@ -34,6 +34,15 @@
               <div class="field">
                 <div class="control">
                   <label class="label">
+                    <%= checkbox f, :post_on_run, class: "checkbox" %>
+                    Post when a execution has started
+                  </label>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="control">
+                  <label class="label">
                     <%= checkbox f, :post_on_success, class: "checkbox" %>
                     Post when a execution is success
                   </label>
