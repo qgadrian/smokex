@@ -1,26 +1,26 @@
-defmodule Smokex.Integrations.Slack.SlackUserIntegration do
+defmodule Smokex.Integrations.Slack.SlackIntegration do
   use Ecto.Schema
 
-  alias Smokex.Users.User
+  alias Smokex.Organizations.Organization
   alias Smokex.Integrations.Slack.SlackIntegrationPreferences
 
   @schema_fields [:token, :user_id]
 
   @typedoc """
-  A Slack Oauth2 token associated to a user.
+  A Slack Oauth2 token associated to a organization.
   """
   @type t :: %__MODULE__{
           token: String.t(),
-          user_id: number,
+          organization_id: number,
           options: SlackIntegrationPreferences.t()
         }
 
-  schema "slack_users_integrations" do
+  schema "slack_integrations" do
     field(:token, :string, null: false)
 
     embeds_one(:options, SlackIntegrationPreferences, on_replace: :update)
 
-    belongs_to(:user, User)
+    belongs_to(:organization, Organization)
 
     timestamps()
   end
@@ -33,11 +33,11 @@ defmodule Smokex.Integrations.Slack.SlackUserIntegration do
     params = Map.put_new(params, :options, %{post_to_channel: ""})
 
     changeset
-    |> Smokex.Repo.preload(:user)
+    |> Smokex.Repo.preload(:organization)
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@schema_fields)
     |> Ecto.Changeset.cast_embed(:options, required: true)
-    |> Ecto.Changeset.cast_assoc(:user)
-    |> Ecto.Changeset.assoc_constraint(:user)
+    |> Ecto.Changeset.cast_assoc(:organization)
+    |> Ecto.Changeset.assoc_constraint(:organization)
   end
 end
