@@ -1,6 +1,14 @@
 defmodule Smokex.Users do
-  # For overridable functions see:
-  # https://github.com/danschultzer/pow/blob/master/lib/pow/ecto/context.ex
+  @moduledoc """
+  This module provides context functions to interact with users.
+
+  This module uses `Pow.Ecto.Context` to override the default behaviour of the
+  default functions.
+
+  > For a list of all overridable functions see:
+  > https://github.com/danschultzer/pow/blob/master/lib/pow/ecto/context.ex
+  """
+
   use Pow.Ecto.Context,
     repo: Smokex.Repo,
     user: Smokex.Users.User
@@ -9,10 +17,14 @@ defmodule Smokex.Users do
   alias Smokex.Organizations
   alias SmokexWeb.Telemetry.Reporter, as: TelemetryReporter
 
+  @doc """
+  Creates a new user in the database and a new organization associated to it.
+  """
   @spec create(map) :: {:ok, User.t()} | {:error, term}
   def create(params) do
+    # TODO use `Ecto.Multi`
     with {:ok, %User{} = user} = result <- pow_create(params) do
-      Organizations.create("organization_#{user.id}", user)
+      {:ok, _organization} = Organizations.create("organization_#{user.id}", user)
 
       TelemetryReporter.execute([:user], %{new: 1}, %{id: user.id})
 
@@ -20,32 +32,6 @@ defmodule Smokex.Users do
     else
       error -> error
     end
-  end
-
-  @doc """
-  Gets a user by the given fields.
-
-  If no user is found, returns `nil`.
-  """
-  @spec get_by(keyword) :: User.t()
-  def get_by(params) do
-    Smokex.Repo.get_by(User, params)
-  end
-
-  @doc """
-  Updates a user.
-
-  ## Examples
-      iex> update(user, %{stripe_id: "test"})
-      {:ok, %User{}}
-      iex> update(user, %{stripe_id: 1234})
-      {:error, %Ecto.Changeset{}}
-  """
-  @spec update(User.t(), map) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
-  def update(%User{} = user, params) do
-    user
-    |> User.update_changeset(params)
-    |> Smokex.Repo.update()
   end
 
   @doc """
