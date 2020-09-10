@@ -1,3 +1,5 @@
+# TODO refactor to Smokex.PlanDefinitions.PlanDefinition
+# TODO same with PlanExecution and others
 defmodule Smokex.PlanDefinition do
   @moduledoc """
   This module represents a plan definition.
