@@ -1,4 +1,4 @@
-<main id="main-content" role="main" class="container is-fluid">
+<div>
   <p class="notification is-info" role="alert"
     phx-click="lv:clear-flash"
     phx-value-key="info"><%= get_flash(@conn, :info) %></p>
@@ -8,4 +8,4 @@
     phx-value-key="error"><%= get_flash(@conn, :error) %></p>
 
   <%= @inner_content %>
-</main>
+</div>
