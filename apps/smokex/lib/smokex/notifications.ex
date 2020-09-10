@@ -37,12 +37,13 @@ defmodule Smokex.Notifications do
 
   @spec maybe_notify_slack(PlanExecution.t()) :: :ok
   defp maybe_notify_slack(%PlanExecution{} = plan_execution) do
-    %PlanExecution{plan_definition: %PlanDefinition{users: [user]}} =
-      plan_execution = Smokex.Repo.preload(plan_execution, plan_definition: :users)
+    %PlanExecution{plan_definition: %PlanDefinition{organization: organization}} =
+      plan_execution = Smokex.Repo.preload(plan_execution, plan_definition: :organization)
 
-    %User{slack_integration: slack_integration} = Smokex.Repo.preload(user, :slack_integration)
-
-    do_maybe_notify_slack(slack_integration, plan_execution)
+    with {:ok, %SlackIntegration{} = slack_integration} <-
+           SlackHelper.get_integration(organization) do
+      do_maybe_notify_slack(slack_integration, plan_execution)
+    end
   end
 
   @spec do_maybe_notify_slack(SlackIntegration.t(), PlanExecution.t()) :: :ok

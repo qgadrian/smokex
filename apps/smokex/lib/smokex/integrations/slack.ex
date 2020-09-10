@@ -6,47 +6,63 @@ defmodule Smokex.Integrations.Slack do
   require Logger
 
   alias Smokex.Integrations.Slack.SlackIntegrationPreferences
-  alias Smokex.Integrations.Slack.SlackUserIntegration
+  alias Smokex.Integrations.Slack.SlackIntegration
   alias Smokex.Repo
-  alias Smokex.Users.User
+  alias Smokex.Organizations.Organization
 
   @doc """
   Adds a Slack token to a user.
 
   This function raises an error if the user already has a token configured.
 
-  # TODO if the token is present delete and create a new entry instead of
+  # TODO if the token is present delete it and create a new entry instead of
   # failing
   """
-  @spec add_user_token(user_id :: number, token :: String.t()) ::
-          {:ok, SlackUserIntegration.t()} | {:error, Ecto.Changeset.t()}
-  def add_user_token(user_id, token) do
-    %SlackUserIntegration{}
-    |> SlackUserIntegration.create_changeset(%{user_id: user_id, token: token})
+  @spec insert_token(organization_id :: number, token :: String.t()) ::
+          {:ok, SlackIntegration.t()} | {:error, Ecto.Changeset.t()}
+  def insert_token(organization_id, token) do
+    %SlackIntegration{}
+    |> SlackIntegration.create_changeset(%{organization_id: organization_id, token: token})
     |> Repo.insert()
   end
 
   @doc """
-  Deletes a user Slack the integration.
+  Deletes a organization Slack the integration.
 
-  This function also calls Slack to revoke the token.
+  This function also calls Slack to revoke the token. Notice this actions is
+  not transaction and deleting an integration does not assure the token has
+  being revoked from the Slack servers.
   """
-  @spec(remove_integration(User.t()) :: :ok, :error)
-  def remove_integration(%User{} = user) do
-    %User{
-      slack_integration:
-        %SlackUserIntegration{
-          token: slack_integration_token
-        } = slack_integration
-    } = Smokex.Repo.preload(user, :slack_integration)
-
-    with {:ok, _slack_integration} <- Smokex.Repo.delete(slack_integration),
+  @spec(remove_integration(Organization.t()) :: :ok, :error)
+  def remove_integration(%Organization{} = organization) do
+    with {:ok, %SlackIntegration{token: slack_integration_token} = slack_integration} <-
+           get_integration(organization),
+         {:ok, _slack_integration} <- Smokex.Repo.delete(slack_integration),
          _ <- Slack.Web.Auth.revoke(%{token: slack_integration_token}) do
       :ok
     else
       error ->
         Logger.error(inspect(error))
         :error
+    end
+  end
+
+  @doc """
+  Returns the Slack integration for an organization.
+
+  If there is no Slack integration configured for the organization, an error is
+  returned.
+  """
+  @spec get_integration(Organization.t()) :: {:ok, SlackIntegration.t()} | {:error, term}
+  def get_integration(%Organization{} = organization) do
+    organization
+    |> Smokex.Repo.preload(:slack_integration)
+    |> case do
+      %Organization{slack_integration: %SlackIntegration{} = slack_integration} ->
+        {:ok, slack_integration}
+
+      %Organization{slack_integration: nil} ->
+        {:error, "no Slack integration configured"}
     end
   end
 
@@ -92,11 +108,11 @@ defmodule Smokex.Integrations.Slack do
   @doc """
   Updates a Slack integration preferences.
   """
-  @spec update_preferences(User.t(), preferences_attrs :: map) ::
-          {:ok, SlackUserIntegration.t()} | {:error, Ecto.Changeset.t()}
-  def update_preferences(%User{} = user, preferences_attrs) when is_map(preferences_attrs) do
-    %User{slack_integration: %SlackUserIntegration{} = slack_integration} =
-      Smokex.Repo.preload(user, :slack_integration)
+  @spec update_preferences(Organization.t(), preferences_attrs :: map) ::
+          {:ok, SlackIntegration.t()} | {:error, Ecto.Changeset.t()}
+  def update_preferences(%Organization{} = organization, preferences_attrs)
+      when is_map(preferences_attrs) do
+    {:ok, %SlackIntegration{} = slack_integration} = get_integration(organization)
 
     slack_integration
     |> SlackIntegration.create_changeset(%{options: preferences_attrs})

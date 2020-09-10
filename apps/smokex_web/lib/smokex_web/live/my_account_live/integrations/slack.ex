@@ -4,7 +4,9 @@ defmodule SmokexWeb.MyAccountLive.Integrations.Slack do
   alias Phoenix.LiveView.Socket
   alias SmokexWeb.MyAccountLive.Components.SideMenu
   alias Smokex.Users.User
-  alias Smokex.Integrations.Slack.SlackUserIntegration
+  alias Smokex.Organizations
+  alias Smokex.Organizations.Organization
+  alias Smokex.Integrations.Slack.SlackIntegration
   alias Smokex.Integrations.Slack.SlackIntegrationPreferences
   alias Smokex.Integrations.Slack
 
@@ -12,7 +14,7 @@ defmodule SmokexWeb.MyAccountLive.Integrations.Slack do
   def mount(_params, session, socket) do
     socket =
       socket
-      |> SessionHelper.assign_user!(session, preload: :slack_integration)
+      |> SessionHelper.assign_user!(session, preload: :organizations)
       |> assign(:session, session)
       |> maybe_fetch_options()
 
@@ -30,11 +32,12 @@ defmodule SmokexWeb.MyAccountLive.Integrations.Slack do
         %{"slack_integration_preferences" => preferences_attrs},
         %Socket{assigns: %{current_user: current_user}} = socket
       ) do
-    case Slack.update_preferences(current_user, preferences_attrs) do
-      {:ok, %SlackUserIntegration{options: preferences}} ->
-        changeset = Ecto.Changeset.change(preferences)
-        {:noreply, assign(socket, changeset: changeset)}
-
+    with {:ok, %Organization{} = organization} <- Organizations.get_organization(current_user),
+         {:ok, %SlackIntegration{options: preferences}} <-
+           Slack.update_preferences(organization, preferences_attrs) do
+      changeset = Ecto.Changeset.change(preferences)
+      {:noreply, assign(socket, changeset: changeset)}
+    else
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
@@ -46,12 +49,12 @@ defmodule SmokexWeb.MyAccountLive.Integrations.Slack do
         _params,
         %Socket{assigns: %{current_user: current_user, session: session}} = socket
       ) do
-    case Slack.remove_integration(current_user) do
-      :ok ->
-        socket = SessionHelper.reload_user(socket, session, preload: :slack_integration)
+    with {:ok, %Organization{} = organization} <- Organizations.get_organization(current_user),
+         :ok <- Slack.remove_integration(current_user) do
+      socket = SessionHelper.reload_user(socket, session, preload: :slack_integration)
 
-        {:noreply, socket}
-
+      {:noreply, socket}
+    else
       :error ->
         socket =
           put_flash(
@@ -72,20 +75,26 @@ defmodule SmokexWeb.MyAccountLive.Integrations.Slack do
          %Socket{
            assigns: %{
              current_user: %User{
-               slack_integration: %SlackUserIntegration{
-                 options: %SlackIntegrationPreferences{} = preferences
-               }
+               organizations: [%Organization{} = organization]
              }
            }
          } = socket
        ) do
-    changeset = Ecto.Changeset.change(preferences)
-    assign(socket, changeset: changeset)
+    with {:ok, %SlackIntegration{options: preferences}} <- Slack.get_integration(organization) do
+      changeset = Ecto.Changeset.change(preferences)
+      assign(socket, changeset: changeset)
+    else
+      _ -> socket
+    end
   end
 
-  defp maybe_fetch_options(
-         %Socket{assigns: %{current_user: %User{slack_integration: nil}}} = socket
-       ) do
-    socket
+  @spec user_organization_has_slack_integration?(User.t()) :: boolean
+  defp user_organization_has_slack_integration?(%User{} = user) do
+    with {:ok, %Organization{} = organization} <- Organizations.get_organization(user),
+         {:ok, %SlackIntegration{}} <- Slack.get_integration(organization) do
+      true
+    else
+      _ -> false
+    end
   end
 end

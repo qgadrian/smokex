@@ -4,7 +4,7 @@
   <div class="columns">
     <%= live_component @socket, SideMenu %>
 
-    <%= if @current_user.slack_integration == nil do %>
+    <%= unless user_organization_has_slack_integration?(@current_user) do %>
       <div class="column">
         <div class="box">
           <div class="column has-text-centered">

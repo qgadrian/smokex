@@ -4,7 +4,7 @@ defmodule Smokex.Integrations.Slack.SlackIntegration do
   alias Smokex.Organizations.Organization
   alias Smokex.Integrations.Slack.SlackIntegrationPreferences
 
-  @schema_fields [:token, :user_id]
+  @schema_fields [:token, :organization_id]
 
   @typedoc """
   A Slack Oauth2 token associated to a organization.
