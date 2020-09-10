@@ -57,6 +57,7 @@ defmodule Smokex.PlanExecution do
     field(:started_at, :naive_datetime, null: true)
     field(:finished_at, :naive_datetime, null: true)
 
+    # TODO rename user to `trigger_by_user`
     belongs_to(:user, User)
     belongs_to(:plan_definition, PlanDefinition)
 

@@ -11,6 +11,7 @@ defmodule Smokex.Organizations.Organization do
   use Ecto.Schema
 
   alias Smokex.Users.User
+  alias Smokex.PlanDefinition
   alias Smokex.Organizations.OrganizationsUsers
 
   @type t :: %__MODULE__{
@@ -29,6 +30,8 @@ defmodule Smokex.Organizations.Organization do
     field(:subscription_expires_at, :utc_datetime, null: true)
 
     many_to_many(:users, User, join_through: OrganizationsUsers)
+
+    has_many(:plans_definitions, PlanDefinition)
 
     timestamps()
   end

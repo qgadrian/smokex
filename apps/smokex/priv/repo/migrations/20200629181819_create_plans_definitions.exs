@@ -7,6 +7,8 @@ defmodule Smokex.Repo.Migrations.CreatePlansDefinitions do
       add(:description, :string, null: true)
       add(:cron_sentence, :string, null: true)
       add(:content, :text, null: false)
+      add(:author_id, references(:users), null: false)
+      add(:organization_id, references(:organizations), null: false)
 
       timestamps()
     end

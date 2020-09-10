@@ -23,6 +23,7 @@ defmodule Smokex.PlanDefinition do
 
   alias Smokex.PlanExecution
   alias Smokex.Users.User
+  alias Smokex.Organizations.Organization
 
   @required_fields [:name, :content]
   @optional_fields [:description, :cron_sentence]
@@ -35,7 +36,8 @@ defmodule Smokex.PlanDefinition do
     field(:cron_sentence, :string, null: true)
     field(:content, :string, null: false)
 
-    many_to_many(:users, User, join_through: Smokex.PlansDefinitionsUsers)
+    belongs_to(:author, User)
+    belongs_to(:organization, Organization)
 
     has_many(:executions, PlanExecution)
 
@@ -43,10 +45,14 @@ defmodule Smokex.PlanDefinition do
   end
 
   def create_changeset(changeset, params \\ %{}) do
+    author = Map.get(params, :author) || Map.get(params, "author")
+    organization = Map.get(params, :organization) || Map.get(params, "organization")
+
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
-    |> Ecto.Changeset.put_assoc(:users, Map.get(params, :users) || Map.get(params, "users"))
+    |> Ecto.Changeset.put_assoc(:author, author)
+    |> Ecto.Changeset.put_assoc(:organization, organization)
     |> validate_cron_expression()
     |> validate_content()
   end

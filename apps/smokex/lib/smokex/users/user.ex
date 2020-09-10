@@ -8,6 +8,9 @@ defmodule Smokex.Users.User do
   use Pow.Extension.Ecto.Schema, extensions: [PowResetPassword, PowEmailConfirmation]
 
   alias Smokex.Integrations.Slack.SlackUserIntegration
+  alias Smokex.PlanDefinition
+  alias Smokex.Organizations.Organization
+  alias Smokex.Organizations.OrganizationsUsers
 
   @optional_fields [:subscription_expires_at]
 
@@ -19,6 +22,11 @@ defmodule Smokex.Users.User do
     pow_user_fields()
 
     has_one(:slack_integration, SlackUserIntegration)
+
+    has_many(:plans_definitions, PlanDefinition, foreign_key: :author_id)
+
+    # has_many(:organization, Organization)
+    many_to_many(:organizations, Organization, join_through: OrganizationsUsers)
 
     timestamps()
   end
