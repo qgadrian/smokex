@@ -10,7 +10,7 @@ defmodule Smokex.Notifications do
   require Logger
 
   alias Smokex.Integrations.Slack, as: SlackHelper
-  alias Smokex.Integrations.Slack.SlackUserIntegration
+  alias Smokex.Integrations.Slack.SlackIntegration
   alias Smokex.Integrations.Slack.SlackIntegrationPreferences
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
@@ -45,12 +45,11 @@ defmodule Smokex.Notifications do
     do_maybe_notify_slack(slack_integration, plan_execution)
   end
 
-  @spec do_maybe_notify_slack(SlackUserIntegration.t(), PlanExecution.t()) :: :ok
+  @spec do_maybe_notify_slack(SlackIntegration.t(), PlanExecution.t()) :: :ok
   defp do_maybe_notify_slack(
-         %SlackUserIntegration{options: %SlackIntegrationPreferences{post_on_run: true}} =
+         %SlackIntegration{options: %SlackIntegrationPreferences{post_on_run: true}} =
            slack_integration,
          %PlanExecution{
-           id: plan_execution_id,
            user: user,
            status: :running,
            started_at: started_at
@@ -85,11 +84,9 @@ defmodule Smokex.Notifications do
   end
 
   defp do_maybe_notify_slack(
-         %SlackUserIntegration{options: %SlackIntegrationPreferences{post_on_fail: true}} =
+         %SlackIntegration{options: %SlackIntegrationPreferences{post_on_fail: true}} =
            slack_integration,
          %PlanExecution{
-           id: plan_execution_id,
-           user: user,
            status: :halted,
            started_at: started_at,
            finished_at: finished_at
@@ -123,17 +120,15 @@ defmodule Smokex.Notifications do
   end
 
   defp do_maybe_notify_slack(
-         %SlackUserIntegration{options: %SlackIntegrationPreferences{post_on_success: true}} =
+         %SlackIntegration{options: %SlackIntegrationPreferences{post_on_success: true}} =
            slack_integration,
          %PlanExecution{
-           id: plan_execution_id,
-           user: user,
            status: :finished,
            started_at: started_at,
            finished_at: finished_at
          } = plan_execution
        ) do
-    plan_execution_url = "https://smokex.io/executions/#{plan_execution_id}"
+    plan_execution_url = plan_execution_url(plan_execution)
 
     SlackHelper.post_message(
       slack_integration,

@@ -61,9 +61,9 @@ defmodule Smokex.Integrations.Slack do
   """
   def post_message(_slack_user_integration, _message, _opts \\ %{})
 
-  @spec post_message(SlackUserIntegration.t(), message :: String.t()) :: :ok
+  @spec post_message(SlackIntegration.t(), message :: String.t()) :: :ok
   def post_message(
-        %SlackUserIntegration{options: %SlackIntegrationPreferences{post_to_channel: ""}},
+        %SlackIntegration{options: %SlackIntegrationPreferences{post_to_channel: ""}},
         _message,
         _opts
       ) do
@@ -72,7 +72,7 @@ defmodule Smokex.Integrations.Slack do
   end
 
   def post_message(
-        %SlackUserIntegration{
+        %SlackIntegration{
           token: token,
           options: %SlackIntegrationPreferences{post_to_channel: channel}
         },
@@ -99,7 +99,7 @@ defmodule Smokex.Integrations.Slack do
       Smokex.Repo.preload(user, :slack_integration)
 
     slack_integration
-    |> SlackUserIntegration.create_changeset(%{options: preferences_attrs})
+    |> SlackIntegration.create_changeset(%{options: preferences_attrs})
     |> Smokex.Repo.update()
   end
 end
