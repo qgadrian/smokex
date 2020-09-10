@@ -25,7 +25,6 @@ defmodule Smokex.Users.User do
 
     has_many(:plans_definitions, PlanDefinition, foreign_key: :author_id)
 
-    # has_many(:organization, Organization)
     many_to_many(:organizations, Organization, join_through: OrganizationsUsers)
 
     timestamps()
