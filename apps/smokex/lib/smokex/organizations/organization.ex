@@ -13,6 +13,7 @@ defmodule Smokex.Organizations.Organization do
   alias Smokex.Users.User
   alias Smokex.PlanDefinition
   alias Smokex.Organizations.OrganizationsUsers
+  alias Smokex.Integrations.Slack.SlackIntegration
 
   @type t :: %__MODULE__{
           name: String.t(),
@@ -30,6 +31,8 @@ defmodule Smokex.Organizations.Organization do
     field(:subscription_expires_at, :utc_datetime, null: true)
 
     many_to_many(:users, User, join_through: OrganizationsUsers)
+
+    has_one(:slack_integration, SlackIntegration)
 
     has_many(:plans_definitions, PlanDefinition)
 

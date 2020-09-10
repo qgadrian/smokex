@@ -1,4 +1,9 @@
 defmodule Smokex.Organizations do
+  @moduledoc """
+  Context module that provides functions to work with
+  [Organizations](`t:Smokex.Organizations.Organization.t/0`).
+  """
+
   alias Smokex.Users.User
   alias Smokex.Organizations.Organization
 
@@ -15,6 +20,28 @@ defmodule Smokex.Organizations do
     %Organization{name: name}
     |> Organization.create_changeset(%{users: [user]})
     |> Smokex.Repo.insert()
+  end
+
+  @doc """
+  Returns the organization the user belongs to.
+
+  If the user belongs to multiple or no organization at all, an error is
+  returned.
+  """
+  @spec get_organization(User.t()) :: {:ok, Organization.t()} | {:error, term}
+  def get_organization(%User{} = user) do
+    user
+    |> Smokex.Repo.preload(:organizations)
+    |> case do
+      %User{organizations: [%Organization{} = organization]} ->
+        {:ok, organization}
+
+      %User{organizations: [%Organization{} | _]} ->
+        {:error, "multiple organizations not supported yet"}
+
+      %User{organizations: nil} ->
+        {:error, "user does not belong to a organization"}
+    end
   end
 
   @doc """

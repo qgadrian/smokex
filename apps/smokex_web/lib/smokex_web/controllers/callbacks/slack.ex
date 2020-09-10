@@ -28,7 +28,10 @@ defmodule SmokexWeb.Callbacks.Slack do
   require Logger
 
   alias SmokexWeb.Tracer
+  alias Smokex.Users
   alias Smokex.Users.User
+  alias Smokex.Organizations
+  alias Smokex.Organizations.Organization
   alias Smokex.Repo
   alias Smokex.Integrations.Slack, as: SlackHelper
 
@@ -43,7 +46,7 @@ defmodule SmokexWeb.Callbacks.Slack do
     conn
     |> validate_request!()
     |> get_access_token(code)
-    |> add_user_token(user_id)
+    |> insert_token_into_user_organization(user_id)
 
     redirect(conn, to: Routes.live_path(conn, SmokexWeb.MyAccountLive.Integrations.Slack))
   end
@@ -66,12 +69,21 @@ defmodule SmokexWeb.Callbacks.Slack do
       "access_token" => access_token,
       "app_id" => "A01AC9HHX7W",
       "ok" => true
-    } = Slack.Web.Oauth.V2.access(@client_id, @client_secret, code)
+    } = Slack.Web.Oauth.V2.access(client_id, client_secret, code)
 
     access_token
   end
 
-  defp add_user_token(access_token, user_id) do
-    SlackHelper.add_user_token(user_id, access_token)
+  @spec insert_token_into_user_organization(String.t(), user_id :: integer) ::
+          {:ok, term} | {:error, term}
+  defp insert_token_into_user_organization(access_token, user_id) do
+    with %User{} = user <- Users.get_by(id: user_id),
+         {:ok, %Organization{id: organization_id}} <- Organizations.get_organization(user) do
+      SlackHelper.insert_token(organization_id, access_token)
+    else
+      error ->
+        Logger.error("Error inserting Slack token: #{inspect(error)}")
+        {:error, "error inserting Slack token"}
+    end
   end
 end

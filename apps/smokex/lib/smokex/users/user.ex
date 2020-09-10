@@ -20,8 +20,6 @@ defmodule Smokex.Users.User do
 
     pow_user_fields()
 
-    has_one(:slack_integration, SlackUserIntegration)
-
     has_many(:plans_definitions, PlanDefinition, foreign_key: :author_id)
 
     many_to_many(:organizations, Organization, join_through: OrganizationsUsers)

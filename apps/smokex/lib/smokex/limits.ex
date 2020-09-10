@@ -23,6 +23,7 @@ defmodule Smokex.Limits do
   alias Smokex.PlanExecution
   alias Smokex.PlanDefinitions
   alias Smokex.Users
+  alias Smokex.Organizations
   alias Smokex.Users.User
 
   @max_plan_definitions 2
@@ -54,17 +55,14 @@ defmodule Smokex.Limits do
 
   In order to start a new plan execution the user has to have premium access
   or meet the limited configuration.
-
-  TODO replace the `users` logic when `groups` is created
   """
   @spec can_start_execution?(PlanExecution.t()) :: boolean
   def can_start_execution?(%PlanExecution{} = plan_execution) do
-    %PlanExecution{plan_definition: %PlanDefinition{users: users} = plan_definition} =
-      Smokex.Repo.preload(plan_execution, plan_definition: :users)
+    %PlanExecution{plan_definition: %PlanDefinition{organization: organization} = plan_definition} =
+      Smokex.Repo.preload(plan_execution, plan_definition: :organization)
 
-    user_subscribed = Enum.any?(users, fn user -> Users.subscribed?(user) end)
-
-    user_subscribed || get_daily_executions(plan_definition) < @max_daily_executions
+    Organizations.subscribed?(organization) ||
+      get_daily_executions(plan_definition) < @max_daily_executions
   end
 
   @doc """
