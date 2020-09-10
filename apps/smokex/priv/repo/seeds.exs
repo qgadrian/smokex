@@ -14,27 +14,21 @@ alias Smokex.PlanExecutions.Status, as: PlanExecutionStatus
 
 # User with premium access
 {:ok, pro_user} =
-  Pow.Ecto.Context.create(
-    %{
-      email: "test@local.host",
-      password: "fgdfkgmdfkgsfmewsfsd",
-      password_confirmation: "fgdfkgmdfkgsfmewsfsd",
-      subscription_expires_at: DateTime.utc_now()
-    },
-    otp_app: :smokex_web
-  )
+  Smokex.Users.create(%{
+    email: "test@local.host",
+    password: "fgdfkgmdfkgsfmewsfsd",
+    password_confirmation: "fgdfkgmdfkgsfmewsfsd",
+    subscription_expires_at: DateTime.utc_now()
+  })
 
 # User with free access
 {:ok, free_user} =
-  Pow.Ecto.Context.create(
-    %{
-      email: "user@local.host",
-      password: "UuWN8%d*FigS",
-      password_confirmation: "UuWN8%d*FigS",
-      subscription_expires_at: nil
-    },
-    otp_app: :smokex_web
-  )
+  Smokex.Users.create(%{
+    email: "user@local.host",
+    password: "UuWN8%d*FigS",
+    password_confirmation: "UuWN8%d*FigS",
+    subscription_expires_at: nil
+  })
 
 PowEmailConfirmation.Ecto.Context.confirm_email(pro_user, %{}, otp_app: :smokex_web)
 PowEmailConfirmation.Ecto.Context.confirm_email(free_user, %{}, otp_app: :smokex_web)
@@ -54,7 +48,8 @@ for plan_definition_index <- 1..10 do
     })
 
   for _ <- 1..10 do
-    {:ok, plan_execution} = Smokex.PlanExecutions.create_plan_execution(pro_user, plan_definition)
+    {:ok, _plan_execution} =
+      Smokex.PlanExecutions.create_plan_execution(pro_user, plan_definition)
   end
 
   for _ <- 1..5 do
