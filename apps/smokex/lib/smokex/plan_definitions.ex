@@ -4,6 +4,7 @@ defmodule Smokex.PlanDefinitions do
   """
 
   alias Smokex.Users.User
+  alias Smokex.Organizations.Organization
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
   alias Smokex.PlanDefinitions.Scheduler, as: PlanDefinitionScheduler
@@ -16,7 +17,13 @@ defmodule Smokex.PlanDefinitions do
   """
   @spec create(User.t(), map) :: {:ok, PlanDefinition.t()} | {:error, term}
   def create(%User{} = user, attrs) do
-    attrs = Map.put(attrs, "users", [user])
+    %User{organizations: [%Organization{} = organization]} =
+      Smokex.Repo.preload(user, :organizations)
+
+    attrs =
+      attrs
+      |> Map.put("author", user)
+      |> Map.put("organization", organization)
 
     %PlanDefinition{}
     |> PlanDefinition.create_changeset(attrs)
@@ -48,10 +55,9 @@ defmodule Smokex.PlanDefinitions do
   @doc """
   Returns all plan definitions
   """
-  @spec all(nil) :: []
+  @spec all(nil | User.t()) :: list(PlanExecution.t())
   def all(nil), do: []
 
-  @spec all(User.t()) :: list(PlanExecution.t())
   def all(%User{id: user_id}) do
     query =
       from(plan_definition in PlanDefinition,
