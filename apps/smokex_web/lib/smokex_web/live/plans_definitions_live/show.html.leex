@@ -1,5 +1,5 @@
-<section class="section">
-  <h2 class="title"><%= @plan_definition.name %></h2>
+<div>
+  <h1 class="title"><%= @plan_definition.name %></h1>
 
   <div class="box mb-6">
     <%= form_for Ecto.Changeset.change(@plan_definition), "#", [class: "form"], fn f -> %>
@@ -62,4 +62,4 @@
         extra_class: "is-light", text: "Get my subscription" %>
     <% end %>
   </div>
-</section>
+</div>

@@ -1,6 +1,5 @@
-<section class="section">
-  <h2 class="title">Test plans</h2>
-
+<div>
+  <h1 class="title">Test plans</h1>
   <div class="box">
     <table class="table is-fullwidth">
       <thead>
@@ -31,15 +30,14 @@
         <% end %>
       </tbody>
     </table>
-
-    <div class="column has-text-centered">
-      <%= if Smokex.Limits.can_create_plan_definition?(@current_user) do %>
-        <%= live_patch "Create test plan", class: "button is-primary",
-          to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %>
-      <% else %>
-        <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user,
-          extra_class: "is-light is-medium", text: "Get my subscription" %>
-      <% end %>
-    </div>
   </div>
-</section>
+  <div class="column has-text-centered">
+    <%= if Smokex.Limits.can_create_plan_definition?(@current_user) do %>
+      <%= live_patch "Create test plan", class: "button is-primary",
+        to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %>
+    <% else %>
+      <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user,
+        extra_class: "is-light is-medium", text: "Get my subscription" %>
+    <% end %>
+  </div>
+</div>

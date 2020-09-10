@@ -5,6 +5,10 @@
 @import 'prismjs';
 @import "~bulma/bulma";
 
+html {
+  font-size: 14px;
+}
+
 // page container
 #page-container {
   position: relative;
@@ -41,8 +45,7 @@ footer {
 }
 
 // main content
-main#main-content {
-  padding-top: 20px;
+main.sx-main {
   padding-bottom: 4rem;    /* Footer height */
 }
 
