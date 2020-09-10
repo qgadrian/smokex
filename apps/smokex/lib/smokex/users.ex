@@ -15,12 +15,15 @@ defmodule Smokex.Users do
 
   alias Smokex.Users.User
   alias Smokex.Organizations
+  alias Smokex.Organizations.Organization
   alias SmokexWeb.Telemetry.Reporter, as: TelemetryReporter
+
+  @type ecto_user_result :: {:ok, map} | {:error, map}
 
   @doc """
   Creates a new user in the database and a new organization associated to it.
   """
-  @spec create(map) :: {:ok, User.t()} | {:error, term}
+  @spec create(map) :: ecto_user_result
   def create(params) do
     # TODO use `Ecto.Multi`
     with {:ok, %User{} = user} = result <- pow_create(params) do
@@ -35,23 +38,25 @@ defmodule Smokex.Users do
   end
 
   @doc """
-  Returns whether the user has an premium access to the application.
+  Returns whether the organization the user belongs to has an premium access to
+  the application.
 
-  If the user is `nil` (is unauthenticated) or not subscribed, then the
-  `free_access` config is checkd as fallback to grant access to premium
-  features.
+  If the user is `nil` (is unauthenticated), then the `free_access` config is
+  checked as fallback to grant access to premium features.
   """
   @spec subscribed?(User.t()) :: boolean
-  def subscribed?(nil) do
-    Application.get_env(:smokex, :free_access, false)
+  def subscribed?(nil), do: Application.get_env(:smokex, :free_access, false)
+
+  def subscribed?(%User{} = user) do
+    %User{organizations: [%Organization{} = organization]} =
+      Smokex.Repo.preload(user, :organizations)
+
+    Organizations.subscribed?(organization)
   end
 
-  def subscribed?(%User{subscription_expires_at: nil}) do
-    Application.get_env(:smokex, :free_access, false)
-  end
-
-  def subscribed?(%User{subscription_expires_at: subscription_expires_at}) do
-    is_free_access = Application.get_env(:smokex, :free_access, false)
+  #
+  # Private functions
+  #
 
     if is_free_access do
       true
