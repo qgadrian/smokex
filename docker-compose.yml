@@ -39,9 +39,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=postgres-smokex
+      - POSTGRES_USER=postgres
       - POSTGRES_DATABASE=postgres
-    container_name: postgres
+    container_name: postgres-smokex
     networks:
       - localhost
 
