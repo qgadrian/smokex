@@ -51,7 +51,7 @@ defmodule Smokex.Notifications do
          %SlackIntegration{options: %SlackIntegrationPreferences{post_on_run: true}} =
            slack_integration,
          %PlanExecution{
-           user: user,
+           trigger_user: user,
            status: :running,
            started_at: started_at
          } = plan_execution
