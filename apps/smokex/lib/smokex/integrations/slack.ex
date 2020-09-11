@@ -97,6 +97,8 @@ defmodule Smokex.Integrations.Slack do
       ) do
     opts = Map.merge(opts, %{token: token})
 
+    Logger.debug("Slack post to #{channel}: #{message} // #{inspect(opts)}")
+
     channel
     |> Slack.Web.Chat.post_message(message, opts)
     |> case do
