@@ -124,7 +124,22 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * Won't be coupled to any testing library and making changes transparent to the
     repo
 
-## TODO
+### Experience situations where Smokex tests were needed
+
+* Empty deployment with health check workng ok but actual endpoints were all
+    failing
+* App requires some environment variables set before start, they were available
+    on deployment so all went good. After some days the app got restarted but the
+    variables were not available anymore (were managed by a third party service),
+    entering in a crash loop and no one noticing.
+
+### Uses cases (smoke tests & HTTP automation)
+
+* Schedule a HTTP request to keep Heroku instances up.
+* Send a ping request to ensure a system is reachable.
+* Retrieve a information from currency prices and send it to your server to get update value #nocode
+
+## MVP
 
 * [x] Cancel user subscriptions (implemented, needs testing)
 * [x] Show code examples page
@@ -151,11 +166,11 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Increase timeout config to 10 seconds
 * [x] Ensure all the important metrics are properly setup
 * [ ] Fix CTA buttons when the liveview is already loaded
-* [ ] Improve the top bar links and navigation.
+* [x] Improve the top bar links and navigation.
 * [x] Improve subscription information shown
 * [x] If no current subscription in billing view show info and CTA
 
-### Post release features
+### Post release
 
 * [x] Create welcome page with introduction to Smokex
 * [ ] Mail the welcome content to registered users
@@ -165,32 +180,39 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] First SEO steps (robots, sitemap..)
 * [x] Slack notifications
 
-### New features
+### Nice to have (next prio)
 
 * [ ] Allow set custom timeout per each step
 * [ ] Add button to view plan definition from execution view
-* [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (for that, for example see https://github.com/danschultzer/pow/issues/176)
 * [ ] Delete plans
-* [ ] Measure request time per plan step and show a graph view for performance
-* [ ] Generate digest on Docker build
+* [~] Generate digest on Docker build. UPDATE: seems that not working 100%
 * [ ] Create environment variables for configurations, for example
     `apps/smokex/lib/smokex/users.ex`
 * [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
-* [ ] Create organizations model (mind some logic needs to be replaced, for
+* [x] Create organizations model (mind some logic needs to be replaced, for
     example `Limits`)
-* [ ] Provide interface or module to manage the scheduled jobs (aka `Smokex.PlanDefinitions.Scheduler.jobs`)
 * [ ] Add `finished with error` state?
-* [ ] Add the reason details of failed request. For example, a wrong
+* [ ] Add the reason details of failed request. For example, a wrong ?????
 * [ ] Add metadata plugs
 * [ ] Connect to Github and auto create a plan based on the files under `.smokex`
-* [ ] Migrate to a distributed application, so far it is a single instance
-* [ ] Allow remote console access on Heroku (see
+* [~] Allow remote console access on Heroku (see
     https://medium.com/@karmajunkie/distributed-elixir-on-heroku-59b691d9868e
-    and https://github.com/phoenixframework/phoenix/issues/2558)
-* [ ] Improve the scheduled jobs management, by either persisting them or
-    finding a better solution than using a `start_phase`
+    and https://github.com/phoenixframework/phoenix/issues/2558). UPDATE: Kid of
+    working with `docker entrypoint` but it's a new node and not connected to
+    other container
 * [ ] Proper YAML linting and format check. Ideally on the WYSIWYG editor
-* [ ] Run datadog agent with [supervisord](http://supervisord.org/)
+
+### Nice to have (very low prio)
+
+* [ ] Measure request time per plan step and show a graph view for performance
+* [ ] Migrate to a distributed application, so far it is a single instance
+* [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (for that, for example see https://github.com/danschultzer/pow/issues/176). UPDATE: low prio because of Github integration
+* [ ] Provide interface or module to manage the scheduled jobs (aka `Smokex.PlanDefinitions.Scheduler.jobs`). UPDATE: low prio since database provides some info already
+* [ ] Improve the scheduled jobs management, by either persisting them or
+    finding a better solution than using a `start_phase`. UPDATE: low prio until
+    there is more workload
+* [ ] Run datadog agent with [supervisord](http://supervisord.org/), right now
+    is a async bash process (see `docker-entrypoint.sh`)
 
 #### Distributed application
 
