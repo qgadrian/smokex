@@ -11,13 +11,9 @@ defmodule Smokex.Users.User do
   alias Smokex.Organizations.Organization
   alias Smokex.Organizations.OrganizationsUsers
 
-  @optional_fields [:subscription_expires_at]
-
-  @schema_fields @optional_fields
+  @schema_fields []
 
   schema "users" do
-    field(:subscription_expires_at, :utc_datetime)
-
     pow_user_fields()
 
     has_many(:plans_definitions, PlanDefinition, foreign_key: :author_id)
