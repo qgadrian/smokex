@@ -163,9 +163,9 @@ defmodule Smokex.Notifications do
                   "text" => %{
                     "type" => "plain_text",
                     "text" => "View execution",
-                    "style" => "danger",
                     "emoji" => true
                   },
+                  "style" => "danger",
                   "url" => "#{plan_execution_url}"
                 },
                 %{
@@ -237,9 +237,9 @@ defmodule Smokex.Notifications do
                   "text" => %{
                     "type" => "plain_text",
                     "text" => "View execution",
-                    "style" => "primary",
                     "emoji" => true
                   },
+                  "style" => "primary",
                   "url" => "#{plan_execution_url}"
                 },
                 %{
