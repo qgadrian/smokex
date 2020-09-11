@@ -1,5 +1,5 @@
 <section class="section hero">
-  <div class="hero-container container">
+  <div class="hero-container container  pt-5">
     <div class="content is-large">
       <h1 class="title">Life is too short, smoke it</h1>
       <p class="mb-5">
@@ -19,10 +19,10 @@
   </div>
 
 </section>
-<hr class="my-6">
-<section>
+<hr class="my-3">
+<section class="section">
   <div class="container pb-6">
-    <h2 class="title has-text-centered mb-6">Some of our awesome...</h2>
+    <h2 class="title mb-6">Some of our awesome...</h2>
     <div class="columns is-multiline">
       <div class="column is-6 is-3-desktop">
         <h4 class="title is-4">Unleash the smoke tests</h4>
@@ -61,7 +61,7 @@
 </div>
 
 <section class="section">
-  <div class="container has-text-centered pb-6">
+  <div class="container pb-6">
     <h2 class="title mb-6">...features</h2>
     <div class="columns is-multiline">
       <div class="column is-6 is-3-desktop">
