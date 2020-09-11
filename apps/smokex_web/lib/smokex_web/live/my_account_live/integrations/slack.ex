@@ -50,7 +50,7 @@ defmodule SmokexWeb.MyAccountLive.Integrations.Slack do
         %Socket{assigns: %{current_user: current_user, session: session}} = socket
       ) do
     with {:ok, %Organization{} = organization} <- Organizations.get_organization(current_user),
-         :ok <- Slack.remove_integration(current_user) do
+         :ok <- Slack.remove_integration(organization) do
       socket = SessionHelper.reload_user(socket, session, preload: :slack_integration)
 
       {:noreply, socket}
