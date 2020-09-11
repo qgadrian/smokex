@@ -57,6 +57,7 @@ defmodule Smokex.Notifications do
          } = plan_execution
        ) do
     plan_execution_url = plan_execution_url(plan_execution)
+    plan_definition_url = plan_definition_url(plan_execution)
     trigger_user = trigger_user(user)
 
     SlackHelper.post_message(
@@ -66,17 +67,42 @@ defmodule Smokex.Notifications do
         blocks:
           Jason.encode!([
             %{
-              "type" => "section",
+              "type" => "header",
               "text" => %{
-                "type" => "mrkdwn",
-                "text" => "A execution is *running* ⚙️ \n*<#{plan_execution_url}|View execution>*"
+                "type" => "plain_text",
+                "text" => "A execution is running ⚙️"
               }
             },
             %{
-              "type" => "section",
-              "fields" => [
-                %{"type" => "mrkdwn", "text" => "*Triggered by:*\n#{trigger_user}"},
-                %{"type" => "mrkdwn", "text" => "*Started at:*\n#{started_at}"}
+              "type" => "context",
+              "elements" => [
+                %{
+                  "text" => "Started *#{started_at}* | by *#{trigger_user}*",
+                  "type" => "mrkdwn"
+                }
+              ]
+            },
+            %{
+              "type" => "actions",
+              "elements" => [
+                %{
+                  "type" => "button",
+                  "text" => %{
+                    "type" => "plain_text",
+                    "text" => "View execution",
+                    "emoji" => true
+                  },
+                  "url" => "#{plan_execution_url}"
+                },
+                %{
+                  "type" => "button",
+                  "text" => %{
+                    "type" => "plain_text",
+                    "text" => "View plan",
+                    "emoji" => true
+                  },
+                  "url" => "#{plan_definition_url}"
+                }
               ]
             }
           ])
@@ -88,12 +114,15 @@ defmodule Smokex.Notifications do
          %SlackIntegration{options: %SlackIntegrationPreferences{post_on_fail: true}} =
            slack_integration,
          %PlanExecution{
+           trigger_user: user,
            status: :halted,
            started_at: started_at,
            finished_at: finished_at
          } = plan_execution
        ) do
     plan_execution_url = plan_execution_url(plan_execution)
+    plan_definition_url = plan_definition_url(plan_execution)
+    trigger_user = trigger_user(user)
 
     SlackHelper.post_message(
       slack_integration,
@@ -102,17 +131,59 @@ defmodule Smokex.Notifications do
         blocks:
           Jason.encode!([
             %{
-              "type" => "section",
+              "type" => "header",
               "text" => %{
-                "type" => "mrkdwn",
-                "text" => "A execution *failed* ❌\n*<#{plan_execution_url}|View execution>*"
+                "type" => "plain_text",
+<<<<<<< Updated upstream
+                "text" => "A execution *failed* ❌"
+=======
+                "text" => "A execution failed ❌"
+>>>>>>> Stashed changes
               }
             },
             %{
-              "type" => "section",
-              "fields" => [
-                %{"type" => "mrkdwn", "text" => "*Started at:*\n#{started_at}"},
-                %{"type" => "mrkdwn", "text" => "*Failed at:*\n#{finished_at}"}
+              "type" => "context",
+              "elements" => [
+                %{
+                  "text" => "Started *#{started_at}* | by *#{trigger_user}*",
+                  "type" => "mrkdwn"
+                }
+              ]
+            },
+            %{
+              "type" => "context",
+              "elements" => [
+                %{
+                  "text" => "Failed at *#{finished_at}*",
+                  "type" => "mrkdwn"
+                }
+              ]
+            },
+            %{
+              "type" => "actions",
+              "elements" => [
+                %{
+                  "type" => "button",
+                  "text" => %{
+                    "type" => "plain_text",
+                    "text" => "View execution",
+<<<<<<< Updated upstream
+=======
+                    "style" => "danger",
+>>>>>>> Stashed changes
+                    "emoji" => true
+                  },
+                  "url" => "#{plan_execution_url}"
+                },
+                %{
+                  "type" => "button",
+                  "text" => %{
+                    "type" => "plain_text",
+                    "text" => "View plan",
+                    "emoji" => true
+                  },
+                  "url" => "#{plan_definition_url}"
+                }
               ]
             }
           ])
@@ -124,12 +195,15 @@ defmodule Smokex.Notifications do
          %SlackIntegration{options: %SlackIntegrationPreferences{post_on_success: true}} =
            slack_integration,
          %PlanExecution{
+           trigger_user: user,
            status: :finished,
            started_at: started_at,
            finished_at: finished_at
          } = plan_execution
        ) do
     plan_execution_url = plan_execution_url(plan_execution)
+    plan_definition_url = plan_definition_url(plan_execution)
+    trigger_user = trigger_user(user)
 
     SlackHelper.post_message(
       slack_integration,
@@ -138,17 +212,59 @@ defmodule Smokex.Notifications do
         blocks:
           Jason.encode!([
             %{
-              "type" => "section",
+              "type" => "header",
               "text" => %{
-                "type" => "mrkdwn",
-                "text" => "A execution is *finished* ✅\n*<#{plan_execution_url}|View execution>*"
+                "type" => "plain_text",
+<<<<<<< Updated upstream
+                "text" => "A execution is *finished* ✅"
+=======
+                "text" => "A execution is finished ✅"
+>>>>>>> Stashed changes
               }
             },
             %{
-              "type" => "section",
-              "fields" => [
-                %{"type" => "mrkdwn", "text" => "*Started at:*\n#{started_at}"},
-                %{"type" => "mrkdwn", "text" => "*Finished at:*\n#{finished_at}"}
+              "type" => "context",
+              "elements" => [
+                %{
+                  "text" => "Started *#{started_at}* | by *#{trigger_user}*",
+                  "type" => "mrkdwn"
+                }
+              ]
+            },
+            %{
+              "type" => "context",
+              "elements" => [
+                %{
+                  "text" => "Finished at *#{finished_at}*",
+                  "type" => "mrkdwn"
+                }
+              ]
+            },
+            %{
+              "type" => "actions",
+              "elements" => [
+                %{
+                  "type" => "button",
+                  "text" => %{
+                    "type" => "plain_text",
+                    "text" => "View execution",
+<<<<<<< Updated upstream
+=======
+                    "style" => "primary",
+>>>>>>> Stashed changes
+                    "emoji" => true
+                  },
+                  "url" => "#{plan_execution_url}"
+                },
+                %{
+                  "type" => "button",
+                  "text" => %{
+                    "type" => "plain_text",
+                    "text" => "View plan",
+                    "emoji" => true
+                  },
+                  "url" => "#{plan_definition_url}"
+                }
               ]
             }
           ])
@@ -161,6 +277,18 @@ defmodule Smokex.Notifications do
   @spec plan_execution_url(PlanExecution.t()) :: String.t()
   defp plan_execution_url(%PlanExecution{id: plan_execution_id}),
     do: "https://smokex.io/executions/#{plan_execution_id}"
+
+  @spec plan_definition_url(PlanExecution.t()) :: String.t()
+  defp plan_definition_url(%PlanExecution{} = plan_execution) do
+<<<<<<< Updated upstream
+    %PlanExecution{plan_definition: plan_definition_id} =
+=======
+    %PlanExecution{plan_definition: %PlanDefinition{id: plan_definition_id}} =
+>>>>>>> Stashed changes
+      Smokex.Repo.preload(plan_execution, :plan_definition)
+
+    "https://smokex.io/plans/#{plan_definition_id}"
+  end
 
   @spec trigger_user(nil | User.t()) :: String.t()
   defp trigger_user(nil), do: "automatic"
