@@ -17,8 +17,7 @@ alias Smokex.PlanExecutions.Status, as: PlanExecutionStatus
   Smokex.Users.create(%{
     email: "test@local.host",
     password: "fgdfkgmdfkgsfmewsfsd",
-    password_confirmation: "fgdfkgmdfkgsfmewsfsd",
-    subscription_expires_at: DateTime.from_naive!(~N[2099-05-24 13:26:08.003], "Etc/UTC")
+    password_confirmation: "fgdfkgmdfkgsfmewsfsd"
   })
 
 # User with free access
@@ -32,6 +31,13 @@ alias Smokex.PlanExecutions.Status, as: PlanExecutionStatus
 
 PowEmailConfirmation.Ecto.Context.confirm_email(pro_user, %{}, otp_app: :smokex_web)
 PowEmailConfirmation.Ecto.Context.confirm_email(free_user, %{}, otp_app: :smokex_web)
+
+pro_user_organization = Organizations.get_organization(pro_user)
+
+Organizations.update(
+  pro_user_organization,
+  %{subscription_expires_at: DateTime.from_naive!(~N[2099-05-24 13:26:08.003], "Etc/UTC")}
+)
 
 for plan_definition_index <- 1..10 do
   example_file_path = Path.absname("./apps/smokex/priv/repo/plan_definition_content_example.yml")
