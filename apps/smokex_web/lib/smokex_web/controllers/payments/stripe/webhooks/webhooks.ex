@@ -1,4 +1,10 @@
 defmodule SmokexWeb.Payments.Stripe.Webhooks do
+  @moduledoc """
+  Module than handles webhooks from Stripe.
+
+  A Stripe customer is linked to a organization in the database by having the
+  value of the `organization_id` in the Stripe's customer field `customer_id`.
+  """
   require Logger
 
   use SmokexWeb, :controller
@@ -8,6 +14,8 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
   alias Smokex.Users
   alias SmokexWeb.Tracer
   alias Smokex.Users.User
+  alias Smokex.Organizations
+  alias Smokex.Organizations.Organization
   alias Smokex.StripeSubscriptions, as: Subscriptions
   alias Smokex.Subscriptions.StripeSubscription
 
@@ -48,16 +56,18 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
            data: %{
              object: %Stripe.Customer{
                email: email,
-               id: id
+               id: customer_id
              }
            }
          }
        ) do
-    with %User{id: user_id} = user <- Repo.get_by(User, email: email),
-         {:ok, %StripeSubscription{customer_id: ^id, user_id: ^user_id}} <-
-           Subscriptions.create_customer(user, id) do
+    with %User{} = user <- Repo.get_by(User, email: email),
+         {:ok, %Organization{id: organization_id} = organization} <-
+           Organizations.get_organization(user),
+         {:ok, %StripeSubscription{customer_id: ^customer_id, organization_id: ^organization_id}} <-
+           Subscriptions.create_customer(organization, customer_id) do
       Tracer.trace_user(user)
-      Tracer.trace_stripe_customer(id)
+      Tracer.trace_stripe_customer(customer_id)
 
       Logger.info("Created stripe customer")
 
@@ -72,9 +82,9 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
   end
 
   #
-  # Handles a new invoice paid by the user and updates the
-  # `subscription_expires_at` in the user table to the end of the subscription
-  # period.
+  # Handles a new invoice paid by the `organization` and updates the
+  # `subscription_expires_at` in the `organizations` table to the end of the
+  # subscription period.
   #
   # This will handle any new subscription or renewal.
   #
@@ -117,16 +127,17 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
          %StripeSubscription{customer_id: ^customer_id, subscription_id: ^subscription_id} =
            subscription <-
            Subscriptions.get_by(customer_id: customer_id, subscription_id: subscription_id),
-         %StripeSubscription{user: user} <- Repo.preload(subscription, :user),
-         {:ok, %User{id: user_id}} <-
-           Users.update(user, %{subscription_expires_at: subscription_expires_at}) do
-      Tracer.trace_user(user_id)
+         %StripeSubscription{organization: %Organization{} = organization} <-
+           Repo.preload(subscription, :organization),
+         {:ok, %Organization{} = organization} <-
+           Organizations.update(organization, %{subscription_expires_at: subscription_expires_at}) do
+      Tracer.trace_organization(organization)
 
-      Logger.info("Updated subscription_expires_at to user #{user_id}")
+      Logger.info("Updated subscription_expires_at to organization #{organization.id}")
 
       {:ok, :success}
     else
-      nil ->
+      %StripeSubscription{organization: nil} ->
         Logger.info("Subscription not found for customer: #{customer_id}")
 
         create_subscription(customer_id, subscription_id)
@@ -138,14 +149,14 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
   end
 
   #
-  # Handles a new subscription created by the user and updates the
+  # Handles a new subscription created for the organization and updates the
   # `stripe_subscriptions` table with the subscription id.
   #
   # For more info, see:
   # https://stripe.com/docs/api/subscriptions/create
   #
-  # TODO handle each of the subscriptions, what will happen with users with
-  # subscriptions cancelled in the past and create a new one?
+  # TODO handle each of the subscriptions, what will happen with organization's
+  # with subscriptions cancelled in the past and then creates a new one?
   #
   defp handle_event(
          _conn,
@@ -199,10 +210,10 @@ defmodule SmokexWeb.Payments.Stripe.Webhooks do
   # information is present in the database.
   #
   defp create_subscription(customer_id, subscription_id) do
-    Logger.info("Creating subscription #{subscription_id} for user #{customer_id}")
+    Logger.info("Creating subscription #{subscription_id} for customer_id #{customer_id}")
 
     with {:ok, %StripeSubscription{subscription_id: ^subscription_id}} <-
-           Subscriptions.create_or_update_subscription(nil, customer_id, subscription_id) do
+           Subscriptions.create_subscription(customer_id, subscription_id) do
       Logger.info("Created subscription")
 
       {:ok, :success}

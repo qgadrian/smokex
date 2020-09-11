@@ -3,7 +3,8 @@ defmodule Smokex.StripeSubscriptions do
 
   alias Smokex.Subscriptions.StripeSubscription
   alias Smokex.Users.User
-  alias Smokex.Users.User
+  alias Smokex.Organizations
+  alias Smokex.Organizations.Organization
 
   import Ecto.Query
 
@@ -18,14 +19,20 @@ defmodule Smokex.StripeSubscriptions do
   end
 
   @doc """
-  Returns true or false depending if the user has a subscription reference in
-  the database.
+  Returns true or false depending if the organization of the user has a
+  subscription.
+
+  TODO the template calling this function should check if the user has
+  permissions to manage billing
   """
   @spec has_subscription?(User.t() | nil) :: boolean
-  def has_subscription?(%User{id: user_id}) do
-    case Smokex.Repo.get_by(StripeSubscription, user_id: user_id) do
-      nil -> false
-      _ -> true
+  def has_subscription?(%User{} = user) do
+    with {:ok, %Organization{id: organization_id}} <- Organizations.get_organization(user),
+         %StripeSubscription{} <-
+           Smokex.Repo.get_by(StripeSubscription, organization_id: organization_id) do
+      true
+    else
+      _ -> false
     end
   end
 
@@ -49,18 +56,19 @@ defmodule Smokex.StripeSubscriptions do
   end
 
   @doc """
-  Creates a new user entry in the `stripe_subscriptions` table with the
-  customer info.
+  Creates a new entry in the `stripe_subscriptions` table between the
+  organization and the given Stripe customer.
 
-  This does not mean the user has an active subscription yet, but it creates
-  the information to track the user information is Stripe.
+  This does not mean the organization has an active subscription yet, but it
+  creates the information to activate the organization's subscription when the
+  Stripe webhooks arrives in the system.
   """
-  @spec create_customer(user :: User.t(), customer_id :: String.t()) ::
-          {:ok, User.t()} | {:error, Ecto.Changeset.t()}
-  def create_customer(%User{} = user, customer_id) when is_binary(customer_id) do
+  @spec create_customer(organization :: Organization.t(), customer_id :: String.t()) ::
+          {:ok, Organization.t()} | {:error, Ecto.Changeset.t()}
+  def create_customer(%Organization{} = organization, customer_id) when is_binary(customer_id) do
     %StripeSubscription{}
     |> StripeSubscription.create_changeset(%{
-      user: user,
+      organization: organization,
       customer_id: customer_id
     })
     |> Smokex.Repo.insert()
@@ -69,14 +77,18 @@ defmodule Smokex.StripeSubscriptions do
   @doc """
   Creates a Stripe subscription with the `subscription_id` for the given
   customer.
+
+  *It is important to know* This function creates the subscription entry with
+  no `organization_id` information and it is necessary to receive additional
+  webhooks to match the subscription created here with the customer's
+  organization.
   """
-  @spec create_or_update_subscription(
-          user_id :: integer | nil,
-          subscription_id :: String.t(),
-          customer_id :: String.t()
+  @spec create_subscription(
+          customer_id :: integer,
+          subscription_id :: String.t()
         ) ::
           {:ok, StripeSubscription.t()} | {:error, Ecto.Changeset.t()}
-  def create_or_update_subscription(user_id, customer_id, subscription_id)
+  def create_subscription(customer_id, subscription_id)
       when is_binary(subscription_id) and is_binary(customer_id) do
     with %StripeSubscription{customer_id: ^customer_id, subscription_id: nil} = subscription <-
            __MODULE__.with_customer_id_only(customer_id) do
@@ -85,7 +97,7 @@ defmodule Smokex.StripeSubscriptions do
       nil ->
         %StripeSubscription{}
         |> StripeSubscription.create_changeset(%{
-          user_id: user_id,
+          organization_id: nil,
           customer_id: customer_id,
           subscription_id: subscription_id
         })
@@ -108,15 +120,15 @@ defmodule Smokex.StripeSubscriptions do
   end
 
   @doc """
-  Cancels an active subscription for the user.
+  Cancels an active subscription for the organization.
 
-  If the user has multiple active subscriptions, an error will be returned an
-  manual intervention will be needed.
+  If the organization has multiple active subscriptions, an error will be
+  returned an manual intervention will be needed.
   """
-  @spec cancel_subscription(User.t()) :: {:ok, :deleted} | {:error, term}
-  def cancel_subscription(%User{id: user_id}) do
+  @spec cancel_subscription(Organization.t()) :: {:ok, :deleted} | {:error, term}
+  def cancel_subscription(%Organization{id: organization_id}) do
     with %StripeSubscription{customer_id: customer_id} = subscription_reference <-
-           __MODULE__.get_by(user_id: user_id),
+           __MODULE__.get_by(organization_id: organization_id),
          {:ok, %Stripe.List{data: [%Stripe.Subscription{id: subscription_id}]}} <-
            Stripe.Subscription.list(%{customer: customer_id, status: "active"}),
          {:ok, _subscription} <- Stripe.Subscription.delete(subscription_id),
@@ -128,8 +140,8 @@ defmodule Smokex.StripeSubscriptions do
         {:error, :multiple_subscriptions}
 
       nil ->
-        Logger.error("Cannot cancel subscription, user not found: #{user_id}")
-        {:error, "user_not_found"}
+        Logger.error("Cannot cancel subscription, organization not found: #{organization_id}")
+        {:error, "organization_not_found"}
 
       {:error, _reason} = error ->
         Logger.error("Cannot cancel subscription: #{inspect(error)}")
