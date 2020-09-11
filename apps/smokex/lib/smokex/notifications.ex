@@ -134,11 +134,7 @@ defmodule Smokex.Notifications do
               "type" => "header",
               "text" => %{
                 "type" => "plain_text",
-<<<<<<< Updated upstream
-                "text" => "A execution *failed* ❌"
-=======
                 "text" => "A execution failed ❌"
->>>>>>> Stashed changes
               }
             },
             %{
@@ -167,10 +163,7 @@ defmodule Smokex.Notifications do
                   "text" => %{
                     "type" => "plain_text",
                     "text" => "View execution",
-<<<<<<< Updated upstream
-=======
                     "style" => "danger",
->>>>>>> Stashed changes
                     "emoji" => true
                   },
                   "url" => "#{plan_execution_url}"
@@ -215,11 +208,7 @@ defmodule Smokex.Notifications do
               "type" => "header",
               "text" => %{
                 "type" => "plain_text",
-<<<<<<< Updated upstream
-                "text" => "A execution is *finished* ✅"
-=======
                 "text" => "A execution is finished ✅"
->>>>>>> Stashed changes
               }
             },
             %{
@@ -248,10 +237,7 @@ defmodule Smokex.Notifications do
                   "text" => %{
                     "type" => "plain_text",
                     "text" => "View execution",
-<<<<<<< Updated upstream
-=======
                     "style" => "primary",
->>>>>>> Stashed changes
                     "emoji" => true
                   },
                   "url" => "#{plan_execution_url}"
@@ -280,11 +266,7 @@ defmodule Smokex.Notifications do
 
   @spec plan_definition_url(PlanExecution.t()) :: String.t()
   defp plan_definition_url(%PlanExecution{} = plan_execution) do
-<<<<<<< Updated upstream
-    %PlanExecution{plan_definition: plan_definition_id} =
-=======
     %PlanExecution{plan_definition: %PlanDefinition{id: plan_definition_id}} =
->>>>>>> Stashed changes
       Smokex.Repo.preload(plan_execution, :plan_definition)
 
     "https://smokex.io/plans/#{plan_definition_id}"
