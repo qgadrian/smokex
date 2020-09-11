@@ -1,4 +1,4 @@
-defmodule Smokex.Repo.Migrations.AddOrganizations do
+defmodule Smokex.Repo.Migrations.CreateOrganizations do
   use Ecto.Migration
 
   def change do
