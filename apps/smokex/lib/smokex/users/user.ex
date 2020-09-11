@@ -16,6 +16,7 @@ defmodule Smokex.Users.User do
   schema "users" do
     pow_user_fields()
 
+    # TODO maybe rename this to `created_plans_definitions`
     has_many(:plans_definitions, PlanDefinition, foreign_key: :author_id)
 
     many_to_many(:organizations, Organization, join_through: OrganizationsUsers)

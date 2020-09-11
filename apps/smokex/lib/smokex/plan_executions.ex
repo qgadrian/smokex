@@ -35,7 +35,10 @@ defmodule Smokex.PlanExecutions do
   def create_plan_execution(user_or_nil, %PlanDefinition{} = plan_definition) do
     result =
       %PlanExecution{}
-      |> PlanExecution.create_changeset(%{plan_definition: plan_definition, user: user_or_nil})
+      |> PlanExecution.create_changeset(%{
+        plan_definition: plan_definition,
+        trigger_user: user_or_nil
+      })
       |> Smokex.Repo.insert()
       |> send_event(:create)
 

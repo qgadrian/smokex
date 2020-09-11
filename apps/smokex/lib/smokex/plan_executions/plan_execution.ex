@@ -31,8 +31,8 @@ defmodule Smokex.PlanExecution do
   * `plan_definition`: [action](`t:#{RequestActionEnum}/0`) that was executed.
   * `results`: The total [results](`t:#{RequestResultEnum}/0`) of the
   execution.
-  * `user`: The user who the trigger the execution. If the execution was
-  executed automatically will be `nil`.
+  * `trigger_user`: The user who the triggered the execution. If the execution
+  was executed automatically will be `nil`.
   """
   @type t :: %__MODULE__{
           finished_at: NaiveDateTime.t(),
@@ -41,7 +41,7 @@ defmodule Smokex.PlanExecution do
           started_at: NaiveDateTime.t(),
           status: status(),
           total_executions: integer,
-          user: User.t()
+          trigger_user: User.t() | nil
         }
 
   # @required_fields [:plan_definition_id]
@@ -57,8 +57,7 @@ defmodule Smokex.PlanExecution do
     field(:started_at, :naive_datetime, null: true)
     field(:finished_at, :naive_datetime, null: true)
 
-    # TODO rename user to `trigger_by_user`
-    belongs_to(:user, User)
+    belongs_to(:trigger_user, User)
     belongs_to(:plan_definition, PlanDefinition)
 
     has_many(:results, Result)
@@ -75,7 +74,7 @@ defmodule Smokex.PlanExecution do
       :plan_definition,
       params[:plan_definition] || changeset.plan_definition
     )
-    |> maybe_put_user(params)
+    |> maybe_put_trigger_user(params)
     |> Ecto.Changeset.assoc_constraint(:plan_definition)
   end
 
@@ -89,15 +88,15 @@ defmodule Smokex.PlanExecution do
   # Private functions
   #
 
-  defp maybe_put_user(changeset, %{user: user}) do
+  defp maybe_put_trigger_user(changeset, %{trigger_user: user}) do
     case user do
       nil ->
-        Ecto.Changeset.put_assoc(changeset, :user, nil)
+        Ecto.Changeset.put_assoc(changeset, :trigger_user, nil)
 
       user ->
         changeset
-        |> Ecto.Changeset.put_assoc(:user, user)
-        |> Ecto.Changeset.assoc_constraint(:user)
+        |> Ecto.Changeset.put_assoc(:trigger_user, user)
+        |> Ecto.Changeset.assoc_constraint(:trigger_user)
     end
   end
 end
