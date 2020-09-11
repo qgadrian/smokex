@@ -32,9 +32,9 @@ alias Smokex.PlanExecutions.Status, as: PlanExecutionStatus
 PowEmailConfirmation.Ecto.Context.confirm_email(pro_user, %{}, otp_app: :smokex_web)
 PowEmailConfirmation.Ecto.Context.confirm_email(free_user, %{}, otp_app: :smokex_web)
 
-pro_user_organization = Organizations.get_organization(pro_user)
+{:ok, pro_user_organization} = Smokex.Organizations.get_organization(pro_user)
 
-Organizations.update(
+Smokex.Organizations.update(
   pro_user_organization,
   %{subscription_expires_at: DateTime.from_naive!(~N[2099-05-24 13:26:08.003], "Etc/UTC")}
 )
