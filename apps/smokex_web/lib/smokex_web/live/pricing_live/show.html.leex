@@ -18,7 +18,11 @@
               <li>Limited to 10 executions per plan per day</li>
               <li>Basic support</li>
             </ul>
-            <%= link "Sign up", class: "button is-primary is-outlined is-fullwidth", to: Routes.pow_registration_path(@socket, :new) %>
+            <%= if assigns[:current_user] do %>
+              <button class="button disabled is-outlined is-fullwidth is-primary" disabled>Already included</button>
+            <% else %>
+              <%= link "Sign up", class: "button is-primary is-outlined is-fullwidth", to: Routes.pow_registration_path(@socket, :new) %>
+            <% end %>
           </div>
         </div>
       </div>
