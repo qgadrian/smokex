@@ -7,19 +7,26 @@ defmodule SmokexWeb.Tracer do
   """
 
   alias Smokex.Users.User
+  alias Smokex.Organizations
+  alias Smokex.Organizations.Organization
 
   @doc """
   Initializes the trace for the user.
+
+  This function also sets the trace context for the user's organization.
   """
-  @spec trace_user(User.t() | number) :: :ok
-  def trace_user(%User{id: id}) do
-    Sentry.Context.set_user_context(%{user_id: id})
-    Logger.metadata(user_id: id)
+  @spec trace_user(User.t()) :: :ok
+  def trace_user(%User{id: user_id} = user) do
+    {:ok, %Organization{} = organization} = Organizations.get_organization(user)
+    __MODULE__.trace_organization(organization)
+
+    Sentry.Context.set_user_context(%{user_id: user_id})
+    Logger.metadata(user_id: user_id)
   end
 
-  def trace_user(id) when is_number(id) do
-    Sentry.Context.set_user_context(%{user_id: id})
-    Logger.metadata(user_id: id)
+  def trace_organization(%Organization{id: organization_id}) do
+    Sentry.Context.set_user_context(%{organization_id: organization_id})
+    Logger.metadata(organization_id: organization_id)
   end
 
   @doc """
