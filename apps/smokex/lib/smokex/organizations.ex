@@ -23,12 +23,28 @@ defmodule Smokex.Organizations do
   end
 
   @doc """
+  Updates an organization.
+
+  ## Examples
+      iex> update(organization, %{name: "test"})
+      {:ok, %Organization{}}
+      iex> update(organization, %{name: nil})
+      {:error, %Ecto.Changeset{}}
+  """
+  @spec update(Organization.t(), map) :: {:ok, Organization.t()} | {:error, Ecto.Changeset.t()}
+  def update(%Organization{} = organization, params) when is_map(params) do
+    organization
+    |> Organization.update_changeset(params)
+    |> Smokex.Repo.update()
+  end
+
+  @doc """
   Returns the organization the user belongs to.
 
   If the user belongs to multiple or no organization at all, an error is
   returned.
   """
-  @spec get_organization(User.t()) :: {:ok, Organization.t()} | {:error, term}
+  @spec get_organization(User.t()) :: {:ok, Organization.t()} | {:error, String.t()}
   def get_organization(%User{} = user) do
     user
     |> Smokex.Repo.preload(:organizations)

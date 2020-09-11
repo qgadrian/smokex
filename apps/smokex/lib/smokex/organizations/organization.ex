@@ -48,4 +48,11 @@ defmodule Smokex.Organizations.Organization do
     |> Ecto.Changeset.validate_length(:users, min: 1)
     |> Ecto.Changeset.put_assoc(:users, users)
   end
+
+  # TODO allow update the users of the organization. This will require validate
+  # the number of users (minimum of 1) and stuff like that
+  def update_changeset(struct, attrs \\ %{}) do
+    struct
+    |> Ecto.Changeset.cast(attrs, @optional_fields)
+  end
 end
