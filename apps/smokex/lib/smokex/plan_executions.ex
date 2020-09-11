@@ -87,10 +87,10 @@ defmodule Smokex.PlanExecutions do
       from(plan_execution in PlanExecution,
         join: plan_definition in PlanDefinition,
         on: plan_execution.plan_definition_id == plan_definition.id,
-        join: plan_definition_user in "plans_definitions_users",
+        join: organizations_users in "organizations_users",
         on:
-          plan_definition_user.user_id == ^user_id and
-            plan_definition_user.plan_definition_id == plan_definition.id,
+          organizations_users.user_id == ^user_id and
+            organizations_users.organization_id == plan_definition.organization_id,
         where: plan_execution.id == ^id,
         select: plan_execution
       )
@@ -120,10 +120,10 @@ defmodule Smokex.PlanExecutions do
       from(plan_execution in PlanExecution,
         join: plan_definition in PlanDefinition,
         on: plan_execution.plan_definition_id == plan_definition.id,
-        join: plan_definition_user in "plans_definitions_users",
+        join: organizations_users in "organizations_users",
         on:
-          plan_definition_user.user_id == ^user_id and
-            plan_definition_user.plan_definition_id == plan_definition.id,
+          organizations_users.user_id == ^user_id and
+            organizations_users.organization_id == plan_definition.organization_id,
         offset: ^((current_page - 1) * per_page),
         limit: ^per_page,
         order_by: [desc: :updated_at],
@@ -152,10 +152,10 @@ defmodule Smokex.PlanExecutions do
       from(plan_execution in PlanExecution,
         join: plan_definition in PlanDefinition,
         on: plan_execution.plan_definition_id == plan_definition.id,
-        join: plan_definition_user in "plans_definitions_users",
+        join: organizations_users in "organizations_users",
         on:
-          plan_definition_user.user_id == ^user_id and
-            plan_definition_user.plan_definition_id == plan_definition.id,
+          organizations_users.user_id == ^user_id and
+            organizations_users.organization_id == plan_definition.organization_id,
         limit: ^limit,
         order_by: [desc: :updated_at],
         select: plan_execution
@@ -174,10 +174,10 @@ defmodule Smokex.PlanExecutions do
       from(plan_execution in PlanExecution,
         join: plan_definition in PlanDefinition,
         on: plan_execution.plan_definition_id == plan_definition.id,
-        join: plan_definition_user in "plans_definitions_users",
+        join: organizations_users in "organizations_users",
         on:
-          plan_definition_user.user_id == ^user_id and
-            plan_definition_user.plan_definition_id == plan_definition.id,
+          organizations_users.user_id == ^user_id and
+            organizations_users.organization_id == plan_definition.organization_id,
         group_by: plan_execution.status,
         select: {plan_execution.status, count(plan_execution.status)}
       )
@@ -194,10 +194,10 @@ defmodule Smokex.PlanExecutions do
       from(plan_execution in PlanExecution,
         join: plan_definition in PlanDefinition,
         on: plan_execution.plan_definition_id == plan_definition.id,
-        join: plan_definition_user in "plans_definitions_users",
+        join: organizations_users in "organizations_users",
         on:
-          plan_definition_user.user_id == ^user_id and
-            plan_definition_user.plan_definition_id == plan_definition.id,
+          organizations_users.user_id == ^user_id and
+            organizations_users.organization_id == plan_definition.organization_id,
         select: count(plan_execution.id)
       )
 

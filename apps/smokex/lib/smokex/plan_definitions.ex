@@ -62,10 +62,10 @@ defmodule Smokex.PlanDefinitions do
     query =
       from(plan_definition in PlanDefinition,
         order_by: [desc: :updated_at],
-        join: plan_definition_user in "plans_definitions_users",
+        join: organizations_users in "organizations_users",
         on:
-          plan_definition_user.user_id == ^user_id and
-            plan_definition_user.plan_definition_id == plan_definition.id,
+          organizations_users.user_id == ^user_id and
+            organizations_users.organization_id == plan_definition.organization_id,
         select: plan_definition
       )
 
@@ -96,10 +96,10 @@ defmodule Smokex.PlanDefinitions do
   def get(%User{id: user_id}, id) do
     query =
       from(plan_definition in PlanDefinition,
-        join: plan_definition_user in "plans_definitions_users",
+        join: organizations_users in "organizations_users",
         on:
-          plan_definition_user.user_id == ^user_id and
-            plan_definition_user.plan_definition_id == plan_definition.id,
+          organizations_users.user_id == ^user_id and
+            organizations_users.organization_id == plan_definition.organization_id,
         where: plan_definition.id == ^id,
         select: plan_definition
       )
@@ -115,10 +115,10 @@ defmodule Smokex.PlanDefinitions do
   def get!(%User{id: user_id}, id) do
     query =
       from(plan_definition in PlanDefinition,
-        join: plan_definition_user in "plans_definitions_users",
+        join: organizations_users in "organizations_users",
         on:
-          plan_definition_user.user_id == ^user_id and
-            plan_definition_user.plan_definition_id == plan_definition.id,
+          organizations_users.user_id == ^user_id and
+            organizations_users.organization_id == plan_definition.organization_id,
         where: plan_definition.id == ^id,
         select: plan_definition
       )
