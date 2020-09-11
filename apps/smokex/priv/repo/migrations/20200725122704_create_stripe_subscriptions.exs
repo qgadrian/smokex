@@ -3,7 +3,7 @@ defmodule Smokex.Repo.Migrations.CreateStripeSubscriptions do
 
   def change do
     create table(:stripe_subscriptions) do
-      add(:user_id, references(:users), null: true)
+      add(:organization_id, references(:organizations), null: true)
 
       add(:customer_id, :string, null: false)
       add(:subscription_id, :string, null: true)
@@ -11,6 +11,6 @@ defmodule Smokex.Repo.Migrations.CreateStripeSubscriptions do
       timestamps()
     end
 
-    create unique_index(:stripe_subscriptions, [:user_id, :customer_id, :subscription_id])
+    create unique_index(:stripe_subscriptions, [:organization_id, :customer_id, :subscription_id])
   end
 end
