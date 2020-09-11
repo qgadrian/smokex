@@ -18,7 +18,7 @@ alias Smokex.PlanExecutions.Status, as: PlanExecutionStatus
     email: "test@local.host",
     password: "fgdfkgmdfkgsfmewsfsd",
     password_confirmation: "fgdfkgmdfkgsfmewsfsd",
-    subscription_expires_at: DateTime.utc_now()
+    subscription_expires_at: DateTime.from_naive!(~N[2099-05-24 13:26:08.003], "Etc/UTC")
   })
 
 # User with free access
