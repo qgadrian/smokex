@@ -1,29 +1,7 @@
-<%= form = form_for :filter, "#", [phx_change: "filter_update"] %>
-  <div class="box">
-    <p class="subtitle has-text-left">Test plan</p>
-
-    <div class="select">
-      <%= select(form, :plan_definition_id, Enum.map(["all" | @plan_definitions], fn
-        %Smokex.PlanDefinition{id: id, name: name} ->
-          selected = id == @plan_definition_id
-          [key: name, value: id, selected: selected]
-        "all" ->
-          [key: "All", value: "", selected: true]
-        end)) %>
-    </div>
+<div class="columns">
+  <div class="column">
+    <strong>7 results</strong>
   </div>
-
-  <div class="box">
-    <p class="subtitle has-text-left">Execution status</p>
-
-    <div class="control status-filter-vertical">
-      <%= for status <- [:all, :created, :finished, :halted, :running] do %>
-        <label class="radio">
-          <% checked = status == @active_filter %>
-          <%= radio_button(form, :status, status, checked: checked) %>
-          <span> <%= status |> Atom.to_string |> String.capitalize() %></span>
-        </label>
-      <% end %>
-    </div>
-  </div>
-</form>
+  <%# <div class="column box-header-right">
+  </div> %>
+</div>

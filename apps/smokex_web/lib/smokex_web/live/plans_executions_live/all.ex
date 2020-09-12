@@ -8,6 +8,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   alias Smokex.PlanDefinitions
   alias Smokex.PlanExecution
   alias Smokex.PlanExecutions
+  alias SmokexWeb.PlansExecutionsLive.Components.Sidebar
   alias SmokexWeb.PlansExecutionsLive.Components.Filter, as: FilterComponent
   alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
 
@@ -47,6 +48,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       |> subscribe_to_changes()
       |> fetch_executions
       |> fetch_plan_definitions
+      |> fetch_plan_definition
 
     {:noreply, socket}
   end
@@ -138,6 +140,17 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   # Private functions
   #
 
+  defp fetch_plan_definition(%Socket{assigns: %{plan_definition_id: nil}} = socket) do
+    assign(socket, plan_definition: nil)
+  end
+
+  defp fetch_plan_definition(%Socket{assigns: %{plan_definition_id: id, current_user: user}} = socket) do
+    plan_definition = PlanDefinitions.get!(user, id)
+    changeset = Ecto.Changeset.change(plan_definition)
+
+    assign(socket, plan_definition: plan_definition, changeset: changeset)
+  end
+
   @spec fetch_executions(Socket.t()) :: Socket.t()
   defp fetch_executions(
          %Socket{
@@ -152,6 +165,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
     plans_executions =
       user
       |> PlanExecutions.all(page, status: status, plan_definition_id: plan_definition_id)
+      |> Smokex.Repo.preload(:plan_definition)
       |> subscribe_to_changes()
 
     assign(socket, plan_executions: plans_executions)
