@@ -217,10 +217,10 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
            }
          } = socket
        ) do
-    total_count =
+    executions_count =
       PlanExecutions.count_total(user, status: status, plan_definition_id: plan_definition_id)
 
-    assign(socket, executions_count: total_count)
+    assign(socket, executions_count: executions_count)
   end
 
   @spec subscribe_to_changes(list(PlanExecution.t())) :: list(PlanExecution.t())
