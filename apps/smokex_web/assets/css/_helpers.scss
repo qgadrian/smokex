@@ -1,5 +1,6 @@
 // icons!
 ion-icon {
+  visibility: inherit !important;
   &.is-success {
     color: $success
   }
