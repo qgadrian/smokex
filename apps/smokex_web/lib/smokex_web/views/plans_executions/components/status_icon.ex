@@ -3,6 +3,7 @@ defmodule SmokexWeb.PlanExecutions.Components.StatusIcon do
 
   alias Smokex.PlanExecution
 
+  @spec new(PlanExecution.t()) :: term
   def new(%PlanExecution{status: :created}) do
     content_tag('ion-icon', "", name: "remove-outline")
   end
