@@ -1,5 +1,5 @@
 <div class="box-content">
-  <ul>
+  <ul phx-update="append">
   <%= for plan_execution <- @plan_executions do %>
     <%= live_component @socket, RowComponent, id: plan_execution.id, plan_execution: plan_execution %>
   <% end %>
