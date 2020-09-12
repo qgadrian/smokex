@@ -50,7 +50,10 @@ footer {
 
 // main content
 main.sx-main {
-  padding-bottom: 4rem;    /* Footer height */
+  padding-bottom: 53px;    /* Footer height */
+  @include until($tablet) {
+    padding-bottom: 78px;
+  }
 }
 
 // hero section #show.htmol.leex
