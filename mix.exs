@@ -31,7 +31,8 @@ defmodule Smokex.Umbrella.MixProject do
     [
       {:crontab, "~> 1.1"},
       {:ex_machina, "~> 2.4"},
-      {:sentry, "~> 8.0"}
+      {:sentry, "~> 8.0"},
+      {:timex, "~> 3.5"}
     ]
   end
 
