@@ -57,7 +57,7 @@
           </div>
         <% end %>
 
-        <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
+        <%= live_component @socket, TableComponent, plan_executions: @plan_executions, id: "#{@plan_definition_id}-#{@active_filter}" %>
       </div>
 
       <div class="columns is-centered mt-6" role="navigation" aria-label="pagination">
