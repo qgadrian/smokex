@@ -35,8 +35,21 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
     |> create_tag
   end
 
+  # TODO assertions will more than one different filed (header and body, for
+  # example) will fail in the pattern match!
   defp create_tag([{key, %{"expected" => expected, "received" => received}}]) do
     build_tag(key, expected, received)
+  end
+
+  defp create_tag([{"headers", failed_headers}]) do
+    Enum.map(failed_headers, fn %{
+                                  "expected" => expected,
+                                  "received" => received,
+                                  "header" => header_name
+                                } ->
+      expected = "#{header_name} to be #{expected}"
+      build_tag("headers", expected, received)
+    end)
   end
 
   defp create_tag([{"error", "Free limit reached"}]) do
