@@ -40,10 +40,9 @@
             <div class="column">
               <strong><%= @executions_count %> results</strong>
             </div>
-            <%# <div class="column box-header-right">
-            </div> %>
           </div>
         </div>
+
         <%= if @plan_definition_id do %>
           <div class="box-info x-flex x-flex-justify-sb x-flex-align-c <%= if (@executions_count > 0), do: "", else: "box-info-radius" %>">
             <%= if Smokex.Limits.can_start_execution?(@current_user, @plan_definition) do %>
@@ -57,34 +56,15 @@
             <% end %>
           </div>
         <% end %>
+
         <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
       </div>
 
-      <nav class="pagination is-centered mt-6" role="navigation" aria-label="pagination">
-        <%= if @page > 1 do %>
-        <%= live_patch "Previous",
-          to: page_path(@socket, @active_filter, @page - 1, @plan_definition_id),
-          class: "pagination-previous" %>
-        <% end %>
-
-        <%= unless @plan_executions == [] do %>
-          <%= live_patch "Next",
-            to: page_path(@socket, @active_filter, @page + 1, @plan_definition_id),
-            class: "pagination-next" %>
-        <% end%>
-
-        <ul class="pagination-list">
-          <% next_pages = if @plan_executions == [] do @page else (@page + 5) end %>
-
-          <%= for i <- (@page - 5)..next_pages, i > 0 do %>
-            <% active_class = if @page == i do "is-current" else "" end %>
-
-            <%= live_patch "#{i}",
-              to: page_path(@socket, @active_filter, i, @plan_definition_id),
-              class: "pagination-link #{active_class}" %>
-          <% end %>
-        </ul>
-      </nav>
+      <div class="columns is-centered mt-6" role="navigation" aria-label="pagination">
+        <form phx-submit="load-more">
+          <button class="button is-primary" phx-disable-with="loading...">load more</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
