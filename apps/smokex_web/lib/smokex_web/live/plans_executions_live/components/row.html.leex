@@ -1,17 +1,27 @@
-<tr>
-  <td scope="row">
-    <%= live_patch @plan_execution.id,
-to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.Show, @plan_execution.id),
-class: "nav-link" %>
-  </td>
-  <td scope="row">
-    <%= @plan_execution.started_at %>
-  </td>
-  <td scope="row">
-    <%= @plan_execution.finished_at %>
-  </td>
-  <td scope="row">
-    <%= StatusBadge.new(@plan_execution) %>
-  </td>
-</tr>
-
+<li class="box-row">
+  <div class="columns">
+    <div class="column is-four-fifths">
+      <%= StatusIcon.new(@plan_execution) %>
+      <span>
+        <strong class="is-size-5">
+          <%= live_patch @plan_execution.plan_definition.name,
+            to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.Show, @plan_execution.id),
+            class: "has-text-black-bis" %>
+        </strong>
+        <small> #<%= @plan_execution.id %></small>
+      </span>
+    </div>
+    <div class="column">
+      <div class="box-right">
+        <summary>
+          <ion-icon name="calendar-outline"></ion-icon>
+          <%= TimeAgoLabel.new(@plan_execution) %>
+        </summary>
+        <summary>
+          <ion-icon name="stopwatch-outline"></ion-icon>
+          <%= RuntimeLabel.new(@plan_execution) %>
+        </summary>
+      </div>
+    </div>
+  </div>
+</li>

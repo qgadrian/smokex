@@ -1,42 +1,76 @@
 <div>
-  <h1 class="title">All executions</h1>
   <div class="columns">
-    <div class="column is-one-quarter">
-      <%= live_component @socket, FilterComponent, active_filter: @active_filter,
-        plan_executions: @plan_executions, plan_definition_id: @plan_definition_id,
-        plan_definitions: @plan_definitions %>
-    </div>
-
     <div class="column">
-      <div class="box">
+      <%= live_component @socket, Sidebar, active_filter: @active_filter,
+              plan_executions: @plan_executions, plan_definition_id: @plan_definition_id,
+              plan_definitions: @plan_definitions %>
+    </div>
+    <div class="column is-four-fifths">
+      <div class="x-flex x-flex-justify-sb">
+        <h1 class="title is-size-4 mb-5 is-hidden-mobile">
+          <%= if !@plan_definition_id do %>
+            All Plans
+          <% else %>
+            <%= @plan_definition.name %>
+          <% end %>
+        </h1>
+        <%= if @plan_definition_id do %>
+        <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Show, @plan_definition_id) do %>
+          <button class="button">
+            <span class="icon">
+              <ion-icon name="settings-outline"></ion-icon>
+            </span>
+          </button>
+        <% end %>
+        <% end %>
+      </div>
+      <nav class="box-nav">
+        <div class="buttons has-addons">
+          <%= for status <- [:all, :created, :finished, :halted, :running] do %>
+            <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, status, 1, plan: @plan_definition_id),
+              class: "button is-responsive #{ if (status == @active_filter), do: "is-primary", else: "" }" do %>
+                <%= status |> Atom.to_string |> String.capitalize() %>
+            <% end %>
+          <% end %>
+        </div>
+      </nav>
+      <div class="box is-bordered">
+        <div class="box-header">
+          <%= live_component @socket, FilterComponent, active_filter: @active_filter,
+              plan_executions: @plan_executions, plan_definition_id: @plan_definition_id,
+              plan_definitions: @plan_definitions %>
+        </div>
+        <div class="box-info">
+          <span>Next execution is scheduled at 2020-09-12 02:00:00</span>
+        </div>
         <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
       </div>
+
+      <nav class="pagination is-centered mt-6" role="navigation" aria-label="pagination">
+        <%= if @page > 1 do %>
+        <%= live_patch "Previous",
+          to: page_path(@socket, @active_filter, @page - 1, @plan_definition_id),
+          class: "pagination-previous" %>
+        <% end %>
+
+        <%= unless @plan_executions == [] do %>
+          <%= live_patch "Next",
+            to: page_path(@socket, @active_filter, @page + 1, @plan_definition_id),
+            class: "pagination-next" %>
+        <% end%>
+
+        <ul class="pagination-list">
+          <% next_pages = if @plan_executions == [] do @page else (@page + 5) end %>
+
+          <%= for i <- (@page - 5)..next_pages, i > 0 do %>
+            <% active_class = if @page == i do "is-current" else "" end %>
+
+            <%= live_patch "#{i}",
+              to: page_path(@socket, @active_filter, i, @plan_definition_id),
+              class: "pagination-link #{active_class}" %>
+          <% end %>
+        </ul>
+      </nav>
     </div>
   </div>
-
-  <nav class="pagination is-centered mt-6" role="navigation" aria-label="pagination">
-    <%= if @page > 1 do %>
-    <%= live_patch "Previous",
-      to: page_path(@socket, @active_filter, @page - 1, @plan_definition_id),
-      class: "pagination-previous" %>
-    <% end %>
-
-    <%= unless @plan_executions == [] do %>
-      <%= live_patch "Next",
-        to: page_path(@socket, @active_filter, @page + 1, @plan_definition_id),
-        class: "pagination-next" %>
-    <% end%>
-
-    <ul class="pagination-list">
-      <% next_pages = if @plan_executions == [] do @page else (@page + 5) end %>
-
-      <%= for i <- (@page - 5)..next_pages, i > 0 do %>
-        <% active_class = if @page == i do "is-current" else "" end %>
-
-        <%= live_patch "#{i}",
-          to: page_path(@socket, @active_filter, i, @plan_definition_id),
-          class: "pagination-link #{active_class}" %>
-      <% end %>
-    </ul>
-  </nav>
 </div>

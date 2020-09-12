@@ -1,0 +1,47 @@
+<div>
+  <%# custom view for mobile %>
+  <div class="is-hidden-tablet  x-flex x-flex-justify-sb">
+    <div class="select is-small">
+      <%= form = form_for :filter, "#", [phx_change: "filter_update"] %>
+        <%= select(form, :plan_definition_id, Enum.map(["all" | @plan_definitions], fn
+          %Smokex.PlanDefinition{id: id, name: name} ->
+            selected = id == @plan_definition_id
+            [key: name, value: id, selected: selected]
+          "all" ->
+            [key: "All Plans", value: "", selected: true]
+          end)) %>
+      </form>
+    </div>
+    <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>
+      <button class="button is-small is-primary is-outlined has-text-weight-medium">New plan</button>
+    <% end %>
+  </div>
+  <%# custom view not for mobile %>
+  <div class="sidebar is-hidden-mobile">
+    <div class="sidebar-header">
+      <h3 class="title is-size-6 has-text-grey-dark">Plans</h3>
+      <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>
+        <button class="button is-small is-primary is-outlined has-text-weight-medium">New plan</button>
+      <% end %>
+    </div>
+    <ul>
+      <li class="filter-item">
+        <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All) do %>
+          <button class="button has-text-left is-fullwidth <%= if (!@plan_definition_id), do: "is-primary", else: "is-white " %>">All plans</button>
+        <% end %>
+      </li>
+      <%= for plan <- @plan_definitions do %>
+        <li class="filter-item">
+          <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, plan: plan.id) do %>
+            <button class="button has-text-left is-fullwidth <%= if (plan.id == @plan_definition_id), do: "is-primary", else: "is-white " %>">
+              <span class="icon">
+                <ion-icon name="document-outline"></ion-icon>
+              </span>
+              <span><%= plan.name %></span>
+            </button>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
