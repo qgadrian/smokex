@@ -36,9 +36,13 @@
       </nav>
       <div class="box is-bordered">
         <div class="box-header">
-          <%= live_component @socket, FilterComponent, active_filter: @active_filter,
-              plan_executions: @plan_executions, plan_definition_id: @plan_definition_id,
-              plan_definitions: @plan_definitions %>
+          <div class="columns">
+            <div class="column">
+              <strong><%= @executions_count %> results</strong>
+            </div>
+            <%# <div class="column box-header-right">
+            </div> %>
+          </div>
         </div>
         <div class="box-info">
           <span>Next execution is scheduled at 2020-09-12 02:00:00</span>

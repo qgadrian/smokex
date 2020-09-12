@@ -9,7 +9,6 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   alias Smokex.PlanExecution
   alias Smokex.PlanExecutions
   alias SmokexWeb.PlansExecutionsLive.Components.Sidebar
-  alias SmokexWeb.PlansExecutionsLive.Components.Filter, as: FilterComponent
   alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
 
   @impl Phoenix.LiveView
@@ -49,6 +48,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       |> fetch_executions
       |> fetch_plan_definitions
       |> fetch_plan_definition
+      |> assign(executions_count: 9)
 
     {:noreply, socket}
   end
