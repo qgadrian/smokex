@@ -236,6 +236,25 @@ defmodule Smokex.PlanExecutions do
     Smokex.Repo.all(query)
   end
 
+  @doc """
+  Returns the execution time, in seconds.
+
+  In order to process the exeuction time the plan execution needs to have a
+  start and finish date, and a **finished state**. If the execution has no
+  finished state, returns `nil`.
+  """
+  @spec execution_time(PlanExecution.t()) :: integer
+  def execution_time(%PlanExecution{
+        started_at: started_at,
+        finished_at: finished_at,
+        status: status
+      })
+      when status in [:finished, :halted] do
+    NaiveDateTime.diff(finished_at, started_at, :second)
+  end
+
+  def execution_time(_plan_execution), do: nil
+
   defdelegate subscribe(plan_execution), to: Smokex.PlanExecutions.Subscriber
 
   #
