@@ -16,6 +16,10 @@ ion-icon {
 .x-flex {
   display: flex;
 }
+.x-flex-column {
+  display: flex;
+  flex-direction: column;
+}
 .x-flex-justify-sb {
   justify-content: space-between;
 }
