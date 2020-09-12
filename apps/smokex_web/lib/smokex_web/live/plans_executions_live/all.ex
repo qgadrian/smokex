@@ -43,11 +43,11 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       |> assign(page: 1)
       |> assign(active_filter: status)
       |> assign(plan_definition_id: plan_definition_id)
-      |> assign(executions_count: -32)
       |> subscribe_to_changes()
       |> fetch_executions
       |> fetch_plan_definitions
       |> fetch_plan_definition
+      |> set_total_results_count
 
     {:noreply, socket}
   end
@@ -208,6 +208,22 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       |> subscribe_to_changes()
 
     assign(socket, plan_executions: updated_plans_executions)
+  end
+
+  @spec set_total_results_count(Socket.t()) :: Socket.t()
+  defp set_total_results_count(
+         %Socket{
+           assigns: %{
+             current_user: user,
+             active_filter: status,
+             plan_definition_id: plan_definition_id
+           }
+         } = socket
+       ) do
+    total_count =
+      PlanExecutions.count_total(user, status: status, plan_definition_id: plan_definition_id)
+
+    assign(socket, executions_count: total_count)
   end
 
   @spec subscribe_to_changes(list(PlanExecution.t())) :: list(PlanExecution.t())
