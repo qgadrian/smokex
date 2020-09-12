@@ -37,7 +37,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
     case PlanDefinitions.create(user, plan_definition_attrs) do
       {:ok, plan_definition} ->
         redirect_path =
-          Routes.live_path(socket, SmokexWeb.PlansDefinitionsLive.Show, plan_definition.id)
+          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, plan: plan_definition.id)
 
         {:noreply, push_redirect(socket, to: redirect_path)}
 
