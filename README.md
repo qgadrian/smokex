@@ -179,6 +179,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Avoid make the cron sentence mandatory
 * [x] First SEO steps (robots, sitemap..)
 * [x] Slack notifications
+  * [ ] Seems that when using buttons Slack expects a callback to be handled: https://api.slack.com/interactivity/handling#acknowledgment_response
+* [ ] Check: missing logs on worker processes?
 
 ### Nice to have (next prio)
 
