@@ -44,9 +44,19 @@
             </div> %>
           </div>
         </div>
-        <div class="box-info">
-          <span>Next execution is scheduled at 2020-09-12 02:00:00</span>
-        </div>
+        <%= if @plan_definition_id do %>
+          <div class="box-info x-flex x-flex-justify-sb x-flex-align-c <%= if (@executions_count > 0), do: "", else: "box-info-radius" %>">
+            <%= if Smokex.Limits.can_start_execution?(@current_user, @plan_definition) do %>
+                <span>Launch this plan manually</span>
+                <a href="#" role="button" class="button has-text-weight-medium is-small" phx-click="execute" phx-disable-with="Starting...">
+                  Run
+                </a>
+            <% else %>
+              <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user,
+                extra_class: "is-light", text: "Get my subscription" %>
+            <% end %>
+          </div>
+        <% end %>
         <%= live_component @socket, TableComponent, plan_executions: @plan_executions %>
       </div>
 

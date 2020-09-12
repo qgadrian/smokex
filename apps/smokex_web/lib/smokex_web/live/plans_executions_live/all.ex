@@ -4,6 +4,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   require Logger
 
   alias Smokex.PlanExecutions.Subscriber, as: PlanExecutionsSubscriber
+  alias Smokex.PlanDefinitions.Scheduler, as: PlanDefinitionScheduler
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanDefinitions
   alias Smokex.PlanExecution
@@ -85,6 +86,25 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       end
 
     {:noreply, push_patch(socket, to: path_to)}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_event(
+        "execute",
+        _params,
+        %Socket{assigns: %{current_user: user, plan_definition: plan_definition}} = socket
+      ) do
+    with {:ok, plan_execution_id} <- PlanDefinitionScheduler.enqueue_job(plan_definition, user) do
+      redirect_path =
+        Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.Show, plan_execution_id)
+
+      {:noreply, push_redirect(socket, to: redirect_path)}
+    else
+      error ->
+        # TODO handle error and show feedback to user
+        Logger.error(inspect(error))
+        {:noreply, socket}
+    end
   end
 
   @impl Phoenix.LiveView
