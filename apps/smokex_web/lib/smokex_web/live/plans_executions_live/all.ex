@@ -65,8 +65,8 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   @impl Phoenix.LiveView
   def handle_event(
         "filter_update",
-        %{"filter" => %{"plan_definition_id" => plan_definition_id, "status" => status_filter}},
-        %Socket{} = socket
+        %{"filter" => %{"plan_definition_id" => plan_definition_id}},
+        %Socket{assigns: %{active_filter: status_filter}} = socket
       ) do
     plan_definition_id =
       case Integer.parse(plan_definition_id) do
@@ -74,11 +74,8 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
         :error -> nil
       end
 
-    status_filter = String.to_existing_atom(status_filter)
-
     socket =
       socket
-      |> assign(active_filter: status_filter)
       |> assign(plan_definition_id: plan_definition_id)
       |> fetch_executions
 
