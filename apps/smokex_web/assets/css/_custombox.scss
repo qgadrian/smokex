@@ -23,12 +23,15 @@
 }
 
 .box-info {
-  display: none;
-  padding: 16px;
+  padding: 12px;
   margin: -1px 0;
-  background-color: #dbedff;
+  background-color: #F1F8FF;
   border-top: 1px solid rgba(4, 66, 137, 0.2);
   border-bottom: 1px solid rgba(4, 66, 137, 0.2);
+}
+
+.box-info-radius {
+  border-radius: $box-radius;
 }
 
 .box-row {
