@@ -10,6 +10,9 @@ defmodule Smokex.PlanExecutions.Status do
   alias Smokex.PlanExecution
   alias Smokex.PlanExecutions
   alias Smokex.Notifications
+  alias SmokexWeb.Telemetry.Reporter, as: TelemetryReporter
+
+  @type ecto_plan_execution_result :: {:ok, PlanExecution.t()} | {:error, Ecto.Changeset.t()}
 
   @typedoc """
   The optional parameters to filter plan executions.
@@ -69,7 +72,28 @@ defmodule Smokex.PlanExecutions.Status do
       status: :finished,
       finished_at: NaiveDateTime.utc_now()
     })
+    |> report_execution_time()
     |> Subscriber.notify_change(:finished)
     |> Notifications.maybe_notify_change()
   end
+
+  #
+  # Private functions
+  #
+
+  @spec report_execution_time(ecto_plan_execution_result) :: ecto_plan_execution_result
+  defp report_execution_time(
+         {:ok, %PlanExecution{id: id, status: status} = plan_execution} = result
+       ) do
+    execution_time = PlanExecutions.execution_time(plan_execution)
+
+    measurement = %{execution_time: execution_time}
+    metadata = %{id: id, status: status}
+
+    TelemetryReporter.execute([:plan_execution], measurement, metadata)
+
+    result
+  end
+
+  defp report_execution_time(error), do: error
 end

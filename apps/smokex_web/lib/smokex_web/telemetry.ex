@@ -76,7 +76,6 @@ defmodule SmokexWeb.Telemetry do
 
   defp custom_metrics do
     [
-      # Custom metrics
       counter("smokex_web.plan_definition.action",
         measurement: :action,
         tags: [:id, :result, :action]
@@ -84,6 +83,11 @@ defmodule SmokexWeb.Telemetry do
       counter("smokex_web.plan_execution.action",
         measurement: :action,
         tags: [:id, :result, :status, :action, :plan_definition_id]
+      ),
+      summary("smokex.plan_execution.execution_time",
+        measurement: :execution_time,
+        tags: [:id, :status],
+        unit: {:native, :second}
       ),
 
       # User sessions
