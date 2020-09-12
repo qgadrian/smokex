@@ -1,6 +1,5 @@
 defmodule SmokexWeb.Callbacks.Slack do
   @moduledoc """
-  ```
   This module handles callbacks from Slack when an application is added to a
   workspace through Smokex.
 
@@ -8,6 +7,7 @@ defmodule SmokexWeb.Callbacks.Slack do
 
   Example response from the Slack Oauth V2 access call:
 
+  ```
   %{
     "access_token" => access_token
     "app_id" => "XXXXXXXXXXX",
