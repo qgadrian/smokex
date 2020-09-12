@@ -212,7 +212,7 @@ defmodule Smokex.PlanExecutions do
   start and finish date, and a **finished state**. If the execution has no
   finished state, returns `nil`.
   """
-  @spec execution_time(PlanExecution.t()) :: integer
+  @spec execution_time(PlanExecution.t()) :: integer | nil
   def execution_time(%PlanExecution{
         started_at: started_at,
         finished_at: finished_at,
