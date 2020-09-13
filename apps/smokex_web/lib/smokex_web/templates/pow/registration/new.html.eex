@@ -1,85 +1,90 @@
-<section class="section">
+<div class="pt-5 px-4">
   <div class="container">
-    <div class="box">
-      <h2 class="title has-text-centered">Sign up</h2>
+    <p class="has-text-centered pb-4 is-family-monospace has-text-dark">Join Smokex</p>
+    <h1 class="title has-text-centered is-size-2 pb-5 is-hidden-mobile">Create your account</h1>
 
-      <div class="columns is-centered">
-        <div class="column is-5 is-4-desktop">
-          <%= form_for @changeset, @action, [as: :user], fn f -> %>
-            <%= if @changeset.action do %>
-              <div class="notification is-danger">
-                <p>Oops, something went wrong! Please check the errors below.</p>
-              </div>
-            <% end %>
-
-            <div class="field">
-              <div class="field-label is-normal has-text-left pb-2">
-                <%= label f, Pow.Ecto.Schema.user_id_field(@changeset),
-                  class: "label" %>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset),
-                      class: "input is-medium", type: "email",
-                      placeholder: "e.g. luke@skywalker.com" %>
-                  </div>
-                </div>
-              </div>
-
-              <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+    <div class="columns is-centered">
+      <div class="column is-5">
+        <%= form_for @changeset, @action, [as: :user], fn f -> %>
+          <%= if @changeset.action do %>
+            <div class="notification is-danger">
+              <p>Oops, something went wrong! Please check the errors below.</p>
             </div>
-
-            <div class="field">
-              <div class="field-label is-normal has-text-left pb-2">
-                  <%= label f, :password, class: "label" %>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <%= password_input f, :password, class: "input is-medium",
-                      placeholder: "e.g. password" %>
-                  </div>
-                </div>
-              </div>
-
-              <%= error_tag f, :password %>
-            </div>
-
-            <div class="field">
-              <div class="field-label is-normal has-text-left pb-2">
-                <%= label f, :password_confirmation, class: "label" %>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <%= password_input f, :password_confirmation,
-                      placeholder: "e.g. password", class: "input is-medium" %>
-                  </div>
-                </div>
-              </div>
-
-              <%= error_tag f, :password_confirmation %>
-            </div>
-
-            <div class="field is-grouped pt-2">
-              <div class="control is-expanded">
-                <%= link "Have an account?", class: "button is-primary is-outlined is-fullwidth",
-                  to: Routes.pow_session_path(@conn, :new) %>
-              </div>
-
-              <div class="control is-expanded">
-                <button class="button is-primary is-fullwidth">Sign up!</button>
-              </div>
-            </div>
-
-            <p>By signing up you agree with the
-            <%= link "Terms and conditions", to: Routes.legal_path(SmokexWeb.Endpoint, :terms_and_conditions) %>
-            and
-            <%= link "Privacy policy", to: Routes.legal_path(SmokexWeb.Endpoint, :privacy_policy) %>
           <% end %>
+
+          <div class="field">
+            <div class="field-label is-normal has-text-left pb-2">
+              <%= label f, Pow.Ecto.Schema.user_id_field(@changeset),
+                class: "label" %>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset),
+                    class: "input is-medium", type: "email",
+                    placeholder: "luke@skywalker.com" %>
+                </div>
+              </div>
+            </div>
+
+            <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+          </div>
+
+          <div class="field">
+            <div class="field-label is-normal has-text-left pb-2">
+                <%= label f, :password, class: "label" %>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <%= password_input f, :password, class: "input is-medium",
+                    placeholder: "yourstrongestpassword" %>
+                </div>
+              </div>
+            </div>
+
+            <%= error_tag f, :password %>
+          </div>
+
+          <div class="field">
+            <div class="field-label is-normal has-text-left pb-2">
+              <%= label f, :password_confirmation, class: "label" %>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <%= password_input f, :password_confirmation,
+                    placeholder: "yourstrongestpassword", class: "input is-medium" %>
+                </div>
+              </div>
+            </div>
+
+            <%= error_tag f, :password_confirmation %>
+          </div>
+
+          <div class="field is-grouped pt-2">
+            <div class="control is-expanded">
+              <button class="button is-primary is-fullwidth">Create account</button>
+            </div>
+          </div>
+
+          <p>By creating an account you agree to the
+          <%= link "Terms and conditions", to: Routes.legal_path(SmokexWeb.Endpoint, :terms_and_conditions) %>
+          and
+          <%= link "Privacy policy", to: Routes.legal_path(SmokexWeb.Endpoint, :privacy_policy) %>.
+        <% end %>
+      </div>
+    </div>
+    <div class="columns is-centered pt-5">
+      <div class="column is-5">
+        <div class="box is-bordered py-4 px-5 x-flex x-flex-justify-sb .x-flex-align-c">
+          <span class="no-wrap x-flex-align-self-c pr-3">
+            Have an account?
+          </span>
+          <%= link "Sign in", class: "button is-primary is-outlined",
+            to: Routes.pow_session_path(@conn, :new) %>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
