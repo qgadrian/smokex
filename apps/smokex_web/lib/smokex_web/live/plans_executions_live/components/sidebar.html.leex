@@ -12,16 +12,20 @@
           end)) %>
       </form>
     </div>
-    <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>
-      <button class="button is-small is-primary is-outlined has-text-weight-medium">New plan</button>
+    <%= if Smokex.Limits.can_create_plan_definition?(@current_user) do %>
+      <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>
+        <button class="button is-small is-primary is-outlined has-text-weight-medium">New plan</button>
+      <% end %>
     <% end %>
   </div>
   <%# custom view not for mobile %>
   <div class="sidebar is-hidden-mobile">
     <div class="sidebar-header">
-      <h3 class="title is-size-6 has-text-grey-dark">Plans</h3>
-      <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>
-        <button class="button is-small is-primary is-outlined has-text-weight-medium">New plan</button>
+      <h3 class="title is-size-6 has-text-grey-dark mb-5">Plans</h3>
+      <%= if Smokex.Limits.can_create_plan_definition?(@current_user) do %>
+        <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>
+          <button class="button is-small is-primary is-outlined has-text-weight-medium">New plan</button>
+        <% end %>
       <% end %>
     </div>
     <ul>
