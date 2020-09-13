@@ -13,7 +13,7 @@ defmodule SmokexWeb.Telemetry.ObanErrorReporter do
   end
 
   defp log_and_report(meta) do
-    Logger.error("#{inspect meta}")
+    Logger.error("#{inspect(meta)}")
     Sentry.capture_exception(meta.error, stracktrace: meta.stacktrace, extra: extra)
   end
 end
