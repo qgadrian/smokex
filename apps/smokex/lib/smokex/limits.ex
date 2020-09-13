@@ -7,6 +7,9 @@ defmodule Smokex.Limits do
   The scope of the limitations affect to users that have a non premium
   subscription only.
 
+  In order to create/execute new resources the organization has to have premium
+  access or meet the limited configuration.
+
   ## Limits
 
   ### Plan definition limit
@@ -22,6 +25,7 @@ defmodule Smokex.Limits do
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
   alias Smokex.PlanDefinitions
+  alias Smokex.Organizations.Organization
   alias Smokex.Users
   alias Smokex.Organizations
   alias Smokex.Users.User
@@ -40,14 +44,24 @@ defmodule Smokex.Limits do
   end
 
   @doc """
-  Whether the plan definition can start a new execution.
+  Returns `true` if a new execution can be started.
 
-  In order to create a new plan definition the user has to have premium access
-  or meet the limited configuration.
+  This function can receive a `user`, `plan_execution` or `plan_definition` and
+  will check the limits for the related `organization`.
+
   """
-  @spec can_start_execution?(User.t(), PlanDefinition.t()) :: boolean
-  def can_start_execution?(%User{} = user, %PlanDefinition{} = plan_definition) do
-    Users.subscribed?(user) || get_daily_executions(plan_definition) < @max_daily_executions
+  @spec can_start_execution?(User.t() | PlanExecution.t() | PlanDefinition.t()) :: boolean
+  def can_start_execution?(%PlanDefinition{} = plan_definition) do
+    %Organization{} = organization = Smokex.Repo.preload(plan_definition, :organization)
+
+    Organizations.subscribed?(organization) ||
+      get_daily_executions(organization) < @max_daily_executions
+  end
+
+  def can_start_execution?(%User{} = user) do
+    organization = Organizations.get_organization(user)
+
+    Users.subscribed?(user) || get_daily_executions(organization) < @max_daily_executions
   end
 
   @doc """
@@ -58,34 +72,34 @@ defmodule Smokex.Limits do
   """
   @spec can_start_execution?(PlanExecution.t()) :: boolean
   def can_start_execution?(%PlanExecution{} = plan_execution) do
-    %PlanExecution{plan_definition: %PlanDefinition{organization: organization} = plan_definition} =
+    %PlanExecution{plan_definition: %PlanDefinition{organization: organization}} =
       Smokex.Repo.preload(plan_execution, plan_definition: :organization)
 
     Organizations.subscribed?(organization) ||
-      get_daily_executions(plan_definition) < @max_daily_executions
+      get_daily_executions(organization) < @max_daily_executions
   end
 
   @doc """
-  Returns the number of executions for the user for the last 24 hours since
+  Returns the number of executions for the organization for the last 24 hours since
   last execution was started.
   """
-  @spec get_daily_executions(PlanDefinition.t()) :: integer | nil
-  def get_daily_executions(%PlanDefinition{id: plan_definition_id}) do
-    Cachex.get!(:daily_executions, plan_definition_id) || 0
+  @spec get_daily_executions(Organization.t()) :: integer | nil
+  def get_daily_executions(%Organization{id: organization_id}) do
+    Cachex.get!(:daily_executions, organization_id) || 0
   end
 
   @doc """
-  Returns the number of executions for the user for the last 24 hours since
+  Returns the number of executions for the organization for the last 24 hours since
   last execution was started.
   """
-  @spec increase_daily_executions(PlanDefinition.t() | (plan_definition_id :: integer)) :: :ok
-  def increase_daily_executions(%PlanDefinition{id: plan_definition_id}) do
-    increase_daily_executions(plan_definition_id)
+  @spec increase_daily_executions(Organization.t() | (organization_id :: integer)) :: :ok
+  def increase_daily_executions(%Organization{id: organization_id}) do
+    increase_daily_executions(organization_id)
   end
 
-  def increase_daily_executions(plan_definition_id) when is_number(plan_definition_id) do
-    count = Cachex.get!(:daily_executions, plan_definition_id) || 0
-    Cachex.expire(:daily_executions, plan_definition_id, :timer.hours(24))
-    Cachex.put!(:daily_executions, plan_definition_id, count + 1)
+  def increase_daily_executions(organization_id) when is_number(organization_id) do
+    count = Cachex.get!(:daily_executions, organization_id) || 0
+    Cachex.expire(:daily_executions, organization_id, :timer.hours(24))
+    Cachex.put!(:daily_executions, organization_id, count + 1)
   end
 end

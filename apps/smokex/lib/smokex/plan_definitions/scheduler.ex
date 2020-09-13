@@ -7,6 +7,7 @@ defmodule Smokex.PlanDefinitions.Scheduler do
 
   require Logger
 
+  alias Smokex.Limits
   alias Smokex.Users.User
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
@@ -17,7 +18,7 @@ defmodule Smokex.PlanDefinitions.Scheduler do
   Creates a job schedule with the plan definition cron sentence.
   """
   @spec create_scheduled_job(PlanDefinition.t()) :: :ok
-  def create_scheduled_job(%PlanDefinition{id: plan_definition_id, cron_sentence: nil}), do: :ok
+  def create_scheduled_job(%PlanDefinition{cron_sentence: nil}), do: :ok
 
   def create_scheduled_job(
         %PlanDefinition{id: plan_definition_id, cron_sentence: cron_sentence} = plan_definition
