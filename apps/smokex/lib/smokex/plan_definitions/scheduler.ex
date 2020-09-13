@@ -7,6 +7,7 @@ defmodule Smokex.PlanDefinitions.Scheduler do
 
   require Logger
 
+  alias Smokex.Limits
   alias Smokex.Users.User
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
@@ -17,7 +18,7 @@ defmodule Smokex.PlanDefinitions.Scheduler do
   Creates a job schedule with the plan definition cron sentence.
   """
   @spec create_scheduled_job(PlanDefinition.t()) :: :ok
-  def create_scheduled_job(%PlanDefinition{id: plan_definition_id, cron_sentence: nil}), do: :ok
+  def create_scheduled_job(%PlanDefinition{cron_sentence: nil}), do: :ok
 
   def create_scheduled_job(
         %PlanDefinition{id: plan_definition_id, cron_sentence: cron_sentence} = plan_definition
@@ -88,7 +89,8 @@ defmodule Smokex.PlanDefinitions.Scheduler do
 
   @spec insert_job(User.t() | nil, PlanDefinition.t()) :: {:ok, number} | {:error, term}
   defp insert_job(user_or_nil, %PlanDefinition{} = plan_definition) do
-    with {:ok, %PlanExecution{id: plan_execution_id} = plan_execution} <-
+    with true <- Limits.can_start_execution?(plan_definition),
+         {:ok, %PlanExecution{id: plan_execution_id} = plan_execution} <-
            PlanExecutions.create_plan_execution(user_or_nil, plan_definition),
          job_spec <- build_job_spec(plan_execution, user_or_nil),
          {:ok, %Oban.Job{args: %{plan_execution_id: ^plan_execution_id}}} <-
@@ -96,6 +98,10 @@ defmodule Smokex.PlanDefinitions.Scheduler do
       Logger.info("Created scheduled job for execution #{inspect(plan_execution_id)}")
       {:ok, plan_execution_id}
     else
+      false ->
+        Logger.debug("Execution limit reached")
+        {:ok, "execution limit reached"}
+
       {:error, changeset} = error ->
         Logger.error("Error creating scheduled job: #{inspect(changeset)}")
         error

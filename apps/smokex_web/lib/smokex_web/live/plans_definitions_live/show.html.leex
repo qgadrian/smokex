@@ -52,7 +52,7 @@
       class: "button is-primary is-outlined" %>
 
 
-    <%= if Smokex.Limits.can_start_execution?(@current_user, @plan_definition) do %>
+    <%= if Smokex.Limits.can_start_execution?(@current_user) do %>
       <a href="#" role="button" class="button is-primary is-outlined"
                phx-click="execute" phx-disable-with="Starting...">
         Start new execution

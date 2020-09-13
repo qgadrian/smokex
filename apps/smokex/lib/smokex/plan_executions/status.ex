@@ -6,7 +6,8 @@ defmodule Smokex.PlanExecutions.Status do
   alias Smokex.PlanExecutions.Subscriber
 
   alias Smokex.Limits
-  alias Smokex.Users
+  alias Smokex.Organizations
+  alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
   alias Smokex.PlanExecutions
   alias Smokex.Notifications
@@ -35,10 +36,11 @@ defmodule Smokex.PlanExecutions.Status do
   """
   @spec start(PlanExecution.t(), integer) :: {:ok, PlanExecution.t()} | {:error, term}
   def start(%PlanExecution{} = plan_execution, total_executions \\ nil) do
-    plan_execution = Smokex.Repo.preload(plan_execution, :trigger_user)
+    %PlanExecution{plan_definition: %PlanDefinition{organization: organization}} =
+      plan_execution = Smokex.Repo.preload(plan_execution, plan_definition: :organization)
 
-    unless Users.subscribed?(plan_execution.trigger_user) do
-      Limits.increase_daily_executions(plan_execution.plan_definition_id)
+    unless Organizations.subscribed?(organization) do
+      Limits.increase_daily_executions(organization)
     end
 
     plan_execution

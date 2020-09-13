@@ -29,3 +29,6 @@ config :smokex_web, :basic_auth,
 config :slack,
   client_id: System.fetch_env!("SLACK_CLIENT_ID"),
   client_secret: System.fetch_env!("SLACK_CLIENT_SECRET")
+
+config :sentry,
+  dsn: System.fetch_env!("SENTRY_DSN")

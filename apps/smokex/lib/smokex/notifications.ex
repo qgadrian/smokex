@@ -51,14 +51,13 @@ defmodule Smokex.Notifications do
          %SlackIntegration{options: %SlackIntegrationPreferences{post_on_run: true}} =
            slack_integration,
          %PlanExecution{
-           trigger_user: user,
            status: :running,
            started_at: started_at
          } = plan_execution
        ) do
     plan_execution_url = plan_execution_url(plan_execution)
     plan_definition_url = plan_definition_url(plan_execution)
-    trigger_user = trigger_user(user)
+    trigger_user = trigger_user(plan_execution)
 
     SlackHelper.post_message(
       slack_integration,
@@ -114,7 +113,6 @@ defmodule Smokex.Notifications do
          %SlackIntegration{options: %SlackIntegrationPreferences{post_on_fail: true}} =
            slack_integration,
          %PlanExecution{
-           trigger_user: user,
            status: :halted,
            started_at: started_at,
            finished_at: finished_at
@@ -122,7 +120,7 @@ defmodule Smokex.Notifications do
        ) do
     plan_execution_url = plan_execution_url(plan_execution)
     plan_definition_url = plan_definition_url(plan_execution)
-    trigger_user = trigger_user(user)
+    trigger_user = trigger_user(plan_execution)
 
     SlackHelper.post_message(
       slack_integration,
@@ -188,7 +186,6 @@ defmodule Smokex.Notifications do
          %SlackIntegration{options: %SlackIntegrationPreferences{post_on_success: true}} =
            slack_integration,
          %PlanExecution{
-           trigger_user: user,
            status: :finished,
            started_at: started_at,
            finished_at: finished_at
@@ -196,7 +193,7 @@ defmodule Smokex.Notifications do
        ) do
     plan_execution_url = plan_execution_url(plan_execution)
     plan_definition_url = plan_definition_url(plan_execution)
-    trigger_user = trigger_user(user)
+    trigger_user = trigger_user(plan_execution)
 
     SlackHelper.post_message(
       slack_integration,
@@ -272,7 +269,11 @@ defmodule Smokex.Notifications do
     "https://smokex.io/plans/#{plan_definition_id}"
   end
 
-  @spec trigger_user(nil | User.t()) :: String.t()
-  defp trigger_user(nil), do: "automatic"
-  defp trigger_user(%User{email: email}), do: email
+  @spec trigger_user(PlanExecution.t()) :: String.t()
+  defp trigger_user(%PlanExecution{} = plan_execution) do
+    case Smokex.Repo.preload(plan_execution, :trigger_user) do
+      %PlanExecution{trigger_user: nil} -> "automatic"
+      %PlanExecution{trigger_user: %User{email: email}} -> email
+    end
+  end
 end
