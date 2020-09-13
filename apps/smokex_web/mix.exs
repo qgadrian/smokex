@@ -50,6 +50,7 @@ defmodule SmokexWeb.MixProject do
       {:smokex, in_umbrella: true},
       {:swoosh, "~> 1.0"},
       {:telemetry_metrics, "~> 0.4"},
+      {:timex, "~> 3.5"},
       {:telemetry_poller, "~> 0.4"},
       {:telemetry_metrics_statsd, "~> 0.4.0"},
       {:jason, "~> 1.0"},
