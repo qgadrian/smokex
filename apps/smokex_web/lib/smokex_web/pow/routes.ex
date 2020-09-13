@@ -11,4 +11,7 @@ defmodule SmokexWeb.Pow.Routes do
   def after_registration_path(conn) do
     Routes.live_path(conn, SmokexWeb.WelcomeLive.Show)
   end
+
+  @impl Pow.Phoenix.Routes
+  def after_sign_in_path(conn), do: Routes.live_path(conn, SmokexWeb.PlansExecutionsLive.All)
 end
