@@ -9,12 +9,13 @@ services:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
       - DATABASE_PORT=5432
-      - DATABASE_NAME=postgres
+      - DATABASE_NAME=smokex_dev
       - DASHBOARD_AUTH_USERNAME="hey"
       - DASHBOARD_AUTH_PASSWORD="hey"
       - DD_API_KEY=""
       - PORT=4000
       - POOL_SIZE=1
+      - SENTRY_DSN=""
       - STRIPE_API_KEY=""
       - STRIPE_SIGNING_SECRET=""
       - STRIPE_PUBLISHABLE_API_KEY=""
@@ -40,7 +41,7 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_DATABASE=postgres
+      - POSTGRES_DATABASE=smokex_dev
     container_name: postgres-smokex
     networks:
       - localhost
