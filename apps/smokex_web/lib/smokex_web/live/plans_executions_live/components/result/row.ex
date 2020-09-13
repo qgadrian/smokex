@@ -1,3 +1,7 @@
+#
+# TODO this module requires a HUGE refactor and sync with the `Smokex.Result` module to cleanup the pattern matching with String, atoms, keys format...
+# It needs to be a fixed struct and stop playing around with maps a types!
+#
 defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
   use SmokexWeb, :live_component
 
@@ -32,16 +36,20 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
   def assertion_error_detail(failed_assertion) when is_map(failed_assertion) do
     failed_assertion
     |> Map.to_list()
-    |> create_tag
+    |> Enum.map(fn assertion ->
+      create_tag(assertion)
+    end)
   end
 
-  # TODO assertions will more than one different filed (header and body, for
-  # example) will fail in the pattern match!
-  defp create_tag([{key, %{"expected" => expected, "received" => received}}]) do
+  defp create_tag({key, %{"expected" => expected, "received" => received}}) do
     build_tag(key, expected, received)
   end
 
-  defp create_tag([{"headers", failed_headers}]) do
+  defp create_tag({key, %{expected: expected, received: received}}) do
+    build_tag(key, expected, received)
+  end
+
+  defp create_tag({"headers", failed_headers}) do
     Enum.map(failed_headers, fn %{
                                   "expected" => expected,
                                   "received" => received,
@@ -52,7 +60,18 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
     end)
   end
 
-  defp create_tag([{"error", "Free limit reached"}]) do
+  defp create_tag({:headers, failed_headers}) do
+    Enum.map(failed_headers, fn %{
+                                  expected: expected,
+                                  received: received,
+                                  header: header_name
+                                } ->
+      expected = "#{header_name} to be #{expected}"
+      build_tag("headers", expected, received)
+    end)
+  end
+
+  defp create_tag({"error", "Free limit reached"}) do
     content_tag(:tr, class: "is-not-hoverable details-row ml-6") do
       content_tag(:td, colspan: "6") do
         content_tag(:div, class: "columns ml-4") do
@@ -70,7 +89,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
     end
   end
 
-  defp create_tag([{"error", reason}]) do
+  defp create_tag({"error", reason}) do
     build_tag("request", "to be successfully sent", reason)
   end
 
@@ -80,14 +99,6 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
 
   defp create_tag(status_code: %{expected: expected, received: received}) do
     build_tag("status_code", expected, received)
-  end
-
-  defp create_tag(
-         [{key, %{"expected" => expected, "received" => received}} | other] = tags_to_create
-       ) do
-    Enum.map(tags_to_create, fn {key, %{"expected" => expected, "received" => received}} ->
-      build_tag(key, expected, received)
-    end)
   end
 
   defp build_tag(key, expected, received) do
