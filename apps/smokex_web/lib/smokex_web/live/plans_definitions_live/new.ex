@@ -55,7 +55,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
     if Limits.can_create_plan_definition?(user) do
       socket
     else
-      redirect_path = Routes.live_path(socket, SmokexWeb.PlansDefinitionsLive.List)
+      redirect_path = Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All)
 
       push_redirect(socket, to: redirect_path)
     end
