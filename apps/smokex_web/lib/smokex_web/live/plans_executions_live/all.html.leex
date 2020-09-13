@@ -57,13 +57,15 @@
           <%= if @plan_definition_id do %>
             <div class="box-info x-flex x-flex-justify-sb x-flex-align-c <%= if (@executions_count > 0), do: "", else: "box-info-radius" %>">
               <%= if Smokex.Limits.can_start_execution?(@current_user, @plan_definition) do %>
-                  <span>Launch this plan manually</span>
-                  <a href="#" role="button" class="button has-text-weight-medium is-small" phx-click="execute" phx-disable-with="Starting...">
-                    Run
-                  </a>
+                <span>Launch this plan manually</span>
+                <a href="#" role="button" class="button has-text-weight-medium is-responsive" phx-click="execute" phx-disable-with="Starting...">
+                  Run
+                </a>
               <% else %>
-                <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user,
-                  extra_class: "is-light", text: "Get my subscription" %>
+                <span>Free limit executions reached.</span>
+                <div>
+                <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user, extra_class: "is-light is-responsive", text: "Go PRO" %>
+                </div>
               <% end %>
             </div>
           <% end %>
