@@ -30,9 +30,6 @@
           <div id="navbarDropdown" class="navbar-menu">
             <div class="navbar-start">
               <%= if Pow.Plug.current_user(@conn) do %>
-                <%= live_patch "Statistics", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
-                  class: "navbar-item" %>
-
                 <%= live_patch "Workflows", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.List), class: "navbar-item" %>
               <% else %>
                 <%= live_patch "Getting started", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "navbar-item" %>
