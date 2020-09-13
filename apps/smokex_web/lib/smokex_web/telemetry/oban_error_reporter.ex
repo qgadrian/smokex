@@ -5,10 +5,15 @@ defmodule SmokexWeb.Telemetry.ObanErrorReporter do
       |> Map.take([:id, :args, :queue, :worker])
       |> Map.merge(measure)
 
-    Sentry.capture_exception(meta.error, stracktrace: meta.stacktrace, extra: extra)
+    log_and_report(meta)
   end
 
   def handle_event([:oban, :circuit, :trip], _measure, meta, _) do
-    Sentry.capture_exception(meta.error, stacktrace: meta.stacktrace, extra: meta)
+    log_and_report(meta)
+  end
+
+  defp log_and_report(meta) do
+    Logger.error("#{inspect meta}")
+    Sentry.capture_exception(meta.error, stracktrace: meta.stacktrace, extra: extra)
   end
 end
