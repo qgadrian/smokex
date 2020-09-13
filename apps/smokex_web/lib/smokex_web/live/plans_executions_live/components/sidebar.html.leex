@@ -1,16 +1,27 @@
 <div>
   <%# custom view for mobile %>
   <div class="is-hidden-tablet  x-flex x-flex-justify-sb">
-    <div class="select is-small">
-      <%= form = form_for :filter, "#", [phx_change: "filter_update"] %>
-        <%= select(form, :plan_definition_id, Enum.map(["all" | @plan_definitions], fn
-          %Smokex.PlanDefinition{id: id, name: name} ->
-            selected = id == @plan_definition_id
-            [key: name, value: id, selected: selected]
-          "all" ->
-            [key: "All Plans", value: "", selected: true]
-          end)) %>
-      </form>
+    <div class="x-flex x-flex-align-c">
+      <div class="select is-small">
+        <%= form = form_for :filter, "#", [phx_change: "filter_update"] %>
+          <%= select(form, :plan_definition_id, Enum.map(["all" | @plan_definitions], fn
+            %Smokex.PlanDefinition{id: id, name: name} ->
+              selected = id == @plan_definition_id
+              [key: name, value: id, selected: selected]
+            "all" ->
+              [key: "All Plans", value: "", selected: true]
+            end)) %>
+        </form>
+      </div>
+      <%= if @plan_definition_id do %>
+        <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition_id) do %>
+          <button class="button is-small ml-3">
+            <span class="icon">
+              <ion-icon name="create-outline" size="large" class="is-primary"></ion-icon>
+            </span>
+          </button>
+        <% end %>
+      <% end %>
     </div>
     <%= if Smokex.Limits.can_create_plan_definition?(@current_user) do %>
       <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>

@@ -18,8 +18,8 @@
       </div>
 
       <div class="column is-four-fifths">
-        <div class="x-flex x-flex-justify-sb">
-          <h1 class="title is-size-4 mb-5 is-hidden-mobile">
+        <div class="x-flex is-hidden-mobile">
+          <h1 class="title is-size-4 mb-5">
             <%= if !@plan_definition_id do %>
               All Plans
             <% else %>
@@ -28,11 +28,9 @@
           </h1>
           <%= if @plan_definition_id do %>
             <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition_id) do %>
-              <button class="button">
-                <span class="icon">
-                  <ion-icon name="settings-outline"></ion-icon>
-                </span>
-              </button>
+              <span class="icon ml-3">
+                <ion-icon name="create-outline"></ion-icon>
+              </span>
             <% end %>
           <% end %>
         </div>
