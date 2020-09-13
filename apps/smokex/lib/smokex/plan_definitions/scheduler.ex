@@ -89,7 +89,8 @@ defmodule Smokex.PlanDefinitions.Scheduler do
 
   @spec insert_job(User.t() | nil, PlanDefinition.t()) :: {:ok, number} | {:error, term}
   defp insert_job(user_or_nil, %PlanDefinition{} = plan_definition) do
-    with {:ok, %PlanExecution{id: plan_execution_id} = plan_execution} <-
+    with true <- Limits.can_start_execution?(plan_definition),
+         {:ok, %PlanExecution{id: plan_execution_id} = plan_execution} <-
            PlanExecutions.create_plan_execution(user_or_nil, plan_definition),
          job_spec <- build_job_spec(plan_execution, user_or_nil),
          {:ok, %Oban.Job{args: %{plan_execution_id: ^plan_execution_id}}} <-
@@ -97,6 +98,10 @@ defmodule Smokex.PlanDefinitions.Scheduler do
       Logger.info("Created scheduled job for execution #{inspect(plan_execution_id)}")
       {:ok, plan_execution_id}
     else
+      false ->
+        Logger.debug("Execution limit reached")
+        {:ok, "execution limit reached"}
+
       {:error, changeset} = error ->
         Logger.error("Error creating scheduled job: #{inspect(changeset)}")
         error
