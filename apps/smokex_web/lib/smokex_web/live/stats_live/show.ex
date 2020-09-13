@@ -24,18 +24,22 @@ defmodule SmokexWeb.StatsLive.Show do
   #
   defp fetch_plan_executions(%Socket{assigns: %{current_user: user}} = socket) do
     plan_executions =
-      PlanExecutions.last_executions(user, limit: 10)
+      user
+      |> PlanExecutions.last_executions(limit: 10)
       |> Smokex.Repo.preload(:plan_definition)
+
     assign(socket, plan_executions: plan_executions)
   end
 
   defp fetch_executions_summary(%Socket{assigns: %{current_user: user}} = socket) do
     executions_summary = PlanExecutions.executions_summary(user)
+
     assign(socket, executions_summary: executions_summary)
   end
 
   defp fetch_total_executions(%Socket{assigns: %{current_user: user}} = socket) do
     total_executions = PlanExecutions.total_executions(user)
+
     assign(socket, total_executions: total_executions)
   end
 end

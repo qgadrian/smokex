@@ -62,7 +62,8 @@ defmodule Smokex.Limits do
   def can_start_execution?(%User{} = user) do
     {:ok, organization} = Organizations.get_organization(user)
 
-    Users.subscribed?(user) || get_daily_executions(organization) < @max_daily_executions
+    Organizations.subscribed?(organization) ||
+      get_daily_executions(organization) < @max_daily_executions
   end
 
   @spec can_start_execution?(PlanExecution.t()) :: boolean
