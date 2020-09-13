@@ -2,8 +2,8 @@ defmodule SmokexWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 
-  @enable_system_metrics Application.compile_env(:smokex_web, :enable_system_metrics)
-  @metrics_reporters Application.compile_env(:smokex_web, :metrics_reporters)
+  @enable_system_metrics Application.compile_env(:smokex_web, :enable_system_metrics, true)
+  @metrics_reporters Application.compile_env(:smokex_web, :metrics_reporters, [])
 
   def start_link(arg) do
     Supervisor.start_link(__MODULE__, arg, name: __MODULE__)
