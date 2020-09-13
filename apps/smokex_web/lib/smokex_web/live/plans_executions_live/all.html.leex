@@ -60,11 +60,13 @@
         <%= live_component @socket, TableComponent, plan_executions: @plan_executions, id: "#{@plan_definition_id}-#{@active_filter}" %>
       </div>
 
-      <div class="columns is-centered mt-6" role="navigation" aria-label="pagination">
-        <form phx-submit="load-more">
-          <button class="button is-primary" phx-disable-with="loading...">load more</button>
-        </form>
-      </div>
+      <%= if @plan_executions != [] do %>
+        <div class="columns is-centered mt-6" role="navigation" aria-label="pagination">
+          <form phx-submit="load-more">
+            <button class="button is-primary" phx-disable-with="loading...">Load more</button>
+          </form>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
