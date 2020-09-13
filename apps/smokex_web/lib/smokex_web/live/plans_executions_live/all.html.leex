@@ -27,13 +27,13 @@
             <% end %>
           </h1>
           <%= if @plan_definition_id do %>
-          <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition_id) do %>
-            <button class="button">
-              <span class="icon">
-                <ion-icon name="settings-outline"></ion-icon>
-              </span>
-            </button>
-          <% end %>
+            <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition_id) do %>
+              <button class="button">
+                <span class="icon">
+                  <ion-icon name="settings-outline"></ion-icon>
+                </span>
+              </button>
+            <% end %>
           <% end %>
         </div>
 
@@ -59,7 +59,7 @@
 
           <%= if @plan_definition_id do %>
             <div class="box-info x-flex x-flex-justify-sb x-flex-align-c <%= if (@executions_count > 0), do: "", else: "box-info-radius" %>">
-              <%= if Smokex.Limits.can_start_execution?(@current_user, @plan_definition) do %>
+              <%= if Smokex.Limits.can_start_execution?(@current_user) do %>
                 <span>Launch this plan manually</span>
                 <a href="#" role="button" class="button has-text-weight-medium is-responsive" phx-click="execute" phx-disable-with="Starting...">
                   Run
