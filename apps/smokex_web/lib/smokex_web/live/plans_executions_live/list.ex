@@ -83,10 +83,13 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
     path_to =
       case plan_definition_id do
         nil ->
-          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, status_filter, 1)
+          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, status_filter)
 
         plan_definition_id ->
-          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, status_filter, 1,
+          Routes.live_path(
+            socket,
+            SmokexWeb.PlansExecutionsLive.List,
+            status_filter,
             plan: plan_definition_id
           )
       end
@@ -251,16 +254,5 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
     PlanExecutionsSubscriber.subscribe_to_any()
 
     socket
-  end
-
-  @spec page_path(Socket.t(), PlanExecution.status(), integer, integer | nil) :: term
-  defp page_path(socket, active_filter, page, nil) do
-    Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, active_filter, page)
-  end
-
-  defp page_path(socket, active_filter, page, plan_definition_id) do
-    Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, active_filter, page,
-      plan: plan_definition_id
-    )
   end
 end
