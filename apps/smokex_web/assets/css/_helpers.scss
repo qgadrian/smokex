@@ -1,0 +1,68 @@
+// icons!
+ion-icon {
+  visibility: inherit !important;
+  &.is-success {
+    color: $success
+  }
+  &.is-info {
+    color: $info
+  }
+  &.is-danger {
+    color: $danger
+  }
+}
+
+// flex!
+.x-flex {
+  display: flex;
+}
+.x-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.x-flex-justify-sb {
+  justify-content: space-between;
+}
+.x-flex-justify-c {
+  justify-content: center;
+}
+.x-flex-align-c {
+  align-items: center;
+}
+.x-flex-align-self-c {
+  align-self: center;
+}
+
+// text
+.no-wrap {
+  white-space: nowrap;
+}
+
+// boxes!
+.box.is-bordered {
+  padding: 0;
+  box-shadow: none;
+  border: 1px solid $border;
+}
+
+// buttons!
+.button.is-responsive {
+  @include until($tablet) {
+    @include button-small;
+  }
+}
+.button.has-text-left {
+  justify-content: flex-start;
+
+}
+.button.has-text-right {
+  justify-content: flex-end;
+}
+
+// spacing!
+.erase-px-mobile {
+  @include until($tablet) {
+    padding-left: 12px !important;
+    padding-right: 11px !important;
+  }
+}

@@ -1,15 +1,7 @@
-<table class="table is-fullwidth">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Started at</th>
-      <th scope="col">Finished at</th>
-      <th scope="col">Status</th>
-    </tr>
-  </thead>
-  <tbody>
+<div class="box-content">
+  <ul phx-update="append">
     <%= for plan_execution <- @plan_executions do %>
       <%= live_component @socket, RowComponent, id: plan_execution.id, plan_execution: plan_execution %>
     <% end %>
-  </tbody>
-</table>
+  </ul>
+</div>

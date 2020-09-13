@@ -4,12 +4,14 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   require Logger
 
   alias Smokex.PlanExecutions.Subscriber, as: PlanExecutionsSubscriber
+  alias Smokex.PlanDefinitions.Scheduler, as: PlanDefinitionScheduler
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanDefinitions
   alias Smokex.PlanExecution
   alias Smokex.PlanExecutions
-  alias SmokexWeb.PlansExecutionsLive.Components.Filter, as: FilterComponent
+  alias SmokexWeb.PlansExecutionsLive.Components.Sidebar
   alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
+  alias SmokexWeb.PlansExecutionsLive.Components.GetStarted, as: GetStarted
 
   @impl Phoenix.LiveView
   def mount(_params, session, socket) do
@@ -18,13 +20,11 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       |> assign(page_title: "Executions")
       |> SessionHelper.assign_user!(session)
 
-    {:ok, socket}
+    {:ok, socket, temporary_assigns: [plan_executions: []]}
   end
 
   @impl Phoenix.LiveView
   def handle_params(params, _url, socket) do
-    {page, ""} = Integer.parse(params["page"] || "1")
-
     status =
       params
       |> Map.get("status", "all")
@@ -41,12 +41,24 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
 
     socket =
       socket
-      |> assign(page: page)
+      |> assign(page: 1)
       |> assign(active_filter: status)
       |> assign(plan_definition_id: plan_definition_id)
       |> subscribe_to_changes()
       |> fetch_executions
       |> fetch_plan_definitions
+      |> fetch_plan_definition
+      |> set_total_results_count
+
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_event("load-more", _, %Socket{assigns: %{page: page}} = socket) do
+    socket =
+      socket
+      |> assign(page: page + 1)
+      |> fetch_executions()
 
     {:noreply, socket}
   end
@@ -54,8 +66,8 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   @impl Phoenix.LiveView
   def handle_event(
         "filter_update",
-        %{"filter" => %{"plan_definition_id" => plan_definition_id, "status" => status_filter}},
-        %Socket{} = socket
+        %{"filter" => %{"plan_definition_id" => plan_definition_id}},
+        %Socket{assigns: %{active_filter: status_filter}} = socket
       ) do
     plan_definition_id =
       case Integer.parse(plan_definition_id) do
@@ -63,11 +75,8 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
         :error -> nil
       end
 
-    status_filter = String.to_existing_atom(status_filter)
-
     socket =
       socket
-      |> assign(active_filter: status_filter)
       |> assign(plan_definition_id: plan_definition_id)
       |> fetch_executions
 
@@ -83,6 +92,25 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
       end
 
     {:noreply, push_patch(socket, to: path_to)}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_event(
+        "execute",
+        _params,
+        %Socket{assigns: %{current_user: user, plan_definition: plan_definition}} = socket
+      ) do
+    with {:ok, plan_execution_id} <- PlanDefinitionScheduler.enqueue_job(plan_definition, user) do
+      redirect_path =
+        Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.Show, plan_execution_id)
+
+      {:noreply, push_redirect(socket, to: redirect_path)}
+    else
+      error ->
+        # TODO handle error and show feedback to user
+        Logger.error(inspect(error))
+        {:noreply, socket}
+    end
   end
 
   @impl Phoenix.LiveView
@@ -138,6 +166,27 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   # Private functions
   #
 
+  @spec fetch_plan_definition(Socket.t()) :: Socket.t()
+  defp fetch_plan_definition(%Socket{assigns: %{plan_definition_id: nil}} = socket) do
+    assign(socket, plan_definition: nil)
+  end
+
+  defp fetch_plan_definition(
+         %Socket{assigns: %{plan_definition_id: id, current_user: user}} = socket
+       ) do
+    plan_definition = PlanDefinitions.get!(user, id)
+    changeset = Ecto.Changeset.change(plan_definition)
+
+    assign(socket, plan_definition: plan_definition, changeset: changeset)
+  end
+
+  @spec fetch_plan_definitions(Socket.t()) :: Socket.t()
+  defp fetch_plan_definitions(%Socket{assigns: %{current_user: user}} = socket) do
+    plan_definitions = PlanDefinitions.all(user)
+
+    assign(socket, plan_definitions: plan_definitions)
+  end
+
   @spec fetch_executions(Socket.t()) :: Socket.t()
   defp fetch_executions(
          %Socket{
@@ -149,19 +198,29 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
            }
          } = socket
        ) do
-    plans_executions =
+    more_plans_executions =
       user
       |> PlanExecutions.all(page, status: status, plan_definition_id: plan_definition_id)
+      |> Smokex.Repo.preload(:plan_definition)
       |> subscribe_to_changes()
 
-    assign(socket, plan_executions: plans_executions)
+    assign(socket, plan_executions: more_plans_executions)
   end
 
-  @spec fetch_plan_definitions(Socket.t()) :: Socket.t()
-  defp fetch_plan_definitions(%Socket{assigns: %{current_user: user}} = socket) do
-    plan_definitions = PlanDefinitions.all(user)
+  @spec set_total_results_count(Socket.t()) :: Socket.t()
+  defp set_total_results_count(
+         %Socket{
+           assigns: %{
+             current_user: user,
+             active_filter: status,
+             plan_definition_id: plan_definition_id
+           }
+         } = socket
+       ) do
+    executions_count =
+      PlanExecutions.count_total(user, status: status, plan_definition_id: plan_definition_id)
 
-    assign(socket, plan_definitions: plan_definitions)
+    assign(socket, executions_count: executions_count)
   end
 
   @spec subscribe_to_changes(list(PlanExecution.t())) :: list(PlanExecution.t())

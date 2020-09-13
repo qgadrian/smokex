@@ -1,0 +1,49 @@
+.box-nav {
+  margin-bottom: 16px;
+}
+
+.box-header {
+  padding: 16px;
+  background-color: #f6f8fa;
+  border-bottom: 1px solid $border;
+  .select {
+    margin: -5px 0;
+  }
+  .box-header-right {
+    display: flex;
+    @include from($tablet) {
+      justify-content: flex-end;
+    }
+    .box-header-filter{
+      &:not(:last-child) {
+        margin-right: 12px;
+      }
+    }
+  }
+}
+
+.box-info {
+  padding: 12px;
+  margin: -1px 0;
+  background-color: $info-light;
+  border-top: 1px solid rgba(4, 66, 137, 0.2);
+  border-bottom: 1px solid rgba(4, 66, 137, 0.2);
+}
+
+.box-info-radius {
+  border-radius: $box-radius;
+}
+
+.box-row {
+  border-bottom: 1px solid $border;
+  padding: 16px;
+}
+
+.box-right {
+  display: flex;
+  flex-direction: column;
+  summary {
+    padding: 4px 0;
+    display: flex;
+  }
+}

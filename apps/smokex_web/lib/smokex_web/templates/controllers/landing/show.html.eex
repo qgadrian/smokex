@@ -13,7 +13,7 @@
           development.
         </span>
       </p>
-      <%= live_patch "Sign up for free", to: Routes.live_path(@conn, SmokexWeb.MyAccountLive.Show), class: "button is-primary is-large" %>
+      <%= link "Sign up for free", class: "button is-primary is-large", to: Routes.pow_registration_path(@conn, :new) %>
     </div>
     <img src="<%= Routes.static_path(@conn, "/images/landing.png") %>" class="hero-image" alt="Landing image"/>
   </div>

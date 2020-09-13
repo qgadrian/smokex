@@ -3,13 +3,12 @@ defmodule Smokex.Oban.PlanExecutionWorker do
 
   require Logger
 
-  alias Smokex.PlanDefinitions
   alias Smokex.PlanExecution
   alias Smokex.PlanExecutions
 
   @impl Oban.Worker
   def perform(%Oban.Job{
-        args: %{"plan_execution_id" => plan_execution_id, "user_id" => user_id_or_nil}
+        args: %{"plan_execution_id" => plan_execution_id, "user_id" => _user_id_or_nil}
       }) do
     Logger.info("Start scheduled job for #{plan_execution_id}")
 

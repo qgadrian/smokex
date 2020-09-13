@@ -85,20 +85,11 @@ defmodule Smokex.PlanExecutions do
   If no execution is found, raises an exception.
   """
   @spec get!(User.t(), id :: integer) :: PlanExecution.t() | no_return
-  def get!(%User{id: user_id}, id) do
-    query =
-      from(plan_execution in PlanExecution,
-        join: plan_definition in PlanDefinition,
-        on: plan_execution.plan_definition_id == plan_definition.id,
-        join: organizations_users in "organizations_users",
-        on:
-          organizations_users.user_id == ^user_id and
-            organizations_users.organization_id == plan_definition.organization_id,
-        where: plan_execution.id == ^id,
-        select: plan_execution
-      )
-
-    Smokex.Repo.one!(query)
+  def get!(%User{} = user, id) do
+    user
+    |> list_executions_query()
+    |> where(id: ^id)
+    |> Smokex.Repo.one!()
   end
 
   @doc """
@@ -113,29 +104,16 @@ defmodule Smokex.PlanExecutions do
 
   def all(nil, _current_page, _opts), do: []
 
-  def all(%User{id: user_id}, current_page, opts) do
-    plan_definition_id = Keyword.get(opts, :plan_definition_id)
+  def all(%User{} = user, current_page, opts) do
     # TODO make this configurable
     per_page = Keyword.get(opts, :per_page, 20)
-    status = Keyword.get(opts, :status, :all)
 
-    query =
-      from(plan_execution in PlanExecution,
-        join: plan_definition in PlanDefinition,
-        on: plan_execution.plan_definition_id == plan_definition.id,
-        join: organizations_users in "organizations_users",
-        on:
-          organizations_users.user_id == ^user_id and
-            organizations_users.organization_id == plan_definition.organization_id,
-        offset: ^((current_page - 1) * per_page),
-        limit: ^per_page,
-        order_by: [desc: :updated_at],
-        select: plan_execution
-      )
-      |> maybe_query_by_status(status)
-      |> maybe_query_by_plan_definition(plan_definition_id)
-
-    Smokex.Repo.all(query)
+    user
+    |> list_executions_query(opts)
+    |> offset((^current_page - 1) * ^per_page)
+    |> limit(^per_page)
+    |> order_by(desc: :updated_at)
+    |> Smokex.Repo.all()
   end
 
   @doc """
@@ -146,26 +124,14 @@ defmodule Smokex.PlanExecutions do
   # TODO get the plan definition in opts and create a maybe function
   @spec last_executions(User.t(), last_execution_opts) :: list(PlanExecution.t())
   # TODO add a config to limit
-  def last_executions(%User{id: user_id}, opts) do
-    plan_definition_id = Keyword.get(opts, :plan_definition_id)
+  def last_executions(%User{} = user, opts) do
     # TODO make the limit configurable
     limit = Keyword.get(opts, :limit, 10)
 
-    query =
-      from(plan_execution in PlanExecution,
-        join: plan_definition in PlanDefinition,
-        on: plan_execution.plan_definition_id == plan_definition.id,
-        join: organizations_users in "organizations_users",
-        on:
-          organizations_users.user_id == ^user_id and
-            organizations_users.organization_id == plan_definition.organization_id,
-        limit: ^limit,
-        order_by: [desc: :updated_at],
-        select: plan_execution
-      )
-      |> maybe_query_by_plan_definition(plan_definition_id)
-
-    Smokex.Repo.all(query)
+    user
+    |> list_executions_query(opts)
+    |> limit(^limit)
+    |> Smokex.Repo.all()
   end
 
   @doc """
@@ -189,23 +155,26 @@ defmodule Smokex.PlanExecutions do
   end
 
   @doc """
+  Returns the total number of executions for the given criteria.
+  """
+  @spec count_total(User.t(), filter_opts()) :: list(PlanExecution.t())
+  def count_total(user_or_nil, opts \\ [])
+
+  def count_total(nil, _opts), do: 0
+
+  def count_total(%User{} = user, opts) do
+    user
+    |> list_executions_query(opts)
+    |> Smokex.Repo.aggregate(:count)
+  end
+
+  @doc """
   Returns the total number of executions.
+
+  TODO delete this function as duplicates `count_total`
   """
   @spec total_executions(User.t()) :: list(PlanExecution.t())
-  def total_executions(%User{id: user_id}) do
-    query =
-      from(plan_execution in PlanExecution,
-        join: plan_definition in PlanDefinition,
-        on: plan_execution.plan_definition_id == plan_definition.id,
-        join: organizations_users in "organizations_users",
-        on:
-          organizations_users.user_id == ^user_id and
-            organizations_users.organization_id == plan_definition.organization_id,
-        select: count(plan_execution.id)
-      )
-
-    Smokex.Repo.one!(query)
-  end
+  def total_executions(%User{} = user), do: count_total(user, [])
 
   @doc """
   Returns all the executions of a plan definition id that are in the given
@@ -243,7 +212,7 @@ defmodule Smokex.PlanExecutions do
   start and finish date, and a **finished state**. If the execution has no
   finished state, returns `nil`.
   """
-  @spec execution_time(PlanExecution.t()) :: integer
+  @spec execution_time(PlanExecution.t()) :: integer | nil
   def execution_time(%PlanExecution{
         started_at: started_at,
         finished_at: finished_at,
@@ -260,6 +229,23 @@ defmodule Smokex.PlanExecutions do
   #
   # Private functions
   #
+
+  defp list_executions_query(%User{id: user_id}, opts \\ []) do
+    plan_definition_id = Keyword.get(opts, :plan_definition_id)
+    status = Keyword.get(opts, :status, :all)
+
+    from(plan_execution in PlanExecution,
+      join: plan_definition in PlanDefinition,
+      on: plan_execution.plan_definition_id == plan_definition.id,
+      join: organizations_users in "organizations_users",
+      on:
+        organizations_users.user_id == ^user_id and
+          organizations_users.organization_id == plan_definition.organization_id,
+      select: plan_execution
+    )
+    |> maybe_query_by_status(status)
+    |> maybe_query_by_plan_definition(plan_definition_id)
+  end
 
   @spec maybe_query_by_plan_definition(Ecto.Query.t(), integer | binary) :: Ecto.Query
   defp maybe_query_by_plan_definition(query, plan_definition_id)

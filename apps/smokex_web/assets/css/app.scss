@@ -1,9 +1,13 @@
 /* This file is for your main application css. */
 @import "../node_modules/nprogress/nprogress.css";
 @import 'variables';
-@import 'cheatsheet';
 @import 'prismjs';
 @import "~bulma/bulma";
+@import 'helpers';
+@import 'custombox';
+@import 'executions';
+@import 'cheatsheet';
+@import 'vendors';
 
 html {
   font-size: 14px;
@@ -46,7 +50,10 @@ footer {
 
 // main content
 main.sx-main {
-  padding-bottom: 4rem;    /* Footer height */
+  padding-bottom: 53px;    /* Footer height */
+  @include until($tablet) {
+    padding-bottom: 78px;
+  }
 }
 
 // hero section #show.htmol.leex
