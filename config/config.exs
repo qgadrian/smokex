@@ -81,7 +81,6 @@ config :stripity_stripe,
   signing_secret: "***REMOVED***"
 
 config :sentry,
-  dsn: "***REMOVED***",
   environment_name: Mix.env(),
   included_environments: [:prod],
   enable_source_code_context: true,
