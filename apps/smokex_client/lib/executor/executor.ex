@@ -23,14 +23,20 @@ defmodule SmokexClient.Executor do
 
   Keep in mind this can be a long living executing and the calling process
   will be potentially blocked for a long time.
+
+  In order to let this function execute the `#{PlanExecution}` the status must be:
+
+  * `created`: Means the
   """
-  @spec execute(PlanExecution.t()) :: {:ok, term} | {:error, term}
+  @spec execute(PlanExecution.t(), keyword) :: {:ok, term} | {:error, term}
+  def execute(_plan_execution, opts \\ [])
+
   def execute(
         %PlanExecution{
           id: id,
           status: :created
         } = plan_execution,
-        opts \\ [halt: true]
+        opts
       ) do
     Logger.info("Start execution #{id}")
 
@@ -48,6 +54,16 @@ defmodule SmokexClient.Executor do
 
       {:error, :reached_free_limit}
     end
+  end
+
+  def execute(%PlanExecution{id: id, status: status} = plan_execution, _opts) do
+    Logger.info(
+      "Execution #{id} cannot run, it will halted instead because has invalid status: #{status}"
+    )
+
+    PlanExecutionStatus.halt(plan_execution)
+
+    {:ok, plan_execution}
   end
 
   @spec do_execute(PlanExecution.t(), keyword) :: {:ok, term} | {:error, term}
