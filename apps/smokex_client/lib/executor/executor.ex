@@ -24,9 +24,9 @@ defmodule SmokexClient.Executor do
   Keep in mind this can be a long living executing and the calling process
   will be potentially blocked for a long time.
 
-  In order to let this function execute the `#{PlanExecution}` the status must be:
-
-  * `created`: Means the
+  In order to let this function execute the `#{PlanExecution}` the status must
+  have the `created` state. If it does not, it means the execution is in a
+  *corrupted state* and it will halted by the worker.
   """
   @spec execute(PlanExecution.t(), keyword) :: {:ok, term} | {:error, term}
   def execute(_plan_execution, opts \\ [halt: true])
