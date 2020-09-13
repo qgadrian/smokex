@@ -172,6 +172,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ### Post release
 
+* [ ] Add view to promote "beta free access", ideally toggleable by
+    configuration
 * [x] Create welcome page with introduction to Smokex
 * [ ] Mail the welcome content to registered users
 * [x] Add terms and conditions links to footer
