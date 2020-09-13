@@ -11,6 +11,7 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   alias Smokex.PlanExecutions
   alias SmokexWeb.PlansExecutionsLive.Components.Sidebar
   alias SmokexWeb.PlansExecutionsLive.Components.Table, as: TableComponent
+  alias SmokexWeb.PlansExecutionsLive.Components.GetStarted, as: GetStarted
 
   @impl Phoenix.LiveView
   def mount(_params, session, socket) do

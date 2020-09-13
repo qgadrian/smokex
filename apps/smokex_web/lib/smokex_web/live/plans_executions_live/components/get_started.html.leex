@@ -1,0 +1,56 @@
+<div class="container py-4 is-vcentered">
+  <h2 class="title">Get started with Smokex Plans</h2>
+
+  <h3 class="title is-5">We will help you to take you first steps</h3>
+  <p class="subtitle is-6">Creating any test plan is extremely easy and can be done in 3 simple steps.</p>
+
+  <div class="media pt-3">
+    <div class="media-content">
+      <div class="content">
+        <h3>1. Create a plan</h3>
+        <p>
+          <%= live_patch "Create test plan",
+to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %> that will
+assert a 200 response and a specific value in the response:
+        </p>
+
+        <section class="cheatsheet">
+          <pre phx-update="ignore" class="box"><code class="language-yaml"><span>- post:
+    host: "http://httpbin.org/post"
+    body:
+      name: "Michael Jordan"
+      number: 23
+    expect:
+      status_code: 200
+    body:
+      json:
+        number: 23
+          </span></code></pre>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div class="media">
+    <div class="media-content">
+      <div class="content">
+        <h3>2. Launch a plan</h3>
+        <p>When you create a new plan you schedule executions using a <a href="https://crontab.guru/examples.html" target="_blank">cron sentence</a>, additionally you can manually run your plan on demand.</p>
+      </div>
+    </div>
+  </div>
+  <div class="media">
+    <div class="media-content">
+      <div class="content">
+        <h3>3. Check the result</h3>
+        <p>You can check
+        <%= live_patch "all the plans", to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All) %>, including the detail of any failed assertions or errors.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content pt-6">
+    <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>
+      <button class="button is-primary is-outlined">Create you first plan</button>
+    <% end %>
+  </div>
+</div>
