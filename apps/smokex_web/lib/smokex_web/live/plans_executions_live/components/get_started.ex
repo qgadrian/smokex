@@ -3,6 +3,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.GetStarted do
 
   use Phoenix.HTML
 
+  @impl Phoenix.LiveComponent
   def mount(socket) do
     {:ok, socket}
   end
