@@ -191,7 +191,6 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
   defp fetch_executions(
          %Socket{
            assigns: %{
-             plan_executions: current_plans_executions,
              current_user: user,
              active_filter: status,
              page: page,
@@ -199,13 +198,13 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
            }
          } = socket
        ) do
-    updated_plans_executions =
+    more_plans_executions =
       user
       |> PlanExecutions.all(page, status: status, plan_definition_id: plan_definition_id)
       |> Smokex.Repo.preload(:plan_definition)
       |> subscribe_to_changes()
 
-    assign(socket, plan_executions: updated_plans_executions)
+    assign(socket, plan_executions: more_plans_executions)
   end
 
   @spec set_total_results_count(Socket.t()) :: Socket.t()
