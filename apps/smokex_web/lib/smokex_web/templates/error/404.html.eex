@@ -23,10 +23,7 @@
               <%= live_patch "Stats", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
                 class: "navbar-item" %>
 
-              <%= live_patch "Test plans", to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.List),
-                class: "navbar-item" %>
-
-              <%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.List),
+              <%= live_patch "Workflows", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.List),
                 class: "navbar-item" %>
 
               <%= live_patch "Pricing", to: Routes.live_path(@conn, SmokexWeb.PricingLive.Show),
