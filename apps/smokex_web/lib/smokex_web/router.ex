@@ -91,7 +91,7 @@ defmodule SmokexWeb.Router do
       live "/plans/:id/edit", PlansDefinitionsLive.Edit
 
       live "/executions", PlansExecutionsLive.List
-      live "/executions/:status", PlansExecutionsLive.List
+      live "/executions/status/:status", PlansExecutionsLive.List
       live "/executions/:id", PlansExecutionsLive.Show
 
       scope "/payments" do
