@@ -2,11 +2,19 @@
   <%= if @plan_definitions == [] do %>
     <%= live_component @socket, GetStarted %>
   <% else %>
+    <%= if !Smokex.Limits.can_create_plan_definition?(@current_user) do %>
+      <div class="notification is-info is-light">
+        <%# <button class="delete"></button> %>
+        You have reached the maximum number of plans allowed for your subscription. To create a new Plan <strong>
+        <%= link "upgrade your subscription", class: "", to: Routes.pow_registration_path(@socket, :new) %></strong>.
+      </div>
+    <% end %>
+
     <div class="columns">
       <div class="column">
         <%= live_component @socket, Sidebar, active_filter: @active_filter,
                 plan_executions: @plan_executions, plan_definition_id: @plan_definition_id,
-                plan_definitions: @plan_definitions %>
+                plan_definitions: @plan_definitions, current_user: @current_user %>
       </div>
       <div class="column is-four-fifths">
         <div class="x-flex x-flex-justify-sb">
@@ -64,7 +72,7 @@
         </div>
 
         <%= if @plan_executions != [] do %>
-          <div class="columns is-centered mt-6" role="navigation" aria-label="pagination">
+          <div class="x-flex x-flex-justify-c" role="navigation" aria-label="pagination">
             <form phx-submit="load-more">
               <button class="button is-primary" phx-disable-with="loading...">Load more</button>
             </form>
