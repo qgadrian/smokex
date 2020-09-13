@@ -33,7 +33,7 @@
                 <%= live_patch "Statistics", to: Routes.live_path(@conn, SmokexWeb.StatsLive.Show),
                   class: "navbar-item" %>
 
-                <%= live_patch "Executions", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All), class: "navbar-item" %>
+                <%= live_patch "Plans", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.All), class: "navbar-item" %>
               <% else %>
                 <%= live_patch "Getting started", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "navbar-item" %>
               <% end %>
