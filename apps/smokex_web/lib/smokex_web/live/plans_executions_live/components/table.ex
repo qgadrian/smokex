@@ -3,6 +3,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Table do
 
   alias SmokexWeb.PlansExecutionsLive.Components.Row, as: RowComponent
 
+  @impl Phoenix.LiveView
   def mount(socket) do
     {:ok, socket}
   end

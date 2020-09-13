@@ -16,6 +16,7 @@
                 plan_executions: @plan_executions, plan_definition_id: @plan_definition_id,
                 plan_definitions: @plan_definitions, current_user: @current_user %>
       </div>
+
       <div class="column is-four-fifths">
         <div class="x-flex x-flex-justify-sb">
           <h1 class="title is-size-4 mb-5 is-hidden-mobile">
@@ -35,6 +36,7 @@
           <% end %>
           <% end %>
         </div>
+
         <nav class="box-nav">
           <div class="buttons has-addons">
             <%= for status <- [:all, :created, :finished, :halted, :running] do %>
@@ -45,6 +47,7 @@
             <% end %>
           </div>
         </nav>
+
         <div class="box is-bordered">
           <div class="box-header">
             <div class="columns">
