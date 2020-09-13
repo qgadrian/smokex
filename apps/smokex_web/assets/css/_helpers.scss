@@ -29,6 +29,14 @@ ion-icon {
 .x-flex-align-c {
   align-items: center;
 }
+.x-flex-align-self-c {
+  align-self: center;
+}
+
+// text
+.no-wrap {
+  white-space: nowrap;
+}
 
 // boxes!
 .box.is-bordered {
