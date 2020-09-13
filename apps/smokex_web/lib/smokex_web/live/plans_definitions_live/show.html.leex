@@ -48,7 +48,7 @@
 
 
     <%= live_patch "View executions",
-      to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, :all, 1, plan: @plan_definition.id),
+      to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, :all, 1, plan: @plan_definition.id),
       class: "button is-primary is-outlined" %>
 
 

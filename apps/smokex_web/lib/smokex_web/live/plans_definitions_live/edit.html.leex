@@ -48,7 +48,7 @@
       </div>
       <div class="control">
         <%= live_patch "Go back",
-        to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, plan: @plan_definition.id),
+        to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, plan: @plan_definition.id),
         class: "button is-link is-light" %>
       </div>
     </div>

@@ -1,4 +1,4 @@
-defmodule SmokexWeb.PlansExecutionsLive.All do
+defmodule SmokexWeb.PlansExecutionsLive.List do
   use SmokexWeb, :live_view
 
   require Logger
@@ -83,10 +83,10 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
     path_to =
       case plan_definition_id do
         nil ->
-          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, status_filter, 1)
+          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, status_filter, 1)
 
         plan_definition_id ->
-          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, status_filter, 1,
+          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, status_filter, 1,
             plan: plan_definition_id
           )
       end
@@ -255,11 +255,11 @@ defmodule SmokexWeb.PlansExecutionsLive.All do
 
   @spec page_path(Socket.t(), PlanExecution.status(), integer, integer | nil) :: term
   defp page_path(socket, active_filter, page, nil) do
-    Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, active_filter, page)
+    Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, active_filter, page)
   end
 
   defp page_path(socket, active_filter, page, plan_definition_id) do
-    Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, active_filter, page,
+    Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, active_filter, page,
       plan: plan_definition_id
     )
   end

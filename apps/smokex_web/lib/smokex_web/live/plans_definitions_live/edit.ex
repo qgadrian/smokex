@@ -44,7 +44,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.Edit do
     case PlanDefinitions.update(plan_definition, plan_definition_attrs) do
       {:ok, plan_definition} ->
         redirect_path =
-          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.All, plan: plan_definition.id)
+          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, plan: plan_definition.id)
 
         # TODO investigate about the stop response
         # Check https://github.com/chrismccord/phoenix_live_view_example/blob/master/lib/demo_web/live/user_live/edit.ex#L35
