@@ -30,13 +30,13 @@
     </div>
     <ul>
       <li class="filter-item">
-        <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All) do %>
+        <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List) do %>
           <button class="button has-text-left is-fullwidth <%= if (!@plan_definition_id), do: "is-primary", else: "is-white " %>">All plans</button>
         <% end %>
       </li>
       <%= for plan <- @plan_definitions do %>
         <li class="filter-item">
-          <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, plan: plan.id) do %>
+          <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, plan: plan.id) do %>
             <button class="button has-text-left is-fullwidth <%= if (plan.id == @plan_definition_id), do: "is-primary", else: "is-white " %>">
               <span class="icon pr-1">
                 <img src="<%= Routes.static_path(@socket, "/images/plans/icon-plan.svg") %>" alt="<%= plan.name %> logo"/>

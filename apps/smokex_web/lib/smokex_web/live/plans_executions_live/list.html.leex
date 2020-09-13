@@ -40,7 +40,7 @@
         <nav class="box-nav">
           <div class="buttons has-addons">
             <%= for status <- [:all, :created, :finished, :halted, :running] do %>
-              <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.All, status, 1, plan: @plan_definition_id),
+              <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, status, 1, plan: @plan_definition_id),
                 class: "button is-responsive #{ if (status == @active_filter), do: "is-primary", else: "" }" do %>
                   <%= status |> Atom.to_string |> String.capitalize() %>
               <% end %>
