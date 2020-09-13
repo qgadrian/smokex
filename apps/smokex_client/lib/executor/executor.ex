@@ -29,7 +29,7 @@ defmodule SmokexClient.Executor do
   * `created`: Means the
   """
   @spec execute(PlanExecution.t(), keyword) :: {:ok, term} | {:error, term}
-  def execute(_plan_execution, opts \\ [])
+  def execute(_plan_execution, opts \\ [halt: true])
 
   def execute(
         %PlanExecution{
