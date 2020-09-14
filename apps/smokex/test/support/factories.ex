@@ -32,7 +32,8 @@ defmodule Smokex.TestSupport.Factories do
 
   def user_factory do
     %User{
-      email: sequence(:email, &"email#{&1}@test.com")
+      email: sequence(:email, &"email#{&1}@test.com"),
+      organizations: insert_list(1, :organization)
     }
   end
 

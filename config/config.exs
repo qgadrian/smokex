@@ -94,6 +94,7 @@ config :smokex, Oban,
   queues: [plan_executions: 50]
 
 config :smokex,
+  free_access: false,
   limit_executions_expires_after_hours: 1,
   limit_executions_per_period: 10,
   limit_plan_definitions_per_organization: 5
