@@ -69,7 +69,7 @@ defmodule Smokex.Notifications do
               "type" => "header",
               "text" => %{
                 "type" => "plain_text",
-                "text" => "A execution is running ⚙️"
+                "text" => "An execution is running ⚙️"
               }
             },
             %{
@@ -132,7 +132,7 @@ defmodule Smokex.Notifications do
               "type" => "header",
               "text" => %{
                 "type" => "plain_text",
-                "text" => "A execution failed ❌"
+                "text" => "An execution failed ❌"
               }
             },
             %{
@@ -205,7 +205,7 @@ defmodule Smokex.Notifications do
               "type" => "header",
               "text" => %{
                 "type" => "plain_text",
-                "text" => "A execution is finished ✅"
+                "text" => "An execution is finished ✅"
               }
             },
             %{
