@@ -54,8 +54,10 @@ defmodule Smokex.PlanDefinitions do
 
   @doc """
   Returns all plan definitions
+
+  TODO remove `all/1` with `User` and only use plans at organization level
   """
-  @spec all(nil | User.t()) :: list(PlanExecution.t())
+  @spec all(nil | User.t() | Organization.t()) :: list(PlanExecution.t())
   def all(nil), do: []
 
   def all(%User{id: user_id}) do
@@ -66,6 +68,17 @@ defmodule Smokex.PlanDefinitions do
         on:
           organizations_users.user_id == ^user_id and
             organizations_users.organization_id == plan_definition.organization_id,
+        select: plan_definition
+      )
+
+    Smokex.Repo.all(query)
+  end
+
+  def all(%Organization{id: organization_id}) do
+    query =
+      from(plan_definition in PlanDefinition,
+        order_by: [desc: :updated_at],
+        where: ^organization_id == plan_definition.organization_id,
         select: plan_definition
       )
 

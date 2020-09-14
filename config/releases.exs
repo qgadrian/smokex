@@ -20,7 +20,13 @@ config :stripity_stripe,
   signing_secret: System.fetch_env!("STRIPE_SIGNING_SECRET")
 
 config :smokex,
-  stripe_price_id: System.fetch_env!("STRIPE_PRICE_ID")
+  stripe_price_id: System.fetch_env!("STRIPE_PRICE_ID"),
+  limit_executions_expires_after_hours:
+    "LIMIT_EXECUTIONS_EXPIRES_AFTER_HOURS" |> System.fetch_env!() |> String.to_integer(),
+  limit_executions_per_period:
+    "LIMIT_EXECUTIONS_PER_PERIOD" |> System.fetch_env!() |> String.to_integer(),
+  limit_plan_definitions_per_organization:
+    "LIMIT_PLAN_DEFINITIONS_PER_ORGANIZATION" |> System.fetch_env!() |> String.to_integer()
 
 config :smokex_web, :basic_auth,
   username: System.fetch_env!("DASHBOARD_AUTH_USERNAME"),

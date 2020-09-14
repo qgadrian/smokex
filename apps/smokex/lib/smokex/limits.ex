@@ -26,12 +26,8 @@ defmodule Smokex.Limits do
   alias Smokex.PlanExecution
   alias Smokex.PlanDefinitions
   alias Smokex.Organizations.Organization
-  alias Smokex.Users
   alias Smokex.Organizations
   alias Smokex.Users.User
-
-  @max_plan_definitions 2
-  @max_daily_executions 10
 
   @doc """
   Whether a new plan definition can be created or not.
@@ -40,7 +36,9 @@ defmodule Smokex.Limits do
   def can_create_plan_definition?(nil), do: false
 
   def can_create_plan_definition?(%User{} = user) do
-    Users.subscribed?(user) || length(PlanDefinitions.all(user)) < @max_plan_definitions
+    {:ok, %Organization{} = organization} = Organizations.get_organization(user)
+
+    Organizations.subscribed?(organization) || maxed_out_plan_definitions?(organization)
   end
 
   @doc """
@@ -55,15 +53,13 @@ defmodule Smokex.Limits do
     %PlanDefinition{organization: %Organization{} = organization} =
       Smokex.Repo.preload(plan_definition, :organization)
 
-    Organizations.subscribed?(organization) ||
-      get_daily_executions(organization) < @max_daily_executions
+    Organizations.subscribed?(organization) || maxed_out_executions?(organization)
   end
 
   def can_start_execution?(%User{} = user) do
     {:ok, organization} = Organizations.get_organization(user)
 
-    Organizations.subscribed?(organization) ||
-      get_daily_executions(organization) < @max_daily_executions
+    Organizations.subscribed?(organization) || maxed_out_executions?(organization)
   end
 
   @spec can_start_execution?(PlanExecution.t()) :: boolean
@@ -71,17 +67,16 @@ defmodule Smokex.Limits do
     %PlanExecution{plan_definition: %PlanDefinition{organization: organization}} =
       Smokex.Repo.preload(plan_execution, plan_definition: :organization)
 
-    Organizations.subscribed?(organization) ||
-      get_daily_executions(organization) < @max_daily_executions
+    Organizations.subscribed?(organization) || maxed_out_executions?(organization)
   end
 
   @doc """
   Returns the number of executions for the organization for the last 24 hours since
   last execution was started.
   """
-  @spec get_daily_executions(Organization.t()) :: integer | nil
-  def get_daily_executions(%Organization{id: organization_id}) do
-    Cachex.get!(:daily_executions, organization_id) || 0
+  @spec get_executions_limit_track(Organization.t()) :: integer | nil
+  def get_executions_limit_track(%Organization{id: organization_id}) do
+    Cachex.get!(:executions_limit_track, organization_id) || 0
   end
 
   @doc """
@@ -90,12 +85,28 @@ defmodule Smokex.Limits do
   """
   @spec increase_daily_executions(Organization.t() | (organization_id :: integer)) :: :ok
   def increase_daily_executions(%Organization{id: organization_id}) do
-    increase_daily_executions(organization_id)
+    count = Cachex.get!(:executions_limit_track, organization_id) || 0
+
+    limit_executions_expires_after_hours =
+      Application.get_env(:smokex, :limit_executions_expires_after_hours)
+
+    cache_expires_after = :timer.hours(limit_executions_expires_after_hours)
+
+    Cachex.expire(:executions_limit_track, organization_id, cache_expires_after)
+    Cachex.put!(:executions_limit_track, organization_id, count + 1)
   end
 
-  def increase_daily_executions(organization_id) when is_number(organization_id) do
-    count = Cachex.get!(:daily_executions, organization_id) || 0
-    Cachex.expire(:daily_executions, organization_id, :timer.hours(24))
-    Cachex.put!(:daily_executions, organization_id, count + 1)
+  #
+  # Private functions
+  #
+
+  defp maxed_out_executions?(%Organization{} = organization) do
+    get_executions_limit_track(organization) <
+      Application.get_env(:smokex, :limit_executions_per_period)
+  end
+
+  defp maxed_out_plan_definitions?(%Organization{} = organization) do
+    length(PlanDefinitions.all(organization)) <
+      Application.get_env(:smokex, :limit_plan_definitions_per_organization)
   end
 end
