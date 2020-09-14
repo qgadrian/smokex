@@ -23,6 +23,9 @@ services:
       - SLACK_CLIENT_ID=""
       - SLACK_CLIENT_SECRET=""
       - ENABLE_DATADOG_AGENT="false"
+      - LIMIT_EXECUTIONS_EXPIRES_AFTER_HOURS=1
+      - LIMIT_EXECUTIONS_PER_HOUR=1
+      - LIMIT_PLAN_DEFINITIONS_PER_ORGANIZATION=1
     ports:
       - 4000:4000
     depends_on:

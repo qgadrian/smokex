@@ -14,7 +14,7 @@ defmodule Smokex.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Smokex.PubSub},
       # Cache module to store limited features
-      %{id: :daily_executions, start: {Cachex, :start_link, [:daily_executions, []]}},
+      %{id: :executions_limit_track, start: {Cachex, :start_link, [:executions_limit_track, []]}},
       {Oban, @oban_config},
       Smokex.PlanDefinitions.Scheduler
       # Start a worker by calling: Smokex.Worker.start_link(arg)

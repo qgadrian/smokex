@@ -93,6 +93,11 @@ config :smokex, Oban,
   plugins: [Oban.Plugins.Pruner],
   queues: [plan_executions: 50]
 
+config :smokex,
+  limit_executions_expires_after_hours: 1,
+  limit_executions_per_period: 10,
+  limit_plan_definitions_per_organization: 5
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
