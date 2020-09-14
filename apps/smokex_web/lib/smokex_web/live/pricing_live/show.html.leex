@@ -14,8 +14,8 @@
             <hr>
             <ul class="block">
               <li>It's free</li>
-              <li>Up to 2 plans</li>
-              <li>Limited to 10 executions per plan per day</li>
+              <li>Up to <%= max_plan_definitions %> <%= plural(:plan) %></li>
+              <li>Limited to <%= max_limit_executions_per_period %> <%= plural(:execution) %> every <%= max_limit_executions_expires_after_hours %> <%= plural(:hour) %></li>
               <li>Basic support</li>
             </ul>
             <%= if assigns[:current_user] do %>
