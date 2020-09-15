@@ -170,6 +170,8 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
   #
 
   @spec fetch_plan_definition(Socket.t()) :: Socket.t()
+  defp fetch_plan_definition(%Socket{assigns: %{current_user: nil}} = socket), do: socket
+
   defp fetch_plan_definition(%Socket{assigns: %{plan_definition_id: nil}} = socket) do
     assign(socket, plan_definition: nil)
   end
