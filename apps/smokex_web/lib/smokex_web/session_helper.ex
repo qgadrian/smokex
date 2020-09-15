@@ -24,8 +24,8 @@ defmodule SmokexWeb.SessionHelper do
     with {:ok, user} <- get_user(socket, session, opts) do
       Phoenix.LiveView.assign(socket, current_user: user)
     else
-      _ ->
-        # TODO so raise an error or not?
+      _error ->
+        # TODO return a redirect to sign up
         # raise "User not present in the socket session"
         Phoenix.LiveView.assign(socket, current_user: nil)
     end
