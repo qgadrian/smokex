@@ -55,7 +55,7 @@ defmodule Smokex.Organizations do
       %User{organizations: [%Organization{} | _]} ->
         {:error, "multiple organizations not supported yet"}
 
-      %User{organizations: nil} ->
+      %User{organizations: []} ->
         {:error, "user does not belong to a organization"}
     end
   end
