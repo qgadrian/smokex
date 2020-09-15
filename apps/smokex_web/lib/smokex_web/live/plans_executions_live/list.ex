@@ -83,13 +83,13 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
     path_to =
       case plan_definition_id do
         nil ->
-          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, status_filter)
+          Routes.live_path(socket, SmokexWeb.PlansExecutionsLive.List, status: status_filter)
 
         plan_definition_id ->
           Routes.live_path(
             socket,
             SmokexWeb.PlansExecutionsLive.List,
-            status_filter,
+            status: status_filter,
             plan: plan_definition_id
           )
       end
