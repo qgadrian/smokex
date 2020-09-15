@@ -2,7 +2,6 @@ defmodule SmokexWeb.PlansExecutionsLive.ListTest do
   use SmokexWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
-
   import Smokex.TestSupport.Factories
 
   alias Smokex.Users.User
@@ -25,7 +24,7 @@ defmodule SmokexWeb.PlansExecutionsLive.ListTest do
     test "renders the executions", %{conn: conn} do
       {:ok, _view, html} = live(conn, "/executions")
 
-      assert html =~ "<ul id=\"executions-list\" phx-update=\"append\">"
+      assert html =~ "<ul id=\"-all\" phx-update=\"append\">"
       refute html =~ "<h2 class=\"title\">Get started with Smokex Plans</h2>"
     end
   end
