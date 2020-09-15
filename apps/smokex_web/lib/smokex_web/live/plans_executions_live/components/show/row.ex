@@ -2,7 +2,7 @@
 # TODO this module requires a HUGE refactor and sync with the `Smokex.Result` module to cleanup the pattern matching with String, atoms, keys format...
 # It needs to be a fixed struct and stop playing around with maps a types!
 #
-defmodule SmokexWeb.PlansExecutionsLive.Components.Result.Row do
+defmodule SmokexWeb.PlansExecutionsLive.Components.Show.Row do
   use SmokexWeb, :live_component
 
   alias Smokex.Result

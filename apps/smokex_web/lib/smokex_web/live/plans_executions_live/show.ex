@@ -7,7 +7,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
   alias Smokex.Result
   alias SmokexWeb.PlanExecutions.Components.StatusBadge
   alias SmokexWeb.PlanExecutions.Components.Progress
-  alias SmokexWeb.PlansExecutionsLive.Components.Result.Table, as: ResultsTable
+  alias SmokexWeb.PlansExecutionsLive.Components.Show.Table, as: ResultsTable
 
   @impl Phoenix.LiveView
   def mount(_params, session, socket) do
