@@ -55,7 +55,8 @@ defmodule Smokex.PlanDefinitions do
   @doc """
   Returns all plan definitions
 
-  TODO remove `all/1` with `User` and only use plans at organization level
+  TODO remove `all/1` with `User` and only use plans at organization level.
+  Rename the test that says `organizzation or user` and the tests for user
   """
   @spec all(nil | User.t() | Organization.t()) :: list(PlanExecution.t())
   def all(nil), do: []
