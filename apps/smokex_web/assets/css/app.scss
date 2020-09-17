@@ -141,3 +141,15 @@ div.not-found > img {
 .ͼ21 { color: $content-color-string; }
 .ͼ20 { color: $content-color-number; }
 .ͼ1z.ͼ1y { color: $content-color-boolean; }
+
+// PAGES
+
+// my account
+.my-account {
+  input, textarea {
+    max-width: 440px;
+  }
+  textarea {
+    height: 100px;
+  }
+}
