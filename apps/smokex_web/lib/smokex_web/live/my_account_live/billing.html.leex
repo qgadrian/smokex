@@ -1,36 +1,33 @@
-<div>
-  <h1 class="title">Subscription</h1>
-
+<div class="my-account">
   <div class="columns">
     <%= live_component @socket, SideMenu %>
 
     <div class="column">
-      <div class="box">
-        <%= form_for Ecto.Changeset.change(@current_user), "#", [class: "form"], fn f -> %>
-          <div class="field">
-            <%= label(:name,"Current subscription ends at", class: "label") %>
-            <div class="control">
-              <%= text_input f, :subscription_expires_at, class: "input", readonly: true %>
-            </div>
+      <h1 class="title is-size-4">Subscription</h1>
+      <%= form_for Ecto.Changeset.change(@current_user), "#", [class: "form"], fn f -> %>
+        <div class="field">
+          <%= label(:name,"Current subscription ends at", class: "label") %>
+          <div class="control">
+            <%= text_input f, :subscription_expires_at, class: "input", readonly: true %>
           </div>
+        </div>
 
-          <%= if Smokex.StripeSubscriptions.has_subscription?(@current_user) do %>
-            <div class="column has-text-centered">
+        <div class="field is-grouped pt-2">
+          <div class="control is-expanded">
+            <%= if Smokex.StripeSubscriptions.has_subscription?(@current_user) do %>
               <button type="button"
-                      class="button is-primary is-outlined"
-                      phx-click="show_cancel_subscription_modal"
-                      phx-disable-with="...">
-                Cancel subscription
-              </button>
-            </div>
-          <% else %>
-            <div class="column has-text-centered">
+                    class="button is-danger is-outlined"
+                    phx-click="show_cancel_subscription_modal"
+                    phx-disable-with="...">
+              Cancel subscription
+            </button>
+            <% else %>
               <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user,
-                extra_class: "is-large", text: "Upgrade my subscription" %>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
+                  extra_class: "", text: "Upgrade my subscription" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     </div>
 
   <%= if assigns[:show_confirm_modal] do %>
