@@ -8,7 +8,7 @@
       <div class="box">
         <%= form_for Ecto.Changeset.change(@current_user), "#", [class: "form"], fn f -> %>
           <div class="field">
-            <%= label(:name,"Email", class: "label") %>
+            <%= label(:name, "Email", class: "label") %>
             <div class="control">
               <%= text_input f, :email, class: "input", readonly: true, disabled: true %>
             </div>

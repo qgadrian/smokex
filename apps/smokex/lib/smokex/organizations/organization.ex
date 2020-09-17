@@ -14,6 +14,7 @@ defmodule Smokex.Organizations.Organization do
   alias Smokex.PlanDefinition
   alias Smokex.Organizations.OrganizationsUsers
   alias Smokex.Integrations.Slack.SlackIntegration
+  alias Smokex.Organizations.Secret
 
   @type t :: %__MODULE__{
           name: String.t(),
@@ -35,6 +36,7 @@ defmodule Smokex.Organizations.Organization do
     has_one(:slack_integration, SlackIntegration)
 
     has_many(:plans_definitions, PlanDefinition)
+    has_many(:secrets, Secret)
 
     timestamps()
   end

@@ -6,6 +6,7 @@ defmodule Smokex.TestSupport.Factories do
   alias Smokex.Organizations.Organization
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
+  alias Smokex.Result
   alias Smokex.Users.User
 
   use ExMachina.Ecto, repo: Smokex.Repo
@@ -27,6 +28,16 @@ defmodule Smokex.TestSupport.Factories do
       status: :created,
       plan_definition: build(:plan_definition),
       results: []
+    }
+  end
+
+  def result_factory do
+    %Result{
+      action: :get,
+      result: :ok,
+      failed_assertions: [],
+      plan_execution: build(:plan_execution),
+      host: sequence(:host, &"host#{&1}.test")
     }
   end
 

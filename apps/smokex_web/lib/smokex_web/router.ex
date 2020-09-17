@@ -83,6 +83,8 @@ defmodule SmokexWeb.Router do
         live "/edit", Edit
         live "/billing", Billing
         live "/integrations/slack", Integrations.Slack
+        live "/integrations/secrets", Administration.Secrets.Show
+        live "/integrations/secrets/new", Administration.Secrets.New
       end
 
       live "/plans", PlansDefinitionsLive.List
