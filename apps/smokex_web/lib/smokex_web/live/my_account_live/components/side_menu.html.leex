@@ -13,6 +13,9 @@
     <ul class="menu-list">
       <li class="hidden"><a>Team Settings</a></li>
       <li>
+        <%= live_patch "Secrets", to: Routes.live_path(@socket, SmokexWeb.MyAccountLive.Administration.Secrets.Show) %>
+      </li>
+      <li>
         <a>Integrations</a>
         <ul>
           <li>

@@ -99,6 +99,25 @@ config :smokex,
   limit_executions_per_period: 10,
   limit_plan_definitions_per_organization: 5
 
+#
+# Database encryption
+#
+config :smokex, Smokex.Ecto.Vault,
+  ciphers: [
+    default: {
+      Cloak.Ciphers.AES.GCM,
+      # In AES.GCM, it is important to specify 12-byte IV length for
+      # interoperability with other encryption software. See this GitHub
+      # issue for more details:
+      # https://github.com/danielberkompas/cloak/issues/93
+      #
+      # In Cloak 2.0, this will be the default iv length for AES.GCM.
+      tag: "AES.GCM.V1",
+      key: Base.decode64!("lrHxehsPskcgcFaUUMicJ3LryGWc4ylHAv5B32M+Zko="),
+      iv_length: 12
+    }
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

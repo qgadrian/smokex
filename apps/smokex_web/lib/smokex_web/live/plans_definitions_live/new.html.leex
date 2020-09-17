@@ -3,7 +3,7 @@
 
   <%= form_for @changeset, "#", [phx_change: :validate, phx_submit: :save, class: "form"], fn f -> %>
     <div class="field">
-      <%= label(:name,"Name", class: "label") %>
+      <%= label(:name, "Name", class: "label") %>
       <div class="control">
         <%= text_input f, :name, class: "input", placeholder: "Type some cool name for your plan" %>
         <%= error_tag f, :name %>
@@ -11,14 +11,14 @@
     </div>
 
     <div class="field">
-      <%= label(:description,"Description", class: "label") %>
+      <%= label(:description, "Description", class: "label") %>
       <div class="control">
         <%= text_input f, :description, class: "input", placeholder: "What is going to do?" %>
       </div>
     </div>
 
     <div class="field">
-      <%= label(:cron_sentence,"Cron expression", class: "label") %>
+      <%= label(:cron_sentence, "Cron expression", class: "label") %>
       <div class="control">
         <%= text_input f, :cron_sentence, class: "input", placeholder: "0 * * * * runs every hour" %>
         <%= error_tag f, :cron_sentence %>
@@ -28,7 +28,7 @@
     <%= hidden_input f, :content, id: "plan-definition-content" %>
 
     <div class="field">
-      <%= label(:content,"Content", class: "label") %>
+      <%= label(:content, "Content", class: "label") %>
 
       <div class="box is-bordered code-content control py-3">
         <div id="plan-definition-content-editor"

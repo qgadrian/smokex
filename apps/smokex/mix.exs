@@ -38,6 +38,7 @@ defmodule Smokex.MixProject do
   defp deps do
     [
       {:cachex, "~> 3.2"},
+      {:cloak_ecto, "~> 1.0"},
       {:ecto_enum, "~> 1.4"},
       {:ecto_sql, "~> 3.4"},
       {:jason, "~> 1.0"},

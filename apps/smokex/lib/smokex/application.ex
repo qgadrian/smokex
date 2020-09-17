@@ -13,6 +13,7 @@ defmodule Smokex.Application do
       Smokex.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: Smokex.PubSub},
+      Smokex.Ecto.Vault,
       # Cache module to store limited features
       %{id: :executions_limit_track, start: {Cachex, :start_link, [:executions_limit_track, []]}},
       {Oban, @oban_config},
