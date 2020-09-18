@@ -76,7 +76,7 @@
       </div>
       <div class="column is-6 is-3-desktop">
         <h4 class="title is-4">Flexible</h4>
-        <p>You can create any new test plan quickly and work with any request
+        <p>You can create any new workflow quickly and work with any request
         information returned.</p>
       </div>
       <div class="column is-6 is-3-desktop">
@@ -97,7 +97,7 @@
     <div class="columns is-vcentered">
       <div class="column">
         <h2 class="title is-spaced">First steps</h2>
-        <p class="subtitle">Starting with Smokex is really easy! We've designed a simple, efficient process for companies to create smoke test plans.</p>
+        <p class="subtitle">Starting with Smokex is really easy! We've designed a simple, efficient process for companies to create smoke workflows.</p>
 
         <%= live_patch "Here's how it works!", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "button is-primary is-outlined is-medium" %>
       </div>

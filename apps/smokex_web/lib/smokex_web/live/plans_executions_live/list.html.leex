@@ -5,7 +5,7 @@
     <%= if !Smokex.Limits.can_create_plan_definition?(@current_user) do %>
       <div class="notification is-info is-light">
         <%# <button class="delete"></button> %>
-        You have reached the maximum number of plans allowed for your subscription. To create a new Plan <strong>
+        You have reached the maximum number of workflows allowed for your subscription. To create a new Workflow <strong>
         <%= link "upgrade your subscription", class: "", to: Routes.pow_registration_path(@socket, :new) %></strong>.
       </div>
     <% end %>
@@ -21,7 +21,7 @@
         <div class="x-flex x-flex-justify-sb is-hidden-mobile">
           <h1 class="title is-size-4 mb-5">
             <%= if !@plan_definition_id do %>
-              All Plans
+              All workflows
             <% else %>
               <%= @plan_definition.name %>
             <% end %>
@@ -56,7 +56,7 @@
           <%= if @plan_definition_id do %>
             <div class="box-info x-flex x-flex-justify-sb x-flex-align-c <%= if (@executions_count > 0), do: "", else: "box-info-radius" %>">
               <%= if Smokex.Limits.can_start_execution?(@current_user) do %>
-                <span>Launch this plan manually</span>
+                <span>Launch this workflow manually</span>
                 <a href="#" role="button" class="button has-text-weight-medium is-responsive" phx-click="execute" phx-disable-with="Starting...">
                   Run
                 </a>

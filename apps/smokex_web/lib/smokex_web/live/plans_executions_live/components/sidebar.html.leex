@@ -9,7 +9,7 @@
               selected = id == @plan_definition_id
               [key: name, value: id, selected: selected]
             "all" ->
-              [key: "All Plans", value: "", selected: true]
+              [key: "All workflows", value: "", selected: true]
             end)) %>
         </form>
       </div>
@@ -22,7 +22,7 @@
     <% end %>
     <%= if Smokex.Limits.can_create_plan_definition?(@current_user) do %>
       <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>
-        <button class="button is-small is-primary is-outlined has-text-weight-medium">New plan</button>
+        <button class="button is-small is-primary is-outlined has-text-weight-medium">New</button>
       <% end %>
     <% end %>
     </div>
@@ -30,17 +30,17 @@
   <%# custom view not for mobile %>
   <div class="sidebar is-hidden-mobile">
     <div class="sidebar-header">
-      <h3 class="title is-size-6 has-text-grey-dark mb-5">Plans</h3>
+      <h3 class="title is-size-6 has-text-grey-dark mb-5">Workflow</h3>
       <%= if Smokex.Limits.can_create_plan_definition?(@current_user) do %>
         <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>
-          <button class="button is-small is-primary is-outlined has-text-weight-medium">New plan</button>
+          <button class="button is-small is-primary is-outlined has-text-weight-medium">New</button>
         <% end %>
       <% end %>
     </div>
     <ul>
       <li class="filter-item">
         <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List) do %>
-          <button class="button has-text-left is-fullwidth <%= if (!@plan_definition_id), do: "is-primary", else: "is-white " %>">All plans</button>
+          <button class="button has-text-left is-fullwidth <%= if (!@plan_definition_id), do: "is-primary", else: "is-white " %>">All workflows</button>
         <% end %>
       </li>
       <%= for plan <- @plan_definitions do %>
