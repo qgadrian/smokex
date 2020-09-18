@@ -13,21 +13,19 @@
             end)) %>
         </form>
       </div>
-      <%= if @plan_definition_id do %>
-        <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition_id) do %>
-          <button class="button is-small ml-3">
-            <span class="icon">
-              <ion-icon name="create-outline" size="large" class="is-primary"></ion-icon>
-            </span>
-          </button>
-        <% end %>
-      <% end %>
     </div>
+    <div>
+    <%= if @plan_definition_id do %>
+      <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition_id) do %>
+        <button class="button is-small is-primary is-outlined has-text-weight-medium">Edit</button>
+      <% end %>
+    <% end %>
     <%= if Smokex.Limits.can_create_plan_definition?(@current_user) do %>
       <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) do %>
         <button class="button is-small is-primary is-outlined has-text-weight-medium">New plan</button>
       <% end %>
     <% end %>
+    </div>
   </div>
   <%# custom view not for mobile %>
   <div class="sidebar is-hidden-mobile">
