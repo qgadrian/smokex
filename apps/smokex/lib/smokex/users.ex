@@ -26,12 +26,16 @@ defmodule Smokex.Users do
   @spec create(map) :: ecto_user_result
   def create(params) do
     Smokex.Repo.transaction(fn ->
-      {:ok, %User{} = user} = pow_create(params)
-      {:ok, _organization} = Organizations.create("organization_#{user.id}", user)
+      with {:ok, %User{} = user} <- pow_create(params),
+           {:ok, _organization} <- Organizations.create("organization_#{user.id}", user) do
+        report_new_user(user)
 
-      user
+        user
+      else
+        {:error, error} ->
+          Smokex.Repo.rollback(error)
+      end
     end)
-    |> maybe_report_new_user()
   end
 
   @doc """
@@ -55,11 +59,8 @@ defmodule Smokex.Users do
   # Private functions
   #
 
-  @spec maybe_report_new_user(ecto_user_result) :: ecto_user_result
-  defp maybe_report_new_user({:ok, %User{id: user_id}} = result) do
+  @spec report_new_user(User.t) :: any
+  defp report_new_user(%User{id: user_id} = user) do
     TelemetryReporter.execute([:user], %{new: 1}, %{id: user_id})
-    result
   end
-
-  defp maybe_report_new_user(error), do: error
 end
