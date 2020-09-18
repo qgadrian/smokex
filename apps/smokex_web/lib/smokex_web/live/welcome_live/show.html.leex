@@ -22,7 +22,7 @@
         </div>
 
         <div class="buttons">
-          <%= live_patch "Create test plan", class: "button is-primary",
+          <%= live_patch "Create workflow", class: "button is-primary",
 to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %>
           <%= live_patch "Or read the documentation", to: Routes.live_path(@socket, SmokexWeb.DocumentationLive.Show), class: "button is-text" %>
         </div>
@@ -32,7 +32,7 @@ to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %>
         <h2 class="title">Getting started</h2>
 
         <h3 class="title is-5">We will help you to take you first steps</h3>
-        <p class="subtitle is-6">Creating any test plan is extremely easy and can be done in 3 simple steps.</p>
+        <p class="subtitle is-6">Creating any workflow is extremely easy and can be done in 3 simple steps.</p>
 
         <div class="media">
           <div class="media-left">
@@ -40,9 +40,9 @@ to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %>
           </div>
           <div class="media-content">
             <div class="content">
-              <h3>Create a plan</h3>
+              <h3>Create a workflow</h3>
               <p>
-                <%= live_patch "Create test plan",
+                <%= live_patch "Create workflow",
 to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.New) %> that will
 assert a 200 response and a specific value in the response:
               </p>
@@ -70,7 +70,7 @@ assert a 200 response and a specific value in the response:
           <div class="media-content">
             <div class="content">
               <h3>Launch an execution</h3>
-              <p>When you create a new plan you schedule executions using a <a href="https://crontab.guru/examples.html" target="_blank">cron sentence</a>, additionally you can manually run your plan on demand.</p>
+              <p>When you create a new workflow you schedule executions using a <a href="https://crontab.guru/examples.html" target="_blank">cron sentence</a>, additionally you can manually run your workflow on demand.</p>
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@ assert a 200 response and a specific value in the response:
             <div class="content">
               <h3>Check the result</h3>
               <p>You can check
-              <%= live_patch "all the executions", to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List) %> of your plans, including the detail of any failed assertions or errors.</p>
+              <%= live_patch "all the executions", to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List) %> of your workflows, including the detail of any failed assertions or errors.</p>
             </div>
           </div>
         </div>

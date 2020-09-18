@@ -47,9 +47,9 @@ defmodule SmokexWeb.PricingLive.Show do
 
   defp plural(:plan) do
     if Application.get_env(:smokex, :limit_plan_definitions_per_organization) > 1 do
-      "plans"
+      "workflows"
     else
-      "plan"
+      "workflow"
     end
   end
 end
