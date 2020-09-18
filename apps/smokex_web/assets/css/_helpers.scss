@@ -47,12 +47,6 @@ ion-icon {
   white-space: nowrap;
 }
 
-// boxes!
-.box.is-bordered {
-  box-shadow: none;
-  border: 1px solid $border;
-}
-
 // buttons!
 .button.is-responsive {
   @include until($tablet) {
