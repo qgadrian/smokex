@@ -59,7 +59,7 @@ defmodule Smokex.Users do
   # Private functions
   #
 
-  @spec report_new_user(User.t) :: any
+  @spec report_new_user(User.t()) :: any
   defp report_new_user(%User{id: user_id} = user) do
     TelemetryReporter.execute([:user], %{new: 1}, %{id: user_id})
   end
