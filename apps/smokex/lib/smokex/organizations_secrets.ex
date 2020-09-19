@@ -3,6 +3,8 @@ defmodule Smokex.OrganizationsSecrets do
   Context module to provide functions to work with Plan definition secrets.
   """
 
+  import Ecto.Query
+
   alias Smokex.Organizations.Organization
   alias Smokex.Organizations.Secret
 
@@ -26,12 +28,28 @@ defmodule Smokex.OrganizationsSecrets do
     |> Smokex.Repo.update()
   end
 
-  @spec get(Organization.t | integer) :: list(Secrets.t)
-  def get(id) when is_number(id) do
-    Smokex.Repo.get(Secret, id)
+  @doc """
+  Returns the secret for the given organization.
+
+  If the secret is not found or does not belong to the organization, raises an
+  error.
+  """
+  @spec get!(Organization.t(), integer) :: Secret.t() | nil
+  def get!(%Organization{id: organization_id}, secret_id) when is_number(secret_id) do
+    query = from(secret in Secret,
+      where: secret.organization_id == ^organization_id,
+      where: secret.id == ^secret_id,
+      select: secret
+    )
+
+    Smokex.Repo.one!(query)
   end
 
-  def get(%Organization{} = organization) do
+  @doc """
+  Returns all secrets of the given organization.
+  """
+  @spec list(Organization.t()) :: list(Secret.t())
+  def list(%Organization{} = organization) do
     Smokex.Repo.preload(organization, :secrets).secrets
   end
 end

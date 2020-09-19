@@ -29,9 +29,8 @@ defmodule SmokexWeb.MyAccountLive.Administration.Secrets.Show do
   defp assign_secrets(%Socket{assigns: %{current_user: user}} = socket) do
     {:ok, %Organization{} = organization} = Organizations.get_organization(user)
 
-    secrets = OrganizationsSecrets.get(organization)
+    secrets = OrganizationsSecrets.list(organization)
 
     assign(socket, :secrets, secrets)
   end
 end
-

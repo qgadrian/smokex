@@ -13,25 +13,33 @@ defmodule SmokexWeb.MyAccountLive.Administration.Secrets.Edit do
     socket =
       socket
       |> SessionHelper.assign_user!(session)
-    # TODO kick user out if they dont belong to the orgnaization secret
-      |> fetch_secret()
 
-    {:ok, socket, temporary_assigns: [changeset: Ecto.Changeset.change(%Secret{})]}
+    {:ok, socket}
   end
 
   @impl Phoenix.LiveView
   def handle_params(%{"id" => id}, _url, socket) do
-    {:noreply, assign(socket, :id, String.to_integer(id))}
+    socket =
+      socket
+      |> assign(:id, String.to_integer(id))
+      |> fetch_secret()
+
+    {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
-  def handle_event("save", %{"secret" => secret_attrs}, %Socket{assigns: %{id: secret_id, current_user: user}} = socket) do
-    with %Secret{} = secret <- OrganizationsSecrets.get(secret_id),
+  def handle_event(
+        "save",
+        %{"secret" => secret_attrs},
+        %Socket{assigns: %{id: secret_id, current_user: user}} = socket
+      ) do
+    with {:ok, %Organization{} = organization} <- Organizations.get_organization(user),
+         %Secret{} = secret <- OrganizationsSecrets.get!(organization, secret_id),
          {:ok, %Secret{} = secret} <- OrganizationsSecrets.update(secret, secret_attrs) do
-        redirect_path =
-          Routes.live_path(socket, SmokexWeb.MyAccountLive.Administration.Secrets.Show)
+      redirect_path =
+        Routes.live_path(socket, SmokexWeb.MyAccountLive.Administration.Secrets.Show)
 
-        {:noreply, push_redirect(socket, to: redirect_path)}
+      {:noreply, push_redirect(socket, to: redirect_path)}
     else
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -42,13 +50,25 @@ defmodule SmokexWeb.MyAccountLive.Administration.Secrets.Edit do
   # Private functions
   #
 
-  defp fetch_secret(%Socket{assigns: %{id: secret_id}} = socket) do
-    changeset = OrganizationsSecrets.get(secret_id)
+  defp fetch_secret(%Socket{assigns: %{current_user: user, id: secret_id}} = socket) do
+    with {:ok, %Organization{} = organization} <- Organizations.get_organization(user),
+         %Secret{} = secret <- OrganizationsSecrets.get!(organization, secret_id),
+         changeset <- Ecto.Changeset.change(secret) do
+      assign(socket, changeset: changeset)
+    else
+      _ ->
+        redirect_path =
+          Routes.live_path(socket, SmokexWeb.MyAccountLive.Administration.Secrets.Show)
 
-    socket
-    |> assign(changeset: changeset)
+        {:noreply, push_redirect(socket, to: redirect_path)}
+    end
+
   end
 
-  defp fetch_secret(socket), do: socket
-end
+  defp fetch_secret(socket) do
+    redirect_path =
+      Routes.live_path(socket, SmokexWeb.MyAccountLive.Administration.Secrets.Show)
 
+    {:noreply, push_redirect(socket, to: redirect_path)}
+  end
+end
