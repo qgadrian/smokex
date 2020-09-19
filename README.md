@@ -183,6 +183,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Slack notifications
   * [ ] Seems that when using buttons Slack expects a callback to be handled: https://api.slack.com/interactivity/handling#acknowledgment_response
 * [ ] Check: missing logs on worker processes?
+* [ ] Listen to tab event on the yaml editor to avoid jumping out and screwing
+    with the browser
 
 ### Nice to have (next prio)
 
@@ -210,6 +212,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 ### Nice to have (very low prio)
 
 * [ ] Measure request time per plan step and show a graph view for performance
+* [ ] Add Sendgrid integration to allow sending email using the user API KEY
 * [ ] Migrate to a distributed application, so far it is a single instance
 * [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (for that, for example see https://github.com/danschultzer/pow/issues/176). UPDATE: low prio because of Github integration
 * [ ] Provide interface or module to manage the scheduled jobs (aka `Smokex.PlanDefinitions.Scheduler.jobs`). UPDATE: low prio since database provides some info already
