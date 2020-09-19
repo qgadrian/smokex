@@ -1,5 +1,5 @@
 defmodule SmokexClient.Test.Workers.Yaml do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   #
   # There are `error case` scenarios here and the log messages are not being
@@ -23,6 +23,35 @@ defmodule SmokexClient.Test.Workers.Yaml do
     PlanExecutions.subscribe(plan_execution)
 
     plan_execution
+  end
+
+  test "the organization secrets are used in the context execution" do
+    secrets = [
+      build(:organization_secret, name: "TEST_VAR", value: "203"),
+      build(:organization_secret, name: "EXPECT_TEST_VAR", value: "203")
+    ]
+
+    organization = insert(:organization, secrets: secrets)
+
+    plan_definition =
+      insert(:plan_definition,
+        organization: organization,
+        content: File.read!("test/support/fixtures/worker/yaml/test_context_variables.yml")
+      )
+
+    %PlanExecution{id: id} =
+      plan_execution = insert(:plan_execution, plan_definition: plan_definition)
+
+    PlanExecutions.subscribe(plan_execution)
+
+    Executor.execute(plan_execution)
+
+    assert_receive {:started, %PlanExecution{id: ^id}}
+
+    assert_receive {:result,
+                    %Result{action: :get, host: "https://localhost:5743/status/203", result: :ok}}
+
+    assert_receive {:finished, %PlanExecution{id: ^id}}
   end
 
   test "Given a yaml steps when launch worker then each valid step is processed" do

@@ -1,0 +1,4 @@
+- get:
+    host: "https://localhost:5743/status/${TEST_VAR}"
+    expect:
+      status_code: ${EXPECT_TEST_VAR}

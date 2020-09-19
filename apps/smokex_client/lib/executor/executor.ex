@@ -66,6 +66,10 @@ defmodule SmokexClient.Executor do
     {:ok, plan_execution}
   end
 
+  #
+  # Private functions
+  #
+
   @spec do_execute(PlanExecution.t(), keyword) :: {:ok, term} | {:error, term}
   defp do_execute(%PlanExecution{id: id} = plan_execution, opts) do
     content =
@@ -86,9 +90,7 @@ defmodule SmokexClient.Executor do
         try do
           Enum.reduce(list_of_requests, nil, fn
             request, nil ->
-              execution_context = %ExecutionContext{
-                halt_on_error: Keyword.get(opts, :halt)
-              }
+              execution_context = ExecutionContext.new(plan_execution, opts)
 
               Worker.execute(request, plan_execution, execution_context)
 
