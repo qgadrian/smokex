@@ -26,7 +26,7 @@ defmodule SmokexWeb.MyAccountLive.Administration.Secrets.New do
   @impl Phoenix.LiveView
   def handle_event("save", %{"secret" => secret_attrs}, %Socket{assigns: %{current_user: user}} = socket) do
     with {:ok, %Organization{} = organization} <- Organizations.get_organization(user),
-     %Secret{} = secret <- OrganizationsSecrets.create(organization, secret_attrs) do
+         {:ok, %Secret{} = secret} <- OrganizationsSecrets.create(organization, secret_attrs) do
         redirect_path =
           Routes.live_path(socket, SmokexWeb.MyAccountLive.Administration.Secrets.Show)
 
