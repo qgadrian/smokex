@@ -62,12 +62,10 @@ defmodule SmokexWeb.MyAccountLive.Administration.Secrets.Edit do
 
         {:noreply, push_redirect(socket, to: redirect_path)}
     end
-
   end
 
   defp fetch_secret(socket) do
-    redirect_path =
-      Routes.live_path(socket, SmokexWeb.MyAccountLive.Administration.Secrets.Show)
+    redirect_path = Routes.live_path(socket, SmokexWeb.MyAccountLive.Administration.Secrets.Show)
 
     {:noreply, push_redirect(socket, to: redirect_path)}
   end
