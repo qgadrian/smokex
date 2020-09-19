@@ -4,6 +4,7 @@ defmodule Smokex.TestSupport.Factories do
   """
 
   alias Smokex.Organizations.Organization
+  alias Smokex.Organizations.Secret
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
   alias Smokex.Result
@@ -50,7 +51,15 @@ defmodule Smokex.TestSupport.Factories do
 
   def organization_factory do
     %Organization{
-      name: sequence(:name, &"organization_#{&1}")
+      name: sequence(:name, &"organization_#{&1}"),
+      secrets: []
+    }
+  end
+
+  def organization_secret_factory do
+    %Secret{
+      name: sequence(:secret_name, &"secret_#{&1}"),
+      value: sequence(:value, &"value_#{&1}")
     }
   end
 end
