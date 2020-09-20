@@ -49,6 +49,7 @@ defmodule SmokexWeb.MixProject do
       {:pow, "~> 1.0.20"},
       {:smokex, in_umbrella: true},
       {:swoosh, "~> 1.0"},
+      {:phoenix_swoosh, "~> 0.3"},
       {:telemetry_metrics, "~> 0.4"},
       {:timex, "~> 3.5"},
       {:telemetry_poller, "~> 0.4"},

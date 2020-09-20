@@ -21,6 +21,8 @@ config :stripity_stripe,
 
 config :smokex,
   stripe_price_id: System.fetch_env!("STRIPE_PRICE_ID"),
+  enable_email_notifications:
+    String.downcase(System.fetch_env!("ENABLE_EMAIL_NOTIFICATIONS")) == "true",
   limit_executions_expires_after_hours:
     "LIMIT_EXECUTIONS_EXPIRES_AFTER_HOURS" |> System.fetch_env!() |> String.to_integer(),
   limit_executions_per_period:
