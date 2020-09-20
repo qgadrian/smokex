@@ -3,7 +3,11 @@
     <%= live_component @socket, SideMenu %>
 
     <div class="column">
-      <h1 class="title is-size-4">Subscription</h1>
+      <h1 class="title is-4">Subscription</h1>
+      <p class="subtitle is-6">View and manage your Smokex subscription.</p>
+
+      <hr class="m-2">
+
       <%= form_for Ecto.Changeset.change(@current_user), "#", [class: "form"], fn f -> %>
         <div class="field">
           <%= label(:name,"Current subscription ends at", class: "label") %>

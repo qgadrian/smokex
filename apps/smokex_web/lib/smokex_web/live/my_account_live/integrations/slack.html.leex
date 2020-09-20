@@ -6,6 +6,10 @@
       <div class="column">
         <div class="column">
           <h2 class="title is-4">Slack integration is not enabled yet</h2>
+          <p class="subtitle is-6">Enable the Slack integration to get
+          notifications with the status of your executions.</p>
+
+          <hr class="m-2">
 
           <a href="https://slack.com/oauth/v2/authorize?client_id=1307767828135.1352323609268&scope=channels:join,chat:write,chat:write.customize,commands,im:read,im:write,users:read,app_mentions:read&user_scope=&state=<%= @current_user.id %>">
             <img alt="Add Smokex app to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
@@ -14,53 +18,53 @@
       </div>
     <% else %>
       <div class="column">
-        <div class="box">
-          <div class="column">
-            <h2 class="title is-4">Configure Slack integration</h2>
+        <h2 class="title is-4">Slack integration</h2>
+        <p class="subtitle is-6">Configure the Slack integration to get
+        notifications with the status of your executions.</p>
 
-            <%= form_for @changeset, "#", [phx_submit: :save, class: "form"], fn f -> %>
-              <div class="field">
-                <%= label(:post_to_channel, "Slack channel", class: "label") %>
-                <div class="control">
-                  <%= text_input f, :post_to_channel, class: "input" %>
-                  <%= error_tag f, :post_to_channel %>
-                </div>
-              </div>
+        <hr class="m-2">
 
-              <div class="field">
-                <div class="control">
-                  <label class="label">
-                    <%= checkbox f, :post_on_run, class: "checkbox" %>
-                    Post when a execution has started
-                  </label>
-                </div>
-              </div>
-
-              <div class="field">
-                <div class="control">
-                  <label class="label">
-                    <%= checkbox f, :post_on_success, class: "checkbox" %>
-                    Post when a execution is success
-                  </label>
-                </div>
-              </div>
-
-              <div class="field">
-                <div class="control">
-                  <label class="label">
-                    <%= checkbox f, :post_on_fail, class: "checkbox" %> Post when a execution failed
-                  </label>
-                </div>
-              </div>
-
-              <div class="column has-text-centered">
-                <%= submit "Save", class: "button is-primary", phx_disable_with: "Saving..." %>
-
-                <a class="button is-primary is-outlined" phx-click="remove_integration" phx-disable-with="Removing...">Remove integration</a>
-              </div>
-            <% end %>
+        <%= form_for @changeset, "#", [phx_submit: :save, class: "form"], fn f -> %>
+          <div class="field">
+            <%= label(:post_to_channel, "Slack channel", class: "label") %>
+            <div class="control">
+              <%= text_input f, :post_to_channel, class: "input" %>
+              <%= error_tag f, :post_to_channel %>
+            </div>
           </div>
-        </div>
+
+          <div class="field">
+            <div class="control">
+              <label class="label">
+                <%= checkbox f, :post_on_run, class: "checkbox" %>
+                Post when a execution has started
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <label class="label">
+                <%= checkbox f, :post_on_success, class: "checkbox" %>
+                Post when a execution is success
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <label class="label">
+                <%= checkbox f, :post_on_fail, class: "checkbox" %> Post when a execution failed
+              </label>
+            </div>
+          </div>
+
+          <div class="column">
+            <%= submit "Save", class: "button is-primary", phx_disable_with: "Saving..." %>
+
+            <a class="button is-primary is-outlined" phx-click="remove_integration" phx-disable-with="Removing...">Remove integration</a>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>
