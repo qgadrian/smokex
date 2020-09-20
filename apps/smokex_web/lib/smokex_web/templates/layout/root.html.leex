@@ -88,7 +88,8 @@
             <li class="mr-3"><a href="/terms-and-conditions">Terms</a></li>
             <li class="mr-3"><a href="/privacy-policy">Privacy</a></li>
             <li class="mr-3"><a href="/pricing">Pricing</a></li>
-            <li><%= live_patch "Getting started", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "level-item" %></li>
+            <li class="mr-3"><%= live_patch "Getting started", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "level-item" %></li>
+            <li><%= live_patch "Blog", to: Routes.live_path(@conn, SmokexWeb.BlogLive.Show), class: "level-item" %></li>
           </ul>
         </div>
       </footer>

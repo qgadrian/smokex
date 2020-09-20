@@ -126,9 +126,9 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ### Experience situations where Smokex tests were needed
 
-* Empty deployment with health check workng ok but actual endpoints were all
+* [x] Empty deployment with health check workng ok but actual endpoints were all
     failing
-* App requires some environment variables set before start, they were available
+* [ ] App requires some environment variables set before start, they were available
     on deployment so all went good. After some days the app got restarted but the
     variables were not available anymore (were managed by a third party service),
     entering in a crash loop and no one noticing.
