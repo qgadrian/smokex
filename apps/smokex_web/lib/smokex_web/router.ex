@@ -38,8 +38,12 @@ defmodule SmokexWeb.Router do
     plug SmokexWeb.Payments.Stripe.Webhooks.Plug
   end
 
+  pipeline :pow_email_layout do
+    plug :put_pow_mailer_layout, {SmokexWeb.LayoutView, :email}
+  end
+
   scope "/" do
-    pipe_through :browser
+    pipe_through [:browser, :pow_email_layout]
 
     pow_routes()
     pow_extension_routes()
@@ -122,4 +126,10 @@ defmodule SmokexWeb.Router do
     pipe_through :basic_auth
     live_dashboard "/boat/dog/dashboard", metrics: SmokexWeb.Telemetry
   end
+
+  #
+  # Plug function needed to add the base layout to pow emails, for more info
+  # see: https://hexdocs.pm/pow/Pow.Phoenix.Mailer.Mail.html#content
+  #
+  defp put_pow_mailer_layout(conn, layout), do: put_private(conn, :pow_mailer_layout, layout)
 end
