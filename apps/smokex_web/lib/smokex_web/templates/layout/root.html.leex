@@ -38,6 +38,8 @@
             <div class="navbar-start">
               <%= if !Pow.Plug.current_user(@conn) do %>
                 <%= live_patch "Getting started", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "navbar-item" %>
+              <% else %>
+                <%= live_patch "Workflows", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.List), class: "navbar-item" %>
               <% end %>
 
               <%= live_patch "Docs", to: Routes.live_path(@conn, SmokexWeb.DocumentationLive.Show), class: "navbar-item" %>
