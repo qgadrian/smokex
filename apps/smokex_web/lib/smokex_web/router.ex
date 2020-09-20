@@ -73,6 +73,7 @@ defmodule SmokexWeb.Router do
     get "/privacy-policy", Controllers.Legal, :privacy_policy
     get "/terms-and-conditions", Controllers.Legal, :terms_and_conditions
 
+    live "/blog", BlogLive.Show
     live "/pricing", PricingLive.Show
     live "/docs", DocumentationLive.Show
     live "/getting-started", WelcomeLive.Show
