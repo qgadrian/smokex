@@ -15,7 +15,7 @@ defmodule Smokex.Notifications.Email do
   Notifies a execution change via email.
   """
   @spec notify_change(PlanExecution.t()) :: :ok
-  def notify_change(%PlanExecution{} = plan_execution) do
+  def notify_change(%PlanExecution{status: :halted} = plan_execution) do
     %PlanExecution{
       started_at: plan_execution_started_at,
       status: plan_execution_status,
@@ -48,4 +48,6 @@ defmodule Smokex.Notifications.Email do
       :ok
     end
   end
+
+  def notify_change(_plan_execution), do: :ok
 end
