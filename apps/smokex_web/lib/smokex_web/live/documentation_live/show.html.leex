@@ -85,13 +85,13 @@
           <div class="box">
             <h4 class="title is-4">Simple request</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
-    host: "http://smokex.io"</span></code></pre>
+    host: "https://smokex.io"</span></code></pre>
           </div>
 
           <div class="box">
             <h4 class="title is-4">Headers</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
-    host: "http://smokex.io"
+    host: "https://smokex.io"
     headers:
       - content-type: "application/json"</span></code></pre>
           </div>
@@ -99,7 +99,7 @@
           <div class="box">
             <h4 class="title is-4">Query params</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
-    host: "http://smokex.io"
+    host: "https://smokex.io"
     query:
       search: "my-query-search"
       filter: "all"</span></code></pre>
@@ -108,7 +108,7 @@
           <div class="box">
             <h4 class="title is-4">Adding a request body</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- post:
-    host: "http://smokex.io"
+    host: "https://smokex.io"
     body:
       name: "Michael"
       last-name: "Jordan"
@@ -127,7 +127,7 @@
           <div class="box">
             <h4 class="title is-4">Status code</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- post:
-    host: "http://smokex.io"
+    host: "https://smokex.io"
     body:
       name: "Michael"
       last-name: "Jordan"
@@ -139,7 +139,7 @@
           <div class="box">
             <h4 class="title is-4">Headers</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- post:
-    host: "http://smokex.io"
+    host: "https://smokex.io"
     body:
       name: "Michael"
       last-name: "Jordan"
@@ -158,7 +158,7 @@
               </div>
             </article>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
-    host: "http://smokex.io"
+    host: "https://smokex.io"
     query:
       id: 23
     expect:
@@ -170,7 +170,7 @@
           rebounds: 458</span></code></pre>
 
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
-    host: "http://smokex.io"
+    host: "https://smokex.io"
     query:
       id: 23
     expect:
@@ -191,7 +191,7 @@
           <div class="box">
             <h4 class="title is-4">Save data from response</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- post:
-    host: "http://smokex.io"
+    host: "https://smokex.io"
     body:
       name: "Michael"
       last-name: "Jordan"
@@ -201,7 +201,7 @@
         json_path: "stats.points"
 
   - put:
-    host: "http://smokex.io/players/23"
+    host: "https://smokex.io/players/23"
     body:
       points: ${current_points}</span></code></pre>
           </div>

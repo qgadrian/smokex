@@ -213,6 +213,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 * [ ] Measure request time per plan step and show a graph view for performance
 * [ ] Add Sendgrid integration to allow sending email using the user API KEY
+* [ ] Add change password view to my account instead redirecting to a new page
 * [ ] Migrate to a distributed application, so far it is a single instance
 * [ ] Provide API endpoint to start an execution. Mind this will need an API KEY (for that, for example see https://github.com/danschultzer/pow/issues/176). UPDATE: low prio because of Github integration
 * [ ] Provide interface or module to manage the scheduled jobs (aka `Smokex.PlanDefinitions.Scheduler.jobs`). UPDATE: low prio since database provides some info already
