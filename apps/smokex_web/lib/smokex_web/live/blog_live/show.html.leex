@@ -6,30 +6,38 @@
     <div class="columns is-centered has-text-left">
       <div class="column is-8">
         <div class="content">
-          <p class="subtitle">Smokex provides a powerful engine to <strong>create any kind of automated requests</strong>.</p>
+          <p class="subtitle">Smokex provides a powerful engine to
+          <strong>create any kind of automated requests</strong> and we want to
+          share with you a bunch of common use cases from our users.</p>
           <p><i>I have an application without tests...</i> <strong>You can create
-            any test in no time</strong> just write the request and set any
+            any test in no time</strong>, just write the request and set any
           expectation to verify the information received is correct. This will
-          create functional tests without having to write any line of code in
+          create a new test without having to write any line of code in
           your application!</p>
-          <p><i>Do you need to know if your application is up?</i> No prob! Just
-          create a workflow to make a request to any URL and it will
+          <p><i>Can I use it to know if my application is up?</i> Yes indeed! Just
+          create a workflow to make a request to the desired URL and Smokex will
           <strong>automatically notify if the response from the server is not
           correct</strong>.</p>
-          <p><i>I need to send a keep alive message to my host...</i> Sure, just as
-          easy as create a new workflow and set a cron sentence to specify when
-          Smokex should send the request to your host.</p>
-          <p>You can also send requests and <strong>expect the response
+          <p><i>I need to send a keep alive message to my host...</i> No
+          problem, just as easy as creating a new workflow and set a cron
+          sentence to specify when Smokex should send the request to your
+          host.</p>
+          <p>You can also send requests and <strong>expect a minimum response
             time</strong>, if your application takes more time to send the
-          response Smokex will let you know so you can take a look at the
+          response Smokex will notify you so you can take a look at the
           <strong>current performance of your system!</strong></p>
           <p>Liking the new <a target="_blank"
           href="https://twitter.com/hashtag/nocode?lang=en">#nocode</a> trend?
-        You can consume and send data from third parties using a workflow, this
-        means you don't even need to write any backend to work with you
-        data</p>
+          You can consume and send data from third parties using a workflow, this
+          means you don't even need to write a backend to work with your
+          data</p>
 
-          <div class="tags mt-5"><a class="tag is-primary" href="#">smoke tests</a><a class="tag is-primary" href="#">automated requests</a><a class="tag is-primary" href="#">application performance</a><a class="tag is-primary" href="#">#nocode</a></div>
+          <div class="tags mt-5">
+            <a class="tag is-primary" href="#">smoke tests</a>
+            <a class="tag is-primary" href="#">automated requests</a>
+            <a class="tag is-primary" href="#">application performance</a>
+            <a class="tag is-primary" href="#">#nocode</a>
+          </div>
         </div>
       </div>
     </div>
@@ -43,36 +51,36 @@
       <div class="column is-8">
         <div class="content">
           <p class="subtitle">This is the story about how things broke and got fixed.</p>
-          <p>I've working with different companies in different status and with
-          different mindsets. But one at of the best place I've worked at I
-          (we) learned how smoke tests can have a <strong>huge impact in our
-          daily workflow</strong>. Because we deployed several times per day
-        and we had lot of tests we were confidence enough to deploy every
-        single commit to product, nothing can go wrong right? right?</p>
-          <p>Well you know the answer already, <strong>LOT of things can go
-            wrong</strong> and one of responsibilities is minimize those
+          <p>I've working with different companies in different states, and with
+          different mindsets. But one at of the best places I'd worked at I
+          (we) learned how smoke tests can have a <strong>huge impact in your
+          daily workflow</strong>. We deployed several times per day and we had
+          lot of tests we were confidence enough with our releases, because
+          nothing can go wrong right? right?</p>
+          <p>Well... you know the answer already, <strong>LOT of things can go
+            wrong</strong> and one of responsibilities is to minimize those
           risks.</p>
           <p>Long story short, one day like any other day we made some changes
-          in our application and ending up missing part of the code on the
-          release ((*yikes*). Our nice CD pipeline run the tests, compilations,
-          etc... <i>all good, green light, we are good to go!</i>. But we
-          weren't.</p>
-          <p>Took not so long to start getting complains from our users that
+          in our application and ended up <i>missing</i> part of the code on the
+          release final (*yikes*). Our nice CD pipeline compiles, run all the
+          tests, etc... <i>all good, green light, we are good to go!</i>. But
+          we weren't.</p>
+          <p>Took not so long to start getting complains from our users that were
           <strong>seeing a blank page where our application should be</strong>.
           In our local environment everything was ok, we had our Kubernetes
           running several pods and everything looked good... After we found out
-          we had missing half of the application and immediately <strong>rolled
-          back to the previous release</strong>.</p>
+          we had missing half of the application code and immediately
+          <strong>rolled back to the previous release</strong>.</p>
           <p>After our regular post mortem we decided to add smoke testing to
           our pipeline. It would be really simple, login with an internal
-          testing user and make a couple of requests and make a couple of
-          tests. If for any reason the smoke tests failed we
-          <strong>immediately roll back</strong> to the latest known good
-          release. This problem, or any other problem with same impact on our
-          users can happen again, so we wanted to ensure that it will never
+          testing user, make a couple of requests and make checks on the data
+          received from the server. We added a new step to the CD pipeline so
+          if for any reason a smoke test fails we <strong>immediately roll
+            back</strong> to the latest known good release. This or any other
+          problem can happen again, so we wanted to ensure it will <i>never</i>
           happen again.</p>
 
-          <p>Having smoke tests provide us:</p>
+          <p>After adding smoke tests to our development workflow we got:</p>
           <ul>
             <li>A simple way to verify any release of any project</li>
             <li>Happier developers &amp; stakeholders, even less worried about releases</li>
@@ -80,7 +88,11 @@
             <li>Improved QA by creating tests effortless</li>
           </ul>
 
-          <div class="tags mt-5"><a class="tag is-primary" href="#">smoke tests</a><a class="tag is-primary" href="#">release verification</a><a class="tag is-primary" href="#">smokex</a></div>
+          <div class="tags mt-5">
+            <a class="tag is-primary" href="#">smoke tests</a>
+            <a class="tag is-primary" href="#">release verification</a>
+            <a class="tag is-primary" href="#">smokex</a>
+          </div>
         </div>
       </div>
     </div>
