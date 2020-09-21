@@ -116,5 +116,9 @@ defmodule SmokexWeb.Telemetry do
       &SmokexWeb.Telemetry.ObanErrorReporter.handle_event/4,
       %{}
     )
+
+    events = [[:oban, :job, :start], [:oban, :job, :stop], [:oban, :job, :exception]]
+
+    :telemetry.attach_many("oban-logger", events, &MyApp.ObanLogger.handle_event/4, [])
   end
 end

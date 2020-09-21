@@ -140,7 +140,7 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
     |> Map.take(@step_opts)
     |> Map.to_list()
     |> Map.new(fn {key, value} ->
-      # TODO users can add ANYTHING and this will throw an unhandled error
+      # TODO users can add ANYTHING and this will throw an unhandled error using `to_existing_atom`
       {String.to_existing_atom(key), TypeConverter.convert(value)}
     end)
     |> Keyword.new()
