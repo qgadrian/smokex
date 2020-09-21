@@ -1,4 +1,4 @@
-defmodule SmokexWeb.Telemetry.ObanErrorLogger do
+defmodule SmokexWeb.Telemetry.ObanLogger do
   @moduledoc """
   This module handles Oban telemetry error event thrown by workers.
   """
