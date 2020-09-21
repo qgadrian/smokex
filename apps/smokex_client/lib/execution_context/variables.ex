@@ -9,6 +9,7 @@ defmodule SmokexClient.ExecutionContext.Variables do
   """
 
   alias SmokexClient.ExecutionContext
+  alias SmokexClient.TypeConverter
   alias Smokex.PlanExecution
   alias Smokex.PlanDefinition
   alias Smokex.Organizations.Organization
@@ -29,23 +30,8 @@ defmodule SmokexClient.ExecutionContext.Variables do
     organization
     |> OrganizationsSecrets.list()
     |> Enum.map(fn %Secret{name: name, value: value} ->
-      {name, convert(value)}
+      {name, TypeConverter.convert(value)}
     end)
     |> Enum.into(%{})
-  end
-
-  #
-  # Private functions
-  #
-
-  @spec convert(String.t()) :: boolean | integer | String.t()
-  defp convert("true"), do: true
-  defp convert("false"), do: false
-
-  defp convert(string_or_number) do
-    case Integer.parse(string_or_number) do
-      {number, ""} -> number
-      _error -> string_or_number
-    end
   end
 end
