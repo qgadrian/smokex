@@ -8,11 +8,76 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
 
   @impl true
   def mount(_params, session, socket) do
+    default_plan_definition_value = """
+    # get a session token
+    - post:
+        host: "#{Routes.test_endpoint_url(socket, :login)}"
+        headers:
+          content-type: "application/json"
+        body:
+          user: "smokex"
+          password: "may the force be with you"
+        save_from_response:
+          - variable_name: "session_token"
+            json_path: "session_token"
+
+    # request a list of elements
+    - get:
+        host: "#{Routes.test_endpoint_url(socket, :get_players)}"
+        headers:
+          auth: ${session_token}
+        expect:
+          body:
+            players:
+              - name: "Michael"
+                last_name: "Jordan"
+                number: 23
+              - name: "LeBron"
+                last_name: "James"
+                number: 23
+              - name: "Kobe"
+                last_name: "Bryant"
+                number: 24
+        save_from_response:
+          - variable_name: "jordan"
+            json_path: "players[0].number"
+          - variable_name: "james"
+            json_path: "players[1].number"
+          - variable_name: "kobe"
+            json_path: "players[2].number"
+
+    # send a request with query params
+    - get:
+        host: "#{Routes.test_endpoint_url(socket, :best_laker, "lakers")}"
+        headers:
+          auth: ${session_token}
+        query:
+          number: ${kobe}
+        expect:
+          body:
+            best_laker: true
+
+    # put some data in a server
+    - put:
+        host: "#{Routes.test_endpoint_url(socket, :message)}"
+        headers:
+          auth: ${session_token}
+        query:
+          number: ${kobe}
+          message: "mamba forever"
+        expect:
+          body:
+            response: "your message was sent to player 24"
+    """
+
     socket =
       socket
       |> SessionHelper.assign_user!(session)
       |> check_permission()
-      |> assign(changeset: Ecto.Changeset.change(%PlanDefinition{}))
+      |> assign(
+        changeset: Ecto.Changeset.change(%PlanDefinition{content: default_plan_definition_value})
+      )
+      |> assign(:default_content, default_plan_definition_value)
       |> assign(page_title: "Create test plan")
 
     {:ok, socket}

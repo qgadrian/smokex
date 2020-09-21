@@ -63,6 +63,15 @@ defmodule SmokexWeb.Router do
     end
   end
 
+  scope "/workflow_test", SmokexWeb.Controllers.WorkflowTest do
+    pipe_through([:skip_csrf_protection, :api])
+
+    post "/login", TestEndpoint, :login
+    get "/players", TestEndpoint, :get_players
+    get "/best/:team", TestEndpoint, :best_laker
+    put "/message", TestEndpoint, :message
+  end
+
   scope "/", SmokexWeb do
     pipe_through :browser
 
