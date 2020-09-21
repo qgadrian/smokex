@@ -1,13 +1,15 @@
 defmodule Smokex.Step.Request do
+  @type opts :: :timeout
+
   @type t :: %__MODULE__{
           action: atom,
-          host: String.t(),
-          query: map,
           body: map,
           expect: Smokex.Step.Request.Expect.t(),
           headers: map,
-          save_from_response: list(Smokex.Step.Request.SaveFromResponse.t()),
-          opts: Smokex.Step.Request.SaveFromResponse.t()
+          host: String.t(),
+          opts: %{opts => term},
+          query: map,
+          save_from_response: list(Smokex.Step.Request.SaveFromResponse.t())
         }
 
   defstruct [
