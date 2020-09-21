@@ -89,6 +89,14 @@
           </div>
 
           <div class="box">
+            <h4 class="title is-4">Set a request timeout</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
+    host: "https://smokex.io"
+    options:
+      timeout: 2000</span></code></pre>
+          </div>
+
+          <div class="box">
             <h4 class="title is-4">Headers</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
     host: "https://smokex.io"
