@@ -158,11 +158,15 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   defp save_from_response(context_variables, response_body) do
     context_variables
     |> Enum.map(fn save_from_response ->
-      # TODO use JSON path here
-      json_path_as_list = String.split(save_from_response.json_path, ".")
-      value_from_response = get_in(response_body["json"], json_path_as_list)
+      json_body = response_body["json"] || response_body
 
-      {save_from_response.variable_name, value_from_response}
+      case ExJSONPath.eval(json_body, save_from_response.json_path) do
+        {:ok, [value_from_response]} ->
+          {save_from_response.variable_name, value_from_response}
+
+        _ ->
+          {save_from_response.variable_name, nil}
+      end
     end)
     |> Map.new()
   end

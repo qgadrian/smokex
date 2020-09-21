@@ -185,6 +185,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [ ] Check: missing logs on worker processes?
 * [ ] Listen to tab event on the yaml editor to avoid jumping out and screwing
     with the browser
+* [ ] If a body is present the automatically add the `content-type` json to the
+    request
 
 ### Nice to have (next prio)
 
