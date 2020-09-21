@@ -7,6 +7,7 @@ defmodule SmokexClient.Utils.StepVarsReplacer do
 
   alias Smokex.Step.Request
   alias SmokexClient.ExecutionContext
+  alias SmokexClient.TypeConverter
 
   @spec process_step_variables(list(Request.t()), map) :: list(Request.t())
   def process_step_variables(steps, context_variables \\ %{}) when is_list(steps) do
@@ -114,10 +115,7 @@ defmodule SmokexClient.Utils.StepVarsReplacer do
       nil ->
         case Map.get(context_variables, key) do
           nil -> default_value
-          var when is_binary(var) -> var
-          var when is_number(var) -> var
-          var when is_boolean(var) -> var
-          var -> "#{var}"
+          var -> TypeConverter.convert(var)
         end
 
       value ->

@@ -1,7 +1,14 @@
 defmodule SmokexClient.Parsers.Yaml.Parser do
+  @moduledoc """
+  Module that provides functions to parse YAML files.
+  """
+
+  require Logger
+
   alias Smokex.Step.Request
   alias Smokex.Step.Request.Expect
   alias Smokex.Step.Request.SaveFromResponse
+  alias SmokexClient.TypeConverter
 
   @expect_params ["status_code", "headers", "body"]
 
@@ -132,7 +139,10 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
     |> Map.get("options", %{})
     |> Map.take(@step_opts)
     |> Map.to_list()
-    |> Map.new(fn {k, v} -> {String.to_atom(k), v} end)
+    |> Map.new(fn {key, value} ->
+      # TODO users can add ANYTHING and this will throw an unhandled error
+      {String.to_existing_atom(key), TypeConverter.convert(value)}
+    end)
     |> Keyword.new()
   end
 
