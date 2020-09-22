@@ -34,13 +34,14 @@ defmodule SmokexClient.Mixfile do
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.22.1"},
       {:exjsonpath, "~> 0.1"},
-      {:httparrot, "~> 1.2", only: :test, git: "https://github.com/qgadrian/httparrot.git"},
+      {:httparrot, "~> 1.3", only: :test},
+      {:httpoison, "~> 1.6"},
       {:httpoison, "~> 1.6"},
       {:jason, "~> 1.2"},
       {:kitchen_sink, "~> 1.3"},
+      {:slack, "~> 0.23.5"},
       {:smokex, in_umbrella: true},
       {:sobelow, "~> 0.10.3"},
-      {:slack, "~> 0.23.5"},
       {:yaml_elixir, "~> 2.4.0"}
     ]
   end
