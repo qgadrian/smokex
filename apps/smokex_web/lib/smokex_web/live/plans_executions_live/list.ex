@@ -246,16 +246,9 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
   end
 
   @spec subscribe_to_changes(Socket.t()) :: list(PlanExecution.t())
-  defp subscribe_to_changes(%Socket{assigns: %{plan_executions: plan_executions}} = socket)
-       when is_list(plan_executions) do
-    Smokex.PlanExecutions.subscribe(plan_executions)
-    socket
-  end
-
-  @spec subscribe_to_changes(Socket.t()) :: Socket.t()
-  defp subscribe_to_changes(%Socket{assigns: %{plan_definition_id: plan_definition_id}} = socket)
-       when is_number(plan_definition_id) do
-    PlanDefinitions.subscribe("#{plan_definition_id}")
+  defp subscribe_to_changes(%Socket{assigns: assigns} = socket) do
+    Smokex.PlanExecutions.subscribe(assigns.plan_executions)
+    PlanDefinitions.subscribe("#{assigns.plan_definition_id}")
 
     socket
   end
