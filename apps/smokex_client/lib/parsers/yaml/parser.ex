@@ -96,8 +96,11 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
     yaml_step_action = yaml_step |> Map.to_list() |> Enum.at(0) |> elem(0)
 
     case yaml_step_action do
-      nil -> {:error, :invalid_action}
-      action -> %{action: action, props: Map.get(yaml_step, yaml_step_action)}
+      nil ->
+        {:error, :invalid_action}
+
+      action ->
+        %{action: String.to_existing_atom(action), props: Map.get(yaml_step, yaml_step_action)}
     end
   end
 
@@ -111,16 +114,19 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
 
   @spec get_query_params(map) :: map
   defp get_query_params(yaml_step_props) do
+    # TODO raise error if not a map
     Map.get(yaml_step_props, "query", %{})
   end
 
   @spec get_body(map) :: map
   defp get_body(yaml_step_props) do
+    # TODO raise error if not a map
     Map.get(yaml_step_props, "body", %{})
   end
 
   @spec get_headers(map) :: map
   defp get_headers(yaml_step_props) do
+    # TODO raise error if not a map
     Map.get(yaml_step_props, "headers", %{})
   end
 

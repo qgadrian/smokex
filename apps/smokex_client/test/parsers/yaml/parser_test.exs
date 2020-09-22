@@ -26,13 +26,13 @@ defmodule SmokexClient.Test.Parsers.Yaml do
       Parser.parse_file("test/support/fixtures/parser/yaml/test_multiple_requests.yml")
 
     expected_yaml_data = [
-      %Request{action: "get", host: "test_2_host_1"},
-      %Request{action: "get", host: "test_2_host_2"},
-      %Request{action: "post", host: "test_2_host_3"},
-      %Request{action: "get", host: "test_2_host_4"},
-      %Request{action: "post", host: "test_2_host_5"},
-      %Request{action: "post", host: "test_2_host_6"},
-      %Request{action: "patch", host: "test_2_host_7"}
+      %Request{action: :get, host: "test_2_host_1"},
+      %Request{action: :get, host: "test_2_host_2"},
+      %Request{action: :post, host: "test_2_host_3"},
+      %Request{action: :get, host: "test_2_host_4"},
+      %Request{action: :post, host: "test_2_host_5"},
+      %Request{action: :post, host: "test_2_host_6"},
+      %Request{action: :patch, host: "test_2_host_7"}
     ]
 
     assert {:ok, expected_yaml_data} === result_response
@@ -42,10 +42,10 @@ defmodule SmokexClient.Test.Parsers.Yaml do
     result_response = Parser.parse_file("test/support/fixtures/parser/yaml/test_parse_params.yml")
 
     expected_yaml_data = [
-      %Request{action: "get", host: "test_3_host_1", query: %{"param_1" => "param_1"}},
-      %Request{action: "get", host: "test_3_host_2"},
+      %Request{action: :get, host: "test_3_host_1", query: %{"param_1" => "param_1"}},
+      %Request{action: :get, host: "test_3_host_2"},
       %Request{
-        action: "post",
+        action: :post,
         host: "test_3_host_3",
         body: %{"param_1" => "param_1", "param_2" => "param_2"}
       }
@@ -59,7 +59,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
 
     expected_yaml_data = [
       %Request{
-        action: "get",
+        action: :get,
         host: "test_host",
         query: %{"param_1" => "param_1"},
         expect: %Expect{status_code: 200},
@@ -75,7 +75,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
 
     expected_yaml_data = [
       %Request{
-        action: "get",
+        action: :get,
         host: "test_host",
         query: %{"param_1" => "param_1"},
         expect: %Expect{
@@ -94,7 +94,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
 
     expected_yaml_data = [
       %Request{
-        action: "get",
+        action: :get,
         host: "test_host",
         query: %{"param_1" => "param_1"},
         expect: %Expect{status_code: 200}
@@ -110,7 +110,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
 
     expected_yaml_data = [
       %Request{
-        action: "get",
+        action: :get,
         host: "test_host",
         query: %{"param_1" => "param_1"},
         expect: %Expect{
@@ -130,7 +130,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
 
       expected_yaml_data = [
         %Request{
-          action: "post",
+          action: :post,
           host: "https://httpbin.org/get",
           body: %{
             "test" => %{
@@ -159,7 +159,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
 
       expected_yaml_data = [
         %Request{
-          action: "get",
+          action: :get,
           host: "http://httpbing.org/",
           query: %{"query_key" => "query_value"},
           opts: [timeout: 5000]
@@ -175,7 +175,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
 
       expected_yaml_data = [
         %Request{
-          action: "get",
+          action: :get,
           host: "http://httpbing.org/",
           body: "this is a body string"
         }
