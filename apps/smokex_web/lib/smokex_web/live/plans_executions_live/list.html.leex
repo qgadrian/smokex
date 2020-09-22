@@ -69,7 +69,7 @@
             </div>
           <% end %>
 
-          <%= live_component @socket, TableComponent, plan_executions: @plan_executions, id: "#{@plan_definition_id}-#{@active_filter}" %>
+          <%= live_component @socket, TableComponent, plan_executions: @plan_executions, id: "#{@plan_definition_id}-#{@active_filter}", update_action: @update_action %>
         </div>
 
         <%= if @plan_executions != [] do %>

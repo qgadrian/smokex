@@ -18,9 +18,10 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
     socket =
       socket
       |> assign(page_title: "Executions")
+      |> assign(plan_executions: [])
       |> SessionHelper.assign_user!(session)
 
-    {:ok, socket, temporary_assigns: [plan_executions: []]}
+    {:ok, socket, temporary_assigns: [update_action: "append"]}
   end
 
   @impl Phoenix.LiveView
@@ -118,12 +119,13 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
 
   @impl Phoenix.LiveView
   def handle_info(
-        {:created, %PlanExecution{}},
+        {:created, %PlanExecution{} = plan_execution},
         %Socket{assigns: %{active_filter: :all}} = socket
       ) do
     socket =
       socket
-      |> fetch_executions()
+      |> assign(update_action: "prepend")
+      |> assign(plan_executions: [plan_execution])
       |> subscribe_to_changes()
 
     {:noreply, socket}
@@ -131,12 +133,13 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
 
   @impl Phoenix.LiveView
   def handle_info(
-        {:created, %PlanExecution{status: status}},
+        {:created, %PlanExecution{status: status} = plan_execution},
         %Socket{assigns: %{active_filter: status}} = socket
       ) do
     socket =
       socket
-      |> fetch_executions()
+      |> assign(update_action: "prepend")
+      |> assign(plan_executions: [plan_execution])
       |> subscribe_to_changes()
 
     {:noreply, socket}
@@ -153,7 +156,9 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
         other_plan_execution -> other_plan_execution
       end)
 
-    socket = assign(socket, plan_executions: updated_plan_executions)
+    socket =
+      socket
+      |> assign(plan_executions: updated_plan_executions)
 
     {:noreply, socket}
   end
@@ -214,7 +219,8 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
       |> Smokex.Repo.preload(:plan_definition)
       |> subscribe_to_changes()
 
-    assign(socket, plan_executions: more_plans_executions)
+    socket
+    |> assign(plan_executions: more_plans_executions)
   end
 
   @spec set_total_results_count(Socket.t()) :: Socket.t()
