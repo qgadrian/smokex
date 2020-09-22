@@ -28,4 +28,13 @@ defmodule Smokex.Results do
 
     result
   end
+
+  @doc """
+  Return whether the result has failed assertions.
+  """
+  @spec has_failed?(Result.t()) :: boolean
+  def has_failed?(%Result{failed_assertions: map}) when map == %{}, do: false
+  def has_failed?(%Result{failed_assertions: nil}), do: false
+  def has_failed?(%Result{failed_assertions: []}), do: false
+  def has_failed?(%Result{failed_assertions: _}), do: true
 end
