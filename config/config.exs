@@ -57,7 +57,7 @@ config :logger, Sentry.LoggerBackend,
 config :phoenix, :json_library, Jason
 
 config :smokex_client,
-  timeout: 20000,
+  timeout: 5000,
   verbose: true,
   quiet: false,
   halt_on_error: true
