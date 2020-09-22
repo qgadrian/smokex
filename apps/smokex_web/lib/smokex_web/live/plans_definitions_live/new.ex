@@ -21,11 +21,13 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
           - variable_name: "session_token"
             json_path: "session_token"
 
-    # request a list of elements
+    # request a list of elements (will timeout after 4 seconds)
     - get:
         host: "#{Routes.test_endpoint_url(socket, :get_players)}"
         headers:
           auth: ${session_token}
+        options:
+          timeout: 4000
         expect:
           body:
             players:
