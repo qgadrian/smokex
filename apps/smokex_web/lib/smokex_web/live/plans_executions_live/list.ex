@@ -159,6 +159,11 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
   end
 
   @impl Phoenix.LiveView
+  def handle_info({:result, _result}, %Socket{} = socket) do
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
   def handle_info(message, socket) do
     Logger.warn("Received unhandled message #{inspect(message)}")
 
