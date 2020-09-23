@@ -56,6 +56,14 @@ defmodule SmokexWeb.Telemetry do
           unit: {:native, :millisecond}
         ),
 
+        # Tesla Metrics
+        summary("tesla.request.start.system_time", unit: {:native, :millisecond}, tags: [:env]),
+        summary("tesla.request.stop.duration", unit: {:native, :millisecond}, tags: [:env, :error]),
+        summary("tesla.request.exception.duration",
+          unit: {:native, :millisecond},
+          tags: [:kind, :reason]
+        ),
+
         # Database Metrics
         summary("smokex.repo.query.total_time", unit: {:native, :millisecond}),
         summary("smokex.repo.query.decode_time", unit: {:native, :millisecond}),
@@ -76,12 +84,6 @@ defmodule SmokexWeb.Telemetry do
 
   defp custom_metrics do
     [
-      summary("tesla.request.start.system_time", unit: {:native, :millisecond}, tags: [:env]),
-      summary("tesla.request.stop.duration", unit: {:native, :millisecond}, tags: [:env, :error]),
-      summary("tesla.request.exception.duration",
-        unit: {:native, :millisecond},
-        tags: [:kind, :reason]
-      ),
       counter("smokex_web.plan_definition.action",
         measurement: :action,
         tags: [:id, :result, :action]
