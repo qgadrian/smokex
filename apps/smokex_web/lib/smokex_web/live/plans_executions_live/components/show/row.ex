@@ -97,6 +97,10 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Show.Row do
     build_tag("request", "to be successfully sent", reason)
   end
 
+  defp create_tag({:error, reason}) do
+    build_tag("request", "to be successfully sent", inspect(reason))
+  end
+
   defp create_tag(status_code: %{expected: expected, received: received}) do
     build_tag("status_code", expected, received)
   end
