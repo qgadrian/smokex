@@ -2,6 +2,7 @@ defmodule SmokexClient.Step.HttpClient do
   @moduledoc """
   Module responsible to generate the HTTP client.
   """
+  require Logger
 
   alias Smokex.Step.Request
 
@@ -18,6 +19,12 @@ defmodule SmokexClient.Step.HttpClient do
     |> Tesla.client(build_adapter())
   end
 
+  @doc """
+  Sends the given request and returns the response.
+
+  If the request is invalid or there is any error raised this function will
+  wrap the raised error and return a tuple with the error wrapped.
+  """
   @spec request(Request.t()) :: Tesla.Env.result()
   def request(%Request{} = step) do
     step
@@ -27,6 +34,10 @@ defmodule SmokexClient.Step.HttpClient do
       url: step.host,
       body: get_body(step.body, step.action)
     )
+  rescue
+    error ->
+      Logger.error(inspect(error))
+      {:error, "Error executing request"}
   end
 
   #
