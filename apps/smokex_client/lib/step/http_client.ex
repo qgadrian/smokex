@@ -14,7 +14,7 @@ defmodule SmokexClient.Step.HttpClient do
   @spec new(Request.t()) :: Tesla.Client.t()
   def new(%Request{} = step) do
     step
-    |> build_middlware
+    |> build_middleware()
     |> Tesla.client(build_adapter())
   end
 
@@ -40,8 +40,8 @@ defmodule SmokexClient.Step.HttpClient do
   @spec build_adapter() :: term
   defp build_adapter, do: {Tesla.Adapter.Hackney, insecure: true}
 
-  @spec build_middlware(Request.t()) :: list
-  defp build_middlware(%Request{} = step) do
+  @spec build_middleware(Request.t()) :: list
+  defp build_middleware(%Request{} = step) do
     maybe_json_middleware =
       if is_binary(step.expect.body) do
         nil
