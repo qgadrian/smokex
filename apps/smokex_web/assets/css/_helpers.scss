@@ -1,5 +1,14 @@
 // icons!
 ion-icon {
+  @at-root .is-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 50%;
+  }
   visibility: inherit !important;
   &.is-primary {
     color: $primary
@@ -75,4 +84,9 @@ ion-icon {
 
 .p-0 {
   padding: 0 !important;
+}
+
+// letters n words
+.break-word {
+  word-break: break-word;
 }

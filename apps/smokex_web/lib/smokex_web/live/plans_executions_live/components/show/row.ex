@@ -6,6 +6,10 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Show.Row do
   use SmokexWeb, :live_component
 
   alias Smokex.Result
+  alias SmokexWeb.Results.Components.ActionBadge
+  alias SmokexWeb.Results.Components.RuntimeLabel
+  alias SmokexWeb.Results.Components.StatusBadge
+  alias SmokexWeb.Results.Components.TimeAgoLabel
 
   @impl Phoenix.LiveComponent
   def mount(socket) do

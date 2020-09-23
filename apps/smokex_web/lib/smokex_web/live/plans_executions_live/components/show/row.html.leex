@@ -1,8 +1,48 @@
-<tr class="result-row">
-  <td scope="row"><%= @result.action || "-" %></td>
-  <td scope="row"><%= @result.host || "-" %></td>
-  <td scope="row"><%= @result.result %></td>
-</tr>
-
-<%= assertion_error_details(@result) %>
-
+<li class="box-row">
+  <div class="box-row-result">
+    <div class="x-flex x-flex-align-c x-flex-justify-c">
+      <%= StatusBadge.new(@result) %>
+    </div>
+    <div class="box-row-result-content pl-4">
+      <div class="box-row-result-content-header">
+        <div class="box-row-result-content-header-title">
+          <div class="mr-2 mb-2">
+            <%= ActionBadge.new(@result) %>
+          </div>
+          <strong class="is-size-5 break-word">
+            <%= @result.host %>
+          </strong>
+        </div>
+        <div class="x-flex x-flex-align-c">
+          <summary class="x-flex x-flex-align-c x-flex-justify-c">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <%= TimeAgoLabel.new(@result) %>
+          </summary>
+          <summary class="x-flex x-flex-align-c x-flex-justify-c pl-4">
+            <ion-icon name="stopwatch-outline"></ion-icon>
+            <%= RuntimeLabel.new(@result) %>
+          </summary>
+        </div>
+      </div>
+      <%= if @result.failed_assertions != [] do %>
+        <div class="x-flex mt-4">
+          <%= for failed_assertion <- @result.failed_assertions do %>
+            <div class="box is-bordered p-4 x-flex-column mr-4">
+              <span class="is-uppercase mb-1">Expected</span>
+              <code class="px-4 py-2">
+                status_code: 400
+              </code>
+            </div>
+            <div class="x-flex-column">
+              <span class="is-uppercase mb-1">Received</span>
+              <code class="px-4 py-2">
+                status_code: 400
+              </code>
+            </div>
+          <% end %>
+          <%= assertion_error_details(@result) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</li>

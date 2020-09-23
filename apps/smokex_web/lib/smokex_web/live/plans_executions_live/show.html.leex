@@ -1,30 +1,48 @@
 <div>
-  <h1 class="title">Execution details</h1>
+  <div class="x-flex x-flex-justify-sb mb-6">
+    <div class="x-flex x-flex-align-c">
+      <%= StatusBadge.new(@plan_execution) %>
+      <div class="pl-4">
+        <h1 class="title is-4"><%= @plan_definition.name %></h1>
+        <p class="subtitle is-size-6 is-gray">Execution #<%= @plan_execution.id %></p>
+      </div>
+    </div>
+    <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansDefinitionsLive.Edit, @plan_definition.id) do %>
+      <button class="button is-small is-primary is-outlined has-text-weight-medium">Edit</button>
+    <% end %>
+  </div>
 
-    <div class="columns has-text-centered">
-      <div class="column is-4">
-        <div class="box has-background-primary">
-          <%= Progress.total_progress(@plan_execution, @results) %>
-          <p class="subtitle has-text-white">Executed</p>
-        </div>
-      </div>
-      <div class="column is-4">
-        <div class="box has-background-success has-text-white">
-          <%= Progress.success(@results) %>
-          <p class="subtitle has-text-white">Successful</p>
-        </div>
-      </div>
-      <div class="column is-4">
-        <div class="box has-background-danger">
-          <%= Progress.failed(@results) %>
-          <p class="subtitle has-text-white">Failed</p>
+  <div class="box is-bordered p-0">
+    <div class="box-header">
+      <div class="columns">
+        <div class="column">
+          <strong><%#= @results.count %> 2 actions</strong>
         </div>
       </div>
     </div>
 
-  <div class="box">
-    <p class="subtitle">Current status: <%= StatusBadge.new(@plan_execution) %></p>
-
     <%= live_component @socket, ResultsTable, results: @results %>
+  </div>
+
+
+  <div class="columns has-text-centered mt-6">
+    <div class="column is-4">
+      <div class="box has-background-primary">
+        <%= Progress.total_progress(@plan_execution, @results) %>
+        <p class="subtitle has-text-white">Executed</p>
+      </div>
+    </div>
+    <div class="column is-4">
+      <div class="box has-background-success has-text-white">
+        <%= Progress.success(@results) %>
+        <p class="subtitle has-text-white">Successful</p>
+      </div>
+    </div>
+    <div class="column is-4">
+      <div class="box has-background-danger">
+        <%= Progress.failed(@results) %>
+        <p class="subtitle has-text-white">Failed</p>
+      </div>
+    </div>
   </div>
 </div>

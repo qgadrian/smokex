@@ -2,6 +2,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
   use SmokexWeb, :live_view
 
   alias Phoenix.LiveView.Socket
+  alias Smokex.PlanDefinitions
   alias Smokex.PlanExecutions
   alias Smokex.PlanExecution
   alias Smokex.Result
@@ -26,6 +27,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
       socket
       |> assign(id: id)
       |> fetch_plan_execution()
+      |> fetch_plan_definition
       |> assign(page_title: "Execution #{id}")
 
     {:noreply, socket}
@@ -55,5 +57,14 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
       |> assign(plan_execution: plan_execution)
       |> assign(results: plan_execution.results)
     end
+  end
+
+  defp fetch_plan_definition(
+        %Socket{assigns: %{plan_execution: plan_execution, current_user: user}} = socket
+      ) do
+    plan_definition = PlanDefinitions.get!(user, plan_execution.plan_definition_id)
+    changeset = Ecto.Changeset.change(plan_definition)
+
+    assign(socket, plan_definition: plan_definition, changeset: changeset)
   end
 end
