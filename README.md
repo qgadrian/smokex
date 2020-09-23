@@ -213,6 +213,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ### Nice to have (very low prio)
 
+* [ ] Add Tesla statsd https://github.com/salemove/tesla_statsd to get request
+    metrics
 * [ ] Measure request time per plan step and show a graph view for performance
 * [ ] Add Sendgrid integration to allow sending email using the user API KEY
 * [ ] Add change password view to my account instead redirecting to a new page
