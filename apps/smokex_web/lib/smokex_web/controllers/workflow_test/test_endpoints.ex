@@ -30,7 +30,9 @@ defmodule SmokexWeb.Controllers.WorkflowTest.TestEndpoint do
           ]
         }
 
-        send_resp(conn, 200, Jason.encode!(players))
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(200, Jason.encode!(players))
 
       _ ->
         conn

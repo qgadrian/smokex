@@ -14,6 +14,10 @@ defmodule SmokexClient.Validator.Body do
     end
   end
 
+  #
+  # Private functions
+  #
+
   @spec validate_expected_body(map | String.t(), map | String.t()) :: tuple
   defp validate_expected_body(expected_body, received_body)
        when is_binary(expected_body) and is_map(received_body) do
