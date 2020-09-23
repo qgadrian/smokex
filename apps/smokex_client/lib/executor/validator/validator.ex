@@ -43,20 +43,10 @@ defmodule SmokexClient.Validator do
   defp return_validation_result(validation_errors, response_body) do
     case validation_errors do
       @default_validation_errors ->
-        {:ok, parse_json_response_body(response_body)}
+        {:ok, response_body}
 
       _ ->
         validation_errors
-    end
-  end
-
-  @spec parse_json_response_body(String.t()) :: map | nil
-  defp parse_json_response_body(body) do
-    with {:ok, parsed_body} <- Jason.decode(body) do
-      parsed_body
-    else
-      _ ->
-        body
     end
   end
 end
