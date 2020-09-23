@@ -65,7 +65,7 @@ defmodule Smokex.PlanDefinition do
     |> validate_content()
   end
 
-  @spec validate_cron_expression(Ecto.Changeset.t()) :: keyword
+  @spec validate_cron_expression(Ecto.Changeset.t()) :: Ecto.Changeset.t()
   defp validate_cron_expression(changeset) do
     Ecto.Changeset.validate_change(changeset, :cron_sentence, fn _current_field, value ->
       case Crontab.CronExpression.Parser.parse(value) do
@@ -75,7 +75,7 @@ defmodule Smokex.PlanDefinition do
     end)
   end
 
-  @spec validate_content(Ecto.Changeset.t()) :: keyword
+  @spec validate_content(Ecto.Changeset.t()) :: Ecto.Changeset.t()
   defp validate_content(changeset) do
     Ecto.Changeset.validate_change(changeset, :content, fn _current_field, value ->
       case SmokexClient.Parsers.Yaml.Parser.parse(value) do
