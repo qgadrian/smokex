@@ -3,7 +3,8 @@ defmodule SmokexClient.Validator.StatusCode do
 
   @sucess_status_codes [200, 201, 202, 203, 204]
 
-  @spec validate(Expect.t(), non_neg_integer) :: tuple
+  @spec validate(Expect.t(), non_neg_integer) ::
+          {:ok, non_neg_integer} | {:error, map, String.t()}
   def validate(%Expect{} = expected, status_code) do
     case Map.get(expected, :status_code) do
       nil ->
@@ -14,7 +15,12 @@ defmodule SmokexClient.Validator.StatusCode do
     end
   end
 
-  @spec validate_response_status_code(number) :: tuple
+  #
+  # Private functions
+  #
+
+  @spec validate_response_status_code(non_neg_integer) ::
+          {:ok, non_neg_integer} | {:error, map, String.t()}
   defp validate_response_status_code(status_code) do
     if Enum.any?(@sucess_status_codes, &(&1 == status_code)) do
       {:ok, status_code}
@@ -24,7 +30,8 @@ defmodule SmokexClient.Validator.StatusCode do
     end
   end
 
-  @spec validate_expected_status_code(number, number) :: tuple
+  @spec validate_expected_status_code(non_neg_integer, non_neg_integer) ::
+          {:ok, non_neg_integer} | {:error, map, String.t()}
   defp validate_expected_status_code(expected_status_code, status_code) do
     if expected_status_code == status_code do
       {:ok, status_code}
