@@ -11,8 +11,6 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
 
   alias SmokexClient.Utils.StepVarsReplacer
 
-  @type validation_result :: {:ok, any} | {:error, any, String.t()}
-
   @spec execute(Request.t(), PlanExecution.t(), ExecutionContext.t()) ::
           ExecutionContext.t() | no_return
   def execute(
@@ -46,7 +44,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   #
 
   @spec process_validation(
-          validation_result(),
+          Validator.validation_result(),
           Request.t(),
           PlanExecution.t(),
           ExecutionContext.t()
@@ -101,8 +99,8 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
     end
   end
 
-  @spec process_request_error(Request.t(), any, PlanExecution.t()) :: :ok
-  defp process_request_error(%Request{} = step, reason, plan_execution) do
+  @spec process_request_error(Request.t(), term, PlanExecution.t()) :: :ok
+  defp process_request_error(%Request{} = step, reason, %PlanExecution{} = plan_execution) do
     case reason do
       :nxdomain ->
         # TODO save in database and notify the result via PubSub

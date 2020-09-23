@@ -2,7 +2,7 @@ defmodule SmokexClient.Validator.Headers do
   alias Smokex.Step.Request.Expect
 
   @spec validate(Expect.t(), list(tuple)) ::
-          {:ok, :headers} | {:error, %{headers: list(map)}, String.t()}
+          {:ok, term} | {:error, %{headers: list(map)}, String.t()}
   def validate(%Expect{} = expected, headers) do
     case Map.get(expected, :headers) do
       nil ->

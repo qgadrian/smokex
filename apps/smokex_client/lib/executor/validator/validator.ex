@@ -5,23 +5,44 @@ defmodule SmokexClient.Validator do
   alias SmokexClient.Validator.Headers
   alias SmokexClient.Validator.Body
 
-  @default_validation_errors %{}
+  @typedoc """
+  Represents the validation result.
 
-  @type validation_error_acc :: {:error, map, String.t()} | any
-  @type validation_result :: {:ok, any} | {:error, any, String.t()}
+  ### Success validation
 
+  If no errors are found and all the validation check pass, the validation
+  process is a tuple containing the response body: `{:ok, response_body}`.
+
+  ### Failed validations
+
+  If errors were found, they will be represented with a triplet with the
+  accumulated errors and a message: `{:error, map_with_assertions_failed,
+  description_message}`.
+  """
+  @type validation_result :: {:ok, response_body} | {:error, map, String.t()}
+
+  @type response_body :: map | String.t()
+
+  @type expect_validation_result :: {:ok, term} | {:error, map, String.t()}
+
+  @doc """
+  Validates a response body with the given expectations.
+
+  This functions iterates over all defined expectation and returns a
+  `t:validation_result/0` containing whether if there were expectations failed
+  or not.
+  """
   @spec validate(Expect.t(), Tesla.Env.t()) :: validation_result
-  def validate(%Expect{} = expected, response) do
+  def validate(%Expect{} = expected, %Tesla.Env{} = response) do
     %Tesla.Env{body: body, status: status_code, headers: headers} = response
 
     with status_code_result <- StatusCode.validate(expected, status_code),
          headers_result <- Headers.validate(expected, headers),
          body_result <- Body.validate(expected, body) do
-      @default_validation_errors
+      {:ok, body}
       |> add_validation_error(status_code_result)
       |> add_validation_error(headers_result)
       |> add_validation_error(body_result)
-      |> return_validation_result(body)
     end
   end
 
@@ -29,28 +50,17 @@ defmodule SmokexClient.Validator do
   # Private functions
   #
 
-  @spec add_validation_error(validation_error_acc, validation_result) :: validation_error_acc
-  defp add_validation_error(acc, validation_result) do
-    case {acc, validation_result} do
+  @spec add_validation_error(validation_result, expect_validation_result) :: validation_result
+  defp add_validation_error(current_errors_result, validation_result) do
+    case {current_errors_result, validation_result} do
       {_, {:ok, _}} ->
-        acc
+        current_errors_result
 
-      {{:error, error_infos, _}, {:error, error_info, _}} ->
-        {:error, Map.merge(error_infos, error_info), "Multiple assertion errors"}
+      {{:error, current_errors, _}, {:error, error_to_add, _}} ->
+        {:error, Map.merge(current_errors, error_to_add), "Multiple assertion errors"}
 
-      {_, {:error, error_info, message}} ->
-        {:error, error_info, message}
-    end
-  end
-
-  @spec return_validation_result(validation_error_acc, String.t()) :: validation_result
-  defp return_validation_result(validation_errors, response_body) do
-    case validation_errors do
-      @default_validation_errors ->
-        {:ok, response_body}
-
-      _ ->
-        validation_errors
+      {{:ok, _}, {:error, error_to_add, message}} when is_map(error_to_add) ->
+        {:error, error_to_add, message}
     end
   end
 end
