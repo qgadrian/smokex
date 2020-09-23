@@ -7,6 +7,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   alias Smokex.Step.Request.SaveFromResponse
   alias Smokex.Step.Request
   alias Smokex.PlanExecution
+  alias SmokexClient.Step.HttpClient
 
   alias SmokexClient.Utils.StepVarsReplacer
 
@@ -23,29 +24,13 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
 
     step = StepVarsReplacer.process_step_variables_(step, execution_context)
 
-    body = get_body(step.body, step.action)
-
-    # SSL issue in Erlang 19: https://bugs.erlang.org/browse/ERL-192
-    http_client_options = [
-      params: Map.to_list(step.query),
-      ssl: [
-        {:versions, [:"tlsv1.2"]}
-      ],
-      recv_timeout: step.opts[:timeout] || Application.get_env(:smokex_client, :timeout),
-      hackney: [:insecure]
-    ]
-
-    headers = Map.to_list(step.headers)
-
-    response = HTTPoison.request(step.action, step.host, body, headers, http_client_options)
-
-    case response do
+    case HttpClient.request(step) do
       {:ok, response} ->
         step.expect
         |> Validator.validate(response)
         |> process_validation(step, plan_execution, execution_context)
 
-      {:error, %HTTPoison.Error{reason: reason}} ->
+      {:error, reason} ->
         process_request_error(step, reason, plan_execution)
 
         if halt_on_error do
@@ -56,13 +41,12 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
     end
   end
 
-  @spec get_body(String.t() | map, atom) :: String.t()
-  defp get_body(%{}, "get"), do: ""
-  defp get_body(body, _action) when is_binary(body), do: body
-  defp get_body(body, _action), do: Jason.encode!(body)
+  #
+  # Private functions
+  #
 
   @spec process_validation(
-          validation_result,
+          validation_result(),
           Request.t(),
           PlanExecution.t(),
           ExecutionContext.t()
