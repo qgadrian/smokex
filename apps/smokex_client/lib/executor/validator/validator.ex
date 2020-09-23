@@ -10,9 +10,9 @@ defmodule SmokexClient.Validator do
   @type validation_error_acc :: {:error, map, String.t()} | any
   @type validation_result :: {:ok, any} | {:error, any, String.t()}
 
-  @spec validate(Expect.t(), HTTPoison.Response.t()) :: validation_result
+  @spec validate(Expect.t(), Tesla.Env.t()) :: validation_result
   def validate(%Expect{} = expected, response) do
-    %HTTPoison.Response{body: body, status_code: status_code, headers: headers} = response
+    %Tesla.Env{body: body, status: status_code, headers: headers} = response
 
     with status_code_result <- StatusCode.validate(expected, status_code),
          headers_result <- Headers.validate(expected, headers),
@@ -24,6 +24,10 @@ defmodule SmokexClient.Validator do
       |> return_validation_result(body)
     end
   end
+
+  #
+  # Private functions
+  #
 
   @spec add_validation_error(validation_error_acc, validation_result) :: validation_error_acc
   defp add_validation_error(acc, validation_result) do

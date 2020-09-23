@@ -3,5 +3,5 @@
     body: "this is a body string"
     expect:
       status_code: 200
-      body: "{\"args\":{},\"headers\":{\"content-length\":\"21\",\"content-type\":\"application/octet-stream\",\"host\":\"localhost:5743\",\"user-agent\":\"hackney/1.16.0\"},\"url\":\"https://localhost:5743/post\",\"origin\":\"\",\"form\":{},\"data\":\"this is a body string\",\"json\":null}"
+      body: "{\"args\":{},\"headers\":{\"content-length\":\"23\",\"content-type\":\"application/octet-stream\",\"host\":\"localhost:5743\",\"user-agent\":\"hackney/1.16.0\"},\"url\":\"https://localhost:5743/post\",\"origin\":\"\",\"form\":{},\"data\":\"\\\"this is a body string\\\"\",\"json\":\"this is a body string\"}"
       # body: "this is a body string"

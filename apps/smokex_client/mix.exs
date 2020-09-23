@@ -41,6 +41,7 @@ defmodule SmokexClient.Mixfile do
       {:slack, "~> 0.23.5"},
       {:smokex, in_umbrella: true},
       {:sobelow, "~> 0.10.3"},
+      {:tesla, "~> 1.3.0"},
       {:yaml_elixir, "~> 2.4.0"}
     ]
   end

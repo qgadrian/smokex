@@ -8,7 +8,7 @@ defmodule SmokexClient.Test.Validator do
   alias SmokexClient.Validator
 
   test "Given no expected response when the status code is 20x then an ok is returned" do
-    mock_response = %HTTPoison.Response{status_code: 200, body: ""}
+    mock_response = %Tesla.Env{status: 200, body: ""}
     mock_expect = %Expect{}
 
     {result, _other} = Validator.validate(mock_expect, mock_response)
@@ -17,7 +17,7 @@ defmodule SmokexClient.Test.Validator do
   end
 
   test "Given no expected response when the status code is not 20x then an error is returned" do
-    mock_response = %HTTPoison.Response{status_code: 400, body: ""}
+    mock_response = %Tesla.Env{status: 400, body: ""}
     mock_expect = %Expect{}
 
     {result, %{status_code: %{received: received}}, _message} =
@@ -28,7 +28,7 @@ defmodule SmokexClient.Test.Validator do
   end
 
   test "Given expected status code when the response status code is equal then an ok is returned" do
-    mock_response = %HTTPoison.Response{status_code: 323, body: ""}
+    mock_response = %Tesla.Env{status: 323, body: ""}
     mock_expect = %Expect{status_code: 323}
 
     {result, _other} = Validator.validate(mock_expect, mock_response)
@@ -37,7 +37,7 @@ defmodule SmokexClient.Test.Validator do
   end
 
   test "Given expected status code when the response status code is different then an error is returned" do
-    mock_response = %HTTPoison.Response{status_code: 400, body: ""}
+    mock_response = %Tesla.Env{status: 400, body: ""}
     mock_expect = %Expect{status_code: 300}
 
     {result, %{status_code: %{expected: expected, received: received}}, _message} =
@@ -50,7 +50,7 @@ defmodule SmokexClient.Test.Validator do
 
   test "Given expected headers when the response headers include them then an ok is returned" do
     mock_headers = [{"header_1", "value_1"}, {"header_2", "value_2"}]
-    mock_response = %HTTPoison.Response{status_code: 200, headers: mock_headers, body: ""}
+    mock_response = %Tesla.Env{status: 200, headers: mock_headers, body: ""}
     mock_expect = %Expect{headers: %{"header_1" => "value_1", "header_2" => "value_2"}}
 
     {result, _} = Validator.validate(mock_expect, mock_response)
@@ -59,7 +59,7 @@ defmodule SmokexClient.Test.Validator do
   end
 
   test "Given expected headers when the response headers doesnt include them then an error is returned" do
-    mock_response = %HTTPoison.Response{status_code: 200, headers: [], body: ""}
+    mock_response = %Tesla.Env{status: 200, headers: [], body: ""}
     mock_expect = %Expect{headers: %{"header_1" => "value_1", "header_2" => "value_2"}}
 
     {result,
@@ -81,7 +81,7 @@ defmodule SmokexClient.Test.Validator do
 
   test "Given expected header when the response header has different value then an error is returned" do
     mock_headers = [{"header_1", "value_1"}, {"header_2", "value_23"}]
-    mock_response = %HTTPoison.Response{status_code: 200, headers: mock_headers, body: ""}
+    mock_response = %Tesla.Env{status: 200, headers: mock_headers, body: ""}
     mock_expect = %Expect{headers: %{"header_1" => "value_1", "header_2" => "value_2"}}
 
     {result, %{headers: [%{header: header, expected: expected, received: received}]}, _message} =
@@ -96,7 +96,7 @@ defmodule SmokexClient.Test.Validator do
   test "Given expected body when equals the received body then an ok is returned" do
     mock_body = "this is a body"
 
-    mock_response = %HTTPoison.Response{status_code: 200, body: mock_body}
+    mock_response = %Tesla.Env{status: 200, body: mock_body}
     mock_expect = %Expect{body: mock_body}
 
     assert {:ok, _} = Validator.validate(mock_expect, mock_response)
@@ -106,7 +106,7 @@ defmodule SmokexClient.Test.Validator do
     mock_expected_body = "this is a body"
     mock_received_body = "this is a different body"
 
-    mock_response = %HTTPoison.Response{status_code: 200, body: mock_received_body}
+    mock_response = %Tesla.Env{status: 200, body: mock_received_body}
     mock_expect = %Expect{body: mock_expected_body}
 
     {result, %{body: %{expected: expected_body, received: received_body}}, _message} =
