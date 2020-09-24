@@ -177,17 +177,17 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [ ] Add view to promote "beta free access", ideally toggleable by
     configuration
 * [x] Create welcome page with introduction to Smokex
-* [ ] Mail the welcome content to registered users
+* [x] Mail the welcome content to registered users
 * [x] Add terms and conditions links to footer
-* [ ] Create a blog page with some explanations about what can do (?)
+* [x] Create a blog page with some explanations about what can do (?)
 * [x] Avoid make the cron sentence mandatory
 * [x] First SEO steps (robots, sitemap..)
 * [x] Slack notifications
   * [ ] Seems that when using buttons Slack expects a callback to be handled: https://api.slack.com/interactivity/handling#acknowledgment_response
-* [ ] Check: missing logs on worker processes?
+* [x] Check: missing logs on worker processes?
 * [x] Listen to tab event on the yaml editor to avoid jumping out and screwing
     with the browser
-* [ ] If a body is present the automatically add the `content-type` json to the
+* [x] If a body is present the automatically add the `content-type` json to the
     request
 
 ### Nice to have (next prio)
@@ -199,7 +199,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [~] Generate digest on Docker build. UPDATE: seems that not working 100%
 * [ ] Create environment variables for configurations, for example
     `apps/smokex/lib/smokex/users.ex`
-* [ ] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
+* [x] Use https://github.com/ispirata/exjsonpath/ to get data from JSON
 * [x] Create organizations model (mind some logic needs to be replaced, for
     example `Limits`)
 * [ ] Add `finished with error` state?
