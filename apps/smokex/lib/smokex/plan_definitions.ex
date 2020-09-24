@@ -143,16 +143,21 @@ defmodule Smokex.PlanDefinitions do
   @doc """
   Subscribes to the plan definition.
   """
-  @spec subscribe(PlanDefinition.t() | String.t() | number) :: :ok | {:error, term}
+  @spec subscribe(PlanDefinition.t() | String.t() | number | nil) :: :ok | {:error, term}
+  def subscribe(nil), do: subscribe_to_any_plan_defition()
+
   def subscribe(plan_definition_id) when is_binary(plan_definition_id) do
+    unsubscribe_from_any_plan_definition()
     Phoenix.PubSub.subscribe(Smokex.PubSub, plan_definition_id, link: true)
   end
 
   def subscribe(plan_definition_id) when is_number(plan_definition_id) do
+    unsubscribe_from_any_plan_definition()
     Phoenix.PubSub.subscribe(Smokex.PubSub, "#{plan_definition_id}", link: true)
   end
 
   def subscribe(%PlanDefinition{} = plan_definition) do
+    unsubscribe_from_any_plan_definition()
     Phoenix.PubSub.subscribe(Smokex.PubSub, "#{plan_definition.id}", link: true)
   end
 
@@ -187,5 +192,15 @@ defmodule Smokex.PlanDefinitions do
     TelemetryReporter.execute([:plan_definition], measurement, metadata)
 
     result
+  end
+
+  @spec subscribe_to_any_plan_defition() :: :ok | {:error, term}
+  defp subscribe_to_any_plan_defition() do
+    Phoenix.PubSub.subscribe(Smokex.PubSub, "any_execution", link: true)
+  end
+
+  @spec unsubscribe_from_any_plan_definition() :: :ok | {:error, term}
+  defp unsubscribe_from_any_plan_definition() do
+    Phoenix.PubSub.unsubscribe(Smokex.PubSub, "any_execution")
   end
 end
