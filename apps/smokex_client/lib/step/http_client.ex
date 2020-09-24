@@ -60,12 +60,14 @@ defmodule SmokexClient.Step.HttpClient do
         Tesla.Middleware.JSON
       end
 
+    timeout = step.opts[:timeout] || Application.get_env(:smokex_client, :timeout)
+
     [
       maybe_json_middleware,
       Tesla.Middleware.Logger,
       {Tesla.Middleware.Query, Map.to_list(step.query)},
       {Tesla.Middleware.Headers, Map.to_list(step.headers)},
-      {Tesla.Middleware.Timeout, timeout: 2_000},
+      {Tesla.Middleware.Timeout, timeout: timeout},
       Tesla.Middleware.Telemetry
     ]
     |> Enum.reject(&is_nil/1)
