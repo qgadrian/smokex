@@ -37,14 +37,20 @@ defmodule SmokexWeb.Tracer do
   @spec trace_plan_execution(PlanExecution.t()) :: :ok
   def trace_plan_execution(%PlanExecution{
         id: plan_execution_id,
+        trigger_user_id: trigger_user_id,
         plan_definition_id: plan_definition_id
       }) do
     Sentry.Context.set_tags_context(%{
+      trigger_user_id: trigger_user_id,
       plan_execution_id: plan_execution_id,
       plan_definition_id: plan_definition_id
     })
 
-    Logger.metadata(plan_execution_id: plan_execution_id, plan_definition_id: plan_definition_id)
+    Logger.metadata(
+      trigger_user_id: trigger_user_id,
+      plan_execution_id: plan_execution_id,
+      plan_definition_id: plan_definition_id
+    )
   end
 
   @doc """
