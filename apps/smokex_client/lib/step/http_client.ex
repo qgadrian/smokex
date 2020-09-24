@@ -16,7 +16,7 @@ defmodule SmokexClient.Step.HttpClient do
   def new(%Request{} = step) do
     step
     |> build_middleware()
-    |> Tesla.client(build_adapter())
+    |> Tesla.client(build_adapter(step))
   end
 
   @doc """
@@ -48,8 +48,15 @@ defmodule SmokexClient.Step.HttpClient do
   defp get_body(_, :get), do: nil
   defp get_body(body, _action), do: Jason.encode!(body)
 
-  @spec build_adapter() :: term
-  defp build_adapter, do: {Tesla.Adapter.Hackney, insecure: true}
+  @spec step_timeout(Request.t()) :: non_neg_integer()
+  defp step_timeout(%Request{} = step) do
+    step.opts[:timeout] || Application.get_env(:smokex_client, :timeout, 5_000)
+  end
+
+  @spec build_adapter(Request.t()) :: term
+  defp build_adapter(%Request{} = step) do
+    {Tesla.Adapter.Hackney, insecure: true, recv_timeout: step_timeout(step)}
+  end
 
   @spec build_middleware(Request.t()) :: list
   defp build_middleware(%Request{} = step) do
@@ -60,14 +67,12 @@ defmodule SmokexClient.Step.HttpClient do
         Tesla.Middleware.JSON
       end
 
-    timeout = step.opts[:timeout] || Application.get_env(:smokex_client, :timeout)
-
     [
       maybe_json_middleware,
-      {Tesla.Middleware.Logger, debug: true, log_level: :info},
+      Tesla.Middleware.Logger,
       {Tesla.Middleware.Query, Map.to_list(step.query)},
       {Tesla.Middleware.Headers, Map.to_list(step.headers)},
-      {Tesla.Middleware.Timeout, timeout: timeout},
+      {Tesla.Middleware.Timeout, timeout: step_timeout(step)},
       Tesla.Middleware.Telemetry
     ]
     |> Enum.reject(&is_nil/1)
