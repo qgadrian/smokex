@@ -1,3 +1,5 @@
+![Deploy to Heroku](https://github.com/qgadrian/smokex/workflows/Deploy%20to%20Heroku/badge.svg)
+
 # Smokex.Umbrella
 
 ## Deployment
