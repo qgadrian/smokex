@@ -113,8 +113,6 @@ defmodule SmokexWeb.Telemetry do
   end
 
   defp attach_oban_handlers do
-    :ok = Oban.Telemetry.attach_default_logger()
-
     :telemetry.attach_many(
       "oban-errors",
       [[:oban, :job, :exception], [:oban, :circuit, :trip]],
@@ -124,6 +122,11 @@ defmodule SmokexWeb.Telemetry do
 
     events = [[:oban, :job, :start], [:oban, :job, :stop], [:oban, :job, :exception]]
 
-    :telemetry.attach_many("oban-logger", events, &MyApp.ObanLogger.handle_event/4, [])
+    :telemetry.attach_many(
+      "oban-logger",
+      events,
+      &SmokexWeb.Telemetry.ObanLogger.handle_event/4,
+      []
+    )
   end
 end

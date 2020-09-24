@@ -11,6 +11,18 @@ defmodule SmokexWeb.Telemetry.ObanLogger do
           :telemetry.event_metadata(),
           term
         ) :: :ok
+  def handle_event(
+        [:oban, :job, :start],
+        measure,
+        %{args: %{"plan_execution_id" => plan_execution_id, "user_id" => user_id}} = meta,
+        _
+      ) do
+    Logger.info("[Oban] :start #{meta.worker} at #{measure.system_time}",
+      plan_execution_id: plan_execution_id,
+      user_id: user_id
+    )
+  end
+
   def handle_event([:oban, :job, :start], measure, meta, _) do
     Logger.info("[Oban] :start #{meta.worker} at #{measure.system_time}")
   end
