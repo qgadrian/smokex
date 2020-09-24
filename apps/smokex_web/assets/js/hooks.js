@@ -2,6 +2,8 @@ import {EditorView, basicSetup} from "@codemirror/next/basic-setup"
 import {EditorState} from "@codemirror/next/state"
 import {tagExtension} from "@codemirror/next/state"
 import {javascript} from "@codemirror/next/lang-javascript"
+import {keymap} from "@codemirror/next/view"
+import { defaultKeymap, indentMore, indentLess } from "@codemirror/next/commands";
 
 import cronstrue from 'cronstrue'
 import Prism from "prismjs"
@@ -40,6 +42,19 @@ Hooks.LoadPlanDefinitionContent = {
           }
         }),
         tagExtension(Symbol("language"), javascript()),
+        keymap([
+          ...defaultKeymap,
+          {
+            key: "Tab",
+            preventDefault: true,
+            run: indentMore,
+          },
+          {
+            key: "Shift-Tab",
+            preventDefault: true,
+            run: indentLess,
+          },
+        ]),
       ]
     })
 
@@ -64,6 +79,19 @@ Hooks.LoadPlanDefinitionContent = {
           }
         }),
         tagExtension(Symbol("language"), javascript()),
+        keymap([
+          ...defaultKeymap,
+          {
+            key: "Tab",
+            preventDefault: true,
+            run: indentMore,
+          },
+          {
+            key: "Shift-Tab",
+            preventDefault: true,
+            run: indentLess,
+          },
+        ]),
       ]
     })
 
