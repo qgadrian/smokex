@@ -3,7 +3,6 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
 
   require Logger
 
-  alias Smokex.PlanExecutions.Subscriber, as: PlanExecutionsSubscriber
   alias Smokex.PlanDefinitions.Scheduler, as: PlanDefinitionScheduler
   alias Phoenix.LiveView.Socket
   alias Smokex.PlanDefinitions
@@ -46,10 +45,10 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
       |> assign(active_filter: status)
       |> assign(plan_definition_id: plan_definition_id)
       |> subscribe_to_changes()
-      |> fetch_executions
-      |> fetch_plan_definitions
-      |> fetch_plan_definition
-      |> set_total_results_count
+      |> fetch_executions()
+      |> fetch_plan_definitions()
+      |> fetch_plan_definition()
+      |> set_total_results_count()
 
     {:noreply, socket}
   end
@@ -126,7 +125,7 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
       socket
       |> assign(update_action: "prepend")
       |> assign(plan_executions: [plan_execution])
-      |> subscribe_to_changes()
+      |> subscribe_to_execution_changes()
 
     {:noreply, socket}
   end
@@ -140,7 +139,7 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
       socket
       |> assign(update_action: "prepend")
       |> assign(plan_executions: [plan_execution])
-      |> subscribe_to_changes()
+      |> subscribe_to_execution_changes()
 
     {:noreply, socket}
   end
@@ -217,10 +216,10 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
       user
       |> PlanExecutions.all(page, status: status, plan_definition_id: plan_definition_id)
       |> Smokex.Repo.preload(:plan_definition)
-      |> subscribe_to_changes()
 
     socket
     |> assign(plan_executions: more_plans_executions)
+    |> subscribe_to_execution_changes()
   end
 
   @spec set_total_results_count(Socket.t()) :: Socket.t()
@@ -239,25 +238,23 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
     assign(socket, executions_count: executions_count)
   end
 
-  @spec subscribe_to_changes(list(PlanExecution.t())) :: list(PlanExecution.t())
-  defp subscribe_to_changes(plan_executions) when is_list(plan_executions) do
+  @spec subscribe_to_execution_changes(Socket.t()) :: Socket.t()
+  defp subscribe_to_execution_changes(
+         %Socket{assigns: %{plan_executions: plan_executions}} = socket
+       ) do
     Smokex.PlanExecutions.subscribe(plan_executions)
-    plan_executions
-  end
-
-  @spec subscribe_to_changes(Socket.t()) :: list(PlanExecution.t())
-  defp subscribe_to_changes(%Socket{assigns: assigns} = socket) do
-    Smokex.PlanExecutions.subscribe(assigns.plan_executions)
-    PlanDefinitions.subscribe("#{assigns.plan_definition_id}")
 
     socket
   end
 
-  # TODO this will subscribe to all as a fallback. But this does not mean that
-  # with an active filter, for example `finished` the process will be
-  # subscribed (will not) and receive update messages
-  defp subscribe_to_changes(%Socket{} = socket) do
-    PlanExecutionsSubscriber.subscribe_to_any()
+  @spec subscribe_to_changes(Socket.t()) :: Socket.t()
+  defp subscribe_to_changes(
+         %Socket{
+           assigns: %{plan_definition_id: plan_definition_id, plan_executions: plan_executions}
+         } = socket
+       ) do
+    Smokex.PlanExecutions.subscribe(plan_executions)
+    PlanDefinitions.subscribe(plan_definition_id)
 
     socket
   end
