@@ -6,6 +6,7 @@ defmodule SmokexWeb.Tracer do
   * Updates the Logger process metadata
   """
 
+  alias Smokex.PlanExecution
   alias Smokex.Users.User
   alias Smokex.Organizations
   alias Smokex.Organizations.Organization
@@ -24,9 +25,26 @@ defmodule SmokexWeb.Tracer do
     Logger.metadata(user_id: user_id)
   end
 
+  @spec trace_organization(Organization.t()) :: :ok
   def trace_organization(%Organization{id: organization_id}) do
     Sentry.Context.set_user_context(%{organization_id: organization_id})
     Logger.metadata(organization_id: organization_id)
+  end
+
+  @doc """
+  Initializes the trace for the execution.
+  """
+  @spec trace_plan_execution(PlanExecution.t()) :: :ok
+  def trace_plan_execution(%PlanExecution{
+        id: plan_execution_id,
+        plan_definition_id: plan_definition_id
+      }) do
+    Sentry.Context.set_tags_context(%{
+      plan_execution_id: plan_execution_id,
+      plan_definition_id: plan_definition_id
+    })
+
+    Logger.metadata(plan_execution_id: plan_execution_id, plan_definition_id: plan_definition_id)
   end
 
   @doc """
