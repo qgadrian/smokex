@@ -6,16 +6,30 @@ defmodule SmokexWeb.Results.Components.ActionBadge do
   @default_class "tag is-light is-capitalized has-text-weight-medium"
 
   @spec new(Result.t()) :: term
-  def new(%Result{action: :post}) do
-    content_tag(:span, "POST", class: "#{@default_class} is-info")
+  def new(%Result{action: action}) when action in [:get] do
+    text = build_text(action)
+
+    content_tag(:span, text, class: "#{@default_class} is-success")
   end
 
-  @spec new(Result.t()) :: term
-  def new(%Result{action: :put}) do
-    content_tag(:span, "PUT", class: "#{@default_class} is-info")
+  def new(%Result{action: action}) when action in [:delete] do
+    text = build_text(action)
+
+    content_tag(:span, text, class: "#{@default_class} is-danger")
   end
 
-  def new(%Result{action: :get}) do
-    content_tag(:span, "GET", class: "#{@default_class} is-success")
+  def new(%Result{action: action}) do
+    text = build_text(action)
+
+    content_tag(:span, text, class: "#{@default_class} is-info")
+  end
+
+  #
+  # Private functions
+  #
+
+  @spec build_text(atom) :: String.t()
+  defp build_text(action) when is_atom(action) do
+    Atom.to_string(action) |> String.upcase()
   end
 end
