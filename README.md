@@ -185,7 +185,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Slack notifications
   * [ ] Seems that when using buttons Slack expects a callback to be handled: https://api.slack.com/interactivity/handling#acknowledgment_response
 * [ ] Check: missing logs on worker processes?
-* [ ] Listen to tab event on the yaml editor to avoid jumping out and screwing
+* [x] Listen to tab event on the yaml editor to avoid jumping out and screwing
     with the browser
 * [ ] If a body is present the automatically add the `content-type` json to the
     request
@@ -215,8 +215,9 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ### Nice to have (very low prio)
 
-* [x] Add Tesla statsd https://github.com/salemove/tesla_statsd to get request
-    metrics
+* [~] Add Tesla statsd https://github.com/salemove/tesla_statsd to get request
+    metrics. TODO: need to create a handle module and send useful info from
+    Tesla.Env struct
 * [x] Measure request time per plan step and show a graph view for performance
 * [ ] Add Sendgrid integration to allow sending email using the user API KEY
 * [ ] Add change password view to my account instead redirecting to a new page
