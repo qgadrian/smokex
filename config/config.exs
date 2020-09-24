@@ -41,7 +41,9 @@ logger_metadata = [
   :stripe_event,
   :stripe_customer_id,
   :stripe_subscription_id,
-  :user_id
+  :user_id,
+  :plan_execution_id,
+  :plan_definition_id
 ]
 
 config :logger, :console,

@@ -5,6 +5,7 @@ defmodule Smokex.Oban.PlanExecutionWorker do
 
   alias Smokex.PlanExecution
   alias Smokex.PlanExecutions
+  alias SmokexWeb.Tracer
 
   @impl Oban.Worker
   def perform(%Oban.Job{
@@ -13,6 +14,7 @@ defmodule Smokex.Oban.PlanExecutionWorker do
     Logger.info("Start scheduled job for #{plan_execution_id}")
 
     with %PlanExecution{} = plan_execution <- PlanExecutions.get(plan_execution_id),
+         :ok <- Tracer.trace_plan_execution(plan_execution),
          {:ok, _plan_execution} <- SmokexClient.Executor.execute(plan_execution) do
       Logger.info("Scheduled job for #{plan_execution_id} done!")
 

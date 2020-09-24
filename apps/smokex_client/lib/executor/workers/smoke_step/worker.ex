@@ -15,10 +15,11 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
           ExecutionContext.t() | no_return
   def execute(
         %Request{} = step,
-        %PlanExecution{} = plan_execution,
+        %PlanExecution{id: plan_execution_id, plan_definition_id: plan_definition_id} =
+          plan_execution,
         %ExecutionContext{halt_on_error: halt_on_error} = execution_context
       ) do
-    Logger.debug("Executing #{inspect(step)}")
+    Logger.debug("Start execution #{inspect(step)}")
 
     step = StepVarsReplacer.process_step_variables_(step, execution_context)
 
