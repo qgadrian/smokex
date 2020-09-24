@@ -64,7 +64,7 @@ defmodule SmokexClient.Step.HttpClient do
 
     [
       maybe_json_middleware,
-      Tesla.Middleware.Logger,
+      {Tesla.Middleware.Logger, debug: true, log_level: :info},
       {Tesla.Middleware.Query, Map.to_list(step.query)},
       {Tesla.Middleware.Headers, Map.to_list(step.headers)},
       {Tesla.Middleware.Timeout, timeout: timeout},
