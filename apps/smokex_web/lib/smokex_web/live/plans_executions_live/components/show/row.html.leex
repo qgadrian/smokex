@@ -24,25 +24,38 @@
           </summary>
         </div>
       </div>
-      <%= if @result.failed_assertions != [] do %>
+        <%= if Results.has_failed?(@result) do %>
         <div class="x-flex mt-4">
-          <%= for failed_assertion <- @result.failed_assertions do %>
-            <div class="box is-bordered p-4 x-flex-column mr-4">
+          <%= for assertion <- @result.failed_assertions do %>
+            <div class="box-row-result-code-block mr-4">
               <span class="is-uppercase mb-1">Expected</span>
-              <code class="px-4 py-2">
-                status_code: 400
-              </code>
+              <div class="py-2">
+                <%= for {field_key, value} <- assertion do %>
+                <code class="px-4 x-flex">
+                  <%= field_key %>
+                </code>
+                <pre class="px-4 py-1">
+                  <%= assertion_value_to_string(:expected, value) %>
+                </pre>
+                <% end %>
+              </div>
             </div>
-            <div class="x-flex-column">
+            <div class="box-row-result-code-block">
               <span class="is-uppercase mb-1">Received</span>
-              <code class="px-4 py-2">
-                status_code: 400
-              </code>
+              <div class="py-2">
+                <%= for {field_key, value} <- assertion do %>
+                <code class="px-4 x-flex">
+                  <%= field_key %>
+                </code>
+                <pre class="px-4 py-1">
+                  <%= assertion_value_to_string(:received, value) %>
+                </pre>
+                <% end %>
+              </div>
             </div>
           <% end %>
-          <%= assertion_error_details(@result) %>
         </div>
-      <% end %>
+        <% end %>
     </div>
   </div>
 </li>
