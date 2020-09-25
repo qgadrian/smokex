@@ -254,7 +254,12 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
          } = socket
        ) do
     Smokex.PlanExecutions.subscribe(plan_executions)
-    PlanDefinitions.subscribe(plan_definition_id)
+
+    if plan_definition_id == nil do
+      # PlanDefinitions.subscribe(plan_definition_id)
+    else
+      Smokex.PlanExecutions.subscribe(plan_executions)
+    end
 
     socket
   end
