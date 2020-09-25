@@ -6,6 +6,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Show.Row do
   use SmokexWeb, :live_component
 
   alias Smokex.Result
+  alias Smokex.Results
   alias SmokexWeb.Results.Components.ActionBadge
   alias SmokexWeb.Results.Components.RuntimeLabel
   alias SmokexWeb.Results.Components.StatusBadge
@@ -19,6 +20,22 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Show.Row do
   #
   # Private functions
   #
+
+  def assertion_value_to_string(:expected, %{"expected" => expected}) when is_map(expected) do
+    Jason.encode!(expected, pretty: true)
+  end
+
+  def assertion_value_to_string(:expected, %{"expected" => expected}) do
+    expected
+  end
+
+  def assertion_value_to_string(:received, %{"received" => received}) when is_map(received) do
+    Jason.encode!(received, pretty: true)
+  end
+
+  def assertion_value_to_string(:received, %{"received" => received}) do
+    received
+  end
 
   # TODO this should always be a list
   def assertion_error_details(%Result{
