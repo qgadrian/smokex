@@ -6,10 +6,10 @@
     <div class="box-row-result-content pl-4">
       <div class="box-row-result-content-header">
         <div class="box-row-result-content-header-title">
-          <div class="mr-2 mb-2">
+          <div class="mr-2">
             <%= ActionBadge.new(@result) %>
           </div>
-          <strong class="is-size-5 break-word">
+          <strong class="is-size-5 break-word my-2">
             <%= @result.host %>
           </strong>
         </div>
@@ -25,13 +25,13 @@
         </div>
       </div>
         <%= if Results.has_failed?(@result) do %>
-        <div class="x-flex mt-4">
+        <div class="box-row-result-failed-assertions mt-4">
           <%= for assertion <- @result.failed_assertions do %>
             <div class="box-row-result-code-block mr-4">
-              <span class="is-uppercase mb-1">Expected</span>
-              <div class="py-2">
+              <code class="has-text-black has-text-right is-uppercase has-text-weight-medium">Expected</code>
+              <div class="box-row-result-code-block-inner">
                 <%= for {field_key, value} <- assertion do %>
-                <code class="px-4 x-flex">
+                <code class="px-4 x-flex py-2">
                   <%= field_key %>
                 </code>
                 <pre class="px-4 py-1">
@@ -41,10 +41,10 @@
               </div>
             </div>
             <div class="box-row-result-code-block">
-              <span class="is-uppercase mb-1">Received</span>
-              <div class="py-2">
+              <code class="has-text-black has-text-right is-uppercase has-text-weight-medium">Received</code>
+              <div class="box-row-result-code-block-inner">
                 <%= for {field_key, value} <- assertion do %>
-                <code class="px-4 x-flex">
+                <code class="px-4 x-flex py-2">
                   <%= field_key %>
                 </code>
                 <pre class="px-4 py-1">

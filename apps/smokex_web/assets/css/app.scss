@@ -183,8 +183,24 @@ div.not-found > img {
   }
 }
 
+.box-row-result-failed-assertions {
+  display: flex;
+  @include until($tablet) {
+    flex-direction: column;
+  }
+}
 .box-row-result-code-block {
   display: flex;
   flex-direction: column;
   width: 100%;
+  &:last-child {
+    @include until($tablet) {
+      padding-top: 16px;
+    }
+  }
+}
+
+.box-row-result-code-block-inner {
+  max-height: 400px;
+  overflow-y: scroll;
 }
