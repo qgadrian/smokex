@@ -4,6 +4,7 @@ defmodule Smokex.PlanDefinitions do
   """
 
   alias Smokex.Users.User
+  alias Smokex.Organizations
   alias Smokex.Organizations.Organization
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
@@ -143,22 +144,22 @@ defmodule Smokex.PlanDefinitions do
   @doc """
   Subscribes to the plan definition.
   """
-  @spec subscribe(PlanDefinition.t() | String.t() | number | nil) :: :ok | {:error, term}
-  def subscribe(nil), do: subscribe_to_any_plan_defition()
-
-  def subscribe(plan_definition_id) when is_binary(plan_definition_id) do
-    unsubscribe_from_any_plan_definition()
-    Phoenix.PubSub.subscribe(Smokex.PubSub, plan_definition_id, link: true)
+  @spec subscribe(User.t(), PlanDefinition.t() | non_neg_integer()) :: :ok | {:error, term}
+  def subscribe(%User{} = user, plan_definition_id) when is_number(plan_definition_id) do
+    user
+    |> __MODULE__.get(plan_definition_id)
+    |> subscribe()
   end
 
-  def subscribe(plan_definition_id) when is_number(plan_definition_id) do
-    unsubscribe_from_any_plan_definition()
-    Phoenix.PubSub.subscribe(Smokex.PubSub, "#{plan_definition_id}", link: true)
-  end
-
-  def subscribe(%PlanDefinition{} = plan_definition) do
-    unsubscribe_from_any_plan_definition()
+  def subscribe(%PlanDefinition{organization_id: organization_id} = plan_definition) do
+    unsubscribe_from_organization(organization_id)
     Phoenix.PubSub.subscribe(Smokex.PubSub, "#{plan_definition.id}", link: true)
+  end
+
+  @spec subscribe_to_organization(User.t()) :: :ok | {:error, term}
+  def subscribe_to_organization(%User{} = user) do
+    {:ok, %Organization{id: organization_id}} = Organizations.get_organization(user)
+    Phoenix.PubSub.subscribe(Smokex.PubSub, "#{organization_id}", link: true)
   end
 
   #
@@ -194,13 +195,8 @@ defmodule Smokex.PlanDefinitions do
     result
   end
 
-  @spec subscribe_to_any_plan_defition() :: :ok | {:error, term}
-  defp subscribe_to_any_plan_defition() do
-    Phoenix.PubSub.subscribe(Smokex.PubSub, "any_execution", link: true)
-  end
-
-  @spec unsubscribe_from_any_plan_definition() :: :ok | {:error, term}
-  defp unsubscribe_from_any_plan_definition() do
-    Phoenix.PubSub.unsubscribe(Smokex.PubSub, "any_execution")
+  @spec unsubscribe_from_organization(organizaton_id :: non_neg_integer()) :: :ok | {:error, term}
+  defp unsubscribe_from_organization(organization_id) do
+    Phoenix.PubSub.unsubscribe(Smokex.PubSub, "#{organization_id}")
   end
 end

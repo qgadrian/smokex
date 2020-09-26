@@ -44,7 +44,6 @@ defmodule Smokex.PlanExecutions do
 
     with {:ok, plan_execution} <- result do
       Smokex.PlanExecutions.Subscriber.notify_created(plan_definition, plan_execution)
-      Smokex.PlanExecutions.Subscriber.notify_created(plan_execution)
     end
 
     result
@@ -230,6 +229,7 @@ defmodule Smokex.PlanExecutions do
   # Private functions
   #
 
+  @spec list_executions_query(User.t(), keyword) :: Ecto.Query.t()
   defp list_executions_query(%User{id: user_id}, opts \\ []) do
     plan_definition_id = Keyword.get(opts, :plan_definition_id)
     status = Keyword.get(opts, :status, :all)
@@ -247,7 +247,7 @@ defmodule Smokex.PlanExecutions do
     |> maybe_query_by_plan_definition(plan_definition_id)
   end
 
-  @spec maybe_query_by_plan_definition(Ecto.Query.t(), integer | binary) :: Ecto.Query
+  @spec maybe_query_by_plan_definition(Ecto.Query.t(), integer | binary) :: Ecto.Query.t()
   defp maybe_query_by_plan_definition(query, plan_definition_id)
        when is_number(plan_definition_id) do
     where(query, plan_definition_id: ^plan_definition_id)
@@ -255,7 +255,7 @@ defmodule Smokex.PlanExecutions do
 
   defp maybe_query_by_plan_definition(query, _), do: query
 
-  @spec maybe_query_by_status(Ecto.Query.t(), String.t()) :: Ecto.Query
+  @spec maybe_query_by_status(Ecto.Query.t(), String.t()) :: Ecto.Query.t()
   defp maybe_query_by_status(query, :all), do: query
 
   defp maybe_query_by_status(query, status) do

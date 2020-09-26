@@ -6,8 +6,6 @@ defmodule Smokex.PlanExecutions.Subscriber do
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
 
-  @any_execution_topic "any_execution"
-
   @doc """
   Subscribes to the plan execution.
   """
@@ -31,32 +29,21 @@ defmodule Smokex.PlanExecutions.Subscriber do
     Enum.each(plan_executions, &subscribe/1)
   end
 
-  def subscribe_to_any() do
-    Phoenix.PubSub.subscribe(Smokex.PubSub, @any_execution_topic, link: true)
-  end
-
-  @doc """
-  Notifies a new execution for a plan definition topic.
-  """
-  @spec notify_created(PlanDefinition.t(), PlanExecution.t()) :: :ok | {:error, term()}
-  def notify_created(%PlanDefinition{id: plan_definition_id}, %PlanExecution{} = plan_execution) do
-    Phoenix.PubSub.broadcast(
-      Smokex.PubSub,
-      "#{plan_definition_id}",
-      {:created, plan_execution}
-    )
-  end
-
   @doc """
   Notifies a new execution.
+
+  This function broadcasts a message to the plan definition and organization
+  topics.
   """
-  @spec notify_created(PlanExecution.t()) :: :ok | {:error, term()}
-  def notify_created(%PlanExecution{} = plan_execution) do
-    Phoenix.PubSub.broadcast(
-      Smokex.PubSub,
-      @any_execution_topic,
-      {:created, plan_execution}
-    )
+  @spec notify_created(PlanDefinition.t(), PlanExecution.t()) :: :ok | {:error, term()}
+  def notify_created(
+        %PlanDefinition{id: plan_definition_id, organization_id: organization_id},
+        %PlanExecution{} = plan_execution
+      ) do
+    message = {:created, plan_execution}
+
+    Phoenix.PubSub.broadcast(Smokex.PubSub, "#{plan_definition_id}", message)
+    Phoenix.PubSub.broadcast(Smokex.PubSub, "#{organization_id}", message)
   end
 
   @doc """
