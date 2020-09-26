@@ -252,6 +252,12 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
 
   @spec susbcribe_to_plan_definition_or_organization(Socket.t()) :: Socket.t()
   defp susbcribe_to_plan_definition_or_organization(
+         %Socket{assigns: %{current_user: nil}} = socket
+       ) do
+    socket
+  end
+
+  defp susbcribe_to_plan_definition_or_organization(
          %Socket{assigns: %{plan_definition_id: nil, current_user: user}} = socket
        ) do
     PlanDefinitions.subscribe_to_organization(user)
