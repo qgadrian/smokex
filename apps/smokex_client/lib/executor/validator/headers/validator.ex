@@ -3,14 +3,14 @@ defmodule SmokexClient.Validator.Headers do
 
   @spec validate(Expect.t(), list(tuple)) ::
           {:ok, term} | {:error, %{headers: list(map)}, String.t()}
-  def validate(%Expect{} = expected, headers) do
+  def validate(%Expect{} = expected, received_headers) do
     case Map.get(expected, :headers) do
       nil ->
         {:ok, "No headers expected"}
 
       expected_headers ->
         expected_headers
-        |> get_headers_to_validate(headers)
+        |> get_headers_to_validate(received_headers)
         |> validate_expected_headers()
         |> group_validated_headers()
         |> build_validation_result()
