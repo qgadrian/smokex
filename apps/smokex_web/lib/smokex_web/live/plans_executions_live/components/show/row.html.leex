@@ -35,7 +35,7 @@
                   <%= field_key %>
                 </code>
                 <pre class="px-4 py-1">
-                  <%= assertion_value_to_string(:expected, value) %>
+                  <%= expect_value_to_string(value) %>
                 </pre>
                 <% end %>
               </div>
@@ -48,7 +48,7 @@
                   <%= field_key %>
                 </code>
                 <pre class="px-4 py-1">
-                  <%= assertion_value_to_string(:received, value) %>
+                  <%= received_value_to_string(value) %>
                 </pre>
                 <% end %>
               </div>
