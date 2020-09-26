@@ -44,7 +44,7 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
       |> assign(page: 1)
       |> assign(active_filter: status)
       |> assign(plan_definition_id: plan_definition_id)
-      |> subscribe_to_changes()
+      |> susbcribe_to_plan_definition_or_organization()
       |> fetch_executions()
       |> fetch_plan_definitions()
       |> fetch_plan_definition()
@@ -222,6 +222,9 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
     |> subscribe_to_execution_changes()
   end
 
+  # TODO nail the handle_params and mount calls with the expected assigns
+  defp fetch_executions(socket), do: socket
+
   @spec set_total_results_count(Socket.t()) :: Socket.t()
   defp set_total_results_count(
          %Socket{
@@ -247,19 +250,19 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
     socket
   end
 
-  @spec subscribe_to_changes(Socket.t()) :: Socket.t()
-  defp subscribe_to_changes(
-         %Socket{
-           assigns: %{plan_definition_id: plan_definition_id, plan_executions: plan_executions}
-         } = socket
+  @spec susbcribe_to_plan_definition_or_organization(Socket.t()) :: Socket.t()
+  defp susbcribe_to_plan_definition_or_organization(
+         %Socket{assigns: %{plan_definition_id: nil, current_user: user}} = socket
        ) do
-    Smokex.PlanExecutions.subscribe(plan_executions)
+    PlanDefinitions.subscribe_to_organization(user)
 
-    if plan_definition_id == nil do
-      # PlanDefinitions.subscribe(plan_definition_id)
-    else
-      Smokex.PlanExecutions.subscribe(plan_executions)
-    end
+    socket
+  end
+
+  defp susbcribe_to_plan_definition_or_organization(
+         %Socket{assigns: %{plan_definition_id: plan_definition_id, current_user: user}} = socket
+       ) do
+    PlanDefinitions.subscribe(user, plan_definition_id)
 
     socket
   end
