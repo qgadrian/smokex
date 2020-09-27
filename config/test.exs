@@ -19,7 +19,7 @@ config :smokex_web, SmokexWeb.Endpoint,
   server: false
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :info
 
 config :httparrot,
   http_port: 5723,

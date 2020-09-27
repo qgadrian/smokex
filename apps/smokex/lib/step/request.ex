@@ -1,5 +1,5 @@
 defmodule Smokex.Step.Request do
-  @type opts :: :timeout | :retries
+  @type opts :: :timeout | :retries | :debug
 
   @type t :: %__MODULE__{
           action: atom,
