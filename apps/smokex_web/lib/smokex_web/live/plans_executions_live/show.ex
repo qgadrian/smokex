@@ -47,7 +47,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
 
   def actions_length_label(results) do
     length(results)
-      |> action_label
+    |> action_label
   end
 
   #
