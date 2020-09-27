@@ -195,6 +195,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Hide `load more` button when reached end of page
 * [x] Allow set custom timeout per each step
 * [ ] Add button to view plan definition from execution view
+* [ ] Add select option with predefine cron sentences to make it easier to use
+    (including a `custom` option that will show the input to be edited)
 * [ ] Delete plans
 * [~] Generate digest on Docker build. UPDATE: seems that not working 100%
 * [ ] Create environment variables for configurations, for example
