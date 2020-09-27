@@ -9,6 +9,7 @@ defmodule Smokex.TestSupport.Factories do
   alias Smokex.PlanExecution
   alias Smokex.Result
   alias Smokex.Users.User
+  alias Smokex.Step.Request
 
   use ExMachina.Ecto, repo: Smokex.Repo
 
@@ -39,6 +40,17 @@ defmodule Smokex.TestSupport.Factories do
       failed_assertions: [],
       plan_execution: build(:plan_execution),
       host: sequence(:host, &"host#{&1}.test")
+    }
+  end
+
+  def request_factory do
+    %Request{
+      action: :get,
+      host: "localhost",
+      query: %{},
+      body: %{},
+      headers: %{},
+      opts: []
     }
   end
 

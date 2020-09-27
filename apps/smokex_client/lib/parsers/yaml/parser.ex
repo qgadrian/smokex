@@ -12,7 +12,7 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
 
   @expect_params ["status_code", "headers", "body"]
 
-  @step_opts ["timeout", "retries"]
+  @step_opts ["timeout", "retries", "debug"]
 
   @type requests :: list(Request.t())
 

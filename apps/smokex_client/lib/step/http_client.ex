@@ -34,6 +34,7 @@ defmodule SmokexClient.Step.HttpClient do
       url: step.host,
       body: get_body(step.body, step.action)
     )
+    |> maybe_log_request(step)
   rescue
     error ->
       Logger.error(inspect(error))
@@ -47,6 +48,9 @@ defmodule SmokexClient.Step.HttpClient do
   @spec get_body(String.t() | map, atom) :: String.t()
   defp get_body(_, :get), do: nil
   defp get_body(body, _action), do: Jason.encode!(body)
+
+  @spec debug?(Request.t()) :: boolean
+  def debug?(%Request{} = step), do: step.opts[:debug] || false
 
   @spec step_timeout(Request.t()) :: non_neg_integer()
   defp step_timeout(%Request{} = step) do
@@ -67,17 +71,39 @@ defmodule SmokexClient.Step.HttpClient do
         Tesla.Middleware.JSON
       end
 
+    maybe_debug_middleware =
+      if debug?(step) do
+        [
+          {Tesla.Middleware.Logger, log_level: :info, debug: true},
+          Tesla.Middleware.KeepRequest
+        ]
+      else
+        []
+      end
+
     max_retries = step.opts[:retries] || Application.get_env(:smokex_client, :retries, 0)
 
     [
       maybe_json_middleware,
-      Tesla.Middleware.Logger,
       {Tesla.Middleware.Query, Map.to_list(step.query)},
       {Tesla.Middleware.Headers, Map.to_list(step.headers)},
       {Tesla.Middleware.Timeout, timeout: step_timeout(step)},
       {Tesla.Middleware.Retry, max_retries: max_retries},
       Tesla.Middleware.Telemetry
     ]
+    |> Kernel.++(maybe_debug_middleware)
     |> Enum.reject(&is_nil/1)
+  end
+
+  defp maybe_log_request({:ok, %Tesla.Env{} = env} = request_context, %Request{} = step) do
+    if debug?(step), do: Logger.info("Request context: #{inspect(env)}")
+
+    request_context
+  end
+
+  defp maybe_log_request({:error, error} = request_context, %Request{} = step) do
+    if debug?(step), do: Logger.info("Request failed: #{inspect(error)}")
+
+    request_context
   end
 end
