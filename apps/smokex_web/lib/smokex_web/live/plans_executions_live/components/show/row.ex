@@ -40,6 +40,8 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Show.Row do
     inspect(expected)
   end
 
+  def expect_value_to_string(message), do: inspect(message)
+
   @doc """
   Converts a received value from an assertion.
 
@@ -67,4 +69,6 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Show.Row do
   def received_value_to_string(%{"received" => received}) do
     inspect(received)
   end
+
+  def received_value_to_string(message), do: inspect(message)
 end

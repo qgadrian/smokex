@@ -193,7 +193,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 ### Nice to have (next prio)
 
 * [x] Hide `load more` button when reached end of page
-* [ ] Allow set custom timeout per each step
+* [x] Allow set custom timeout per each step
 * [ ] Add button to view plan definition from execution view
 * [ ] Delete plans
 * [~] Generate digest on Docker build. UPDATE: seems that not working 100%
