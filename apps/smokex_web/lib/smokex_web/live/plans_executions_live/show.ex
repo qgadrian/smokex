@@ -45,6 +45,11 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
     {:noreply, assign(socket, plan_execution: plan_execution)}
   end
 
+  def actions_length_label(results) do
+    length(results)
+      |> action_label
+  end
+
   #
   # Private functions
   #
@@ -66,5 +71,13 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
     changeset = Ecto.Changeset.change(plan_definition)
 
     assign(socket, plan_definition: plan_definition, changeset: changeset)
+  end
+
+  defp action_label(results_length) do
+    if results_length > 1 do
+      "#{results_length} actions"
+    else
+      "#{results_length} action"
+    end
   end
 end
