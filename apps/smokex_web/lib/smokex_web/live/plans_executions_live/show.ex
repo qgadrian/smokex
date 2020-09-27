@@ -60,8 +60,8 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
   end
 
   defp fetch_plan_definition(
-        %Socket{assigns: %{plan_execution: plan_execution, current_user: user}} = socket
-      ) do
+         %Socket{assigns: %{plan_execution: plan_execution, current_user: user}} = socket
+       ) do
     plan_definition = PlanDefinitions.get!(user, plan_execution.plan_definition_id)
     changeset = Ecto.Changeset.change(plan_definition)
 
