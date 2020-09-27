@@ -19,7 +19,14 @@
     @include from($tablet) {
       justify-content: flex-end;
     }
-    .box-header-filter{
+    .box-header-filter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      ion-icon {
+        padding-top: 1px;
+        padding-right: 4px;
+      }
       &:not(:last-child) {
         margin-right: 12px;
       }

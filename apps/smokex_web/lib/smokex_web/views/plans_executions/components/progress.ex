@@ -4,18 +4,16 @@ defmodule SmokexWeb.PlanExecutions.Components.Progress do
   alias Smokex.PlanExecution
   alias Smokex.Result
 
-  @default_class "title is-2 has-text-white"
-
   @spec total_progress(PlanExecution.t(), list(Result.t())) :: term
   def total_progress(%PlanExecution{total_executions: nil}, _results) do
-    content_tag(:h3, "-", class: @default_class)
+    "-"
   end
 
   def total_progress(%PlanExecution{total_executions: total_executions}, results) do
     executed = Enum.count(results)
     count = Float.ceil(executed * 100 / total_executions, 2)
 
-    content_tag(:h3, "#{count}%", class: @default_class)
+    "#{count}%"
   end
 
   @spec success(list(Result.t())) :: term
@@ -26,7 +24,7 @@ defmodule SmokexWeb.PlanExecutions.Components.Progress do
         _ -> false
       end)
 
-    content_tag(:h3, count, class: @default_class)
+    count
   end
 
   @spec failed(list(Result.t())) :: term
@@ -37,6 +35,6 @@ defmodule SmokexWeb.PlanExecutions.Components.Progress do
         _ -> false
       end)
 
-    content_tag(:h3, count, class: @default_class)
+    count
   end
 end
