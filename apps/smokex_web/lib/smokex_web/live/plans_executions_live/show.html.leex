@@ -18,31 +18,23 @@
         <div class="column">
           <strong><%= actions_length_label(@results) %></strong>
         </div>
+        <div class="column box-header-right">
+          <div class="box-header-filter">
+            <ion-icon name="checkmark-outline" class="is-16"></ion-icon>
+            <%= Progress.success(@results) %> Successful
+          </div>
+          <div class="box-header-filter">
+            <ion-icon name="close-outline" class="is-16"></ion-icon>
+            <span><%= Progress.failed(@results) %> Failed</span>
+          </div>
+          <div class="box-header-filter">
+            <ion-icon name="timer-outline" class="is-16"></ion-icon>
+            <%= Progress.total_progress(@plan_execution, @results) %> Executed
+          </div>
+        </div>
       </div>
     </div>
 
     <%= live_component @socket, ResultsTable, results: @results %>
-  </div>
-
-
-  <div class="columns has-text-centered mt-6">
-    <div class="column is-4">
-      <div class="box has-background-primary">
-        <%= Progress.total_progress(@plan_execution, @results) %>
-        <p class="subtitle has-text-white">Executed</p>
-      </div>
-    </div>
-    <div class="column is-4">
-      <div class="box has-background-success has-text-white">
-        <%= Progress.success(@results) %>
-        <p class="subtitle has-text-white">Successful</p>
-      </div>
-    </div>
-    <div class="column is-4">
-      <div class="box has-background-danger">
-        <%= Progress.failed(@results) %>
-        <p class="subtitle has-text-white">Failed</p>
-      </div>
-    </div>
   </div>
 </div>

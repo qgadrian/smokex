@@ -1,5 +1,9 @@
 // icons!
 ion-icon {
+  &.is-16 {
+    width: 16px;
+    height: 16px;
+  }
   @at-root .is-circle {
     display: flex;
     justify-content: center;
