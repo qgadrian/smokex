@@ -26,7 +26,10 @@ defmodule SmokexWeb.PlanExecutions.Components.StatusBadge do
 
   def new(%PlanExecution{status: :running}) do
     content_tag(:span, class: "has-background-info #{@default_class}") do
-      content_tag('ion-icon', "", name: "sync-outline", class: "icn-spinner #{@default_icon_class}")
+      content_tag('ion-icon', "",
+        name: "sync-outline",
+        class: "icn-spinner #{@default_icon_class}"
+      )
     end
   end
 end

@@ -13,8 +13,10 @@ defmodule SmokexWeb.Results.Components.RuntimeLabel do
   end
 
   def new(%Result{} = result) do
-    duration = Timex.diff(result.updated_at, result.inserted_at, :duration)
-     |> Timex.format_duration(:humanized)
-    content_tag(:span, duration , class: @default_class)
+    duration =
+      Timex.diff(result.updated_at, result.inserted_at, :duration)
+      |> Timex.format_duration(:humanized)
+
+    content_tag(:span, duration, class: @default_class)
   end
 end
