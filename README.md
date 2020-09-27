@@ -203,7 +203,6 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [x] Create organizations model (mind some logic needs to be replaced, for
     example `Limits`)
 * [ ] Add `finished with error` state?
-* [ ] Add the reason details of failed request. For example, a wrong ?????
 * [ ] Add metadata plugs
 * [ ] Connect to Github and auto create a plan based on the files under `.smokex`
 * [~] Allow remote console access on Heroku (see

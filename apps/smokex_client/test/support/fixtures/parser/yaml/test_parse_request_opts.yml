@@ -4,3 +4,4 @@
       query_key: "query_value"
     options:
       timeout: 5000
+      retries: 5
