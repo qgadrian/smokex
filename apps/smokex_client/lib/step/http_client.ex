@@ -67,12 +67,15 @@ defmodule SmokexClient.Step.HttpClient do
         Tesla.Middleware.JSON
       end
 
+    max_retries = step.opts[:retries] || Application.get_env(:smokex_client, :retries, 0)
+
     [
       maybe_json_middleware,
       Tesla.Middleware.Logger,
       {Tesla.Middleware.Query, Map.to_list(step.query)},
       {Tesla.Middleware.Headers, Map.to_list(step.headers)},
       {Tesla.Middleware.Timeout, timeout: step_timeout(step)},
+      {Tesla.Middleware.Retry, max_retries: max_retries},
       Tesla.Middleware.Telemetry
     ]
     |> Enum.reject(&is_nil/1)

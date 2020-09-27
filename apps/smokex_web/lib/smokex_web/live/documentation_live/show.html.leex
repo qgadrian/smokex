@@ -25,6 +25,7 @@
           <ul class="menu-list">
             <li><a href="#overview" class="is-active">Overview</a></li>
             <li><a href="#http-requests" class="is-active">HTTP requests</a></li>
+            <li><a href="#request-options" class="is-active">Request options</a></li>
             <li><a href="#expects" class="is-active">Expects</a></li>
             <li><a href="#variables" class="is-active">Variables</a></li>
           </ul>
@@ -89,14 +90,6 @@
           </div>
 
           <div class="box">
-            <h4 class="title is-4">Set a request timeout</h4>
-            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
-    host: "https://smokex.io"
-    options:
-      timeout: 2000</span></code></pre>
-          </div>
-
-          <div class="box">
             <h4 class="title is-4">Headers</h4>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
     host: "https://smokex.io"
@@ -121,6 +114,36 @@
       name: "Michael"
       last-name: "Jordan"
       number: 23</span></code></pre>
+          </div>
+
+          <h3 id="request-options" class="title is-3">Request options</h3>
+
+          <article class="message is-primary">
+            <div class="message-body">
+              The following request options are available:
+
+              <ul>
+                <li>The <strong>timeout</strong> of a step to receive a response, in milliseconds. Defaults to <i>5000</i>.</li>
+                <li>number of <strong>retries</strong> of a request in case of connection failures (timeouts, connection closed, etc...) until the timeout limit. Defaults to <i>0</i>.</li>
+              </ul>
+            </div>
+          </article>
+
+
+          <div class="box">
+            <h4 class="title is-4">Set a request timeout</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
+    host: "https://smokex.io"
+    options:
+      timeout: 2000</span></code></pre>
+          </div>
+
+          <div class="box">
+            <h4 class="title is-4">Retry a failed request connection</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
+    host: "https://smokex.io"
+    options:
+      retries: 5</span></code></pre>
           </div>
 
           <h3 id="expects" class="title is-3">Expects</h3>

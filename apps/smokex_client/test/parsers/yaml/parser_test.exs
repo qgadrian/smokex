@@ -162,7 +162,7 @@ defmodule SmokexClient.Test.Parsers.Yaml do
           action: :get,
           host: "http://httpbing.org/",
           query: %{"query_key" => "query_value"},
-          opts: [timeout: 5000]
+          opts: [retries: 5, timeout: 5000]
         }
       ]
 

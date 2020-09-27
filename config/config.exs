@@ -60,6 +60,7 @@ config :phoenix, :json_library, Jason
 
 config :smokex_client,
   timeout: 5000,
+  retries: 0,
   verbose: true,
   quiet: false,
   halt_on_error: true
