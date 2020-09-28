@@ -213,6 +213,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
     working with `docker entrypoint` but it's a new node and not connected to
     other container
 * [ ] Proper YAML linting and format check. Ideally on the WYSIWYG editor
+* [ ] Show the current step in the execution detail view as "ongoing" (right now
+    is only success or fail, so the ongoing request is not shown yet)
 
 ### Nice to have (very low prio)
 
