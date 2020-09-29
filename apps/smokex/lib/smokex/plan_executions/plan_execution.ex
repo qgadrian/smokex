@@ -50,6 +50,8 @@ defmodule Smokex.PlanExecution do
 
   @schema_fields @optional_fields ++ @required_fields
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+
   schema "plans_executions" do
     field(:status, PlanExecutionStatus, null: false, default: :created)
     field(:total_executions, :integer, null: true)
@@ -58,7 +60,7 @@ defmodule Smokex.PlanExecution do
     field(:finished_at, :naive_datetime, null: true)
 
     belongs_to(:trigger_user, User)
-    belongs_to(:plan_definition, PlanDefinition)
+    belongs_to(:plan_definition, PlanDefinition, type: :binary_id)
 
     has_many(:results, HTTPRequestResult)
 
