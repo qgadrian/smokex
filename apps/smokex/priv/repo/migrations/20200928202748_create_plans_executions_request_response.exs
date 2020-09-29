@@ -4,6 +4,7 @@ defmodule Smokex.Repo.Migrations.CreatePlansExecutionsRequestResponse do
   def change do
     create table(:plans_executions_http_request_responses) do
       add(:result_id, references(:plans_executions_http_request_results), null: false)
+      add(:plan_execution_id, references(:plans_executions, type: :uuid), null: false)
 
       add(:body, :binary, null: true)
       add(:headers, :binary, null: true)

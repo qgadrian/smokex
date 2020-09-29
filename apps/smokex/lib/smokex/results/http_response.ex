@@ -6,6 +6,7 @@ defmodule Smokex.Results.HTTPResponse do
 
   use Ecto.Schema
 
+  alias Smokex.PlanExecution
   alias Smokex.Results.HTTPRequestResult
 
   @typedoc """
@@ -32,6 +33,7 @@ defmodule Smokex.Results.HTTPResponse do
     field :started_at, :utc_datetime_usec
     field :finished_at, :utc_datetime_usec
 
+    belongs_to(:plan_execution, PlanExecution, type: :binary_id)
     belongs_to(:result, HTTPRequestResult, foreign_key: :result_id)
 
     timestamps()
