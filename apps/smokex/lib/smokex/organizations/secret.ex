@@ -12,7 +12,7 @@ defmodule Smokex.Organizations.Secret do
 
   schema "organizations_secrets" do
     field(:name, :string, null: false)
-    field(:value, Smokex.Ecto.EncryptedToken)
+    field(:value, Smokex.Ecto.EncryptedBinary)
 
     belongs_to(:organization, Organization)
 
