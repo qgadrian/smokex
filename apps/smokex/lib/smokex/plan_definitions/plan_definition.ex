@@ -30,6 +30,8 @@ defmodule Smokex.PlanDefinition do
 
   @schema_fields @optional_fields ++ @required_fields
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+
   schema "plans_definitions" do
     field(:name, :string, null: false)
     field(:description, :string, null: true)

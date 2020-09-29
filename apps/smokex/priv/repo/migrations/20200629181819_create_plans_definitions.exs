@@ -2,7 +2,9 @@ defmodule Smokex.Repo.Migrations.CreatePlansDefinitions do
   use Ecto.Migration
 
   def change do
-    create table(:plans_definitions) do
+    create table(:plans_definitions, primary_key: false) do
+      add :id, :uuid, primary_key: true
+
       add(:name, :string, null: false)
       add(:description, :string, null: true)
       add(:cron_sentence, :string, null: true)

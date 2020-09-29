@@ -8,6 +8,7 @@ defmodule Smokex.Users.User do
   use Pow.Extension.Ecto.Schema, extensions: [PowResetPassword, PowEmailConfirmation]
 
   alias Smokex.PlanDefinition
+  alias Smokex.PlanExecution
   alias Smokex.Organizations.Organization
   alias Smokex.Organizations.OrganizationsUsers
 

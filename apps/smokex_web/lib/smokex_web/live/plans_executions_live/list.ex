@@ -32,11 +32,11 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
 
     plan_definition_id =
       params
-      |> Map.get("plan", "")
-      |> Integer.parse()
+      |> Map.get("plan", nil)
       |> case do
-        {plan_definition_id, ""} -> plan_definition_id
-        :error -> nil
+        "" -> nil
+        nil -> nil
+        id when is_binary(id) -> id
       end
 
     socket =
@@ -69,12 +69,6 @@ defmodule SmokexWeb.PlansExecutionsLive.List do
         %{"filter" => %{"plan_definition_id" => plan_definition_id}},
         %Socket{assigns: %{active_filter: status_filter}} = socket
       ) do
-    plan_definition_id =
-      case Integer.parse(plan_definition_id) do
-        {plan_definition_id, ""} -> plan_definition_id
-        :error -> nil
-      end
-
     socket =
       socket
       |> assign(plan_definition_id: plan_definition_id)

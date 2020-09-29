@@ -144,8 +144,10 @@ defmodule Smokex.PlanDefinitions do
   @doc """
   Subscribes to the plan definition.
   """
-  @spec subscribe(User.t(), PlanDefinition.t() | non_neg_integer()) :: :ok | {:error, term}
-  def subscribe(%User{} = user, plan_definition_id) when is_number(plan_definition_id) do
+  @spec subscribe(User.t(), PlanDefinition.t() | String.t()) :: :ok | {:error, term}
+  def subscribe(%User{} = user, ""), do: :ok
+
+  def subscribe(%User{} = user, plan_definition_id) when is_binary(plan_definition_id) do
     user
     |> __MODULE__.get(plan_definition_id)
     |> subscribe()

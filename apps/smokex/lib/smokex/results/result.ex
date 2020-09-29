@@ -48,7 +48,7 @@ defmodule Smokex.Results.HTTPRequestResult do
 
     has_one(:response, HTTPResponse, on_replace: :raise, foreign_key: :result_id)
 
-    belongs_to(:plan_execution, PlanExecution)
+    belongs_to(:plan_execution, PlanExecution, type: :binary_id)
 
     timestamps()
   end
