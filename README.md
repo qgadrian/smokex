@@ -192,12 +192,15 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ### Nice to have (next prio)
 
+* [ ] Store the server response to avoid loosing data and show raw data to
+    client
 * [x] Hide `load more` button when reached end of page
 * [x] Allow set custom timeout per each step
-* [ ] Add button to view plan definition from execution view
+* [x] Add button to view plan definition from execution view
 * [ ] Add select option with predefine cron sentences to make it easier to use
     (including a `custom` option that will show the input to be edited)
 * [ ] Delete plans
+* [ ] When a request fails
 * [~] Generate digest on Docker build. UPDATE: seems that not working 100%
 * [ ] Create environment variables for configurations, for example
     `apps/smokex/lib/smokex/users.ex`
@@ -215,6 +218,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 * [ ] Proper YAML linting and format check. Ideally on the WYSIWYG editor
 * [ ] Show the current step in the execution detail view as "ongoing" (right now
     is only success or fail, so the ongoing request is not shown yet)
+* [ ] Limit executions list to last X for free users
+* [ ] Add CSS selector to the request's expect
 
 ### Nice to have (very low prio)
 
