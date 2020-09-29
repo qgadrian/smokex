@@ -247,9 +247,11 @@ defmodule Smokex.PlanExecutions do
     |> maybe_query_by_plan_definition(plan_definition_id)
   end
 
-  @spec maybe_query_by_plan_definition(Ecto.Query.t(), integer | binary) :: Ecto.Query.t()
+  @spec maybe_query_by_plan_definition(Ecto.Query.t(), String.t()) :: Ecto.Query.t()
+  defp maybe_query_by_plan_definition(query, ""), do: query
+
   defp maybe_query_by_plan_definition(query, plan_definition_id)
-       when is_number(plan_definition_id) do
+       when is_binary(plan_definition_id) do
     where(query, plan_definition_id: ^plan_definition_id)
   end
 
