@@ -25,9 +25,9 @@ defmodule Smokex.Results.HTTPResponse do
   @schema_fields @required_fields
 
   schema "plans_executions_http_request_responses" do
-    field :body, :string
-    field :headers, :map
-    field :query, :map
+    field :body, Smokex.Ecto.EncryptedBinary
+    field :headers, Smokex.Ecto.EncryptedMap
+    field :query, Smokex.Ecto.EncryptedMap
     field :status, :integer
     field :started_at, :utc_datetime_usec
     field :finished_at, :utc_datetime_usec
