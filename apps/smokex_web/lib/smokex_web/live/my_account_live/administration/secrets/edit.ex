@@ -18,10 +18,10 @@ defmodule SmokexWeb.MyAccountLive.Administration.Secrets.Edit do
   end
 
   @impl Phoenix.LiveView
-  def handle_params(%{"id" => id}, _url, socket) do
+  def handle_params(%{"name" => secret_name}, _url, socket) do
     socket =
       socket
-      |> assign(:id, String.to_integer(id))
+      |> assign(:name, secret_name)
       |> fetch_secret()
 
     {:noreply, socket}
@@ -31,10 +31,10 @@ defmodule SmokexWeb.MyAccountLive.Administration.Secrets.Edit do
   def handle_event(
         "save",
         %{"secret" => secret_attrs},
-        %Socket{assigns: %{id: secret_id, current_user: user}} = socket
+        %Socket{assigns: %{name: secret_name, current_user: user}} = socket
       ) do
     with {:ok, %Organization{} = organization} <- Organizations.get_organization(user),
-         %Secret{} = secret <- OrganizationsSecrets.get!(organization, secret_id),
+         %Secret{} = secret <- OrganizationsSecrets.get!(organization, secret_name),
          {:ok, %Secret{} = secret} <- OrganizationsSecrets.update(secret, secret_attrs) do
       redirect_path =
         Routes.live_path(socket, SmokexWeb.MyAccountLive.Administration.Secrets.Show)
@@ -50,9 +50,9 @@ defmodule SmokexWeb.MyAccountLive.Administration.Secrets.Edit do
   # Private functions
   #
 
-  defp fetch_secret(%Socket{assigns: %{current_user: user, id: secret_id}} = socket) do
+  defp fetch_secret(%Socket{assigns: %{current_user: user, name: secret_name}} = socket) do
     with {:ok, %Organization{} = organization} <- Organizations.get_organization(user),
-         %Secret{} = secret <- OrganizationsSecrets.get!(organization, secret_id),
+         %Secret{} = secret <- OrganizationsSecrets.get!(organization, secret_name),
          changeset <- Ecto.Changeset.change(secret) do
       assign(socket, changeset: changeset)
     else
