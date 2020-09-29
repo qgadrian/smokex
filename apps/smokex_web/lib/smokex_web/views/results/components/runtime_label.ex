@@ -15,8 +15,7 @@ defmodule SmokexWeb.Results.Components.RuntimeLabel do
   def new(%HTTPRequestResult{response: %HTTPResponse{} = response}) do
     duration =
       response.finished_at
-      |> Timex.diff(response.started_at, :milliseconds)
-      |> Timex.Duration.from_microseconds()
+      |> Timex.diff(response.started_at, :duration)
       |> Timex.format_duration(:humanized)
 
     content_tag(:span, duration, class: @default_class)
