@@ -33,7 +33,8 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
         response =
           ResponseBuilder.build(http_client_response,
             started_at: started_at,
-            finished_at: DateTime.utc_now()
+            finished_at: DateTime.utc_now(),
+            plan_execution_id: plan_execution_id
           )
 
         step.expect

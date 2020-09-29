@@ -7,14 +7,16 @@ defimpl Smokex.Step.Response.ResponseBuilder, for: Tesla.Env do
         opts
       ) do
     started_at = Keyword.fetch!(opts, :started_at)
+    plan_execution_id = Keyword.fetch!(opts, :plan_execution_id)
 
     %HTTPResponse{
       body: body_as_string(http_client_response.body),
+      finished_at: Keyword.get(opts, :finished_at, DateTime.utc_now()),
       headers: Enum.into(http_client_response.headers, %{}),
+      plan_execution_id: plan_execution_id,
       query: Enum.into(http_client_response.query, %{}),
-      status: http_client_response.status,
       started_at: started_at,
-      finished_at: Keyword.get(opts, :finished_at, DateTime.utc_now())
+      status: http_client_response.status
     }
   end
 
