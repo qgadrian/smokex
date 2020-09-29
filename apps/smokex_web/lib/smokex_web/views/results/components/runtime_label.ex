@@ -12,6 +12,10 @@ defmodule SmokexWeb.Results.Components.RuntimeLabel do
     content_tag(:span, "...", class: @default_class)
   end
 
+  def new(%HTTPRequestResult{response: nil}) do
+    content_tag(:span, "-", class: @default_class)
+  end
+
   def new(%HTTPRequestResult{response: %HTTPResponse{} = response}) do
     duration =
       response.finished_at
