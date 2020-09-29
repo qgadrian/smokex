@@ -1,4 +1,4 @@
-defmodule Smokex.Result do
+defmodule Smokex.Results.HTTPRequestResult do
   @moduledoc """
   This module contains the information after a
   [request](`t:Smokex.Step.Request/0`) is executed.

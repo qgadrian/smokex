@@ -6,7 +6,7 @@ defmodule Smokex.Results.HTTPResponse do
 
   use Ecto.Schema
 
-  alias Smokex.Result
+  alias Smokex.Results.HTTPRequestResult
 
   @typedoc """
   Represents a response of a [request](`t:Smokex.Step.Request/0`):
@@ -32,7 +32,7 @@ defmodule Smokex.Results.HTTPResponse do
     field :started_at, :utc_datetime_usec
     field :finished_at, :utc_datetime_usec
 
-    belongs_to(:result, Result, foreign_key: :result_id)
+    belongs_to(:result, HTTPRequestResult, foreign_key: :result_id)
 
     timestamps()
   end

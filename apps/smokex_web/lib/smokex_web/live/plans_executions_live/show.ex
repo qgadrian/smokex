@@ -5,7 +5,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
   alias Smokex.PlanDefinitions
   alias Smokex.PlanExecutions
   alias Smokex.PlanExecution
-  alias Smokex.Result
+  alias Smokex.Results.HTTPRequestResult
   alias SmokexWeb.PlanExecutions.Components.StatusBadge
   alias SmokexWeb.PlanExecutions.Components.Progress
   alias SmokexWeb.PlansExecutionsLive.Components.Show.Table, as: ResultsTable
@@ -34,7 +34,10 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
   end
 
   @impl Phoenix.LiveView
-  def handle_info({:result, %Result{} = result}, %Socket{assigns: %{results: results}} = socket) do
+  def handle_info(
+        {:result, %HTTPRequestResult{} = result},
+        %Socket{assigns: %{results: results}} = socket
+      ) do
     results = [result | results]
 
     {:noreply, assign(socket, results: results)}

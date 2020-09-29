@@ -1,24 +1,24 @@
 defmodule SmokexWeb.Results.Components.ActionBadge do
   use SmokexWeb, :view
 
-  alias Smokex.Result
+  alias Smokex.Results.HTTPRequestResult
 
   @default_class "tag is-light is-capitalized has-text-weight-medium"
 
-  @spec new(Result.t()) :: term
-  def new(%Result{action: action}) when action in [:get] do
+  @spec new(HTTPRequestResult.t()) :: term
+  def new(%HTTPRequestResult{action: action}) when action in [:get] do
     text = build_text(action)
 
     content_tag(:span, text, class: "#{@default_class} is-success")
   end
 
-  def new(%Result{action: action}) when action in [:delete] do
+  def new(%HTTPRequestResult{action: action}) when action in [:delete] do
     text = build_text(action)
 
     content_tag(:span, text, class: "#{@default_class} is-danger")
   end
 
-  def new(%Result{action: action}) do
+  def new(%HTTPRequestResult{action: action}) do
     text = build_text(action)
 
     content_tag(:span, text, class: "#{@default_class} is-info")

@@ -1,18 +1,18 @@
 defmodule Smokex.Results do
   @moduledoc """
-  Context module to work with [results](`t:#{Result}/0`).
+  Context module to work with [results](`t:#{HTTPRequestResult}/0`).
   """
 
   require Logger
 
-  alias Smokex.Result
+  alias Smokex.Results.HTTPRequestResult
   alias Smokex.PlanExecution
 
-  @spec create(map) :: {:ok, Result.t()} | {:error, Ecto.Changeset.t()}
+  @spec create(map) :: {:ok, HTTPRequestResult.t()} | {:error, Ecto.Changeset.t()}
   def create(%{plan_execution: %PlanExecution{id: plan_execution_id}} = attrs) do
     result =
-      %Result{}
-      |> Result.changeset(attrs)
+      %HTTPRequestResult{}
+      |> HTTPRequestResult.changeset(attrs)
       |> Smokex.Repo.insert()
 
     with {:ok, result} <- result do
@@ -32,9 +32,9 @@ defmodule Smokex.Results do
   @doc """
   Return whether the result has failed assertions.
   """
-  @spec has_failed?(Result.t()) :: boolean
-  def has_failed?(%Result{failed_assertions: map}) when map == %{}, do: false
-  def has_failed?(%Result{failed_assertions: nil}), do: false
-  def has_failed?(%Result{failed_assertions: []}), do: false
-  def has_failed?(%Result{failed_assertions: _}), do: true
+  @spec has_failed?(HTTPRequestResult.t()) :: boolean
+  def has_failed?(%HTTPRequestResult{failed_assertions: map}) when map == %{}, do: false
+  def has_failed?(%HTTPRequestResult{failed_assertions: nil}), do: false
+  def has_failed?(%HTTPRequestResult{failed_assertions: []}), do: false
+  def has_failed?(%HTTPRequestResult{failed_assertions: _}), do: true
 end
