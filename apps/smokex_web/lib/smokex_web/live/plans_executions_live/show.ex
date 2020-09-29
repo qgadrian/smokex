@@ -57,7 +57,7 @@ defmodule SmokexWeb.PlansExecutionsLive.Show do
   @spec fetch_plan_execution(Socket.t()) :: Socket.t()
   defp fetch_plan_execution(%Socket{assigns: %{id: id, current_user: user}} = socket) do
     with plan_execution <- PlanExecutions.get!(user, id),
-         plan_execution <- Smokex.Repo.preload(plan_execution, :results) do
+         plan_execution <- Smokex.Repo.preload(plan_execution, results: :response) do
       socket
       |> assign(plan_execution: plan_execution)
       |> assign(results: plan_execution.results)

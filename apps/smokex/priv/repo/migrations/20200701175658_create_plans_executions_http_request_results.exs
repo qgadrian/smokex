@@ -2,7 +2,7 @@ defmodule Smokex.Repo.Migrations.CreatePlansExecutionsStepsResults do
   use Ecto.Migration
 
   def change do
-    create table(:plans_executions_steps_results) do
+    create table(:plans_executions_http_request_results) do
       add(:plan_execution_id, references(:plans_executions), null: false)
 
       add(:action, :string, null: true)
