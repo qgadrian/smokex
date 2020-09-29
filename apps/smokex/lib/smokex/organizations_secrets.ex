@@ -48,12 +48,12 @@ defmodule Smokex.OrganizationsSecrets do
   If the secret is not found or does not belong to the organization, raises an
   error.
   """
-  @spec get!(Organization.t(), integer) :: Secret.t() | nil
-  def get!(%Organization{id: organization_id}, secret_id) when is_number(secret_id) do
+  @spec get!(Organization.t(), secret_name :: String.t()) :: Secret.t() | nil
+  def get!(%Organization{id: organization_id}, secret_name) when is_binary(secret_name) do
     query =
       from(secret in Secret,
         where: secret.organization_id == ^organization_id,
-        where: secret.id == ^secret_id,
+        where: secret.name == ^secret_name,
         select: secret
       )
 

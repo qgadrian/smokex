@@ -26,5 +26,8 @@ defmodule Smokex.Organizations.Secret do
     |> Ecto.Changeset.cast_assoc(:organization)
     |> Ecto.Changeset.assoc_constraint(:organization)
     |> Ecto.Changeset.unique_constraint([:name, :organization_id])
+    |> Ecto.Changeset.validate_format(:name, ~r/^\w+$/,
+      message: "only letters, numbers and underscores are allowed"
+    )
   end
 end
