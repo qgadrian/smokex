@@ -1,8 +1,8 @@
 defmodule SmokexWeb.Results.Components.RuntimeLabel do
   use SmokexWeb, :view
 
-  alias Smokex.PlanExecutions
   alias Smokex.Result
+  alias Smokex.Results.HTTPResponse
 
   @default_class "is-size-7 pl-1"
 
@@ -12,9 +12,11 @@ defmodule SmokexWeb.Results.Components.RuntimeLabel do
     content_tag(:span, "...", class: @default_class)
   end
 
-  def new(%Result{} = result) do
+  def new(%Result{response: %HTTPResponse{} = response}) do
     duration =
-      Timex.diff(result.updated_at, result.inserted_at, :duration)
+      response.finished_at
+      |> Timex.diff(response.started_at, :milliseconds)
+      |> Timex.Duration.from_microseconds()
       |> Timex.format_duration(:humanized)
 
     content_tag(:span, duration, class: @default_class)

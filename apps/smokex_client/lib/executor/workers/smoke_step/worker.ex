@@ -9,6 +9,9 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   alias Smokex.PlanExecution
   alias SmokexClient.Step.HttpClient
 
+  alias Smokex.Results.HTTPResponse
+  alias Smokex.Step.Response.ResponseBuilder
+
   alias SmokexClient.Utils.StepVarsReplacer
 
   @spec execute(Request.t(), PlanExecution.t(), ExecutionContext.t()) ::
@@ -23,11 +26,19 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
 
     step = StepVarsReplacer.process_step_variables_(step, execution_context)
 
+    started_at = DateTime.utc_now()
+
     case HttpClient.request(step) do
-      {:ok, response} ->
+      {:ok, http_client_response} ->
+        response =
+          ResponseBuilder.build(http_client_response,
+            started_at: started_at,
+            finished_at: DateTime.utc_now()
+          )
+
         step.expect
-        |> Validator.validate(response)
-        |> process_validation(step, plan_execution, execution_context)
+        |> Validator.validate(http_client_response)
+        |> process_validation(step, plan_execution, execution_context, response)
 
       {:error, reason} ->
         process_request_error(step, reason, plan_execution)
@@ -48,14 +59,16 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
           Validator.validation_result(),
           Request.t(),
           PlanExecution.t(),
-          ExecutionContext.t()
+          ExecutionContext.t(),
+          Result.t()
         ) :: atom
   defp process_validation(
          validation_result,
          %Request{} = step,
          %PlanExecution{} = plan_execution,
          %ExecutionContext{halt_on_error: halt_on_error, variables: context_variables} =
-           execution_context
+           execution_context,
+         %HTTPResponse{} = response
        ) do
     case validation_result do
       {:error, info, message} ->
@@ -65,6 +78,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
             plan_execution: plan_execution,
             action: step.action,
             host: step.host,
+            response: response,
             failed_assertions: [info],
             result: :error
           })
@@ -81,6 +95,7 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
           Smokex.Results.create(%{
             plan_execution: plan_execution,
             action: step.action,
+            response: response,
             host: step.host,
             result: :ok
           })

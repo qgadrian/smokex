@@ -9,6 +9,7 @@ defmodule Smokex.Result do
   alias Smokex.Step.RequestActionEnum
   alias Smokex.Step.RequestResultEnum
   alias Smokex.PlanExecution
+  alias Smokex.Results.HTTPResponse
 
   @typedoc """
   The result status of an execution step
@@ -24,10 +25,12 @@ defmodule Smokex.Result do
   to `[]`.
   * `result`: The overall [result](`t:#{RequestResultEnum}/0`) of the
   execution.
+  * `response`: The HTTP [response](`t:#{HTTPResponse}.t/0`) from the server.
   """
   @type t :: %__MODULE__{
           action: term,
           host: term,
+          response: HTTPResponse.t(),
           failed_assertions: list,
           result: result
         }
@@ -37,11 +40,13 @@ defmodule Smokex.Result do
 
   @schema_fields @required_fields ++ @optional_fields
 
-  schema "plans_executions_steps_results" do
+  schema "plans_executions_http_request_results" do
     field(:action, RequestActionEnum)
     field(:host, :string, default: nil)
     field(:failed_assertions, {:array, :map}, default: [])
     field(:result, RequestResultEnum)
+
+    has_one(:response, HTTPResponse, on_replace: :raise, foreign_key: :result_id)
 
     belongs_to(:plan_execution, PlanExecution)
 
@@ -54,6 +59,7 @@ defmodule Smokex.Result do
     |> Ecto.Changeset.cast(params, @schema_fields)
     |> Ecto.Changeset.validate_required(@required_fields)
     |> Ecto.Changeset.put_assoc(:plan_execution, params[:plan_execution])
+    |> Ecto.Changeset.put_assoc(:response, params[:response])
     |> Ecto.Changeset.assoc_constraint(:plan_execution)
   end
 end
