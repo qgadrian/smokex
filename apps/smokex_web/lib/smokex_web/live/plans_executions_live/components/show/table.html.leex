@@ -1,6 +1,6 @@
 <div class="box-content">
   <ul>
-    <%= for %Result{} = result <- @results do %>
+    <%= for %HTTPRequestResult{} = result <- @results do %>
       <%= live_component @socket, Row, id: result.id, result: result %>
     <% end %>
   </ul>

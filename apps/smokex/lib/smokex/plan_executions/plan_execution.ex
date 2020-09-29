@@ -6,7 +6,7 @@ defmodule Smokex.PlanExecution do
 
   use Ecto.Schema
 
-  alias Smokex.Result
+  alias Smokex.Results.HTTPRequestResult
   alias Smokex.PlanDefinition
   alias Smokex.Users.User
   alias Smokex.Enums.PlanExecutionStatus
@@ -37,7 +37,7 @@ defmodule Smokex.PlanExecution do
   @type t :: %__MODULE__{
           finished_at: NaiveDateTime.t(),
           plan_definition: PlanDefinition.t(),
-          results: list(Result.t()),
+          results: list(HTTPRequestResult.t()),
           started_at: NaiveDateTime.t(),
           status: status(),
           total_executions: integer,
@@ -60,7 +60,7 @@ defmodule Smokex.PlanExecution do
     belongs_to(:trigger_user, User)
     belongs_to(:plan_definition, PlanDefinition)
 
-    has_many(:results, Result)
+    has_many(:results, HTTPRequestResult)
 
     timestamps()
   end

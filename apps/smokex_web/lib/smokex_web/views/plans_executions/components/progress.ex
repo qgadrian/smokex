@@ -2,9 +2,9 @@ defmodule SmokexWeb.PlanExecutions.Components.Progress do
   use SmokexWeb, :view
 
   alias Smokex.PlanExecution
-  alias Smokex.Result
+  alias Smokex.Results.HTTPRequestResult
 
-  @spec total_progress(PlanExecution.t(), list(Result.t())) :: term
+  @spec total_progress(PlanExecution.t(), list(HTTPRequestResult.t())) :: term
   def total_progress(%PlanExecution{total_executions: nil}, _results) do
     "-"
   end
@@ -16,22 +16,22 @@ defmodule SmokexWeb.PlanExecutions.Components.Progress do
     "#{count}%"
   end
 
-  @spec success(list(Result.t())) :: term
+  @spec success(list(HTTPRequestResult.t())) :: term
   def success(results) do
     count =
       Enum.count(results, fn
-        %Result{result: :ok} -> true
+        %HTTPRequestResult{result: :ok} -> true
         _ -> false
       end)
 
     count
   end
 
-  @spec failed(list(Result.t())) :: term
+  @spec failed(list(HTTPRequestResult.t())) :: term
   def failed(results) do
     count =
       Enum.count(results, fn
-        %Result{result: :error} -> true
+        %HTTPRequestResult{result: :error} -> true
         _ -> false
       end)
 

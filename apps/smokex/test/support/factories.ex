@@ -7,7 +7,7 @@ defmodule Smokex.TestSupport.Factories do
   alias Smokex.Organizations.Secret
   alias Smokex.PlanDefinition
   alias Smokex.PlanExecution
-  alias Smokex.Result
+  alias Smokex.Results.HTTPRequestResult
   alias Smokex.Users.User
   alias Smokex.Step.Request
 
@@ -34,7 +34,7 @@ defmodule Smokex.TestSupport.Factories do
   end
 
   def result_factory do
-    %Result{
+    %HTTPRequestResult{
       action: :get,
       result: :ok,
       failed_assertions: [],

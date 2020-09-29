@@ -12,7 +12,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
   import Smokex.TestSupport.Factories
 
   alias SmokexClient.Executor
-  alias Smokex.Result
+  alias Smokex.Results.HTTPRequestResult
   alias Smokex.PlanExecution
   alias Smokex.PlanExecutions
 
@@ -49,7 +49,11 @@ defmodule SmokexClient.Test.Workers.Yaml do
     assert_receive {:started, %PlanExecution{id: ^id}}
 
     assert_receive {:result,
-                    %Result{action: :get, host: "https://localhost:5743/status/203", result: :ok}}
+                    %HTTPRequestResult{
+                      action: :get,
+                      host: "https://localhost:5743/status/203",
+                      result: :ok
+                    }}
 
     assert_receive {:finished, %PlanExecution{id: ^id}}
   end
@@ -64,13 +68,25 @@ defmodule SmokexClient.Test.Workers.Yaml do
     assert_receive {:started, %PlanExecution{id: ^id}}
 
     assert_receive {:result,
-                    %Result{action: :get, host: "https://localhost:5743/get", result: :ok}}
+                    %HTTPRequestResult{
+                      action: :get,
+                      host: "https://localhost:5743/get",
+                      result: :ok
+                    }}
 
     assert_receive {:result,
-                    %Result{action: :post, host: "https://localhost:5743/post", result: :ok}}
+                    %HTTPRequestResult{
+                      action: :post,
+                      host: "https://localhost:5743/post",
+                      result: :ok
+                    }}
 
     assert_receive {:result,
-                    %Result{action: :get, host: "https://localhost:5743/status/204", result: :ok}}
+                    %HTTPRequestResult{
+                      action: :get,
+                      host: "https://localhost:5743/status/204",
+                      result: :ok
+                    }}
 
     assert_receive {:finished, %PlanExecution{id: ^id}}
   end
@@ -85,7 +101,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
     assert_receive {:started, %PlanExecution{id: ^id}}
 
     assert_receive {:result,
-                    %Result{
+                    %HTTPRequestResult{
                       action: :get,
                       host: "https://localhost:5743/status/500",
                       failed_assertions: [
@@ -109,7 +125,11 @@ defmodule SmokexClient.Test.Workers.Yaml do
     assert_receive {:started, %PlanExecution{id: ^id}}
 
     assert_receive {:result,
-                    %Result{action: :get, host: "https://localhost:5743/status/423", result: :ok}}
+                    %HTTPRequestResult{
+                      action: :get,
+                      host: "https://localhost:5743/status/423",
+                      result: :ok
+                    }}
 
     assert_receive {:finished, %PlanExecution{id: ^id}}
   end
@@ -124,7 +144,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
     assert_receive {:started, %PlanExecution{id: ^id}}
 
     assert_receive {:result,
-                    %Result{
+                    %HTTPRequestResult{
                       action: :get,
                       host: "https://localhost:5743/get",
                       failed_assertions: [%{status_code: %{expected: 400, received: 200}}],
@@ -144,7 +164,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
     assert_receive {:started, %PlanExecution{id: ^id}}
 
     assert_receive {:result,
-                    %Result{
+                    %HTTPRequestResult{
                       action: :get,
                       host: "invalid_host",
                       failed_assertions: [%{error: "Invalid host"}],
@@ -164,7 +184,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
     assert_receive {:started, %PlanExecution{id: ^id}}
 
     assert_receive {:result,
-                    %Result{
+                    %HTTPRequestResult{
                       action: :get,
                       host: "https://localhost:5743/status/202",
                       failed_assertions: [
@@ -192,7 +212,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
     assert_receive {:started, %PlanExecution{id: ^id}}
 
     assert_receive {:result,
-                    %Result{
+                    %HTTPRequestResult{
                       action: :get,
                       host: "https://localhost:5743/status/202",
                       failed_assertions: ^expected_assertions,
@@ -213,7 +233,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
       assert_received {:started, %PlanExecution{id: ^id}}
 
       assert_receive {:result,
-                      %Result{
+                      %HTTPRequestResult{
                         action: :get,
                         host: "http://httpbin.org/delay/2",
                         failed_assertions: [%{error: :timeout}],
@@ -233,7 +253,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
       assert_received {:started, %PlanExecution{id: ^id}}
 
       assert_receive {:result,
-                      %Result{
+                      %HTTPRequestResult{
                         action: :post,
                         host: "https://localhost:5743/post",
                         result: :ok
@@ -252,10 +272,18 @@ defmodule SmokexClient.Test.Workers.Yaml do
       assert_receive {:started, %PlanExecution{id: ^id}}
 
       assert_receive {:result,
-                      %Result{action: :post, host: "https://localhost:5743/post", result: :ok}}
+                      %HTTPRequestResult{
+                        action: :post,
+                        host: "https://localhost:5743/post",
+                        result: :ok
+                      }}
 
       assert_receive {:result,
-                      %Result{action: :get, host: "https://localhost:5743/headers", result: :ok}}
+                      %HTTPRequestResult{
+                        action: :get,
+                        host: "https://localhost:5743/headers",
+                        result: :ok
+                      }}
 
       assert_receive {:finished, %PlanExecution{id: ^id, status: :finished}}
     end

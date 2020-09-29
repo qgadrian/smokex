@@ -1,10 +1,10 @@
 defmodule SmokexWeb.Results.Components.TimeAgoLabel do
   use SmokexWeb, :view
 
-  alias Smokex.Result
+  alias Smokex.Results.HTTPRequestResult
 
-  @spec new(Result.t()) :: term
-  def new(%Result{inserted_at: nil}) do
+  @spec new(HTTPRequestResult.t()) :: term
+  def new(%HTTPRequestResult{inserted_at: nil}) do
     content_tag('time-ago', "not started", class: "no-wrap is-size-7 pl-1 is-italic")
   end
 
