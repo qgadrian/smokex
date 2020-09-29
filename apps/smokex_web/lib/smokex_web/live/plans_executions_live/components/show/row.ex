@@ -31,8 +31,12 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Show.Row do
   end
 
   def expect_value_to_string(expected_list) when is_list(expected_list) do
-    Enum.map(expected_list, fn %{"expected" => expected, "header" => header_name} ->
-      "#{header_name}: #{expected}\n"
+    Enum.map(expected_list, fn
+      %{"expected" => expected, "header" => header_name} ->
+        "#{header_name}: #{expected}\n"
+
+      %{expected: expected, header: header_name} ->
+        "#{header_name}: #{expected}\n"
     end)
   end
 
@@ -62,6 +66,12 @@ defmodule SmokexWeb.PlansExecutionsLive.Components.Show.Row do
         "`#{header_name}` not present\n"
 
       %{"received" => received, "header" => header_name} ->
+        "#{header_name}: #{received}\n"
+
+      %{received: nil, header: header_name} ->
+        "`#{header_name}` not present\n"
+
+      %{received: received, header: header_name} ->
         "#{header_name}: #{received}\n"
     end)
   end
