@@ -109,6 +109,18 @@ Hooks.LoadStripeButton = {
   successUrl() { return this.el.dataset.successUrl },
   cancelUrl() { return this.el.dataset.cancelUrl },
   priceId() { return this.el.dataset.priceId },
+  maybeLoadStripeScript() {
+    if(!window.Stripe) {
+      const publishableApiKey = this.el.dataset.publishableApiKey;
+      const stripeJs = document.createElement('script');
+      stripeJs.src = 'https://js.stripe.com/v3/';
+      stripeJs.async = true;
+      stripeJs.onload = () => {
+        window.Stripe = Stripe(publishableApiKey);
+      };
+      document.body && document.body.appendChild(stripeJs)
+    }
+  },
   mounted() {
     var checkoutButton = document.getElementById(`checkout-button-${this.priceId()}-${this.buttonId()}`);
 
@@ -118,6 +130,8 @@ Hooks.LoadStripeButton = {
     var _successUrl = this.successUrl();
     var _cancelUrl = this.cancelUrl();
     var _priceId = this.priceId();
+
+    this.maybeLoadStripeScript();
 
     checkoutButton.addEventListener('click', function () {
       // When the customer clicks on the button, redirect
