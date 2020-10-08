@@ -2,7 +2,9 @@
   <h2 class="title">Get started with Smokex Plans</h2>
 
   <h3 class="title is-5">We will help you to take you first steps</h3>
-  <p class="subtitle is-6">Creating any test plan is extremely easy and can be done in 3 simple steps.</p>
+
+  <p class="subtitle is-6">Creating any test plan is extremely easy and can be
+  done in 3 simple steps.</p>
 
   <div class="media pt-3">
     <div class="media-content">
@@ -15,21 +17,25 @@ assert a 200 response and a specific value in the response:
         </p>
 
         <section class="cheatsheet">
-          <pre id="getting-started-example" phx-update="ignore" class="box"><code class="language-yaml"><span>- post:
-    host: "http://httpbin.org/post"
-    body:
-      name: "Michael Jordan"
-      number: 23
-    expect:
-      status_code: 200
-    body:
-      json:
+          <pre class="box" id="getting-started-cheatsheet" phx-hook="LoadPrismjs">
+            <code class="language-yaml"><span>- post:
+      host: "http://httpbin.org/post"
+      body:
+        name: "Michael Jordan"
         number: 23
-          </span></code></pre>
+      expect:
+        status_code: 200
+      body:
+        json:
+          number: 23
+            </span>
+            </code>
+          </pre>
         </section>
       </div>
     </div>
   </div>
+
   <div class="media">
     <div class="media-content">
       <div class="content">
@@ -38,6 +44,7 @@ assert a 200 response and a specific value in the response:
       </div>
     </div>
   </div>
+
   <div class="media">
     <div class="media-content">
       <div class="content">

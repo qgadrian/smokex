@@ -22,6 +22,15 @@ Hooks.PrintCronHumanFriendly = {
   }
 }
 
+Hooks.LoadPrismjs = {
+  mounted() {
+    Prism.highlightAll();
+  },
+  updated() {
+    Prism.highlightAll();
+  }
+}
+
 Hooks.LoadPlanDefinitionContent = {
   content() { return this.el.dataset.content },
   allowEdit() { return this.el.dataset.allowEdit },
