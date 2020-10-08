@@ -1,0 +1,18 @@
+section#features, section#signup {
+  background-color: $primary;
+
+  a {
+    color: $dark
+  }
+
+  h1, h2, h3, h4, p, strong, label {
+    color: white!important;
+  }
+}
+
+section#get-started {
+  img.hero-image {
+    max-height: 250px;
+  }
+}
+

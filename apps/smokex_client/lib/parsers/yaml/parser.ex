@@ -167,6 +167,9 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
 
   @spec get_save_from_response(map) :: list(SaveFromResponse.t())
   def get_save_from_response(map) do
+    # TODO string to atom here??? Check if there is atom to string conversion
+    # because this is a security issue since anyone can create a denial of
+    # service by flooding atoms
     save_from_respose_maps =
       map
       |> Map.get("save_from_response", %{})
