@@ -123,8 +123,14 @@
               The following request options are available:
 
               <ul>
-                <li>The <strong>timeout</strong> of a step to receive a response, in milliseconds. Defaults to <i>5000</i>.</li>
-                <li>number of <strong>retries</strong> of a request in case of connection failures (timeouts, connection closed, etc...) until the timeout limit. Defaults to <i>0</i>.</li>
+                <li>
+                  The <strong>timeout</strong> of a step to receive a response, in milliseconds. Defaults to <i>5000</i>.
+                </li>
+                <li>
+                  Number of request <strong>retries</strong>, in case of connection failures (timeouts, connection closed, etc...) until the timeout limit. Defaults to <i>0</i>.
+                </li>
+                <li>Whether <strong>follow redirections</strong> from a server response. The expectations will be made against the final response. Defaults to <i>false</i>.
+                </li>
               </ul>
             </div>
           </article>
@@ -144,6 +150,14 @@
     host: "https://smokex.io"
     options:
       retries: 5</span></code></pre>
+          </div>
+
+          <div class="box">
+            <h4 class="title is-4">Follow server redirections</h4>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
+    host: "http://smokex.io"
+    options:
+      follow_redirects: true</span></code></pre>
           </div>
 
           <h3 id="expects" class="title is-3">Expects</h3>

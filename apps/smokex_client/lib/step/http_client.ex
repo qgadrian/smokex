@@ -81,6 +81,13 @@ defmodule SmokexClient.Step.HttpClient do
         []
       end
 
+    maybe_follow_redirects =
+      if step.opts[:follow_redirects] do
+        Tesla.Middleware.FollowRedirects
+      else
+        nil
+      end
+
     max_retries = step.opts[:retries] || Application.get_env(:smokex_client, :retries, 0)
 
     [
@@ -89,7 +96,8 @@ defmodule SmokexClient.Step.HttpClient do
       {Tesla.Middleware.Headers, Map.to_list(step.headers)},
       {Tesla.Middleware.Timeout, timeout: step_timeout(step)},
       {Tesla.Middleware.Retry, max_retries: max_retries},
-      Tesla.Middleware.Telemetry
+      Tesla.Middleware.Telemetry,
+      maybe_follow_redirects
     ]
     |> Kernel.++(maybe_debug_middleware)
     |> Enum.reject(&is_nil/1)
