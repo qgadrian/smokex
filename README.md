@@ -192,6 +192,7 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ### Nice to have (next prio)
 
+* [ ] Add https://github.com/mischov/meeseeks to check css and xpath
 * [ ] Store the server response to avoid loosing data and show raw data to
     client
 * [x] Hide `load more` button when reached end of page

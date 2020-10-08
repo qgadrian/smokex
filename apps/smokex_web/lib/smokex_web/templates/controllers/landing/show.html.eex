@@ -1,8 +1,9 @@
-<section class="section hero">
-  <div class="hero-container container  pt-5">
-    <div class="content is-large">
-      <h1 class="title">Life is too short, smoke it</h1>
-      <p class="mb-5">
+<div id="wrapper" class="has-text-centered-mobile">
+  <section class="section hero">
+    <div class="hero-container container  pt-5">
+      <div class="content is-large">
+        <h1 class="title">Life is too short, smoke it</h1>
+        <p class="mb-5">
         Create trust in the development
         and release of you applications, so you
         can spend effort on what it is really
@@ -12,102 +13,152 @@
           automate your HTTP requests and create smoke tests to help in your
           development.
         </span>
-      </p>
-      <%= link "Sign up for free", class: "button is-primary is-large", to: Routes.pow_registration_path(@conn, :new) %>
-    </div>
-    <img src="<%= Routes.static_path(@conn, "/images/landing.png") %>" class="hero-image" alt="Landing image"/>
-  </div>
+        </p>
+        <%= link "Sign up for free", class: "button is-primary is-large", to: Routes.pow_registration_path(@conn, :new) %>
+      </div>
 
-</section>
-<hr class="my-3">
-<section class="section">
-  <div class="container pb-6">
-    <h2 class="title mb-6">Some of our awesome...</h2>
-    <div class="columns is-multiline">
-      <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Unleash the smoke tests</h4>
-        <p class="block">Unit tests, integration tests, functional tests...
-        There is a lot of testing practices and any combination suits best for
-        each of us. With <a target="_blank"
-        href="https://martinfowler.com/articles/originalContinuousIntegration.html#WhatIsASuccessfulBuild">smoke
-      tests</a> you will get a easy way to ensure your build and deployments
-    are correct.</p>
+      <img src="<%= Routes.static_path(@conn, "/images/landing.png") %>" class="hero-image" alt="Landing image"/>
+    </div>
+  </section>
+
+  <section id="features" class="section pt-6">
+    <div class="container">
+      <h2 class="title is-1 mb-6">Some of our awesome features</h2>
+      <div class="columns">
+        <div class="column is-6">
+          <h4 class="title is-spaced">Test without effort</h4>
+          <p class="subtitle">You can create a test suite for your backend or frontend in a eye blink.</p>
+        </div>
+        <div class="column is-6">
+          <h4 class="title is-spaced">Works with anything</h4>
+          <p class="subtitle">Smokex will work for any kind of code, regardless the technology used.</p>
+        </div>
       </div>
-      <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Simplicity</h4>
-        <p class="block">Tired of dealing with complex CI/CD pipelines? Do not
-        worry! Smokex provides you a straightforward, clean, simple and
-        reliable way to run smoke tests against your applications.</p>
-      </div>
-      <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Protect your deployments</h4>
-        <p class="block">No one ensures you that after all the tests run the
-        deployment is going to be ok, so Smokex you can ensure the
-        correctness of your releases.</p>
-      </div>
-      <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Easy to use</h4>
-        <p class="block">Forget about complex setups, dealing with
-        containers, scripts... Anyone with minimum technical
-        knowledge can write validation tests for your application.</p>
+      <div class="columns">
+        <div class="column is-6">
+          <h4 class="title is-spaced">Protects your product</h4>
+          <p class="subtitle">Detect downtimes, performance issues or errors and ensure the correctness of your releases.</p>
+        </div>
+        <div class="column is-6">
+          <h4 class="title is-spaced">Flexible</h4>
+          <p class="subtitle">Smokex workflows can be used for anything, e.g. create a pipeline to send/retrieve information from third parties.</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="container has-text-centered">
-  <%= live_patch "Learn more about Smokex", to: Routes.live_path(@conn, SmokexWeb.DocumentationLive.Show),
-      class: "button is-primary is-outlined is-medium" %>
+  <section id="get-started" class="mt-6">
+    <div class="container mb-6">
+      <h1 class="title is-1 mb-6">How it works</h1>
+      <div class="columns reverse-row-order mt-6">
+
+        <div class="column">
+          <h1 class="title">First, create your workflow</h1>
+          <p class="has-text-black paragraph">
+          <%= live_patch "Create a workflow",
+to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.New) %> with your
+executions. You can add expectations on the response to create tests for
+applications, for example a button is present or to ensure the request responds in time.
+          </p>
+        </div>
+        <div class="column has-text-centered">
+          <img src="<%= Routes.static_path(@conn, "/images/landing-step-one.svg") %>" class="hero-image" alt="Landing image"/>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="container mb-6">
+      <div class="columns reverse-row-order">
+        <div class="column has-text-centered">
+          <img src="<%= Routes.static_path(@conn, "/images/landing-step-two.svg") %>" class="hero-image" alt="Landing image"/>
+        </div>
+        <div class="column">
+          <h1 class="title">Schedule or launch it manually</h1>
+          <p class="has-text-black paragraph">
+          When you create a new plan you schedule executions using a <a href="https://crontab.guru/examples.html" target="_blank">cron sentence</a>, additionally you can manually run your plan on demand.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mb-6">
+      <div class="columns reverse-row-order">
+        <div class="column">
+          <h1 class="title">Get the results of the executions</h1>
+          <p class="has-text-black paragraph">
+          Configure the notifications or check <%= live_patch "the execution details of your workflows", to:
+Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.List) %> to get the
+information of any failed expectations or errors.
+          </p>
+        </div>
+        <div class="column has-text-centered">
+          <img src="<%= Routes.static_path(@conn, "/images/landing-step-three.svg") %>" class="hero-image" alt="Landing image"/>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+  </section>
+
+  <section id="signup" class="section">
+    <div class="container">
+      <h3 class="title is-1 mb-6">
+        Create your account
+      </h3>
+
+      <div class="columns">
+        <div class="column is-6">
+          <img src="<%= Routes.static_path(@conn, "/images/landing-signup.svg") %>" class="hero-image" alt="Landing image"/>
+          </p>
+        </div>
+
+        <%= form_for @changeset, :registration, [class: "column is-6", as: :user, csrf_token: Phoenix.Controller.get_csrf_token()], fn f -> %>
+            <div class="field">
+              <label class="label">Email</label>
+              <div class="control">
+                <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset),
+class: "input is-medium", type: "email",
+placeholder: "luke@skywalker.com" %>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control">
+                <%= password_input f, :password, class: "input is-medium",
+placeholder: "yourstrongestpassword" %>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Confirm password</label>
+              <div class="control">
+                <%= password_input f, :password_confirmation,
+placeholder: "yourstrongestpassword", class: "input is-medium" %>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <p>By creating an account you agree to the
+                <%= link "terms and conditions", to: Routes.legal_path(SmokexWeb.Endpoint, :terms_and_conditions) %>
+                and
+                <%= link "privacy policy", to: Routes.legal_path(SmokexWeb.Endpoint, :privacy_policy) %>.
+              </div>
+            </div>
+
+
+            <div class="field is-grouped">
+              <div class="control">
+                <button class="button is-outlined is-ligth">Sign up</button>
+              </div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
 </div>
-
-<section class="section">
-  <div class="container pb-6">
-    <h2 class="title mb-6">...features</h2>
-    <div class="columns is-multiline">
-      <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Unlimited power</h4>
-        <p>Automate any HTTP request schedule, with Smokex there is no limit
-        to test your applications.</p>
-      </div>
-      <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Secure</h4>
-        <p>No access to your source code, everything runs transparent and
-        detached from your applications.</p>
-      </div>
-      <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Flexible</h4>
-        <p>You can create any new workflow quickly and work with any request
-        information returned.</p>
-      </div>
-      <div class="column is-6 is-3-desktop">
-        <h4 class="title is-4">Perfect for any kind of project</h4>
-        <p>No matter what kind of project, language or how old your code is, Smokex
-        provides a non intrusive and up-to-date way to create acceptance tests
-        and ensure your applications are running smoothly.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="my-1">
-
-<section class="section">
-  <div class="container py-4">
-    <h2 class="title has-text-centered mb-6">Getting started</h2>
-    <div class="columns is-vcentered">
-      <div class="column">
-        <h2 class="title is-spaced">First steps</h2>
-        <p class="subtitle">Starting with Smokex is really easy! We've designed a simple, efficient process for companies to create smoke workflows.</p>
-
-        <%= live_patch "Here's how it works!", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "button is-primary is-outlined is-medium" %>
-      </div>
-      <div class="column">
-        <img class="landing bottom" src="<%= Routes.static_path(@conn, "/images/landing-bottom.png") %>" alt="">
-      </div>
-    </div>
-  </div>
-</section>
-
-<%# <div style="position:-webkit-sticky; position: sticky; bottom: 0; float: right; margin: 10px" id="product-hunt">
-  <a href="https://www.producthunt.com/posts/smokex?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-smokex" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=249255&theme=light" alt="Smokex - Schedule automatic HTTP requests and create smoke tests | Product Hunt Embed" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-</div> %>
