@@ -12,7 +12,7 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
 
   @expect_params ["status_code", "headers", "body"]
 
-  @step_opts ["timeout", "retries", "debug"]
+  @step_opts ["timeout", "retries", "debug", "follow_redirects"]
 
   @type requests :: list(Request.t())
 
@@ -149,7 +149,7 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
     yaml_step_props
     |> Map.get("expect", %{})
     |> Map.take(@expect_params)
-    |> Map.new(fn {k, v} -> {String.to_atom(k), v} end)
+    |> Map.new(fn {k, v} -> {String.to_existing_atom(k), v} end)
     |> Expect.new()
   end
 
