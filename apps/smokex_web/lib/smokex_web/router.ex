@@ -102,10 +102,10 @@ defmodule SmokexWeb.Router do
         live "/secrets/:name/edit", Administration.Secrets.Edit
       end
 
-      live "/plans", PlansDefinitionsLive.List
-      live "/plans/new", PlansDefinitionsLive.New
-      live "/plans/:id", PlansDefinitionsLive.Show
-      live "/plans/:id/edit", PlansDefinitionsLive.Edit
+      live "/workflows", PlansDefinitionsLive.List
+      live "/workflows/new", PlansDefinitionsLive.New
+      live "/workflows/:id", PlansDefinitionsLive.Show
+      live "/workflows/:id/edit", PlansDefinitionsLive.Edit
 
       live "/executions", PlansExecutionsLive.List
       live "/executions/:id", PlansExecutionsLive.Show
