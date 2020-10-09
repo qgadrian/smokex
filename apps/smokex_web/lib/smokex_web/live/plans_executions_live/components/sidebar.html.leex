@@ -48,7 +48,7 @@
           <%= live_patch to: Routes.live_path(@socket, SmokexWeb.PlansExecutionsLive.List, plan: plan.id) do %>
             <button class="button has-text-left is-fullwidth <%= if (plan.id == @plan_definition_id), do: "is-primary", else: "is-white " %>">
               <span class="icon pr-1">
-                <img src="<%= Routes.static_path(@socket, "/images/plans/icon-plan.svg") %>" alt="<%= plan.name %> logo"/>
+                <img src="<%= Routes.static_path(@socket, "/images/workflows/icon-plan.svg") %>" alt="<%= plan.name %> logo"/>
               </span>
               <span><%= plan.name %></span>
             </button>
