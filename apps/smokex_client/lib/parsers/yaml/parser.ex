@@ -10,7 +10,7 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
   alias Smokex.Step.Request.SaveFromResponse
   alias SmokexClient.TypeConverter
 
-  @expect_params ["status_code", "headers", "body"]
+  @expect_params ["status_code", "headers", "body", "html"]
 
   @step_opts ["timeout", "retries", "debug", "follow_redirects"]
 
@@ -149,7 +149,19 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
     yaml_step_props
     |> Map.get("expect", %{})
     |> Map.take(@expect_params)
-    |> Map.new(fn {k, v} -> {String.to_existing_atom(k), v} end)
+    |> Map.new(fn
+      {"html", html_opts} when is_list(html_opts) ->
+        html_opts =
+          Enum.into(html_opts, [], fn
+            %{"path" => path, "equal" => equal} when is_binary(path) ->
+              %{path: path, equal: TypeConverter.convert(equal)}
+          end)
+
+        {:html, html_opts}
+
+      {k, v} when k not in ["html"] ->
+        {String.to_existing_atom(k), v}
+    end)
     |> Expect.new()
   end
 

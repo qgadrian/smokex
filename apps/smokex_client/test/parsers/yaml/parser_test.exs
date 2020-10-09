@@ -123,6 +123,27 @@ defmodule SmokexClient.Test.Parsers.Yaml do
     assert {:ok, expected_yaml_data} === result_response
   end
 
+  test "Given a yml with an expect html when parsed returns the Request with the expect including the html expectations" do
+    result_response = Parser.parse_file("test/support/fixtures/parser/yaml/test_expect_html.yml")
+
+    expected_yaml_data = [
+      %Request{
+        action: :get,
+        host: "test_host",
+        query: %{"param_1" => "param_1"},
+        expect: %Expect{
+          status_code: 204,
+          html: [
+            %{equal: "a given value", path: "a[data-css-path]="},
+            %{equal: "another value", path: "a[other-css-path]="}
+          ]
+        }
+      }
+    ]
+
+    assert {:ok, expected_yaml_data} === result_response
+  end
+
   describe "Given a yml plan with save to variable" do
     test "when the response contains the json path then the value its saved to the variable" do
       result_response =

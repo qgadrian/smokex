@@ -1,0 +1,12 @@
+- get:
+    host: "test_host"
+    query:
+      param_1: "param_1"
+    expect:
+      status_code: 204
+      html:
+        - path: "a[data-css-path]="
+          equal: "a given value"
+        - path: "a[other-css-path]="
+          equal: "another value"
+
