@@ -11,16 +11,18 @@ defmodule Smokex.Step.Request.Expect do
         }
 
   @type t :: %__MODULE__{
-          status_code: non_neg_integer,
-          headers: map,
-          body: map | String.t(),
-          html: list(html_opt)
+          status_code: non_neg_integer | nil,
+          headers: map | nil,
+          string: String.t() | nil,
+          json: map | nil,
+          html: list(html_opt) | nil
         }
 
   defstruct [
     :status_code,
     :headers,
-    :body,
+    :string,
+    :json,
     :html
   ]
 

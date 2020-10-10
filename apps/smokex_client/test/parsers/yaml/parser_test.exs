@@ -70,8 +70,9 @@ defmodule SmokexClient.Test.Parsers.Yaml do
     assert {:ok, expected_yaml_data} === result_response
   end
 
-  test "Given a yml run plan with expect body when its parsed then the expect result with the expected body is returned" do
-    result_response = Parser.parse_file("test/support/fixtures/parser/yaml/test_expect_body.yml")
+  test "Given a yml run plan with expect string when its parsed then the expect result with the expected body is returned" do
+    result_response =
+      Parser.parse_file("test/support/fixtures/parser/yaml/test_expect_string.yml")
 
     expected_yaml_data = [
       %Request{
@@ -80,7 +81,25 @@ defmodule SmokexClient.Test.Parsers.Yaml do
         query: %{"param_1" => "param_1"},
         expect: %Expect{
           status_code: 200,
-          body: "an expected body"
+          string: "an expected body"
+        }
+      }
+    ]
+
+    assert {:ok, expected_yaml_data} === result_response
+  end
+
+  test "Given a yml run plan with expect json when its parsed then the expect result with the expected body is returned" do
+    result_response = Parser.parse_file("test/support/fixtures/parser/yaml/test_expect_json.yml")
+
+    expected_yaml_data = [
+      %Request{
+        action: :get,
+        host: "test_host",
+        query: %{"param_1" => "param_1"},
+        expect: %Expect{
+          status_code: 200,
+          json: %{"an_expected_key" => "an expected value"}
         }
       }
     ]

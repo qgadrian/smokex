@@ -10,7 +10,7 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
   alias Smokex.Step.Request.SaveFromResponse
   alias SmokexClient.TypeConverter
 
-  @expect_params ["status_code", "headers", "body", "html"]
+  @expect_params ["status_code", "headers", "html", "json", "string"]
 
   @step_opts ["timeout", "retries", "debug", "follow_redirects"]
 
@@ -35,7 +35,7 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
       parse(file_content)
     else
       {:error, "Invalid yaml file"} = error -> error
-      _ -> {:error, "Error reading yaml file"}
+      _error -> {:error, "Error reading yaml file"}
     end
   end
 
@@ -159,8 +159,17 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
 
         {:html, html_opts}
 
-      {k, v} when k not in ["html"] ->
-        {String.to_existing_atom(k), v}
+      {"json", v} when is_map(v) or is_list(v) ->
+        {:json, v}
+
+      {"string", v} when is_binary(v) ->
+        {:string, v}
+
+      {"status_code", v} when is_number(v) or is_binary(v) ->
+        {:status_code, TypeConverter.convert(v)}
+
+      {"headers", v} when is_map(v) ->
+        {:headers, v}
     end)
     |> Expect.new()
   end

@@ -106,7 +106,9 @@ defmodule SmokexClient.Test.Workers.Yaml do
                       host: "https://localhost:5743/status/500",
                       failed_assertions: [
                         %{
-                          status_code: %{expected: [200, 201, 202, 203, 204], received: 500}
+                          type: :status_code,
+                          expected: [200, 201, 202, 203, 204],
+                          received: 500
                         }
                       ],
                       result: :error
@@ -147,7 +149,9 @@ defmodule SmokexClient.Test.Workers.Yaml do
                     %HTTPRequestResult{
                       action: :get,
                       host: "https://localhost:5743/get",
-                      failed_assertions: [%{status_code: %{expected: 400, received: 200}}],
+                      failed_assertions: [
+                        %{type: :status_code, name: nil, expected: 400, received: 200}
+                      ],
                       result: :error
                     }}
 
@@ -188,7 +192,7 @@ defmodule SmokexClient.Test.Workers.Yaml do
                       action: :get,
                       host: "https://localhost:5743/status/202",
                       failed_assertions: [
-                        %{headers: [%{header: "a_header", expected: "a_value", received: nil}]}
+                        %{type: :header, name: "a_header", expected: "a_value", received: nil}
                       ],
                       result: :error
                     }}
@@ -205,9 +209,9 @@ defmodule SmokexClient.Test.Workers.Yaml do
 
     Executor.execute(plan_execution)
 
-    expeted_header = %{headers: [%{header: "a_header", expected: "a_value", received: nil}]}
-    expeted_status_code = %{status_code: %{expected: 523, received: 202}}
-    expected_assertions = [Map.merge(expeted_header, expeted_status_code)]
+    expected_header = %{expected: "a_value", name: "a_header", received: nil, type: :header}
+    expected_status_code = %{type: :status_code, name: nil, expected: 523, received: 202}
+    expected_assertions = [expected_header, expected_status_code]
 
     assert_receive {:started, %PlanExecution{id: ^id}}
 
