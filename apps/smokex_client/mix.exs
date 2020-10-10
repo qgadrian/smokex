@@ -38,6 +38,7 @@ defmodule SmokexClient.Mixfile do
       {:httpoison, "~> 1.6"},
       {:httpoison, "~> 1.6"},
       {:jason, "~> 1.2"},
+      {:meeseeks, "~> 0.15.1"},
       {:slack, "~> 0.23.5"},
       {:smokex, in_umbrella: true},
       {:sobelow, "~> 0.10.3"},

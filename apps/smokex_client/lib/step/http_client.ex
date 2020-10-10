@@ -63,9 +63,11 @@ defmodule SmokexClient.Step.HttpClient do
   end
 
   @spec build_middleware(Request.t()) :: list
-  defp build_middleware(%Request{} = step) do
+  defp build_middleware(%Request{body: request_body} = step) do
+    # TODO change this to only put the request header, let the json content
+    # parsing to each expectation kind (see json and string validator modules)
     maybe_json_middleware =
-      if is_binary(step.expect.body) do
+      if is_binary(request_body) do
         nil
       else
         Tesla.Middleware.JSON

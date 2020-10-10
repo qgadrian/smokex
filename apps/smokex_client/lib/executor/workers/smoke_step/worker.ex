@@ -1,18 +1,16 @@
 defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   require Logger
 
-  alias SmokexClient.Validator
-  alias SmokexClient.ExecutionContext
-
-  alias Smokex.Step.Request.SaveFromResponse
-  alias Smokex.Step.Request
   alias Smokex.PlanExecution
-  alias SmokexClient.Step.HttpClient
-
   alias Smokex.Results.HTTPResponse
+  alias Smokex.Step.Request
+  alias Smokex.Step.Request.SaveFromResponse
   alias Smokex.Step.Response.ResponseBuilder
-
+  alias SmokexClient.ExecutionContext
+  alias SmokexClient.Step.HttpClient
   alias SmokexClient.Utils.StepVarsReplacer
+  alias SmokexClient.Validator
+  alias SmokexClient.Validator.ValidationContext
 
   @spec execute(Request.t(), PlanExecution.t(), ExecutionContext.t()) ::
           ExecutionContext.t() | no_return
@@ -57,62 +55,76 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
   #
 
   @spec process_validation(
-          Validator.validation_result(),
+          ValidatorContext.t(),
           Request.t(),
           PlanExecution.t(),
           ExecutionContext.t(),
-          Result.t()
+          HTTPResponse.t()
         ) :: atom
   defp process_validation(
-         validation_result,
+         %ValidationContext{validation_errors: []},
+         %Request{} = step,
+         %PlanExecution{} = plan_execution,
+         %ExecutionContext{variables: context_variables} = execution_context,
+         %HTTPResponse{body: response_body} = response
+       ) do
+    {:ok, _result} =
+      Smokex.Results.create(%{
+        plan_execution: plan_execution,
+        action: step.action,
+        response: response,
+        host: step.host,
+        result: :ok
+      })
+
+    updated_context_variables = save_from_response(step.save_from_response, response_body)
+
+    new_context_variables =
+      Map.merge(
+        context_variables,
+        updated_context_variables
+      )
+
+    %ExecutionContext{
+      execution_context
+      | variables: new_context_variables
+    }
+  end
+
+  defp process_validation(
+         %ValidationContext{validation_errors: validation_errors},
          %Request{} = step,
          %PlanExecution{} = plan_execution,
          %ExecutionContext{halt_on_error: halt_on_error, variables: context_variables} =
            execution_context,
-         %HTTPResponse{} = response
+         %HTTPResponse{body: response_body} = response
        ) do
-    case validation_result do
-      {:error, info, message} ->
-        # TODO save in database and notify the result via PubSub
-        {:ok, _result} =
-          Smokex.Results.create(%{
-            plan_execution: plan_execution,
-            action: step.action,
-            host: step.host,
-            response: response,
-            failed_assertions: [info],
-            result: :error
-          })
+    # TODO save in database and notify the result via PubSub
+    {:ok, _result} =
+      Smokex.Results.create(%{
+        plan_execution: plan_execution,
+        action: step.action,
+        host: step.host,
+        response: response,
+        failed_assertions: Enum.map(validation_errors, &Map.from_struct/1),
+        result: :error
+      })
 
-        if halt_on_error do
-          throw({:error, message})
-        else
-          execution_context
-        end
+    if halt_on_error do
+      throw({:error, "Halting because some expectations were not met"})
+    else
+      updated_context_variables = save_from_response(step.save_from_response, response_body)
 
-      {:ok, response_body} ->
-        # TODO save in database and notify the result via PubSub
-        {:ok, _result} =
-          Smokex.Results.create(%{
-            plan_execution: plan_execution,
-            action: step.action,
-            response: response,
-            host: step.host,
-            result: :ok
-          })
+      new_context_variables =
+        Map.merge(
+          context_variables,
+          updated_context_variables
+        )
 
-        updated_context_variables = save_from_response(step.save_from_response, response_body)
-
-        new_context_variables =
-          Map.merge(
-            context_variables,
-            updated_context_variables
-          )
-
-        %ExecutionContext{
-          execution_context
-          | variables: new_context_variables
-        }
+      %ExecutionContext{
+        execution_context
+        | variables: new_context_variables
+      }
     end
   end
 
@@ -153,9 +165,22 @@ defimpl SmokexClient.Worker, for: Smokex.Step.Request do
     end
   end
 
-  @spec save_from_response(list(SaveFromResponse.t()), map) :: map
-  defp save_from_response(context_variables, response_body) do
-    context_variables
+  @spec save_from_response(list(SaveFromResponse.t()), map | nil) :: map_with_new_variables :: map
+  defp save_from_response(_save_from_resposwes, nil), do: %{}
+
+  defp save_from_response(save_from_responses, response_body) when is_binary(response_body) do
+    with {:ok, response_body} <- Jason.decode(response_body) do
+      save_from_response(save_from_responses, response_body)
+    else
+      _ ->
+        Logger.debug("Error parsing JSON to save response")
+
+        %{}
+    end
+  end
+
+  defp save_from_response(save_from_responses, response_body) do
+    save_from_responses
     |> Enum.map(fn save_from_response ->
       json_body = response_body["json"] || response_body
 

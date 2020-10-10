@@ -1,33 +1,30 @@
 defmodule SmokexClient.Validator.Headers do
   alias Smokex.Step.Request.Expect
+  alias SmokexClient.Validator.ValidationContext
+  alias SmokexClient.Validator.Validation
 
-  @spec validate(Expect.t(), list(tuple)) ::
-          {:ok, term} | {:error, %{headers: list(map)}, String.t()}
-  def validate(%Expect{} = expected, received_headers) do
-    case Map.get(expected, :headers) do
-      nil ->
-        {:ok, "No headers expected"}
+  @spec validate(ValidationContext.t(), Expect.t(), list(tuple)) :: ValidationContext.t()
+  def validate(
+        %ValidationContext{} = validation_context,
+        %Expect{headers: nil},
+        _received_headers
+      ),
+      do: validation_context
 
-      expected_headers ->
-        expected_headers
-        |> get_headers_to_validate(received_headers)
-        |> validate_expected_headers()
-        |> group_validated_headers()
-        |> build_validation_result()
-    end
+  def validate(
+        %ValidationContext{} = validation_context,
+        %Expect{headers: expected_headers},
+        received_headers
+      ) do
+    expected_headers
+    |> get_headers_to_validate(received_headers)
+    |> validate_expected_headers()
+    |> add_validations(validation_context)
   end
 
-  @spec build_validation_result({:ok, :headers} | list(map)) ::
-          {:ok, :headers} | {:error, %{headers: list(map)}, String.t()}
-  defp build_validation_result(headers_validation_info) do
-    case headers_validation_info do
-      {:ok, :headers} ->
-        {:ok, :headers}
-
-      invalid_headers ->
-        {:error, %{headers: invalid_headers}, "Invalid headers"}
-    end
-  end
+  #
+  # Private functions
+  #
 
   @spec get_headers_to_validate(map, list(tuple)) :: list(map)
   defp get_headers_to_validate(expected_headers, headers) do
@@ -41,38 +38,34 @@ defmodule SmokexClient.Validator.Headers do
     end)
   end
 
-  @spec validate_expected_headers(list(map)) :: list(any)
+  @spec validate_expected_headers(list(map)) :: list(Validation.t())
   defp validate_expected_headers(headers_to_validate) do
-    Enum.map(headers_to_validate, fn header_to_validate ->
-      header = Map.get(header_to_validate, :header)
+    Enum.reduce(headers_to_validate, [], fn header_to_validate, validations ->
+      header_name = Map.get(header_to_validate, :header)
       expected = Map.get(header_to_validate, :expected)
       received = Map.get(header_to_validate, :received)
 
       if received == expected do
-        {:ok, header}
+        validations
       else
-        {:error, header_to_validate}
+        [
+          %Validation{
+            type: :header,
+            name: header_name,
+            expected: expected,
+            received: received
+          }
+          | validations
+        ]
       end
     end)
   end
 
-  @spec group_validated_headers(list(map)) :: {:ok, :headers} | list(map)
-  defp group_validated_headers(headers_validation) do
-    all_headers_valid = Enum.all?(headers_validation, fn {result, _header} -> result == :ok end)
-
-    case all_headers_valid do
-      true ->
-        {:ok, :headers}
-
-      false ->
-        get_invalid_headers(headers_validation)
-    end
-  end
-
-  @spec get_invalid_headers(list(map)) :: list(map)
-  defp get_invalid_headers(headers_validation) do
-    headers_validation
-    |> Enum.filter(fn {result, _header} -> result == :error end)
-    |> Enum.reduce([], fn {_result, header}, acc -> [header | acc] end)
+  @spec add_validations(list(Validation.t()), ValidationContext.t()) :: ValidationContext.t()
+  defp add_validations(
+         header_validations,
+         %ValidationContext{validation_errors: validation_errors}
+       ) do
+    %ValidationContext{validation_errors: header_validations ++ validation_errors}
   end
 end

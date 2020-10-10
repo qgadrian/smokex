@@ -4,4 +4,4 @@
       param_1: "param_1"
     expect:
       status_code: 200
-      body: "an expected body"
+      string: "an expected body"
