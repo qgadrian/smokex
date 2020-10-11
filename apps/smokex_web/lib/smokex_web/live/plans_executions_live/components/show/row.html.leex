@@ -25,36 +25,34 @@
         </div>
       </div>
         <%= if Results.has_failed?(@result) do %>
-        <div class="box-row-result-failed-assertions mt-4">
-          <%= for assertion <- @result.failed_assertions do %>
-            <div class="box-row-result-code-block mr-4">
-              <code class="has-text-black has-text-right is-uppercase has-text-weight-medium">Expected</code>
-              <div class="box-row-result-code-block-inner">
-                <%= for {field_key, value} <- assertion do %>
-                <code class="px-4 x-flex py-2">
-                  <%= field_key %>
-                </code>
-                <pre class="px-4 py-1">
-                  <%= expect_value_to_string(value) %>
-                </pre>
-                <% end %>
+          <div class="box-row-result-failed-assertions mt-4">
+            <%= for assertion <- @result.failed_assertions do %>
+              <div class="columns is-full mb-6">
+                <div class="box-row-result-code-block mr-4">
+                  <code class="has-text-black has-text-right is-uppercase has-text-weight-medium">Expected</code>
+                  <div class="box-row-result-code-block-inner">
+                    <code class="px-4 x-flex py-2">
+                      <%= assertion["type"] %>
+                    </code>
+                    <pre class="px-4 py-1">
+                      <%= value_to_string(assertion["expected"]) %>
+                    </pre>
+                  </div>
+                </div>
+                <div class="box-row-result-code-block">
+                  <code class="has-text-black has-text-right is-uppercase has-text-weight-medium">Received</code>
+                  <div class="box-row-result-code-block-inner">
+                    <code class="px-4 x-flex py-2">
+                      <%= assertion["type"] %>
+                    </code>
+                    <pre class="px-4 py-1">
+                      <%= value_to_string(assertion["received"]) %>
+                    </pre>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="box-row-result-code-block">
-              <code class="has-text-black has-text-right is-uppercase has-text-weight-medium">Received</code>
-              <div class="box-row-result-code-block-inner">
-                <%= for {field_key, value} <- assertion do %>
-                <code class="px-4 x-flex py-2">
-                  <%= field_key %>
-                </code>
-                <pre class="px-4 py-1">
-                  <%= received_value_to_string(value) %>
-                </pre>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-        </div>
+            <% end %>
+          </div>
         <% end %>
     </div>
   </div>
