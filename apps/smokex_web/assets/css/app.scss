@@ -186,10 +186,9 @@ div.not-found > img {
 
 .box-row-result-failed-assertions {
   display: flex;
-  @include until($tablet) {
-    flex-direction: column;
-  }
+  flex-direction: column;
 }
+
 .box-row-result-code-block {
   display: flex;
   flex-direction: column;
