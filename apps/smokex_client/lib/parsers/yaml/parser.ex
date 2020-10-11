@@ -180,8 +180,9 @@ defmodule SmokexClient.Parsers.Yaml.Parser do
     |> Map.get("options", %{})
     |> Map.take(@step_opts)
     |> Map.to_list()
-    |> Map.new(fn {key, value} ->
-      {String.to_existing_atom(key), TypeConverter.convert(value)}
+    |> Map.new(fn
+      {key, value} when key in @step_opts ->
+        {String.to_atom(key), TypeConverter.convert(value)}
     end)
     |> Keyword.new()
   end
