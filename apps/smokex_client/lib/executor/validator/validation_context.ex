@@ -12,8 +12,8 @@ defmodule SmokexClient.Validator.ValidationContext do
   alias SmokexClient.Validator.Validation
 
   @type t :: %__MODULE__{
-    validation_errors: list(Validation.t())
-  }
+          validation_errors: list(Validation.t())
+        }
 
   defstruct validation_errors: []
 end
