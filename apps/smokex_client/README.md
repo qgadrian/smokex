@@ -108,8 +108,12 @@ The smoke test execution plan has the following format:
       status_code: # Expected response status code
       headers: # Expected headers
         header_1: "value"
-      body: # Expected body, only JSON and String supported
+      json: # Expected JSON body
         key: "expected_value"
+      string: "a string expected" # Expected String body
+      html: # Expected  a list of CSS path values
+        - path: "a CSS path"
+          equal: "an expected value"
     save_from_response: # Save a JSON path value to a named variable to reuse its value
       - variable_name: "my_session_token"
         json_path: "session.token"
