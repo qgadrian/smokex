@@ -8,7 +8,12 @@ defmodule Smokex.Repo.Migrations.CreatePlansExecutions do
       add(:status, :string, null: false)
       add(:total_executions, :integer, null: true)
 
-      add(:plan_definition_id, references(:plans_definitions, type: :uuid, on_delete: :delete_all), null: false)
+      add(
+        :plan_definition_id,
+        references(:plans_definitions, type: :uuid, on_delete: :delete_all),
+        null: false
+      )
+
       add(:trigger_user_id, references(:users), null: true)
 
       add(:started_at, :naive_datetime_usec)
