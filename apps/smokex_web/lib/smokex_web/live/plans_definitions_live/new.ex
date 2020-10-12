@@ -29,7 +29,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
         options:
           timeout: 4000
         expect:
-          body:
+          json:
             players:
               - name: "Michael"
                 last_name: "Jordan"
@@ -56,7 +56,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
         query:
           number: ${kobe}
         expect:
-          body:
+          json:
             best_laker: true
 
     # put some data in a server
@@ -68,7 +68,7 @@ defmodule SmokexWeb.PlansDefinitionsLive.New do
           number: ${kobe}
           message: "mamba forever"
         expect:
-          body:
+          json:
             response: "your message was sent to player 24"
     """
 

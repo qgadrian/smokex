@@ -1,4 +1,6 @@
 defmodule SmokexClient.Validator.HTML do
+  import Meeseeks.CSS
+
   alias Smokex.Step.Request.Expect
   alias SmokexClient.Validator.ValidationContext
   alias SmokexClient.Validator.Validation
@@ -23,9 +25,9 @@ defmodule SmokexClient.Validator.HTML do
     %ValidationContext{validation_errors: html_validations ++ validation_errors}
   end
 
-  def validate_html_path(%{path: css_path, expected: expected_value}, received_body) do
+  def validate_html_path(%{path: css_path, equal: expected_value}, received_body) do
     with document <- Meeseeks.parse(received_body),
-         css_selector <- Meeseeks.css(css_path),
+         css_selector <- css(css_path),
          result when not is_nil(result) <- Meeseeks.one(document, css_selector),
          ^expected_value <- Meeseeks.own_text(result) do
       nil
