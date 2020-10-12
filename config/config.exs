@@ -94,7 +94,10 @@ config :sentry,
 config :smokex, Oban,
   repo: Smokex.Repo,
   plugins: [Oban.Plugins.Pruner],
-  queues: [plan_executions: 50]
+  queues: [plan_executions: 50, scheduled_tasks: 10],
+  crontab: [
+    {"@daily", SmokexClient.Workers.CleanerWorker, queue: :scheduled_tasks}
+  ]
 
 config :smokex,
   free_access: false,
