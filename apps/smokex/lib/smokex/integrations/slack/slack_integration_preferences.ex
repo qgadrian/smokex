@@ -25,8 +25,7 @@ defmodule Smokex.Integrations.Slack.SlackIntegrationPreferences do
     field :post_on_fail, :boolean, default: true
   end
 
-  @spec changeset(__MODULE__.t(), map) ::
-          {:ok, __MODULE__.t()} | {:error, Ecto.Changeset.t()}
+  @spec changeset(__MODULE__.t(), map) :: Ecto.Changeset.t(__MODULE__.t())
   def changeset(changeset, params \\ %{}) do
     changeset
     |> Ecto.Changeset.cast(params, @schema_fields)
