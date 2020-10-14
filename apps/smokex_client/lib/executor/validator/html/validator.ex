@@ -1,5 +1,11 @@
 defmodule SmokexClient.Validator.HTML do
-  import Meeseeks.CSS
+  @moduledoc """
+  Module that validates HTML expectation against an HTML response.
+
+  The HTML expectation use [CSS path
+  selectors](https://www.w3schools.com/cssref/css_selectors.asp) to validate
+  the text content.
+  """
 
   alias Smokex.Step.Request.Expect
   alias SmokexClient.Validator.ValidationContext
@@ -11,6 +17,24 @@ defmodule SmokexClient.Validator.HTML do
 
   def validate(%ValidationContext{} = validation_context, %Expect{html: nil}, _received_body),
     do: validation_context
+
+  def validate(
+        %ValidationContext{validation_errors: validation_errors},
+        %Expect{},
+        ""
+      ) do
+    %ValidationContext{
+      validation_errors: [
+        %Validation{
+          type: :html,
+          name: "response body",
+          expected: "a valid HTML",
+          received: "invalid HTML"
+        }
+        | validation_errors
+      ]
+    }
+  end
 
   def validate(
         %ValidationContext{validation_errors: validation_errors},
@@ -26,12 +50,19 @@ defmodule SmokexClient.Validator.HTML do
   end
 
   def validate_html_path(%{path: css_path, equal: expected_value}, received_body) do
-    with document <- Meeseeks.parse(received_body),
-         css_selector <- css(css_path),
-         result when not is_nil(result) <- Meeseeks.one(document, css_selector),
-         ^expected_value <- Meeseeks.own_text(result) do
+    with {:ok, document} <- Floki.parse_document(received_body),
+         result when not is_nil(result) <- Floki.find(document, css_path),
+         ^expected_value <- Floki.text(result) do
       nil
     else
+      {:error, _reason} ->
+        %Validation{
+          type: :html,
+          name: css_path,
+          expected: expected_value,
+          received: "invalid HTML"
+        }
+
       unexpected_value ->
         %Validation{
           type: :html,

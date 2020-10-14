@@ -195,11 +195,11 @@
           </div>
 
           <div class="box">
-            <h4 class="title is-4">Response body</h4>
+            <h4 class="title is-4">Response body as JSON</h4>
             <article class="message is-primary">
               <div class="message-body">
-                Currently only <strong>JSON</strong> and
-                <strong>string</strong> body expect are supported.
+                Expect the body response to be a valid <strong>JSON</strong>
+                and contain the given structure.
               </div>
             </article>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
@@ -207,19 +207,48 @@
     query:
       id: 23
     expect:
-      body:
+      json:
         available: true
         status: "healthy"
         stats:
           points: 734
           rebounds: 458</span></code></pre>
+          </div>
 
+          <div class="box">
+            <h4 class="title is-4">Response body as string</h4>
+            <article class="message is-primary">
+              <div class="message-body">
+                Expect the body response to be a <strong>string</strong> and
+                contain the given text.
+              </div>
+            </article>
             <pre phx-update="ignore"><code class="language-yaml"><span>- get:
     host: "https://smokex.io"
     query:
       id: 23
     expect:
-      body: "{ \"available\": true, \"status\": \"healthy\", \"stats\": { \"points\": 723, \"rebounds\": 458 } }"</span></code></pre>
+      string: "{ \"available\": true, \"status\": \"healthy\", \"stats\": { \"points\": 723, \"rebounds\": 458 } }"</span></code></pre>
+          </div>
+
+          <div class="box">
+            <h4 class="title is-4">Response body HTML</h4>
+            <article class="message is-primary">
+              <div class="message-body">
+                Expect the body response to be a valid <strong>HTML</strong> and
+                equal the given CSS paths and its expected text.
+              </div>
+            </article>
+            <pre phx-update="ignore"><code class="language-yaml"><span>- get:
+    host: "https://smokex.io"
+    query:
+      id: 23
+    expect:
+      html:
+        - path: "a.button:nth-child(2)"
+          equal: "Sign up"
+        - path: "ul.is-size-7:nth-child(2) > li:nth-child(5) > a:nth-child(1)"
+          equal: "Blog"</span></code></pre>
           </div>
 
           <h3 id="variables" class="title is-3">Variables</h3>
