@@ -13,7 +13,7 @@ defmodule SmokexClient.Validator.String do
         received_string
       )
       when is_binary(received_string) do
-    if expected_string == received_string do
+    if received_string =~ expected_string do
       validation_context
     else
       %ValidationContext{
