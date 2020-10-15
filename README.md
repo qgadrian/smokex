@@ -1,4 +1,5 @@
 ![Deploy to Heroku](https://github.com/qgadrian/smokex/workflows/Deploy%20to%20Heroku/badge.svg)
+![Run test suite and linters](https://github.com/qgadrian/smokex/workflows/Run%20test%20suite%20and%20linters/badge.svg)
 
 # Smokex.Umbrella
 
