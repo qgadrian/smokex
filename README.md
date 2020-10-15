@@ -225,6 +225,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 ### Nice to have (very low prio)
 
+* [ ] Code splitting, the js and css build are too big
+    (https://webpack.js.org/guides/code-splitting/)
 * [~] Add Tesla statsd https://github.com/salemove/tesla_statsd to get request
     metrics. TODO: need to create a handle module and send useful info from
     Tesla.Env struct
