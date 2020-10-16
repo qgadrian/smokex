@@ -14,6 +14,7 @@
           development.
         </span>
         </p>
+
         <%= link "Sign up for free", class: "button is-primary is-large", to: Routes.pow_registration_path(@conn, :new) %>
       </div>
 
