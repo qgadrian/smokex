@@ -3,9 +3,32 @@
 
 # Smokex.Umbrella
 
+<!-- vim-markdown-toc GFM -->
+
+* [Deployment](#deployment)
+  * [Heroku](#heroku)
+    * [Docker containers](#docker-containers)
+  * [Gigalixir](#gigalixir)
+    * [Working with umbrella projects](#working-with-umbrella-projects)
+    * [Logs](#logs)
+  * [Run a release locally](#run-a-release-locally)
+    * [Need to know](#need-to-know)
+* [Architecture](#architecture)
+* [Random storm ideas & stuff](#random-storm-ideas--stuff)
+  * [Why this product?](#why-this-product)
+  * [Experience situations where Smokex tests were needed](#experience-situations-where-smokex-tests-were-needed)
+  * [Uses cases (smoke tests & HTTP automation)](#uses-cases-smoke-tests--http-automation)
+* [MVP](#mvp)
+  * [Post release](#post-release)
+  * [Nice to have (next prio)](#nice-to-have-next-prio)
+  * [Nice to have (very low prio)](#nice-to-have-very-low-prio)
+    * [Distributed application](#distributed-application)
+
+<!-- vim-markdown-toc -->
+
 ## Deployment
 
-## Heroku
+### Heroku
 
 * Install hero client
 
@@ -94,8 +117,6 @@ heroku drains:add 'https://http-intake.logs.datadoghq.com/v1/input/<DD_APY_KEY>?
 
 ```
 
-## Development
-
 ### Run a release locally
 
 There are multiple environment variables that are expected to be set in order to
@@ -105,12 +126,16 @@ run a release:
 SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5 DATABASE_HOSTNAME=postgres-free-tier-1.gigalixir.com DATABASE_USERNAME=test DATABASE_PASSWORD=test DATABASE_NAME=test PORT=4000 POOL_SIZE=1 DATABASE_URL="" STRIPE_API_KEY="" STRIPE_SIGNING_SECRET="" _build/prod/rel/smokex/bin/smokex start_iex
 ```
 
-### Need to know
+#### Need to know
 
 * The Stripe button to buy a subscription requires environment variables to be
     configured or it will throw the `unexpected item shape` error if not.
 * The Slack integration also requires a runtime configuration therefore it will
     fail locally. Also, the redirection done by Slack is to production host.
+
+## Architecture
+
+![architecture.png](docs/architecture.png)
 
 ## Random storm ideas & stuff
 
@@ -227,8 +252,9 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
 
 * [ ] Code splitting, the js and css build are too big
     (https://webpack.js.org/guides/code-splitting/)
-* [~] Add Tesla statsd https://github.com/salemove/tesla_statsd to get request
-    metrics. TODO: need to create a handle module and send useful info from
+* [x] Add Tesla statsd https://github.com/salemove/tesla_statsd to get request
+    metrics.
+  * [ ] TODO: need to create a handle module and send useful info from
     Tesla.Env struct
 * [x] Measure request time per plan step and show a graph view for performance
 * [ ] Add Sendgrid integration to allow sending email using the user API KEY
@@ -241,6 +267,8 @@ SECRET_KEY_BASE=kGXrNEYUVAm2zOpB8UQMRfK+JkDnqFcH4WOcM8nYApN/fMWVJoQPMGqrUTwv15w5
     there is more workload
 * [ ] Run datadog agent with [supervisord](http://supervisord.org/), right now
     is a async bash process (see `docker-entrypoint.sh`)
+* [ ] Simplify worker/scheduler architecture, executions don't need to be
+    created on scheduling (See diagram)
 
 #### Distributed application
 
