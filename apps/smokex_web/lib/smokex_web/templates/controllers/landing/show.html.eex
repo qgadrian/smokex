@@ -2,16 +2,15 @@
   <section class="section hero">
     <div class="hero-container container  pt-5">
       <div class="content is-large">
-        <h1 class="title">Life is too short, smoke it</h1>
+        <h1 class="title">Test anything. Always. With no code.</h1>
         <p class="mb-5">
         Create trust in the development
         and release of you applications, so you
         can spend effort on what it is really
         is important.
         <span class="is-hidden-mobile">
-          With Smokex you can
-          automate your HTTP requests and create smoke tests to help in your
-          development.
+          With Smokex you can automate your HTTP requests and create tests to
+          help in your development.
         </span>
         </p>
 
