@@ -109,5 +109,28 @@ defmodule Smokex.LimitsTest do
         assert Cachex.get!(:executions_limit_track, organization.id) == counter
       end
     end
+
+    test "sets only a expire date if there is no current one active" do
+      organization = insert(:organization)
+
+      assert Cachex.get!(:executions_limit_track, organization.id) == nil
+      assert {:ok, nil} = Cachex.ttl(:executions_limit_track, organization.id)
+
+      Limits.increase_daily_executions(organization)
+      {:ok, ttl_1} = Cachex.ttl(:executions_limit_track, organization.id)
+
+      Process.sleep(100)
+
+      Limits.increase_daily_executions(organization)
+      {:ok, ttl_2} = Cachex.ttl(:executions_limit_track, organization.id)
+
+      Process.sleep(100)
+
+      Limits.increase_daily_executions(organization)
+      {:ok, ttl_3} = Cachex.ttl(:executions_limit_track, organization.id)
+
+      assert ttl_1 > ttl_2
+      assert ttl_2 > ttl_3
+    end
   end
 end
