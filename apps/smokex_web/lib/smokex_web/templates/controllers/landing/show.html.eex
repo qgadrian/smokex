@@ -1,5 +1,5 @@
 <div id="wrapper" class="has-text-centered-mobile">
-  <section class="section hero">
+  <section id="landing-hero" class="section hero">
     <div class="hero-container container  pt-5">
       <div class="content is-large">
         <h1 class="title">Test anything. Always. With no code.</h1>
