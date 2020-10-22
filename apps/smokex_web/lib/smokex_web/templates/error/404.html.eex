@@ -55,7 +55,7 @@
 
             <div class="navbar-end">
               <div class="navbar-item">
-                <a class="button is-primary" target="_blank" href="https://airtable.com/shrHMbYacikW8eGFI">Contact us 🙌<a>
+                <a class="button is-primary" target="_blank" rel="noopener noreferrer" href="https://airtable.com/shrHMbYacikW8eGFI">Contact us 🙌<a>
               </div>
               <div class="navbar-item">
                 <%= if Pow.Plug.current_user(@conn) do %>
