@@ -21,8 +21,9 @@ defmodule Smokex.PlanExecutionsCleaner do
         on: organization.id == plan_definition.organization_id,
         where: fragment("now() - ? > interval '2 weeks'", plan_execution.inserted_at),
         where:
-          not is_nil(organization.subscription_expires_at) and
-            fragment("now() - ? > interval '2 days'", organization.subscription_expires_at)
+          (not is_nil(organization.subscription_expires_at) and
+             fragment("now() - ? > interval '2 days'", organization.subscription_expires_at)) or
+            is_nil(organization.subscription_expires_at)
       )
 
     Smokex.Repo.delete_all(query)
