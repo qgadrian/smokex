@@ -92,8 +92,14 @@ defmodule Smokex.Limits do
 
     cache_expires_after = :timer.hours(limit_executions_expires_after_hours)
 
-    Cachex.expire(:executions_limit_track, organization_id, cache_expires_after)
-    Cachex.put!(:executions_limit_track, organization_id, count + 1)
+    case Cachex.exists?(:executions_limit_track, organization_id) do
+      {:ok, false} ->
+        Cachex.incr(:executions_limit_track, organization_id)
+        Cachex.expire(:executions_limit_track, organization_id, cache_expires_after)
+
+      {:ok, true} ->
+        Cachex.incr(:executions_limit_track, organization_id)
+    end
   end
 
   #
