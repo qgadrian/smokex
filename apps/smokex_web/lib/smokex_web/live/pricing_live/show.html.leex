@@ -16,7 +16,7 @@
               <li>It's free</li>
               <li>Up to <%= max_plan_definitions %> <%= plural(:plan) %></li>
               <li>Limited to <%= max_limit_executions_per_period %> <%= plural(:execution) %> every <%= max_limit_executions_expires_after_hours %> <%= plural(:hour) %></li>
-              <li>Basic support</li>
+              <li>Limited executions history</li>
             </ul>
             <%= if assigns[:current_user] do %>
               <button class="button disabled is-outlined is-fullwidth is-primary" disabled>Already included</button>
@@ -38,8 +38,8 @@
             <ul class="block">
               <li>Unlimited workflows</li>
               <li>Unlimited executions</li>
+              <li>Unlimited executions history</li>
               <li>Premium support</li>
-              <li>Pay per month</li>
             </ul>
             <%= if assigns[:current_user] do %>
               <%= render SmokexWeb.Cta.SubscribeButtonView, "show.html", user: @current_user, extra_class: "is-fullwidth", text: "Get my subscription" %>
