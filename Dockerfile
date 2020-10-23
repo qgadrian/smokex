@@ -19,7 +19,7 @@
 ########## BUILD IMAGE ############
 ###################################
 
-FROM elixir:1.10-slim AS build
+FROM hexpm/elixir:1.11.1-erlang-23.1.1-ubuntu-focal-20200703 AS build
 
 # install build dependencies
 
@@ -75,8 +75,8 @@ RUN mix release smokex
 ####### DEPLOYMENT IMAGE ##########
 ###################################
 
-FROM elixir:1.10-slim as deploy
 #FROM datadog/agent:7 as deploy
+FROM hexpm/elixir:1.11.1-erlang-23.1.1-ubuntu-focal-20200703 AS deploy
 
 ########## DATADOG AGENT ####################
 # Install GPG dependencies
