@@ -89,7 +89,7 @@ heroku run "eval \"Smokex.Release.migrate()\""
 > problems try to update the `POOL_SIZE` environment variable to a lower value
 > and try again.
 
-* Enable datadog metrics:
+* **Enable logs** datadog metrics:
 
 ```bash
 heroku drains:add 'https://http-intake.logs.datadoghq.com/v1/input/<DD_API_KEY>?ddsource=heroku&service=smokex&host=<HOST>' -a smokex

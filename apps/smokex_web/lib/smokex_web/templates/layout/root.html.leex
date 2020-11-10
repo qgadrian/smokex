@@ -80,8 +80,7 @@
               </div>
               <div class="navbar-item">
                 <%= if Pow.Plug.current_user(@conn) do %>
-                  <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete),
-                    method: :delete, class: "button is-light" %>
+                  <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete, class: "button is-light" %>
                 <% else %>
                   <div class="buttons">
                     <%= link "Sign in", class: "button is-white", to: Routes.pow_session_path(@conn, :new) %>
