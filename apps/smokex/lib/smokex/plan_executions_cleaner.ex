@@ -19,7 +19,7 @@ defmodule Smokex.PlanExecutionsCleaner do
         join: plan_definition in assoc(plan_execution, :plan_definition),
         join: organization in assoc(plan_definition, :organization),
         on: organization.id == plan_definition.organization_id,
-        where: fragment("now() - ? > interval '2 weeks'", plan_execution.inserted_at),
+        where: fragment("now() - ? > interval '1 week'", plan_execution.inserted_at),
         where:
           (not is_nil(organization.subscription_expires_at) and
              fragment("now() - ? > interval '2 days'", organization.subscription_expires_at)) or
