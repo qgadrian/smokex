@@ -3,7 +3,7 @@ defmodule SmokexWeb.Router do
 
   use Pow.Phoenix.Router
   use Sentry.PlugCapture
-  use Pow.Extension.Phoenix.Router, extensions: [PowResetPassword, PowEmailConfirmation]
+  use Pow.Extension.Phoenix.Router, extensions: [PowResetPassword]
 
   pipeline :browser do
     plug :accepts, ["html"]
