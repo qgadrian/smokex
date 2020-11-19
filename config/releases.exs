@@ -4,7 +4,8 @@ config :smokex_web, SmokexWeb.Endpoint,
   http: [port: {:system, "PORT"}],
   secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
   server: true,
-  url: [port: 443]
+  url: [port: 443],
+  live_view: [signing_salt: System.fetch_env!("LIVEVIEW_SIGNING_SALT")]
 
 config :smokex, Smokex.Repo,
   username: System.fetch_env!("DATABASE_USERNAME"),
