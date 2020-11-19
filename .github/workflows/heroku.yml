@@ -2,11 +2,6 @@ name: Deploy to Heroku
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: Message
-        default: ''
-        required: false
   # Uncomment to enable automatic deployments
   #push:
     #branches:
