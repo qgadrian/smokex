@@ -77,11 +77,9 @@ config :smokex_web, :pow,
   web_module: SmokexWeb
 
 config :stripity_stripe,
-  publishable_api_key:
-    "***REMOVED***",
-  api_key:
-    "***REMOVED***",
-  signing_secret: "***REMOVED***"
+  publishable_api_key: "",
+  api_key: "",
+  signing_secret: ""
 
 config :sentry,
   environment_name: Mix.env(),
