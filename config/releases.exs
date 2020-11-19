@@ -41,9 +41,12 @@ config :slack,
 config :sentry,
   dsn: System.fetch_env!("SENTRY_DSN")
 
-config :smokex_web, SmokexWeb.Pow.Mailer,
-  api_key: System.fetch_env!("SENDGRID_API_KEY")
+config :smokex_web, SmokexWeb.Pow.Mailer, api_key: System.fetch_env!("SENDGRID_API_KEY")
 
+
+#
+# To change the cypher key see:
+# https://hexdocs.pm/cloak_ecto/rotate_keys.html#content
 config :smokex, Smokex.Ecto.Vault,
   ciphers: [
     default: {
