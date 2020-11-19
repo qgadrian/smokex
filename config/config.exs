@@ -23,7 +23,8 @@ config :smokex_web, SmokexWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "vpUtc18TGQky8gWkKi0MQmw3MWUf2M02Pu4+6tv+J3Pq1evb333B4/azjwWf2yUh",
   render_errors: [view: SmokexWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: Smokex.PubSub
+  pubsub_server: Smokex.PubSub,
+  live_view: [signing_salt: "Fkj6LuOx2WjqKAMF"]
 
 # Configures Elixir's Logger
 config :logger,
