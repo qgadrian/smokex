@@ -43,7 +43,7 @@ defmodule Smokex.PlanExecutionsCleanerTest do
 
       assert Smokex.Repo.aggregate(PlanExecution, :count) == 4
 
-      assert {2, nil} = PlanExecutionsCleaner.clear_old_executions_from_organizations()
+      assert {3, nil} = PlanExecutionsCleaner.clear_old_executions_from_organizations()
 
       assert Smokex.Repo.aggregate(PlanExecution, :count) == 2
     end
