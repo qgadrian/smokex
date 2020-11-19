@@ -43,7 +43,6 @@ config :sentry,
 
 config :smokex_web, SmokexWeb.Pow.Mailer, api_key: System.fetch_env!("SENDGRID_API_KEY")
 
-
 #
 # To change the cypher key see:
 # https://hexdocs.pm/cloak_ecto/rotate_keys.html#content
@@ -53,12 +52,6 @@ config :smokex, Smokex.Ecto.Vault,
       Cloak.Ciphers.AES.GCM,
       tag: "AES.GCM.V2",
       key: System.fetch_env!("ECTO_CYPHER_KEY") |> Base.decode64!(),
-      iv_length: 12
-    },
-    retired: {
-      Cloak.Ciphers.AES.GCM,
-      tag: "AES.GCM.V1",
-      key: Base.decode64!("lrHxehsPskcgcFaUUMicJ3LryGWc4ylHAv5B32M+Zko="),
       iv_length: 12
     }
   ]
