@@ -3,6 +3,7 @@
 @import 'variables';
 @import 'prismjs';
 @import "~bulma/bulma";
+@import 'footer';
 @import 'helpers';
 @import 'custombox';
 @import 'landing';
@@ -30,23 +31,6 @@ a.navbar-item p {
   letter-spacing: 1px;
   font-size: 18px;
   padding-left: 8px;
-}
-
-// footer
-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  div {
-    white-space: nowrap;
-    display: flex;
-    @include until($tablet) {
-      flex-direction: column;
-    }
-  }
-  ul {
-    display: flex;
-  }
 }
 
 // main content
