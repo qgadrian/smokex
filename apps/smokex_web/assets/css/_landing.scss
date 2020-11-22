@@ -1,14 +1,3 @@
-section#landing-hero::before {
-  position: absolute;
-  transform: skewY(-5deg);
-  bottom: 7vw;
-  right: 0;
-  width: 100%;
-  height: 20%;
-  content: '';
-  background: linear-gradient(to right, $primary 20%, $primary) $primary;
-}
-
 section.hero > div.hero-container {
   height: 500px;
 
@@ -17,7 +6,7 @@ section.hero > div.hero-container {
   }
 }
 
-section#features, section#signup {
+section.highlightable:nth-child(even) {
   background-color: $primary;
 
   a {
@@ -26,6 +15,10 @@ section#features, section#signup {
 
   h1, h2, h3, h4, p, strong, label {
     color: white!important;
+  }
+
+  .language-yaml {
+    background: white;
   }
 }
 
