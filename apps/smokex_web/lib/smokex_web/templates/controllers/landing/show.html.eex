@@ -1,5 +1,5 @@
 <div id="wrapper" class="has-text-centered-mobile">
-  <section id="landing-hero" class="section hero">
+  <section id="landing-hero" class="section hero highlightable">
     <div class="hero-container container  pt-5">
       <div class="content is-large">
         <h1 class="title">Test anything. Always. With no code.</h1>
@@ -21,7 +21,7 @@
     </div>
   </section>
 
-  <section id="features" class="section pt-6">
+  <section id="features" class="section pt-6 highlightable">
     <div class="container">
       <h2 class="title is-1 mb-6">Some of our awesome features</h2>
       <div class="columns">
@@ -47,7 +47,7 @@
     </div>
   </section>
 
-  <section id="get-started" class="mt-6">
+  <section id="get-started" class="section mt-6 highlightable">
     <div class="container mb-6">
       <h1 class="title is-1 mb-6">How it works</h1>
       <div class="columns reverse-row-order mt-6">
@@ -104,7 +104,30 @@ information of any failed expectations or errors.
     <br>
   </section>
 
-  <section id="signup" class="section">
+  <section id="example" class="section pt-6 highlightable cheatsheet">
+    <div class="container">
+      <h2 class="title is-1 mb-4">Simple scenario, monitor your application is alive</h2>
+      <div class="columns">
+        <div class="column is-6">
+          <p class="has-text-black paragraph mb-5">
+          Get notified when your site goes down, you will <strong>immediately
+            get an email or Slack message</strong>.
+          </p>
+          <pre class="box" phx-hook="LoadPrismjs">
+            <code class="language-yaml"><span>
+    - get:
+      host: "http://smokex.io"
+      expect:
+        status_code: 200
+            </span>
+            </code>
+          </pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="signup" class="section highlightable">
     <div class="container">
       <h3 class="title is-1 mb-6">
         Create your account
