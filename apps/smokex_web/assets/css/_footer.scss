@@ -1,0 +1,19 @@
+@mixin footer-link {
+  transition: color 0.2s ease-in-out,background 0.2s ease-in-out;
+
+  color: $grey;
+
+  &:hover {
+    color: $grey-light;
+    background-color: transparent;
+  }
+}
+
+ul.footer-links > li > a {
+  color: $grey;
+  @include footer-link;
+}
+
+a.footer-logo {
+  @include footer-link;
+}

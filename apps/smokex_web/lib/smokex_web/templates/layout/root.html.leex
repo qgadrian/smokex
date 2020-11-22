@@ -99,20 +99,72 @@
       </main>
 
       <footer class="footer">
-        <div>
-          <ul class="is-size-7 my-1">
-            <li class="mr-3">© 2020 Smokex.</li>
-          </ul>
-          <ul class="is-size-7 my-1">
-            <li class="mr-3"><a href="/terms-and-conditions">Terms</a></li>
-            <li class="mr-3"><a href="/privacy-policy">Privacy</a></li>
-            <li class="mr-3"><a href="/pricing">Pricing</a></li>
-            <li class="mr-3"><%= live_patch "Getting started", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show), class: "level-item" %></li>
-            <li><%= live_patch "Blog", to: Routes.live_path(@conn, SmokexWeb.BlogLive.Show), class: "level-item" %></li>
-          </ul>
+        <div class="container">
+          <div class="columns has-text-centered-mobile">
+            <div class="column is-6">
+              <a class="navbar-item footer-logo pl-0" href="https://heymark.io">
+                <img src="<%= Routes.static_path(@conn, "/images/icon.svg") %>" alt="Logo" />
+                <p>heymark</p>
+              </a>
+
+              <p class="has-text-grey">
+              Create trust in the development and release of you applications,
+              so you can spend effort on what it is really is important. With
+              Smokex you can automate your HTTP requests and create tests to
+              help in your development.
+              </p>
+            </div>
+            <div class="column is-2">
+              <h5 class="title has-text-dark is-5">About</h5>
+              <ul class="footer-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/#features">Features</a></li>
+
+                <%= unless Smokex.StripeSubscriptions.has_subscription?(@current_user) do %>
+                  <li>
+                    <%= live_patch "Pricing", to: Routes.live_path(@conn, SmokexWeb.PricingLive.Show) %>
+                  </li>
+                <% end %>
+
+              </ul>
+            </div>
+            <div class="column is-2">
+              <h5 class="title has-text-dark is-5">Resources</h5>
+              <ul class="footer-links">
+                <li>
+                  <%= live_patch "Getting started", to: Routes.live_path(@conn, SmokexWeb.WelcomeLive.Show) %>
+                </li>
+
+                <li>
+                  <%= live_patch "Documentation", to: Routes.live_path(@conn, SmokexWeb.DocumentationLive.Show) %>
+                </li>
+
+                <li>
+                <%= live_patch "Workflows", to: Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.List) %>
+                </li>
+              </ul>
+            </div>
+            <div class="column is-2">
+              <h5 class="title has-text-dark is-5">Company</h5>
+              <ul class="footer-links">
+                <li><a href="https://airtable.com/shrHMbYacikW8eGFI" target="_blank" rel="noopener noreferrer">Want to share feedback?</a></li>
+                <li>
+                  <%= live_patch "Blog", to: Routes.live_path(@conn, SmokexWeb.BlogLive.Show) %>
+                </li>
+                <li class="mr-3"><a href="/terms-and-conditions">Terms of use</a></li>
+                <li class="mr-3"><a href="/privacy-policy">Privacy</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column is-5 is-marginless has-text-centered-mobile content has-text-grey">
+              <p>Copyright <%= DateTime.utc_now.year %> © heymark.io</p>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
+
     <script type="module" src="https://unpkg.com/ionicons@5.1.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule="" src="https://unpkg.com/ionicons@5.1.2/dist/ionicons/ionicons.js"></script>
   </body>
