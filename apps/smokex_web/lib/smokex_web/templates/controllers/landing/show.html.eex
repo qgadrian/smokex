@@ -2,15 +2,11 @@
   <section id="landing-hero" class="section hero highlightable">
     <div class="hero-container container  pt-5">
       <div class="content is-large">
-        <h1 class="title">Test anything. Always. With no code.</h1>
+        <h1 class="title">Monitor and test you applications. With no code.</h1>
         <p class="mb-5">
-        Create trust in the development
-        and release of you applications, so you
-        can spend effort on what it is really
-        is important.
         <span class="is-hidden-mobile">
-          With Smokex you can automate your HTTP requests and create tests to
-          help in your development.
+          With Smokex you can monitor the uptime of your applications, automate
+          your HTTP requests, or create tests to validate your applications.
         </span>
         </p>
 
@@ -23,25 +19,34 @@
 
   <section id="features" class="section pt-6 highlightable">
     <div class="container">
-      <h2 class="title is-1 mb-6">Some of our awesome features</h2>
+      <h2 class="title is-1 mb-6">A powerful tool to monitor & test your applications</h2>
       <div class="columns">
         <div class="column is-6">
-          <h4 class="title is-spaced">Test without effort</h4>
-          <p class="subtitle">You can create a test suite for your backend or frontend in a eye blink.</p>
+          <h4 class="title is-spaced"><ion-icon name="bug-outline"></ion-icon>
+            Test anything in a heartbeat</h4>
+          <p class="subtitle">Create tests for your applications without
+          changing anything in your current projects.</p>
         </div>
         <div class="column is-6">
-          <h4 class="title is-spaced">Works with anything</h4>
-          <p class="subtitle">Smokex will work for any kind of code, regardless the technology used.</p>
+          <h4 class="title is-spaced"><ion-icon
+              name="cloud-done-outline"></ion-icon> Monitor your uptime</h4>
+          <p class="subtitle">Want to know immediately if your website or
+          server goes down? Smokex will notify you if detects a problem!</p>
         </div>
       </div>
       <div class="columns">
         <div class="column is-6">
-          <h4 class="title is-spaced">Protects your product</h4>
-          <p class="subtitle">Detect downtimes, performance issues or errors and ensure the correctness of your releases.</p>
+          <h4 class="title is-spaced"><ion-icon
+              name="shield-outline"></ion-icon> Protect your product</h4>
+          <p class="subtitle">Identify downtimes, performance issues, routing
+          problems, errors... Smokex will send you an alert to your email and
+          Slack.</p>
         </div>
         <div class="column is-6">
-          <h4 class="title is-spaced">Flexible</h4>
-          <p class="subtitle">Smokex workflows can be used for anything, e.g. create a pipeline to send/retrieve information from third parties.</p>
+          <h4 class="title is-spaced"><ion-icon
+              name="albums-outline"></ion-icon> Powerful & flexible</h4>
+          <p class="subtitle">The powerful template engine allows our customer
+          to automate almost anything to test and monitor their products.</p>
         </div>
       </div>
     </div>
@@ -53,12 +58,10 @@
       <div class="columns reverse-row-order mt-6">
 
         <div class="column">
-          <h1 class="title">First, create your workflow</h1>
-          <p class="has-text-black paragraph">
-          <%= live_patch "Create a workflow",
-to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.New) %> with your
-executions. You can add expectations on the response to create tests for
-applications, for example a button is present or to ensure the request responds in time.
+          <h1 class="title"><ion-icon name="albums-outline"></ion-icon> Create a workflow</h1>
+          <p class="has-text-black paragraph"><%= live_patch "Create a
+workflow", to: Routes.live_path(@conn, SmokexWeb.PlansDefinitionsLive.New) %>
+containing for example, uptime checks or validations for your website or server. Check the <%= live_patch "documentation", to: Routes.live_path(@conn, SmokexWeb.DocumentationLive.Show) %> for more information on how it works.
           </p>
         </div>
         <div class="column has-text-centered">
@@ -76,9 +79,11 @@ applications, for example a button is present or to ensure the request responds 
           <img src="<%= Routes.static_path(@conn, "/images/landing-step-two.svg") %>" class="hero-image" alt="Landing image"/>
         </div>
         <div class="column">
-          <h1 class="title">Schedule or launch it manually</h1>
+          <h1 class="title"><ion-icon name="timer-outline"></ion-icon> Schedule or launch it manually</h1>
           <p class="has-text-black paragraph">
-          When you create a new plan you schedule executions using a <a href="https://crontab.guru/examples.html" target="_blank">cron sentence</a>, additionally you can manually run your plan on demand.
+          After you create a workflow, you can schedule the executions using a
+          <a href="https://crontab.guru/examples.html" target="_blank">cron
+          sentence</a>. Want to run it on demand? You can also do it manually.
           </p>
         </div>
       </div>
@@ -87,11 +92,11 @@ applications, for example a button is present or to ensure the request responds 
     <div class="container mb-6">
       <div class="columns reverse-row-order">
         <div class="column">
-          <h1 class="title">Get the results of the executions</h1>
+          <h1 class="title"><ion-icon name="cafe-outline"></ion-icon> Get a coffee, we will take it from here</h1>
           <p class="has-text-black paragraph">
-          Configure the notifications or check <%= live_patch "the execution details of your workflows", to:
-Routes.live_path(@conn, SmokexWeb.PlansExecutionsLive.List) %> to get the
-information of any failed expectations or errors.
+          We will run your workflow with the uptime checks, tests... Now you
+          can sit and relax, if we detect any problem will send you an alert
+          immediately via email or Slack with the details you need.
           </p>
         </div>
         <div class="column has-text-centered">
@@ -106,7 +111,7 @@ information of any failed expectations or errors.
 
   <section id="example" class="section pt-6 highlightable cheatsheet">
     <div class="container">
-      <h2 class="title is-1 mb-4">Simple scenario, monitor your application is alive</h2>
+      <h2 class="title is-1 mb-4">Simple scenario, monitor uptime of your application</h2>
       <div class="columns">
         <div class="column is-6">
           <p class="has-text-black paragraph mb-5">
@@ -127,7 +132,7 @@ information of any failed expectations or errors.
   <section id="signup" class="section highlightable">
     <div class="container">
       <h3 class="title is-1 mb-6">
-        Create your account
+        Start monitoring your applications for free!
       </h3>
 
       <div class="columns">
