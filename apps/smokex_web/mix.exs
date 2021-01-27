@@ -40,22 +40,23 @@ defmodule SmokexWeb.MixProject do
     [
       {:floki, ">= 0.0.0", only: :test},
       {:gettext, "~> 0.11"},
+      {:jason, "~> 1.0"},
       {:phoenix, "~> 1.5.3"},
       {:phoenix_ecto, "~> 4.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_dashboard, "~> 0.2.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.14.0", override: true},
+      {:phoenix_swoosh, "~> 0.3"},
+      {:plug_attack, "~> 0.4.2"},
+      {:plug_cowboy, "~> 2.0"},
       {:pow, "~> 1.0.20"},
       {:smokex, in_umbrella: true},
       {:swoosh, "~> 1.0"},
-      {:phoenix_swoosh, "~> 0.3"},
       {:telemetry_metrics, "~> 0.4"},
-      {:timex, "~> 3.5"},
-      {:telemetry_poller, "~> 0.4"},
       {:telemetry_metrics_statsd, "~> 0.4.0"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:telemetry_poller, "~> 0.4"},
+      {:timex, "~> 3.5"}
     ]
   end
 
