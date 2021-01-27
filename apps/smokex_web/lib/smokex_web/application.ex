@@ -10,9 +10,9 @@ defmodule SmokexWeb.Application do
       # Start the Telemetry supervisor
       SmokexWeb.Telemetry,
       # Start the Endpoint (http/https)
-      SmokexWeb.Endpoint
-      # Start a worker by calling: SmokexWeb.Worker.start_link(arg)
-      # {SmokexWeb.Worker, arg}
+      SmokexWeb.Endpoint,
+      # Plug to throttle requests and avoid brute force attacks
+      {PlugAttack.Storage.Ets, name: SmokexWeb.Plugs.PlugAttack, clean_period: 60_000}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
