@@ -13,7 +13,8 @@ config :smokex, Smokex.Repo,
   database: System.fetch_env!("DATABASE_NAME"),
   hostname: System.fetch_env!("DATABASE_HOSTNAME"),
   port: System.fetch_env!("DATABASE_PORT"),
-  pool_size: System.fetch_env!("POOL_SIZE") |> String.to_integer()
+  pool_size: System.fetch_env!("POOL_SIZE") |> String.to_integer(),
+  ssl: String.to_existing_atom(System.get_env("DATABASE_SSL_ENABLED", "true"))
 
 config :stripity_stripe,
   api_key: System.fetch_env!("STRIPE_API_KEY"),
